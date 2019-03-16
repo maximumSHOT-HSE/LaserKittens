@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         /*
-        * Send message to camera about need of updating of matrixes
+        * Send message to camera about need of updating of matrices
         * */
         camera.update(); // good practise -- update camera one time per frame
 

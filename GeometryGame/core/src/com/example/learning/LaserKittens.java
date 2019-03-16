@@ -8,6 +8,7 @@ public class LaserKittens extends Game {
 
     SpriteBatch batch;
     BitmapFont font;
+    private final AppPreferences preferences = new AppPreferences();
 
     enum SCREEN_TYPE {
         MAIN_MENU_SCREEN,
@@ -18,6 +19,10 @@ public class LaserKittens extends Game {
     private MainMenuScreen mainMenuScreen;
     private GameScreen gameScreen;
     private SettingsScreen settingsScreen;
+
+    protected AppPreferences getPreferences() {
+        return preferences;
+    }
 
     void changeScreen(SCREEN_TYPE screen) {
         switch (screen) {
@@ -60,4 +65,5 @@ public class LaserKittens extends Game {
         batch.dispose();
         font.dispose();
     }
+
 }

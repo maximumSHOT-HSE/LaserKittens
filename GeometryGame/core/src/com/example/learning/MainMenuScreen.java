@@ -17,20 +17,23 @@ public class MainMenuScreen implements Screen {
     private final LaserKittens geometryGame;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background = new Background("blue-background.jpg");
-    private Stage stage = new Stage(new ScreenViewport());
-    private Menu menu = new Menu(stage);
+    private Stage stage;
+    private Menu menu;
 
     public MainMenuScreen(final LaserKittens geometryGame) {
         this.geometryGame = geometryGame;
 
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        stage = new Stage(new ScreenViewport());
         // creating stage
-        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+
+        menu = new Menu(stage);
+
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
@@ -84,7 +87,7 @@ public class MainMenuScreen implements Screen {
         public Menu(Stage stage) {
             // creating menu table (actor) for buttons
             menuTable.setFillParent(true);
-            menuTable.setDebug(true);
+         //   menuTable.setDebug(true);
             stage.addActor(menuTable);
 
             play.getLabel().setFontScale(2f);
@@ -110,7 +113,7 @@ public class MainMenuScreen implements Screen {
             settings.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-//                    geometryGame.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
+                    geometryGame.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
                 }
             });
 
