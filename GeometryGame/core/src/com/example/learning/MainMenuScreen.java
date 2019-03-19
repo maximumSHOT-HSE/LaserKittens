@@ -24,7 +24,6 @@ public class MainMenuScreen implements Screen {
         this.geometryGame = geometryGame;
 
         stage = new Stage(new ScreenViewport());
-        // creating stage
     }
 
     @Override

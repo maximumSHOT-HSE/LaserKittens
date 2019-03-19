@@ -2,6 +2,7 @@ package com.example.learning;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -18,11 +19,13 @@ public class Model {
     World world = new World(new Vector2(0, 0), true);
     private BodyFactory bodyFactory = BodyFactory.getBodyFactory(world);
     private OrthographicCamera camera = new OrthographicCamera();
-    private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
+    //private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
     private Body body;
+    private GestureDetector controller;
 
-    public Model() {
+    public Model(GestureDetector controller) {
         world.setContactListener(new MyContactListener(this));
+        this.controller = controller;
 
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
@@ -40,7 +43,7 @@ public class Model {
 //            }
 //        );
 
-        body = bodyFactory.newCircleBody(laserSourceCenter, laserSourceRadius, BodyDef.BodyType.KinematicBody, false);
+        body = bodyFactory.newCircleBody(laserSourceCenter, laserSourceRadius, BodyDef.BodyType.DynamicBody, false);
 
 //        // left wall
 //        bodyFactory.newRectangleBody(
@@ -68,13 +71,12 @@ public class Model {
     }
 
     public void step(float delta) {
-        world.step(delta, 3, 3);
+        //world.step(delta, 3, 3);
 
-        body.applyForceToCenter(new Vector2(-10000, 10000), true);
-        if (body.getLinearVelocity().x > 0)
-            body.setLinearVelocity(100000000f, +10);
-        else
-            body.setLinearVelocity(+10000f, +10);
+        if (controller.isLongPressed(1f)) {
+            body.setLinearVelocity(100f, 100f);
+        }
+
     }
 
 

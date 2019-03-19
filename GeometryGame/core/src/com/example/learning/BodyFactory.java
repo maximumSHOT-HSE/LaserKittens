@@ -46,7 +46,7 @@ public class BodyFactory {
         boxBodyDef.position.x = center.x;
         boxBodyDef.position.y = center.y;
         boxBodyDef.fixedRotation = fixedRotation;
-        boxBodyDef.linearVelocity.y = -1000f;
+        boxBodyDef.linearVelocity.y = 0f;
         boxBodyDef.angle = 0;
 
         //create the body to attach said definition
@@ -55,8 +55,9 @@ public class BodyFactory {
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
 
-        boxBody.createFixture(newFixture(circleShape));
-        circleShape.dispose();
+        FixtureDef fixtureDef = newFixture(circleShape);
+        boxBody.createFixture(fixtureDef);
+        //circleShape.dispose();
 
         return boxBody;
     }

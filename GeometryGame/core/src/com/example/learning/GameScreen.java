@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -12,22 +13,26 @@ public class GameScreen implements Screen {
 
     private final LaserKittens geometryGame;
     private OrthographicCamera camera = new OrthographicCamera(24, 32);
-    private Model model = new Model();
+    private Model model;
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
     private Background background = new Background("blue-background.jpg");
-    private Stage stage = new Stage(new ScreenViewport());
+    private Stage stage;
+    private GestureDetector controller = new GestureDetector(new CatGestureListener());
 
     public GameScreen(LaserKittens geometryGame) {
         this.geometryGame = geometryGame;
+        stage = new Stage(new ScreenViewport());
 
-        // creating camera
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        Gdx.input.setInputProcessor(stage);
+        model = new Model(controller);
     }
 
     @Override
     public void show() {
+
+
+        //Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(controller);
     }
 
     @Override
