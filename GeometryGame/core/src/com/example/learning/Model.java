@@ -44,7 +44,7 @@ public class Model {
 //        );
 
         body = bodyFactory.newCircleBody(laserSourceCenter, laserSourceRadius, BodyDef.BodyType.DynamicBody, false);
-
+        body.setLinearVelocity(new Vector2(100, 100));
 //        // left wall
 //        bodyFactory.newRectangleBody(
 //            new Vector2(1, 0.7f * height),
@@ -72,10 +72,6 @@ public class Model {
 
     public void step(float delta) {
         //world.step(delta, 3, 3);
-
-        if (controller.isLongPressed(1f)) {
-            body.setLinearVelocity(100f, 100f);
-        }
 
     }
 

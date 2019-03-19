@@ -17,7 +17,7 @@ public class GameScreen implements Screen {
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
     private Background background = new Background("blue-background.jpg");
     private Stage stage;
-    private GestureDetector controller = new GestureDetector(new CatGestureListener());
+    private GestureDetector controller = new GestureDetector(new CatGestureListener(camera));
 
     public GameScreen(LaserKittens geometryGame) {
         this.geometryGame = geometryGame;

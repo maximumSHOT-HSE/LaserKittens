@@ -1,9 +1,16 @@
 package com.example.learning;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
 public class CatGestureListener implements GestureDetector.GestureListener {
+
+    private OrthographicCamera camera;
+
+    public CatGestureListener(OrthographicCamera camera) {
+        this.camera = camera;
+    }
 
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
@@ -31,7 +38,8 @@ public class CatGestureListener implements GestureDetector.GestureListener {
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
-
+        camera.translate(-deltaX, deltaY);
+        camera.update();
         return false;
     }
 
