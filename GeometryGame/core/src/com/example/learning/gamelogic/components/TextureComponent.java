@@ -1,4 +1,4 @@
-package com.example.learning.gamelogic;
+package com.example.learning.gamelogic.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
