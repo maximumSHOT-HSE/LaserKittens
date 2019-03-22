@@ -20,6 +20,10 @@ public class PlayerControlSystem extends IteratingSystem{
     public PlayerControlSystem() {
         super(Family.all(PlayerComponent.class).get());
 
+        pm = ComponentMapper.getFor(PlayerComponent.class);
+        bodm = ComponentMapper.getFor(BodyComponent.class);
+        sm = ComponentMapper.getFor(StateComponent.class);
+
     }
     @Override
     protected void processEntity(Entity entity, float deltaTime) {

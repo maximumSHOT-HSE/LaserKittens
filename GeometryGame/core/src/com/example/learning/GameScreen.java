@@ -6,7 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -85,7 +87,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+
     }
 
 
@@ -107,7 +109,7 @@ public class GameScreen implements Screen {
         body.body = bodyFactory.newCircleBody(new Vector2(0.5f * width, 0.2f * height), 150f, BodyDef.BodyType.DynamicBody, false);
 
         position.position.set(10,10,0);
-        texture.region = null;
+        texture.region = new TextureRegion(parent.assetManager.manager.get("badlogic.jpg", Texture.class));
         type.type = TypeComponent.ObjectType.OTHER;
         stateCom.set(StateComponent.State.NORMAL);
         body.body.setUserData(entity);

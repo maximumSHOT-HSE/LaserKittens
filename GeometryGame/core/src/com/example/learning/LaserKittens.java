@@ -1,6 +1,7 @@
 package com.example.learning;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -9,6 +10,7 @@ public class LaserKittens extends Game {
     SpriteBatch batch;
     BitmapFont font;
     private final AppPreferences preferences = new AppPreferences();
+    public final MyAssetManager assetManager = new MyAssetManager();
 
     enum SCREEN_TYPE {
         MAIN_MENU_SCREEN,
@@ -51,6 +53,10 @@ public class LaserKittens extends Game {
     public void create() {
         batch = new SpriteBatch();
         font = new BitmapFont();
+
+        assetManager.loadImages();
+        assetManager.manager.finishLoading();
+
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }
 
