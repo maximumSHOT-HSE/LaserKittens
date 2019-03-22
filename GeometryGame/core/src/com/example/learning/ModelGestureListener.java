@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
-public class CatGestureListener implements GestureDetector.GestureListener {
+public class ModelGestureListener implements GestureDetector.GestureListener {
 
     private OrthographicCamera camera;
 
-    public CatGestureListener(OrthographicCamera camera) {
+    public ModelGestureListener(OrthographicCamera camera) {
         this.camera = camera;
     }
 
