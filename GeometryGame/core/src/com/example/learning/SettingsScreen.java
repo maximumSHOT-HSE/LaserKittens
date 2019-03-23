@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -19,15 +20,16 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class SettingsScreen implements Screen {
 
-    private final LaserKittens geometryGame;
+    private final LaserKittens parent;
     private OrthographicCamera camera = new OrthographicCamera();
-    private Background background = new Background("blue-background.jpg");
+    private Background background;
 
     private Stage stage;
     private Menu menu;
 
     public SettingsScreen(LaserKittens laserKittens) {
-        this.geometryGame = laserKittens;
+        this.parent = laserKittens;
+        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
 
 
         stage = new Stage(new ScreenViewport());
@@ -53,9 +55,9 @@ public class SettingsScreen implements Screen {
 
         camera.update(); // good practise -- update camera one time per frame
 
-        geometryGame.batch.begin();
-        background.draw(geometryGame.batch, camera);
-        geometryGame.batch.end();
+        parent.batch.begin();
+        background.draw(parent.batch, camera);
+        parent.batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -123,23 +125,23 @@ public class SettingsScreen implements Screen {
 
         private void setListeners() {
             //volume
-            volumeMusicSlider.setValue( geometryGame.getPreferences().getMusicVolume() );
+            volumeMusicSlider.setValue( parent.getPreferences().getMusicVolume() );
             volumeMusicSlider.addListener( new EventListener() {
                 @Override
                 public boolean handle(Event event) {
-                    geometryGame.getPreferences().setMusicVolume( volumeMusicSlider.getValue() );
+                    parent.getPreferences().setMusicVolume( volumeMusicSlider.getValue() );
                     return false;
                 }
             });
 
 
             //music
-            musicCheckbox.setChecked( geometryGame.getPreferences().isMusicEnabled() );
+            musicCheckbox.setChecked( parent.getPreferences().isMusicEnabled() );
             musicCheckbox.addListener( new EventListener() {
                 @Override
                 public boolean handle(Event event) {
                     boolean enabled = musicCheckbox.isChecked();
-                    geometryGame.getPreferences().setMusicEnabled( enabled );
+                    parent.getPreferences().setMusicEnabled( enabled );
                     return false;
                 }
             });
@@ -149,7 +151,7 @@ public class SettingsScreen implements Screen {
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    geometryGame.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
                 }
             });
 

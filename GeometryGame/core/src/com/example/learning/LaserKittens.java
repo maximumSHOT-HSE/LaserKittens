@@ -55,6 +55,7 @@ public class LaserKittens extends Game {
         font = new BitmapFont();
 
         assetManager.loadImages();
+        assetManager.loadSkins();
         assetManager.manager.finishLoading();
 
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);

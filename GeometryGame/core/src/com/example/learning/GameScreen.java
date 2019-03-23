@@ -41,12 +41,14 @@ public class GameScreen implements Screen {
 
 
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-    private Background background = new Background("blue-background.jpg");
+    private Background background;
     private Stage stage;
     private GestureDetector controller = new GestureDetector(new ModelGestureListener(camera));
 
     public GameScreen(LaserKittens geometryGame) {
         this.parent = geometryGame;
+        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
+
         world = new World(new Vector2(0,-10f), true);
         bodyFactory = BodyFactory.getBodyFactory(world);
 

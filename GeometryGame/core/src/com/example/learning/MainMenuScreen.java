@@ -2,8 +2,10 @@ package com.example.learning;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,14 +16,15 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
 
-    private final LaserKittens geometryGame;
+    private final LaserKittens parent;
     private OrthographicCamera camera = new OrthographicCamera();
-    private Background background = new Background("blue-background.jpg");
+    private Background background;
     private Stage stage;
     private Menu menu;
 
-    public MainMenuScreen(final LaserKittens geometryGame) {
-        this.geometryGame = geometryGame;
+    public MainMenuScreen(final LaserKittens parent) {
+        this.parent = parent;
+        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
 
         stage = new Stage(new ScreenViewport());
     }
@@ -42,9 +45,9 @@ public class MainMenuScreen implements Screen {
 
         camera.update(); // good practise -- update camera one time per frame
 
-        geometryGame.batch.begin();
-            background.draw(geometryGame.batch, camera);
-        geometryGame.batch.end();
+        parent.batch.begin();
+            background.draw(parent.batch, camera);
+        parent.batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -78,7 +81,8 @@ public class MainMenuScreen implements Screen {
 
     private class Menu {
         private Table menuTable = new Table();
-        private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+       // private Skin skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
+       private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
         private TextButton play = new TextButton("Play", skin);
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton exit = new TextButton("Exit", skin);
@@ -105,14 +109,14 @@ public class MainMenuScreen implements Screen {
             play.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    geometryGame.changeScreen(LaserKittens.SCREEN_TYPE.GAME_SCREEN);
+                    parent.changeScreen(LaserKittens.SCREEN_TYPE.GAME_SCREEN);
                 }
             });
 
             settings.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    geometryGame.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
+                    parent.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
                 }
             });
 
