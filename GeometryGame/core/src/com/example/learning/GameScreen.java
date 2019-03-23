@@ -15,7 +15,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.gamelogic.components.BodyComponent;
 import com.example.learning.gamelogic.components.CollisionComponent;
 import com.example.learning.gamelogic.components.PlayerComponent;
@@ -33,58 +32,58 @@ import com.example.learning.gamelogic.systems.RenderingSystem;
 public class GameScreen implements Screen {
 
     private final LaserKittens parent;
-    private OrthographicCamera camera = new OrthographicCamera(24, 32);
-    private World world;
-    private BodyFactory bodyFactory;
-    private SpriteBatch sb;
+    private OrthographicCamera camera;
     private PooledEngine engine;
+    private LevelFactory levelFactory;
 
 
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
     private Background background;
-    private Stage stage;
-    private GestureDetector controller = new GestureDetector(new ModelGestureListener(camera));
+    private GestureDetector controller;
 
     public GameScreen(LaserKittens geometryGame) {
         this.parent = geometryGame;
         background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
 
-        world = new World(new Vector2(0,-10f), true);
-        bodyFactory = BodyFactory.getBodyFactory(world);
-
-        sb = new SpriteBatch();
-        // Create our new rendering system
-        RenderingSystem renderingSystem = new RenderingSystem(sb);
-        camera = renderingSystem.getCamera();
-
-        sb.setProjectionMatrix(camera.combined);
-
         engine = new PooledEngine();
+        levelFactory = new LevelFactory(engine, parent.assetManager);
+
+        // Create our new rendering system
+        RenderingSystem renderingSystem = new RenderingSystem(parent.batch);
+        camera = renderingSystem.getCamera();
+        controller = new GestureDetector(new ModelGestureListener(camera));
+
+        parent.batch.setProjectionMatrix(camera.combined);
+
         engine.addSystem(new AnimationSystem());
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PhysicsSystem(world));
-        engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
+        engine.addSystem(new PhysicsSystem(levelFactory.world));
+        engine.addSystem(new PhysicsDebugSystem(levelFactory.world, renderingSystem.getCamera()));
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem());
 
-        createPlayer();
+        levelFactory.createPlayer();
     }
 
     @Override
     public void show() {
 
-
-        //Gdx.input.setInputProcessor(stage);
         Gdx.input.setInputProcessor(controller);
     }
 
     @Override
     public void render (float delta) {
-
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+        //debugRenderer.render(world, camera.combined);
         engine.update(delta);
+
+        parent.batch.begin();
+        background.draw(parent.batch, camera);//TODO draw it with rendering system
+        parent.batch.end();
+        debugRenderer.render(levelFactory.world, camera.combined);
     }
 
     @Override
@@ -92,43 +91,6 @@ public class GameScreen implements Screen {
 
     }
 
-
-    private void createPlayer(){
-
-        // Create the Entity and all the components that will go in the entity
-        Entity entity = engine.createEntity();
-        BodyComponent body = engine.createComponent(BodyComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-        PlayerComponent player = engine.createComponent(PlayerComponent.class);
-        CollisionComponent colComp = engine.createComponent(CollisionComponent.class);
-        TypeComponent type = engine.createComponent(TypeComponent.class);
-        StateComponent stateCom = engine.createComponent(StateComponent.class);
-
-        // create the data for the components and add them to the components
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
-        body.body = bodyFactory.newCircleBody(new Vector2(0.5f * width, 0.2f * height), 150f, BodyDef.BodyType.DynamicBody, false);
-
-        position.position.set(10,10,0);
-        texture.region = new TextureRegion(parent.assetManager.manager.get("badlogic.jpg", Texture.class));
-        type.type = TypeComponent.ObjectType.OTHER;
-        stateCom.set(StateComponent.State.NORMAL);
-        body.body.setUserData(entity);
-
-        // add the components to the entity
-        entity.add(body);
-        entity.add(position);
-        entity.add(texture);
-        entity.add(player);
-        entity.add(colComp);
-        entity.add(type);
-        entity.add(stateCom);
-
-        // add the entity to the engine
-        engine.addEntity(entity);
-
-    }
 
     @Override
     public void pause() {
@@ -147,7 +109,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
         background.dispose();
     }
 }

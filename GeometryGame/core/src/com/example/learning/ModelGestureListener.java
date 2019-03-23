@@ -7,9 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 public class ModelGestureListener implements GestureDetector.GestureListener {
 
     private OrthographicCamera camera;
+    float currentZoom;
 
     public ModelGestureListener(OrthographicCamera camera) {
+
         this.camera = camera;
+        currentZoom = camera.zoom;
     }
 
     @Override
@@ -46,13 +49,15 @@ public class ModelGestureListener implements GestureDetector.GestureListener {
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
 
+        currentZoom = camera.zoom;
         return false;
     }
 
     @Override
     public boolean zoom (float originalDistance, float currentDistance){
-
-        return false;
+        camera.zoom = (originalDistance / currentDistance) * currentZoom;
+        camera.update();
+        return true;
     }
 
     @Override

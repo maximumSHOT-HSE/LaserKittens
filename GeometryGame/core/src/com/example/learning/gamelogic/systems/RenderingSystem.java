@@ -34,7 +34,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     // static method to get screen size in pixels
-    public static Vector2 getScreenSizeInPixesl(){
+    public static Vector2 getScreenSizeInPixels(){
         pixelDimensions.set(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         return pixelDimensions;
     }
@@ -69,6 +69,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         // set up the camera to match our screen size
         camera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT / 2f, 0);
     }
 

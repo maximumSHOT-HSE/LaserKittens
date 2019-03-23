@@ -53,7 +53,7 @@ public class SettingsScreen implements Screen {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update(); // good practise -- update camera one time per frame
+        camera.update();
 
         parent.batch.begin();
         background.draw(parent.batch, camera);

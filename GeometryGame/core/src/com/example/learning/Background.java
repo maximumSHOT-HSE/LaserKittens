@@ -11,13 +11,6 @@ public class Background {
     private Sprite backgroundSprite;
 
 
-    public Background(String backgroundPath) {
-        backgroundTexture = new Texture(backgroundPath);
-        backgroundTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
-        backgroundSprite = new Sprite(backgroundTexture);
-
-    }
-
     public Background(Texture background) {
         backgroundTexture = background;
         backgroundTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);

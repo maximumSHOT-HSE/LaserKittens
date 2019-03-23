@@ -71,6 +71,7 @@ public class LaserKittens extends Game {
         super.dispose();
         batch.dispose();
         font.dispose();
+        assetManager.manager.dispose();
     }
 
 }
