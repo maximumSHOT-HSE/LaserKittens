@@ -2,6 +2,8 @@ package com.example.learning;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,7 +26,8 @@ public class GameScreen implements Screen {
 
     private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(
             true, true, true, true, true, true);
-    private GestureDetector controller;
+
+    private InputMultiplexer inputMultiplexer;
 
     public GameScreen(LaserKittens geometryGame) {
         this.parent = geometryGame;
@@ -36,7 +39,13 @@ public class GameScreen implements Screen {
         // Create our new rendering system
         RenderingSystem renderingSystem = new RenderingSystem(parent.batch);
         camera = renderingSystem.getCamera();
-        controller = new GestureDetector(new ModelGestureListener(camera));
+
+
+        Gdx.input.setCatchBackKey(true);
+        GestureDetector gestureDetector = new GestureDetector(new ModelGestureListener(camera));
+        InputProcessor inputProcessor = new GameScreenInputProcessor(parent);
+        inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
+
 
         engine.addSystem(renderingSystem);
         engine.addSystem(new PhysicsSystem(levelFactory.world));
@@ -52,7 +61,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
-        Gdx.input.setInputProcessor(controller);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
@@ -87,6 +96,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        levelFactory.world.dispose();
+        engine.removeAllEntities();
+        //probably bodies should be disposed somehow as well
     }
 }

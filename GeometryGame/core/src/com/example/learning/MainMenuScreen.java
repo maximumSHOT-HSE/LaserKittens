@@ -36,6 +36,7 @@ public class MainMenuScreen implements Screen {
         menu = new Menu(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.update();
     }
 
     @Override
