@@ -94,6 +94,6 @@ public class GameScreen implements Screen {
     public void dispose() {
         world.dispose();
         engine.removeAllEntities();
-        //probably bodies should be disposed somehow as well
+//        probably bodies should be disposed somehow as well
     }
 }

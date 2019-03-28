@@ -7,6 +7,9 @@ import com.example.learning.MyAssetManager;
 
 abstract public class AbstractLevelFactory {
 
+    protected PooledEngine engine;
+    protected MyAssetManager manager;
+
     abstract public World getWorld();
 
     abstract public Entity getPlayer();
