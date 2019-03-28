@@ -1,4 +1,4 @@
-package com.example.learning.game;
+package com.example.learning.game.levels.TestMovePlayerLevel;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;

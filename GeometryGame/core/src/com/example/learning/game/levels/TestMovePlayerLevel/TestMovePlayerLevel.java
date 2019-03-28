@@ -1,8 +1,9 @@
-package com.example.learning.game.levels;
+package com.example.learning.game.levels.TestMovePlayerLevel;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.example.learning.MyAssetManager;
-import com.example.learning.game.TestMoveLevelFactory;
+import com.example.learning.game.levels.AbstractLevel;
+import com.example.learning.game.levels.AbstractLevelFactory;
 
 public class TestMovePlayerLevel extends AbstractLevel {
 
