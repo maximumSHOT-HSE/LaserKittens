@@ -11,10 +11,8 @@ import java.awt.event.ContainerListener;
 
 public class MyContactListener implements ContactListener {
 
-    private Model model;
+    public MyContactListener() {
 
-    public MyContactListener(Model model) {
-        this.model = model;
     }
 
     @Override

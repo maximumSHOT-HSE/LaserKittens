@@ -62,7 +62,7 @@ public class LevelFactory {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
 
-        position.position.set(0,0,-1e9f);
+        position.position.set(16,16,-1e9f);
         position.rotation = 90f;
         position.scale.set(5, 5);
         texture.region = new TextureRegion(manager.manager.get("blue-background.jpg", Texture.class));

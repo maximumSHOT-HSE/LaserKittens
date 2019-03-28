@@ -24,7 +24,7 @@ public class Model {
     private GestureDetector controller;
 
     public Model(GestureDetector controller) {
-        world.setContactListener(new MyContactListener(this));
+        world.setContactListener(new MyContactListener());
         this.controller = controller;
 
         float width = Gdx.graphics.getWidth();
