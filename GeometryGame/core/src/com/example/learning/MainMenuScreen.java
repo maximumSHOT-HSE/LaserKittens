@@ -22,8 +22,8 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private Menu menu;
 
-    public MainMenuScreen(final LaserKittens parent) {
-        this.parent = parent;
+    public MainMenuScreen(final LaserKittens laserKittens) {
+        this.parent = laserKittens;
         background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
 
         stage = new Stage(new ScreenViewport());
@@ -31,12 +31,14 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        stage.clear();
         Gdx.input.setInputProcessor(stage);
 
         menu = new Menu(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
+        parent.batch.setProjectionMatrix(camera.combined);
     }
 
     @Override

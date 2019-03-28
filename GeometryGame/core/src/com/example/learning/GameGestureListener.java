@@ -2,15 +2,15 @@ package com.example.learning;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 
-public class ModelGestureListener implements GestureDetector.GestureListener{
+public class GameGestureListener implements GestureListener{
 
     private OrthographicCamera camera;
     float currentZoom;
 
-    public ModelGestureListener(OrthographicCamera camera) {
+    public GameGestureListener(OrthographicCamera camera) {
 
         this.camera = camera;
         currentZoom = camera.zoom;

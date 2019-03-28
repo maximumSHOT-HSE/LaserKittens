@@ -1,6 +1,8 @@
 package com.example.learning;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -27,6 +29,8 @@ public class SettingsScreen implements Screen {
     private Stage stage;
     private Menu menu;
 
+    private InputMultiplexer inputMultiplexer;
+
     public SettingsScreen(LaserKittens laserKittens) {
         this.parent = laserKittens;
         background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
@@ -34,17 +38,21 @@ public class SettingsScreen implements Screen {
 
         stage = new Stage(new ScreenViewport());
 
+        InputProcessor inputProcessor = new SettingsScreenInputProcessor(parent);
+        inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
+
     }
 
     @Override
     public void show() {
         stage.clear();
-
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         menu = new Menu(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.update();
+        parent.batch.setProjectionMatrix(camera.combined);
 
     }
 

@@ -71,7 +71,6 @@ public class RenderingSystem extends SortedIteratingSystem {
         camera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         camera.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT / 2f, 0);
 
-        batch.setProjectionMatrix(camera.combined);
     }
 
     @Override

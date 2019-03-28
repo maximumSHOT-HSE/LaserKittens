@@ -8,7 +8,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.example.learning.gamelogic.systems.CollisionSystem;
 import com.example.learning.gamelogic.systems.PhysicsDebugSystem;
 import com.example.learning.gamelogic.systems.PhysicsSystem;
@@ -39,8 +38,8 @@ public class GameScreen implements Screen {
 
 
         Gdx.input.setCatchBackKey(true);
-        GestureDetector gestureDetector = new GestureDetector(new ModelGestureListener(camera));
-        InputProcessor inputProcessor = new GameScreenInputProcessor(parent);
+        GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
+        InputProcessor inputProcessor = new com.example.learning.SettingsScreenInputProcessor(parent);
         inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
 
 
@@ -58,6 +57,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
+        parent.batch.setProjectionMatrix(camera.combined);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
