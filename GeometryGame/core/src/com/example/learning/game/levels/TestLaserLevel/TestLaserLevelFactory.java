@@ -71,10 +71,13 @@ public class TestLaserLevelFactory extends AbstractLevelFactory {
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         // create the data for the components and add them to the components
-        body.body = bodyFactory.newCircleBody(new Vector2(16f, 16f), 10f, BodyDef.BodyType.KinematicBody, false);
+        body.body = bodyFactory.newCircleBody(new Vector2(16f, 16f), 0.5f, BodyDef.BodyType.KinematicBody, false);
 
         position.position.set(16f, 16f,0);
+        position.scale.set(0.05f, 0.05f);
         texture.region = new TextureRegion(manager.manager.get("badlogic.jpg", Texture.class));
+
+
         body.body.setUserData(entity);
 
         // add the components to the entity
