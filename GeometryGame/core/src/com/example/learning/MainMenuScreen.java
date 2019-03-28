@@ -85,7 +85,7 @@ public class MainMenuScreen implements Screen {
         private Table menuTable = new Table();
        // private Skin skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
        private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-        private TextButton play = new TextButton("Play", skin);
+        private TextButton levels = new TextButton("Levels", skin);
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
@@ -95,23 +95,23 @@ public class MainMenuScreen implements Screen {
          //   menuTable.setDebug(true);
             stage.addActor(menuTable);
 
-            play.getLabel().setFontScale(2f);
+            levels.getLabel().setFontScale(2f);
             settings.getLabel().setFontScale(2f);
             exit.getLabel().setFontScale(2f);
 
             setLinsteners();
 
-            menuTable.add(play).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            menuTable.add(levels).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
             menuTable.row().pad(10, 0, 10, 0);
             menuTable.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).row();
             menuTable.add(exit).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).row();
         }
 
         private void setLinsteners() {
-            play.addListener(new ChangeListener() {
+            levels.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.GAME_SCREEN);
+                    parent.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
                 }
             });
 

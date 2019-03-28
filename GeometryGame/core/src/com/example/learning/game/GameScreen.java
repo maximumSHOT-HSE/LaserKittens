@@ -25,7 +25,6 @@ public class GameScreen implements Screen {
     //adding poolable interface may be needed somewhere
     private LevelFactory levelFactory;
 
-
     private InputMultiplexer inputMultiplexer;
 
     public GameScreen(LaserKittens geometryGame) {
@@ -38,7 +37,6 @@ public class GameScreen implements Screen {
         // Create our new rendering system
         RenderingSystem renderingSystem = new RenderingSystem(parent.batch);
         camera = renderingSystem.getCamera();
-
 
         engine.addSystem(renderingSystem);
         engine.addSystem(new PhysicsSystem(levelFactory.world));
