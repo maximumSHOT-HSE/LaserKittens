@@ -1,4 +1,4 @@
-package com.example.learning;
+package com.example.learning.game;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -11,10 +11,8 @@ import java.awt.event.ContainerListener;
 
 public class MyContactListener implements ContactListener {
 
-    private Model model;
+    public MyContactListener() {
 
-    public MyContactListener(Model model) {
-        this.model = model;
     }
 
     @Override

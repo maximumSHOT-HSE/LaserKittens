@@ -3,14 +3,18 @@ package com.example.learning;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.example.learning.game.GameScreen;
+import com.example.learning.settings.AppPreferences;
+import com.example.learning.settings.SettingsScreen;
 
 public class LaserKittens extends Game {
 
-    SpriteBatch batch;
-    BitmapFont font;
+    public SpriteBatch batch;
+    public BitmapFont font;
     private final AppPreferences preferences = new AppPreferences();
+    public final MyAssetManager assetManager = new MyAssetManager();
 
-    enum SCREEN_TYPE {
+    public enum SCREEN_TYPE {
         MAIN_MENU_SCREEN,
         GAME_SCREEN,
         SETTINGS_SCREEN
@@ -20,11 +24,11 @@ public class LaserKittens extends Game {
     private GameScreen gameScreen;
     private SettingsScreen settingsScreen;
 
-    protected AppPreferences getPreferences() {
+    public AppPreferences getPreferences() {
         return preferences;
     }
 
-    void changeScreen(SCREEN_TYPE screen) {
+    public void changeScreen(SCREEN_TYPE screen) {
         switch (screen) {
             case MAIN_MENU_SCREEN:
                 if (mainMenuScreen == null) {
@@ -45,12 +49,18 @@ public class LaserKittens extends Game {
                 this.setScreen(settingsScreen);
                 break;
         }
+        //should gameScreens be disposed?
     }
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         font = new BitmapFont();
+
+        assetManager.loadImages();
+        assetManager.loadSkins();
+        assetManager.manager.finishLoading();
+
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }
 
@@ -64,6 +74,7 @@ public class LaserKittens extends Game {
         super.dispose();
         batch.dispose();
         font.dispose();
+        assetManager.manager.dispose();
     }
 
 }

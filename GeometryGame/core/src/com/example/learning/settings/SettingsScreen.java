@@ -1,9 +1,12 @@
-package com.example.learning;
+package com.example.learning.settings;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -16,33 +19,42 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.example.learning.Background;
+import com.example.learning.LaserKittens;
 
 public class SettingsScreen implements Screen {
 
-    private final LaserKittens geometryGame;
+    private final LaserKittens parent;
     private OrthographicCamera camera = new OrthographicCamera();
-    private Background background = new Background("blue-background.jpg");
+    private Background background;
 
     private Stage stage;
     private Menu menu;
 
+    private InputMultiplexer inputMultiplexer;
+
     public SettingsScreen(LaserKittens laserKittens) {
-        this.geometryGame = laserKittens;
+        this.parent = laserKittens;
+        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
 
 
         stage = new Stage(new ScreenViewport());
+
+        InputProcessor inputProcessor = new SettingsScreenInputProcessor(parent);
+        inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
 
     }
 
     @Override
     public void show() {
         stage.clear();
-
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         menu = new Menu(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.update();
+        parent.batch.setProjectionMatrix(camera.combined);
 
     }
 
@@ -51,11 +63,11 @@ public class SettingsScreen implements Screen {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update(); // good practise -- update camera one time per frame
+        camera.update();
 
-        geometryGame.batch.begin();
-        background.draw(geometryGame.batch, camera);
-        geometryGame.batch.end();
+        parent.batch.begin();
+        background.draw(parent.batch, camera);
+        parent.batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -123,23 +135,23 @@ public class SettingsScreen implements Screen {
 
         private void setListeners() {
             //volume
-            volumeMusicSlider.setValue( geometryGame.getPreferences().getMusicVolume() );
+            volumeMusicSlider.setValue( parent.getPreferences().getMusicVolume() );
             volumeMusicSlider.addListener( new EventListener() {
                 @Override
                 public boolean handle(Event event) {
-                    geometryGame.getPreferences().setMusicVolume( volumeMusicSlider.getValue() );
+                    parent.getPreferences().setMusicVolume( volumeMusicSlider.getValue() );
                     return false;
                 }
             });
 
 
             //music
-            musicCheckbox.setChecked( geometryGame.getPreferences().isMusicEnabled() );
+            musicCheckbox.setChecked( parent.getPreferences().isMusicEnabled() );
             musicCheckbox.addListener( new EventListener() {
                 @Override
                 public boolean handle(Event event) {
                     boolean enabled = musicCheckbox.isChecked();
-                    geometryGame.getPreferences().setMusicEnabled( enabled );
+                    parent.getPreferences().setMusicEnabled( enabled );
                     return false;
                 }
             });
@@ -149,7 +161,7 @@ public class SettingsScreen implements Screen {
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    geometryGame.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
                 }
             });
 

@@ -1,4 +1,4 @@
-package com.example.learning;
+package com.example.learning.settings;
 
 
 import com.badlogic.gdx.Gdx;

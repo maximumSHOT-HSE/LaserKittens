@@ -1,15 +1,19 @@
-package com.example.learning;
+package com.example.learning.game;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 
-public class ModelGestureListener implements GestureDetector.GestureListener {
+public class GameGestureListener implements GestureListener{
 
     private OrthographicCamera camera;
+    float currentZoom;
 
-    public ModelGestureListener(OrthographicCamera camera) {
+    public GameGestureListener(OrthographicCamera camera) {
+
         this.camera = camera;
+        currentZoom = camera.zoom;
     }
 
     @Override
@@ -20,7 +24,6 @@ public class ModelGestureListener implements GestureDetector.GestureListener {
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        System.out.println("WOW");
         return false;
     }
 
@@ -38,21 +41,23 @@ public class ModelGestureListener implements GestureDetector.GestureListener {
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
-        camera.translate(-deltaX, deltaY);
-        camera.update();
+        //camera.translate(-deltaX * currentZoom * 0.5f, deltaY * currentZoom*0.5f);
+        //camera.update();
         return false;
     }
 
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
 
+        currentZoom = camera.zoom;
         return false;
     }
 
     @Override
     public boolean zoom (float originalDistance, float currentDistance){
-
-        return false;
+        camera.zoom = (originalDistance / currentDistance) * currentZoom;
+        camera.update();
+        return true;
     }
 
     @Override
