@@ -14,6 +14,7 @@ public class LaserKittens extends Game {
     private final AppPreferences preferences = new AppPreferences();
     public final MyAssetManager assetManager = new MyAssetManager();
 
+
     public enum SCREEN_TYPE {
         MAIN_MENU_SCREEN,
         GAME_SCREEN,
