@@ -37,13 +37,12 @@ public class GameScreen implements Screen {
     private LevelFactory levelFactory;
 
 
-    private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-    private Background background;
+    private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(
+            true, true, true, true, true, true);
     private GestureDetector controller;
 
     public GameScreen(LaserKittens geometryGame) {
         this.parent = geometryGame;
-        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
 
         engine = new PooledEngine();
         levelFactory = new LevelFactory(engine, parent.assetManager);
@@ -53,8 +52,6 @@ public class GameScreen implements Screen {
         camera = renderingSystem.getCamera();
         controller = new GestureDetector(new ModelGestureListener(camera));
 
-        parent.batch.setProjectionMatrix(camera.combined);
-
         engine.addSystem(new AnimationSystem());
         engine.addSystem(renderingSystem);
         engine.addSystem(new PhysicsSystem(levelFactory.world));
@@ -62,7 +59,9 @@ public class GameScreen implements Screen {
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem());
 
-        levelFactory.createPlayer();
+        levelFactory.createPlayer(10, 10);
+        levelFactory.createPlayer(20, 20);
+        levelFactory.createBackground();
     }
 
     @Override
@@ -76,13 +75,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-        //debugRenderer.render(world, camera.combined);
         engine.update(delta);
-
-        parent.batch.begin();
-        background.draw(parent.batch, camera);//TODO draw it with rendering system
-        parent.batch.end();
         debugRenderer.render(levelFactory.world, camera.combined);
     }
 
@@ -109,6 +102,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        background.dispose();
+
     }
 }

@@ -46,7 +46,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     private SpriteBatch batch; // a reference to our spritebatch
     private Array<Entity> renderQueue; // an array used to allow sorting of images allowing us to draw images on top of each other
-    private Comparator<Entity> comparator; // a comparator to sort images based on the z position of the transfromComponent
+    private Comparator<Entity> comparator = new ZComparator(); // a comparator to sort images based on the z position of the transfromComponent
     private OrthographicCamera camera; // a reference to our camera
 
     // component mappers to get components from entities
@@ -69,8 +69,9 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         // set up the camera to match our screen size
         camera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT / 2f, 0);
+
+        batch.setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -123,4 +124,23 @@ public class RenderingSystem extends SortedIteratingSystem {
     public OrthographicCamera getCamera() {
         return camera;
     }
+
+
+
+
+    private static class ZComparator implements Comparator<Entity> {
+        private ComponentMapper<TransformComponent> cmTrans;
+
+        private ZComparator(){
+            cmTrans = ComponentMapper.getFor(TransformComponent.class);
+        }
+
+        @Override
+        public int compare(Entity entityA, Entity entityB) {
+            float az = cmTrans.get(entityA).position.z;
+            float bz = cmTrans.get(entityB).position.z;
+            return Double.compare(az, bz);
+        }
+    }
+
 }

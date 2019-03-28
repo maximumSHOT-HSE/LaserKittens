@@ -41,9 +41,9 @@ public class ModelGestureListener implements GestureDetector.GestureListener {
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
-        camera.translate(-deltaX, deltaY);
+        camera.translate(-deltaX * currentZoom * 0.5f, deltaY * currentZoom*0.5f);
         camera.update();
-        return false;
+        return true;
     }
 
     @Override

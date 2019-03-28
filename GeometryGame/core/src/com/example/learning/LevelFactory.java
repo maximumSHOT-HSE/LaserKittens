@@ -28,7 +28,7 @@ public class LevelFactory {
     }
 
 
-    public void createPlayer(){
+    public void createPlayer(float x, float y){
 
         // Create the Entity and all the components that will go in the entity
         Entity entity = engine.createEntity();
@@ -36,16 +36,38 @@ public class LevelFactory {
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         // create the data for the components and add them to the components
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
-        body.body = bodyFactory.newCircleBody(new Vector2(0.5f * width, 0.2f * height), 150f, BodyDef.BodyType.KinematicBody, false);
+        body.body = bodyFactory.newCircleBody(new Vector2(x, y), 10f, BodyDef.BodyType.KinematicBody, false);
 
-        position.position.set(10,10,0);
+        position.position.set(x,y,0);
         texture.region = new TextureRegion(manager.manager.get("badlogic.jpg", Texture.class));
         body.body.setUserData(entity);
 
         // add the components to the entity
         entity.add(body);
+        entity.add(position);
+        entity.add(texture);
+
+        // add the entity to the engine
+        engine.addEntity(entity);
+
+    }
+
+    public void createBackground(){
+
+        // Create the Entity and all the components that will go in the entity
+        Entity entity = engine.createEntity();
+        TransformComponent position = engine.createComponent(TransformComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        // create the data for the components and add them to the components
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
+
+        position.position.set(0,0,-1e9f);
+        position.rotation = 90f;
+        position.scale.set(5, 5);
+        texture.region = new TextureRegion(manager.manager.get("blue-background.jpg", Texture.class));
+
+        // add the components to the entity
         entity.add(position);
         entity.add(texture);
 
