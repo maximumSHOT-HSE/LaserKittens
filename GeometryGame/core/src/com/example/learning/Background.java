@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Background {
     private Texture backgroundTexture;
     private Sprite backgroundSprite;
-
 
     public Background(Texture background) {
         backgroundTexture = background;
@@ -18,9 +18,10 @@ public class Background {
     }
 
     public void draw(SpriteBatch batch, Camera camera) {
+
         batch.draw(
             backgroundTexture,
-                0, 0,
+                0f, 0f,
                 Gdx.graphics.getWidth(),
                 Gdx.graphics.getHeight()
         );

@@ -8,11 +8,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.example.learning.LaserKittens;
 import com.example.learning.MyAssetManager;
 import com.example.learning.game.BodyFactory;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
+import com.example.learning.game.gamelogic.systems.RenderingSystem;
 
 public class LevelFactory {
 
@@ -63,10 +65,10 @@ public class LevelFactory {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
 
-        position.position.set(16,16,-1e9f);
-        position.rotation = 90f;
-        position.scale.set(5, 5);
         texture.region = new TextureRegion(manager.manager.get("blue-background.jpg", Texture.class));
+        position.position.set(RenderingSystem.getScreenSizeInMeters().x / 2,RenderingSystem.getScreenSizeInMeters().y / 2,-1e9f);
+        position.scale.set(RenderingSystem.getScreenSizeInPixels().x / texture.region.getRegionWidth(),
+                RenderingSystem.getScreenSizeInPixels().y / texture.region.getRegionHeight());
 
         // add the components to the entity
         entity.add(position);
