@@ -1,6 +1,7 @@
 package com.example.learning;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.example.learning.game.GameScreen;
@@ -55,6 +56,8 @@ public class LaserKittens extends Game {
 
     @Override
     public void create() {
+        Gdx.input.setCatchBackKey(true);
+
         batch = new SpriteBatch();
         font = new BitmapFont();
 

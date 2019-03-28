@@ -7,13 +7,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
+import com.example.learning.game.GameScreen;
 import com.example.learning.settings.SettingsScreenInputProcessor;
+
+import java.util.ArrayList;
 
 public class ChooseLevelScreen implements Screen {
 
@@ -26,6 +32,13 @@ public class ChooseLevelScreen implements Screen {
 
     private InputMultiplexer inputMultiplexer;
 
+    private java.util.List<AbstractLevel> abstractLevels = new ArrayList<>();
+
+    private void fillLevels() {
+        abstractLevels.add(new TestLaserAbstractLevel());
+        abstractLevels.add(new TestMovePlayer());
+    }
+
     public ChooseLevelScreen(LaserKittens laserKittens) {
         this.parent = laserKittens;
         background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
@@ -34,6 +47,8 @@ public class ChooseLevelScreen implements Screen {
 
         InputProcessor inputProcessor = new SettingsScreenInputProcessor(parent);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
+
+        fillLevels();
     }
 
     @Override
@@ -98,11 +113,19 @@ public class ChooseLevelScreen implements Screen {
             // table.setDebug(true);
             stage.addActor(table);
 
-            setListeners();
-        }
-
-        private void setListeners() {
-
+            for (AbstractLevel abstractLevel : abstractLevels) {
+                TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
+                levelButton.getLabel().setFontScale(1f);
+                levelButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        GameScreen gameScreen = new GameScreen(parent, abstractLevel);
+                        parent.setScreen(gameScreen);
+                    }
+                });
+                table.add(levelButton).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+                table.row().pad(10, 0, 10, 0);
+            }
         }
     }
 }
