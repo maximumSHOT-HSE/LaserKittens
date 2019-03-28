@@ -1,8 +1,10 @@
 package com.example.learning.gamelogic.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class StateComponent implements Component {
+public class StateComponent implements Component, Poolable {
+
     public enum State {
         NORMAL,
         SOME;
@@ -19,5 +21,12 @@ public class StateComponent implements Component {
 
     public State get(){
         return state;
+    }
+
+    @Override
+    public void reset() {
+        state = State.NORMAL;
+        time = 0.0f;
+        isLooping = false;
     }
 }

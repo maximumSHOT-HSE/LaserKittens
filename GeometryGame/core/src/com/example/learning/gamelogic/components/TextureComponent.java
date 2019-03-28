@@ -2,7 +2,13 @@ package com.example.learning.gamelogic.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Pool.Poolable;
 
-public class TextureComponent implements Component {
-    public TextureRegion region = null;
+public class TextureComponent implements Component, Poolable {
+    public TextureRegion region;
+
+    @Override
+    public void reset() {
+        region = null;
+    }
 }
