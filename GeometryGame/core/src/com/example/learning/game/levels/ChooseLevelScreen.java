@@ -36,7 +36,7 @@ public class ChooseLevelScreen implements Screen {
 
     private void fillLevels() {
         abstractLevels.add(new TestLaserAbstractLevel());
-        abstractLevels.add(new TestMovePlayer());
+        abstractLevels.add(new TestMovePlayerLevel());
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {

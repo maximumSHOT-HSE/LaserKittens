@@ -118,6 +118,7 @@ public class SettingsScreen implements Screen {
             titleLabel.setFontScale(2f);
             volumeMusicLabel.setFontScale(1.5f);
             musicOnOffLabel.setFontScale(1.5f);
+            backButton.getLabel().setFontScale(2f);
 
             table.add(titleLabel).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).colspan(2);
             table.row().pad(10, 10, 10, 10);

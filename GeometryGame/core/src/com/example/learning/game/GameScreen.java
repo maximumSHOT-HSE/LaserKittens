@@ -33,7 +33,8 @@ public class GameScreen implements Screen {
         this.parent = geometryGame;
 
         engine = new PooledEngine();
-        AbstractLevelFactory levelFactory = abstractLevel.getFactory(engine, parent.assetManager);
+        abstractLevel.createLevel(engine, parent.assetManager);
+        AbstractLevelFactory levelFactory = abstractLevel.getFactory();
         world = levelFactory.getWorld();
         world.setContactListener(new MyContactListener());
 

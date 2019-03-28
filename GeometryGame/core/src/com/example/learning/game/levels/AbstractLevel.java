@@ -16,11 +16,11 @@ abstract public class AbstractLevel {
         this.name = name;
     }
 
-    abstract public void createLevel();
+    abstract public void createLevel(PooledEngine engine, MyAssetManager assetManager);
 
     public String getName() {
         return name;
     }
 
-    abstract public AbstractLevelFactory getFactory(PooledEngine engine, MyAssetManager assetManager);
+    abstract public AbstractLevelFactory getFactory();
 }

@@ -10,12 +10,12 @@ public class TestLaserAbstractLevel extends AbstractLevel {
     }
 
     @Override
-    public void createLevel() {
+    public void createLevel(PooledEngine engine, MyAssetManager assetManager) {
 
     }
 
     @Override
-    public AbstractLevelFactory getFactory(PooledEngine engine, MyAssetManager assetManager) {
+    public AbstractLevelFactory getFactory() {
         return null;
     }
 }

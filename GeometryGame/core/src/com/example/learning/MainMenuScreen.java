@@ -24,7 +24,6 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final LaserKittens laserKittens) {
         this.parent = laserKittens;
         background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
-
         stage = new Stage(new ScreenViewport());
     }
 
