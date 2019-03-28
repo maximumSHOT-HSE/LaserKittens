@@ -1,4 +1,4 @@
-package com.example.learning;
+package com.example.learning.game;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;

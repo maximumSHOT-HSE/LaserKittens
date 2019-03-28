@@ -1,9 +1,9 @@
-package com.example.learning.gamelogic.systems;
+package com.example.learning.game.gamelogic.systems;
 
 
-import com.example.learning.gamelogic.components.CollisionComponent;
-import com.example.learning.gamelogic.components.PlayerComponent;
-import com.example.learning.gamelogic.components.TypeComponent;
+import com.example.learning.game.gamelogic.components.CollisionComponent;
+import com.example.learning.game.gamelogic.components.PlayerComponent;
+import com.example.learning.game.gamelogic.components.TypeComponent;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;

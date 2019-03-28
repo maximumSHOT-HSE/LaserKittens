@@ -1,4 +1,4 @@
-package com.example.learning.gamelogic.systems;
+package com.example.learning.game.gamelogic.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;

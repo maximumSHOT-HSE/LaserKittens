@@ -1,7 +1,8 @@
-package com.example.learning;
+package com.example.learning.game;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.example.learning.LaserKittens;
 
 public class GameScreenInputProcessor implements InputProcessor {
 

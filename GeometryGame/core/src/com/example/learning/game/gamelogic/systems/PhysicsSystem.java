@@ -1,4 +1,4 @@
-package com.example.learning.gamelogic.systems;
+package com.example.learning.game.gamelogic.systems;
 
 
 import com.badlogic.ashley.core.ComponentMapper;
@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.example.learning.gamelogic.components.BodyComponent;
-import com.example.learning.gamelogic.components.TransformComponent;
+import com.example.learning.game.gamelogic.components.BodyComponent;
+import com.example.learning.game.gamelogic.components.TransformComponent;
 
 
 public class PhysicsSystem extends IteratingSystem {

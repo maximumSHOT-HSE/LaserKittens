@@ -1,4 +1,4 @@
-package com.example.learning.gamelogic.components;
+package com.example.learning.game.gamelogic.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;

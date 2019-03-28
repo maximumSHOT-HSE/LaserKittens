@@ -1,13 +1,12 @@
-package com.example.learning.gamelogic.systems;
+package com.example.learning.game.gamelogic.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.example.learning.LevelFactory;
-import com.example.learning.gamelogic.components.PlayerComponent;
-import com.example.learning.gamelogic.components.TransformComponent;
+import com.example.learning.game.LevelFactory;
+import com.example.learning.game.gamelogic.components.PlayerComponent;
+import com.example.learning.game.gamelogic.components.TransformComponent;
 
 public class LevelGenerationSystem extends IteratingSystem {
 

@@ -1,13 +1,12 @@
-package com.example.learning.gamelogic.systems;
+package com.example.learning.game.gamelogic.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.MathUtils;
-import com.example.learning.gamelogic.components.BodyComponent;
-import com.example.learning.gamelogic.components.PlayerComponent;
-import com.example.learning.gamelogic.components.StateComponent;
+import com.example.learning.game.gamelogic.components.BodyComponent;
+import com.example.learning.game.gamelogic.components.PlayerComponent;
+import com.example.learning.game.gamelogic.components.StateComponent;
 
 public class PlayerControlSystem extends IteratingSystem{
 

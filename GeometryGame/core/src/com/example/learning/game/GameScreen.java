@@ -1,4 +1,4 @@
-package com.example.learning;
+package com.example.learning.game;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
@@ -8,11 +8,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
-import com.example.learning.gamelogic.systems.CollisionSystem;
-import com.example.learning.gamelogic.systems.PhysicsDebugSystem;
-import com.example.learning.gamelogic.systems.PhysicsSystem;
-import com.example.learning.gamelogic.systems.PlayerControlSystem;
-import com.example.learning.gamelogic.systems.RenderingSystem;
+import com.example.learning.LaserKittens;
+import com.example.learning.game.gamelogic.systems.CollisionSystem;
+import com.example.learning.game.gamelogic.systems.PhysicsDebugSystem;
+import com.example.learning.game.gamelogic.systems.PhysicsSystem;
+import com.example.learning.game.gamelogic.systems.PlayerControlSystem;
+import com.example.learning.game.gamelogic.systems.RenderingSystem;
+import com.example.learning.settings.SettingsScreenInputProcessor;
 
 public class GameScreen implements Screen {
 
@@ -39,7 +41,7 @@ public class GameScreen implements Screen {
 
         Gdx.input.setCatchBackKey(true);
         GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
-        InputProcessor inputProcessor = new com.example.learning.SettingsScreenInputProcessor(parent);
+        InputProcessor inputProcessor = new SettingsScreenInputProcessor(parent);
         inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
 
 

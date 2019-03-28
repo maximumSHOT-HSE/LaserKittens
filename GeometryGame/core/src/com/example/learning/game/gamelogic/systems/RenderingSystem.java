@@ -1,4 +1,4 @@
-package com.example.learning.gamelogic.systems;
+package com.example.learning.game.gamelogic.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.example.learning.gamelogic.components.TextureComponent;
-import com.example.learning.gamelogic.components.TransformComponent;
+import com.example.learning.game.gamelogic.components.TextureComponent;
+import com.example.learning.game.gamelogic.components.TransformComponent;
 
 import java.util.Comparator;
 

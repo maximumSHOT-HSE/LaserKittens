@@ -1,17 +1,18 @@
-package com.example.learning;
+package com.example.learning.game;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.example.learning.gamelogic.components.BodyComponent;
-import com.example.learning.gamelogic.components.TextureComponent;
-import com.example.learning.gamelogic.components.TransformComponent;
+import com.example.learning.MyAssetManager;
+import com.example.learning.game.BodyFactory;
+import com.example.learning.game.gamelogic.components.BodyComponent;
+import com.example.learning.game.gamelogic.components.TextureComponent;
+import com.example.learning.game.gamelogic.components.TransformComponent;
 
 public class LevelFactory {
 
