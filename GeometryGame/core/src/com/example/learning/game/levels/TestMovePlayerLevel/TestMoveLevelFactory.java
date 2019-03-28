@@ -13,6 +13,7 @@ import com.example.learning.game.BodyFactory;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
+import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevelFactory;
 
 public class TestMoveLevelFactory extends AbstractLevelFactory {
@@ -34,10 +35,18 @@ public class TestMoveLevelFactory extends AbstractLevelFactory {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
 
-        position.position.set(16,16,-1e9f);
-        position.rotation = 90f;
-        position.scale.set(5, 5);
         texture.region = new TextureRegion(manager.manager.get("blue-background.jpg", Texture.class));
+
+        position.position.set(
+            RenderingSystem.getScreenSizeInMeters().x / 2,
+            RenderingSystem.getScreenSizeInMeters().y / 2,
+            -1e9f
+        );
+
+        position.scale.set(
+            RenderingSystem.getScreenSizeInPixels().x / texture.region.getRegionWidth(),
+            RenderingSystem.getScreenSizeInPixels().y / texture.region.getRegionHeight()
+        );
 
         // add the components to the entity
         entity.add(position);

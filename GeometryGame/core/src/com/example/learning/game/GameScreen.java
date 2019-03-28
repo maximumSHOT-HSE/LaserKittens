@@ -11,13 +11,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.physics.box2d.World;
 import com.example.learning.LaserKittens;
+import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.systems.CollisionSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsDebugSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsSystem;
 import com.example.learning.game.gamelogic.systems.PlayerControlSystem;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
-import com.example.learning.game.levels.AbstractLevelFactory;
 import com.example.learning.game.levels.AbstractLevel;
+import com.example.learning.game.levels.AbstractLevelFactory;
 
 public class GameScreen implements Screen {
 
@@ -92,8 +93,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        world.dispose();
+        for (Entity entity : engine.getEntities()) {
+            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+            if(bodyComponent != null) {
+                world.destroyBody(bodyComponent.body);
+            }
+        }
         engine.removeAllEntities();
-//        probably bodies should be disposed somehow as well
     }
 }

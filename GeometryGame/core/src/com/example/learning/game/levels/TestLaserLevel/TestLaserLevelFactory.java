@@ -32,20 +32,17 @@ public class TestLaserLevelFactory extends AbstractLevelFactory {
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         // create the data for the components and add them to the components
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
 
         position.position.set(
-            RenderingSystem.getScreenSizeInMeters().x,
-            RenderingSystem.getScreenSizeInMeters().y,
+            RenderingSystem.getScreenSizeInMeters().x / 2,
+            RenderingSystem.getScreenSizeInMeters().y / 2,
             -1e9f
         );
-//        position.rotation = 90f;
         texture.region = new TextureRegion(manager.manager.get("blue-background.jpg", Texture.class));
 
         position.scale.set(
-            RenderingSystem.getScreenSizeInMeters().x / texture.region.getRegionWidth(),
-            RenderingSystem.getScreenSizeInMeters().y / texture.region.getRegionHeight()
+            RenderingSystem.getScreenSizeInPixels().x / texture.region.getRegionWidth(),
+            RenderingSystem.getScreenSizeInPixels().y / texture.region.getRegionHeight()
         );
 
         // add the components to the entity
