@@ -24,7 +24,6 @@ public class GameGestureListener implements GestureListener{
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        System.out.println("WOW");
         return false;
     }
 
@@ -42,9 +41,9 @@ public class GameGestureListener implements GestureListener{
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
-        camera.translate(-deltaX * currentZoom * 0.5f, deltaY * currentZoom*0.5f);
-        camera.update();
-        return true;
+        //camera.translate(-deltaX * currentZoom * 0.5f, deltaY * currentZoom*0.5f);
+        //camera.update();
+        return false;
     }
 
     @Override

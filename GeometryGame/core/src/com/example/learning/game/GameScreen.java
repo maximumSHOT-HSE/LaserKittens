@@ -1,5 +1,6 @@
 package com.example.learning.game;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -39,21 +40,19 @@ public class GameScreen implements Screen {
         camera = renderingSystem.getCamera();
 
 
-        Gdx.input.setCatchBackKey(true);
-        GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
-        InputProcessor inputProcessor = new SettingsScreenInputProcessor(parent);
-        inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
-
-
         engine.addSystem(renderingSystem);
         engine.addSystem(new PhysicsSystem(levelFactory.world));
         engine.addSystem(new PhysicsDebugSystem(levelFactory.world, renderingSystem.getCamera()));
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem());
 
-        levelFactory.createPlayer(10, 10);
-        levelFactory.createPlayer(20, 20);
+        Entity player = levelFactory.createPlayer(16, 16);
         levelFactory.createBackground();
+
+        Gdx.input.setCatchBackKey(true);
+        GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
+        InputProcessor inputProcessor = new GameScreenInputProcessor(parent, player, camera);
+        inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
     }
 
     @Override

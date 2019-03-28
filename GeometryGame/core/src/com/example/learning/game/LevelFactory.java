@@ -29,7 +29,7 @@ public class LevelFactory {
     }
 
 
-    public void createPlayer(float x, float y){
+    public Entity createPlayer(float x, float y){
 
         // Create the Entity and all the components that will go in the entity
         Entity entity = engine.createEntity();
@@ -50,10 +50,10 @@ public class LevelFactory {
 
         // add the entity to the engine
         engine.addEntity(entity);
-
+        return entity;
     }
 
-    public void createBackground(){
+    public Entity createBackground(){
 
         // Create the Entity and all the components that will go in the entity
         Entity entity = engine.createEntity();
@@ -74,6 +74,6 @@ public class LevelFactory {
 
         // add the entity to the engine
         engine.addEntity(entity);
-
+        return entity;
     }
 }
