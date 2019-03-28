@@ -24,9 +24,6 @@ public class GameScreen implements Screen {
     private LevelFactory levelFactory;
 
 
-    private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer(
-            true, true, true, true, true, true);
-
     private InputMultiplexer inputMultiplexer;
 
     public GameScreen(LaserKittens geometryGame) {
@@ -70,7 +67,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         engine.update(delta);
-        debugRenderer.render(levelFactory.world, camera.combined);
     }
 
     @Override
