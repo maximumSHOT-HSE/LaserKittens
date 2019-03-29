@@ -22,7 +22,7 @@ public class TestStarsLevelFactory extends AbstractLevelFactory {
     private Entity player;
 
     public TestStarsLevelFactory(){
-        world = new World(new Vector2(0,0), true);
+        world = new World(new Vector2(0,0), false);
     }
 
     public Entity createBackground() {
@@ -73,7 +73,7 @@ public class TestStarsLevelFactory extends AbstractLevelFactory {
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         // create the data for the components and add them to the components
-        body.body = bodyFactory.newCircleBody(new Vector2(x, y), radius, BodyDef.BodyType.KinematicBody, false);
+        body.body = bodyFactory.newCircleBody(new Vector2(x, y), radius, BodyDef.BodyType.DynamicBody, false);
 
         position.position.set(x, y,0);
         texture.region = new TextureRegion(manager.manager.get("badlogic.jpg", Texture.class));

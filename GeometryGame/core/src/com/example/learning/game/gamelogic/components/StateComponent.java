@@ -1,13 +1,15 @@
 package com.example.learning.game.gamelogic.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class StateComponent implements Component, Poolable {
 
     public enum State {
         NORMAL,
-        SOME;
+        SOME,
+        FINISHED
     }
 
     private State state = State.NORMAL;
@@ -28,5 +30,9 @@ public class StateComponent implements Component, Poolable {
         state = State.NORMAL;
         time = 0.0f;
         isLooping = false;
+    }
+
+    public void finish() {
+        state = State.FINISHED;
     }
 }

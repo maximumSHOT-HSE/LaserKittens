@@ -9,7 +9,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.example.learning.game.Mapper;
 import com.example.learning.game.gamelogic.components.BodyComponent;
+import com.example.learning.game.gamelogic.components.StateComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
 
 
@@ -26,7 +28,10 @@ public class PhysicsSystem extends IteratingSystem {
 
     @SuppressWarnings("unchecked")
     public PhysicsSystem(World world) {
-        super(Family.all(BodyComponent.class, TransformComponent.class).get());
+        super(Family.all(
+                BodyComponent.class,
+                TransformComponent.class
+        ).get());
         this.world = world;
         this.bodiesQueue = new Array<>();
     }
@@ -39,16 +44,6 @@ public class PhysicsSystem extends IteratingSystem {
         if(accumulator >= MAX_STEP_TIME) {
             world.step(MAX_STEP_TIME, 6, 2);
             accumulator -= MAX_STEP_TIME;
-
-            //Entity Queue
-            for (Entity entity : bodiesQueue) {
-                TransformComponent tfm = tm.get(entity);
-                BodyComponent bodyComp = bm.get(entity);
-                Vector2 position = bodyComp.body.getPosition();
-                tfm.position.x = position.x;
-                tfm.position.y = position.y;
-                tfm.rotation = bodyComp.body.getAngle() * MathUtils.radiansToDegrees;
-            }
         }
         bodiesQueue.clear();
     }

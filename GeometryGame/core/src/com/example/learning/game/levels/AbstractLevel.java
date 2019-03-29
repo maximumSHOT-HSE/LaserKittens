@@ -3,6 +3,8 @@ package com.example.learning.game.levels;
 import com.badlogic.ashley.core.PooledEngine;
 import com.example.learning.MyAssetManager;
 
+import java.util.Map;
+
 /**
  * Class for encapsulating logic and
  * data related with level

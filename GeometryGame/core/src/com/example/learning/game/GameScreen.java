@@ -12,7 +12,9 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.physics.box2d.World;
 import com.example.learning.LaserKittens;
 import com.example.learning.game.gamelogic.components.BodyComponent;
+import com.example.learning.game.gamelogic.systems.BulletSystem;
 import com.example.learning.game.gamelogic.systems.CollisionSystem;
+import com.example.learning.game.gamelogic.systems.GarbageCollectionSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsDebugSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsSystem;
 import com.example.learning.game.gamelogic.systems.PlayerControlSystem;
@@ -39,20 +41,25 @@ public class GameScreen implements Screen {
         world = levelFactory.getWorld();
         world.setContactListener(new MyContactListener());
 
+
         // Create our new rendering system
         RenderingSystem renderingSystem = new RenderingSystem(parent.batch);
         camera = renderingSystem.getCamera();
+
+        camera.zoom = 1.005f; // TODO delete after creating wall
 
         engine.addSystem(renderingSystem);
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem());
+        engine.addSystem(new BulletSystem());
+        engine.addSystem(new GarbageCollectionSystem(world, engine));
 
         Entity player = levelFactory.getPlayer();
 
         GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
-        InputProcessor inputProcessor = new GameScreenInputProcessor(parent, player, camera);
+        InputProcessor inputProcessor = new GameScreenInputProcessor(parent, abstractLevel, camera);
         inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
     }
 

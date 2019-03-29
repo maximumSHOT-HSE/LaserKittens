@@ -27,7 +27,8 @@ public class RenderingSystem extends SortedIteratingSystem {
     // static method to get screen width in metres
     private static Vector2 meterDimensions = new Vector2();
     private static Vector2 pixelDimensions = new Vector2();
-    public static Vector2 getScreenSizeInMeters(){
+
+    public static Vector2 getScreenSizeInMeters() {
         meterDimensions.set(Gdx.graphics.getWidth()*PIXELS_TO_METRES,
                 Gdx.graphics.getHeight()*PIXELS_TO_METRES);
         return meterDimensions;
@@ -123,9 +124,6 @@ public class RenderingSystem extends SortedIteratingSystem {
     public OrthographicCamera getCamera() {
         return camera;
     }
-
-
-
 
     private static class ZComparator implements Comparator<Entity> {
         private ComponentMapper<TransformComponent> cmTrans;

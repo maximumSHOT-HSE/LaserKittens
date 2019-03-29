@@ -11,13 +11,16 @@ import com.badlogic.gdx.math.Vector3;
 import com.example.learning.LaserKittens;
 import com.example.learning.game.gamelogic.components.PlayerComponent;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
+import com.example.learning.game.levels.AbstractLevel;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 public class GameScreenInputProcessor implements InputProcessor {
 
     private LaserKittens laserKittens;
     private Entity player;
+    private AbstractLevel level;
     private OrthographicCamera camera;
 
     private boolean dragging = false;
@@ -25,9 +28,10 @@ public class GameScreenInputProcessor implements InputProcessor {
     private Vector2 draggingStartedDiff = new Vector2();
 
 
-    public GameScreenInputProcessor(LaserKittens laserKittens, Entity player, OrthographicCamera camera) {
+    public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera) {
         this.laserKittens = laserKittens;
-        this.player = player;
+        this.player = level.getFactory().getPlayer();
+        this.level = level;
         this.camera = camera;
     }
 
@@ -72,8 +76,11 @@ public class GameScreenInputProcessor implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         camera.unproject(position.set(screenX, screenY, 0));
 
-
-        if (!clickInPlayerRegion()) return false;
+        if (!clickInPlayerRegion()) {
+//            level.getFactory().createBullet();
+//            return true;
+            return false;
+        }
 
         dragging = true;
         float playerX = Mapper.bodyComponent.get(player).body.getPosition().x;
@@ -91,17 +98,21 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (!dragging) return false;
+        if (!dragging) {
+            return false;
+        }
+        
         camera.unproject(position.set(screenX, screenY, 0));
         position.x -= draggingStartedDiff.x;
         position.y -= draggingStartedDiff.y;
-
 
         float playerX = Mapper.bodyComponent.get(player).body.getPosition().x;
         float playerY = Mapper.bodyComponent.get(player).body.getPosition().y;
         Mapper.bodyComponent.get(player).body.setTransform(position.x, position.y, 0);
         Mapper.transformComponent.get(player).position.x = position.x;
         Mapper.transformComponent.get(player).position.y = position.y;
+
+        //Mapper.bodyComponent.get(player).body.setAwake(true);
 
         //camera.translate(position.x - playerX, position.y - playerY);
 
