@@ -136,11 +136,10 @@ public class TestLaserLevelFactory extends AbstractLevelFactory {
         body.body = bodyFactory.newBullet(source, direction);
 
         bulletComponent.creationTime = System.currentTimeMillis();
-        bulletComponent.lifeTime = 1000;
+        bulletComponent.lifeTime = 1000000;
+        bulletComponent.path.add(source);
 
         stateComponent.set(StateComponent.State.NORMAL);
-
-
 
         entity.add(body);
         entity.add(position);
@@ -166,7 +165,7 @@ public class TestLaserLevelFactory extends AbstractLevelFactory {
         createWall(new Vector2(width, height * 0.5f), width * 0.1f, height); // right wall
         createWall(new Vector2(0.5f * width, 0), width, 0.1f * height); // down wall
         createWall(new Vector2(0.5f * width, height), width, 0.1f * height); // up wall
-        createWall(new Vector2(0.5f * width, 0.7f * height), 0.5f * width, 0.02f * height);
+        createWall(new Vector2(0.5f * width, 0.7f * height), 0.5f * width, 0.02f * height); // obstacle
 
         createLaser(
             new Vector2(

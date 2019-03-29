@@ -1,7 +1,10 @@
 package com.example.learning.game.gamelogic.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
+
+import java.util.ArrayList;
 
 public class BulletComponent implements Component, Poolable {
 
@@ -10,6 +13,8 @@ public class BulletComponent implements Component, Poolable {
 
     /** Time life of bullet in milliseconds */
     public float lifeTime;
+
+    public java.util.List<Vector2> path = new ArrayList<>();
 
     @Override
     public void reset() {
