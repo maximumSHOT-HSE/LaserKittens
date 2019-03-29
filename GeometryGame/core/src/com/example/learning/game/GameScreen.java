@@ -9,13 +9,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.physics.box2d.World;
 import com.example.learning.LaserKittens;
+import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.systems.CollisionSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsDebugSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsSystem;
 import com.example.learning.game.gamelogic.systems.PlayerControlSystem;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
-import com.example.learning.settings.SettingsScreenInputProcessor;
+import com.example.learning.game.levels.AbstractLevel;
+import com.example.learning.game.levels.AbstractLevelFactory;
 
 public class GameScreen implements Screen {
 
@@ -23,33 +26,31 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private PooledEngine engine; // PooledEngine! reuse components. may cause problems
     //adding poolable interface may be needed somewhere
-    private LevelFactory levelFactory;
-
 
     private InputMultiplexer inputMultiplexer;
+    private World world;
 
-    public GameScreen(LaserKittens geometryGame) {
+    public GameScreen(LaserKittens geometryGame, AbstractLevel abstractLevel) {
         this.parent = geometryGame;
 
         engine = new PooledEngine();
-        levelFactory = new LevelFactory(engine, parent.assetManager);
-        levelFactory.world.setContactListener(new MyContactListener());
+        abstractLevel.createLevel(engine, parent.assetManager);
+        AbstractLevelFactory levelFactory = abstractLevel.getFactory();
+        world = levelFactory.getWorld();
+        world.setContactListener(new MyContactListener());
 
         // Create our new rendering system
         RenderingSystem renderingSystem = new RenderingSystem(parent.batch);
         camera = renderingSystem.getCamera();
 
-
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PhysicsSystem(levelFactory.world));
-        engine.addSystem(new PhysicsDebugSystem(levelFactory.world, renderingSystem.getCamera()));
+        engine.addSystem(new PhysicsSystem(world));
+        engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem());
 
-        Entity player = levelFactory.createPlayer(16, 16);
-        levelFactory.createBackground();
+        Entity player = levelFactory.getPlayer();
 
-        Gdx.input.setCatchBackKey(true);
         GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
         InputProcessor inputProcessor = new GameScreenInputProcessor(parent, player, camera);
         inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
@@ -57,7 +58,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
         parent.batch.setProjectionMatrix(camera.combined);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
@@ -93,8 +93,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        levelFactory.world.dispose();
+        for (Entity entity : engine.getEntities()) {
+            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+            if(bodyComponent != null) {
+                world.destroyBody(bodyComponent.body);
+            }
+        }
         engine.removeAllEntities();
-        //probably bodies should be disposed somehow as well
     }
 }

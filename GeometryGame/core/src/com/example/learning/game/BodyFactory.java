@@ -19,9 +19,7 @@ public class BodyFactory {
     }
 
     public static BodyFactory getBodyFactory(World world) {
-        if (bodyFactory == null) {
-            bodyFactory = new BodyFactory(world);
-        }
+        bodyFactory = new BodyFactory(world);
         return bodyFactory;
     }
 

@@ -1,9 +1,11 @@
 package com.example.learning;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.example.learning.game.GameScreen;
+import com.example.learning.game.levels.ChooseLevelScreen;
 import com.example.learning.settings.AppPreferences;
 import com.example.learning.settings.SettingsScreen;
 
@@ -17,12 +19,12 @@ public class LaserKittens extends Game {
 
     public enum SCREEN_TYPE {
         MAIN_MENU_SCREEN,
-        GAME_SCREEN,
+        CHOOSE_LEVEL_SCREEN,
         SETTINGS_SCREEN
     }
 
     private MainMenuScreen mainMenuScreen;
-    private GameScreen gameScreen;
+    private ChooseLevelScreen chooseLevelScreen;
     private SettingsScreen settingsScreen;
 
     public AppPreferences getPreferences() {
@@ -37,11 +39,11 @@ public class LaserKittens extends Game {
                 }
                 this.setScreen(mainMenuScreen);
                 break;
-            case GAME_SCREEN:
-                if (gameScreen == null) {
-                    gameScreen = new GameScreen(this);
+            case CHOOSE_LEVEL_SCREEN:
+                if (chooseLevelScreen == null) {
+                    chooseLevelScreen = new ChooseLevelScreen(this);
                 }
-                this.setScreen(gameScreen);
+                this.setScreen(chooseLevelScreen);
                 break;
             case SETTINGS_SCREEN:
                 if (settingsScreen == null) {
@@ -55,6 +57,8 @@ public class LaserKittens extends Game {
 
     @Override
     public void create() {
+        Gdx.input.setCatchBackKey(true);
+
         batch = new SpriteBatch();
         font = new BitmapFont();
 
