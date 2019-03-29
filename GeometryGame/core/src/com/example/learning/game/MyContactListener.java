@@ -21,7 +21,7 @@ public class MyContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
         System.out.println(fa.getBody().getType() + " has hit " + fb.getBody().getType());
-        fa.getBody().applyForceToCenter(new Vector2(-10000, -100000), true);
+        //fa.getBody().applyForceToCenter(new Vector2(-10000, -100000), true);
     }
 
     @Override
