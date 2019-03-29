@@ -1,19 +1,13 @@
 package com.example.learning.game;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.example.learning.LaserKittens;
-import com.example.learning.game.gamelogic.components.BodyComponent;
-import com.example.learning.game.gamelogic.components.PlayerComponent;
-import com.example.learning.game.gamelogic.components.TransformComponent;
-
-import java.util.Map;
 
 public class GameScreenInputProcessor implements InputProcessor {
 
@@ -36,7 +30,9 @@ public class GameScreenInputProcessor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
+            final Screen gameScreen = laserKittens.getScreen();
             laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+            gameScreen.dispose();
             return true;
         }
         return false;
