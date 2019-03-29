@@ -90,14 +90,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         float dy = to.y - from.y;
         float dist = (float) Math.sqrt(dx * dx + dy *dy);
         float angle = (float) Math.atan2(dy, dx);
-        System.out.println("PRINT! (" + RenderingSystem.MetersToPixels(from.x) +
-                ", " +
-                RenderingSystem.MetersToPixels(from.y) +
-                ") - (" +
-                RenderingSystem.MetersToPixels(to.x) +
-                ", " +
-                RenderingSystem.MetersToPixels(to.y) +
-        ")");
+        System.out.println("PRINT! (" + from.x + ", " + from.y + ") (" + to.x + ", " + to.y + ")");
 //        from = new Vector2(10, 10);
 //        to = new Vector2(500, 500);
         shapeRenderer.setColor(Color.RED);
@@ -157,18 +150,21 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
+        System.out.println("\n");
+
         for (Entity entity : renderQueue) {
             BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
 
             if (bulletComponent != null && bodyComponent != null) {
                 Vector2 from;
-                from = bulletComponent.path.get(0);
+                from = new Vector2(bulletComponent.path.get(0));
                 for (Vector2 to : bulletComponent.path) {
                     drawSegment(from, to, shapeRenderer);
-//                    from.x = to.x;
-//                    from.y = to.y;
+                    from.x = to.x;
+                    from.y = to.y;
                 }
+                drawSegment(from, bodyComponent.body.getPosition(), shapeRenderer);
             }
         }
 

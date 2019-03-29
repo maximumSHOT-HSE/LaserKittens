@@ -3,7 +3,6 @@ package com.example.learning.game.gamelogic.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.Vector2;
 import com.example.learning.game.Mapper;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.BulletComponent;
@@ -24,10 +23,9 @@ public class BulletSystem extends IteratingSystem {
             stateComponent.finish();
             bulletComponent.path.clear();
         } else {
-            Vector2 current = bodyComponent.body.getPosition();
-//            if (!bulletComponent.path.get(bulletComponent.path.size() - 1).equals(current)) {
-                bulletComponent.path.add(current);
-//            }
+            if (bulletComponent.path.size() > 20) {
+                bulletComponent.path.remove(0);
+            }
         }
     }
 }

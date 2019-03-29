@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.example.learning.MyAssetManager;
 import com.example.learning.game.BodyFactory;
@@ -136,10 +138,13 @@ public class TestLaserLevelFactory extends AbstractLevelFactory {
         body.body = bodyFactory.newBullet(source, direction);
 
         bulletComponent.creationTime = System.currentTimeMillis();
-        bulletComponent.lifeTime = 1000000;
+        bulletComponent.lifeTime = 1500000;
         bulletComponent.path.add(source);
 
         stateComponent.set(StateComponent.State.NORMAL);
+        for(Fixture fixture : body.body.getFixtureList()) {
+            fixture.setUserData(entity);
+        }
 
         entity.add(body);
         entity.add(position);
