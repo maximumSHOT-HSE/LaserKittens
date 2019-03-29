@@ -1,6 +1,7 @@
 package com.example.learning.game;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+
+import java.util.Map;
 
 public class BodyFactory {
 
@@ -55,7 +58,7 @@ public class BodyFactory {
 
         FixtureDef fixtureDef = newFixture(circleShape);
         boxBody.createFixture(fixtureDef);
-        //circleShape.dispose();
+        circleShape.dispose();
 
         return boxBody;
     }
@@ -80,18 +83,51 @@ public class BodyFactory {
         return boxBody;
     }
 
-    public Body newPolygonBody(Vector2[] polygonVertices, Vector2 leftDownCorner, BodyDef.BodyType bodyType) {
+    public Body newPolygonBody(Vector2[] polygonVertices, Vector2 leftDownCorner, BodyDef.BodyType bodyType, boolean fixedRotation) {
+
         BodyDef boxBodyDef = new BodyDef();
         boxBodyDef.type = bodyType;
         boxBodyDef.position.x = leftDownCorner.x;
         boxBodyDef.position.y = leftDownCorner.y;
-
+        boxBodyDef.fixedRotation = fixedRotation;
         Body boxBody = world.createBody(boxBodyDef);
 
         PolygonShape polygon = new PolygonShape();
         polygon.set(polygonVertices);
         boxBody.createFixture(newFixture(polygon));
         polygon.dispose();
+
+
+        return boxBody;
+    }
+
+    private Vector2 coordByAngle(Vector2 center, float angle, float length) {
+        return new Vector2(center.x + (float)Math.cos(Math.toRadians(angle)) * length, center.y + (float)Math.sin(Math.toRadians(angle)) * length);
+    }
+
+    public Body newStar(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
+        Vector2 leftDownCorner = new Vector2(center.x + radius * (float)Math.cos(Math.toRadians(234)), center.y + radius * (float)Math.sin(Math.toRadians(234f)));
+
+        BodyDef boxBodyDef = new BodyDef();
+        boxBodyDef.type = bodyType;
+        boxBodyDef.position.x = leftDownCorner.x;
+        boxBodyDef.position.y = leftDownCorner.y;
+        boxBodyDef.fixedRotation = fixedRotation;
+        Body boxBody = world.createBody(boxBodyDef);
+
+        for (int i = 0; i < 5; i++) {
+            float angle = 234f - i * 72f;
+            float angleR = angle - 36f;
+            float angleL = angle + 36f;
+
+            Vector2[] coordinates = {coordByAngle(center, angle, radius), coordByAngle(center, angleR, radius / 2),
+                    center, coordByAngle(center, angleL, radius / 2)};
+
+            PolygonShape polygon = new PolygonShape();
+            polygon.set(coordinates);
+            boxBody.createFixture(newFixture(polygon));
+            polygon.dispose();
+        }
 
         return boxBody;
     }

@@ -65,8 +65,6 @@ public class GameScreenInputProcessor implements InputProcessor {
 
 
         Rectangle textureBounds = new Rectangle(textureX - originX,textureY - originY,textureWidth,textureHeight);
-        System.out.println(textureBounds.x + " " + textureBounds.y + " ! " + textureBounds.width + " " + textureBounds.height);
-        System.out.println(position.x + " " + position.y);
         return textureBounds.contains(position.x, position.y);
     }
 
