@@ -29,8 +29,9 @@ public class GarbageCollectionSystem extends IteratingSystem {
         StateComponent stateComponent = Mapper.stateComponent.get(entity);
         if (stateComponent.get() == StateComponent.State.FINISHED) {
             engine.removeEntity(entity);
-            if (entity.getComponent(BodyComponent.class) != null) {
-                world.destroyBody(entity.getComponent(BodyComponent.class).body);
+            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+            if (bodyComponent != null) {
+                world.destroyBody(bodyComponent.body);
             }
         }
     }

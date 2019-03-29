@@ -140,6 +140,8 @@ public class TestLaserLevelFactory extends AbstractLevelFactory {
 
         stateComponent.set(StateComponent.State.NORMAL);
 
+
+
         entity.add(body);
         entity.add(position);
         entity.add(texture);

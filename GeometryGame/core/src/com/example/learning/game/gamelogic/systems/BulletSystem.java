@@ -17,7 +17,6 @@ public class BulletSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
         StateComponent stateComponent = Mapper.stateComponent.get(entity);
-        System.out.println("TIME !!!!!!!!!!! = " + (System.currentTimeMillis()));
         if (System.currentTimeMillis() - bulletComponent.creationTime >= bulletComponent.lifeTime) {
             stateComponent.finish();
         }
