@@ -199,8 +199,8 @@ public class BodyFactory {
         boxBodyDef.type = BodyDef.BodyType.DynamicBody;
         boxBodyDef.position.x = source.x;
         boxBodyDef.position.y = source.y;
-        boxBodyDef.linearVelocity.x = 1e9f;
-        boxBodyDef.linearVelocity.y = 1e9f;
+        boxBodyDef.linearVelocity.x = 1e9f * direction.x;
+        boxBodyDef.linearVelocity.y = 1e9f * direction.y;
         boxBodyDef.bullet = true;
         boxBodyDef.linearDamping = 0f;
         boxBodyDef.gravityScale = 0;
