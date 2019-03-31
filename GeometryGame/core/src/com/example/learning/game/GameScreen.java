@@ -43,10 +43,8 @@ public class GameScreen implements Screen {
 
 
         // Create our new rendering system
-        RenderingSystem renderingSystem = new RenderingSystem(parent.batch);
+        RenderingSystem renderingSystem = new RenderingSystem(parent.batch, parent.shapeRenderer);
         camera = renderingSystem.getCamera();
-
-        camera.zoom = 1.005f; // TODO delete after creating wall
 
         engine.addSystem(renderingSystem);
         engine.addSystem(new PhysicsSystem(world));
@@ -55,8 +53,6 @@ public class GameScreen implements Screen {
         engine.addSystem(new PlayerControlSystem());
         engine.addSystem(new BulletSystem());
         engine.addSystem(new GarbageCollectionSystem(world, engine));
-
-        Entity player = levelFactory.getPlayer();
 
         GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
         InputProcessor inputProcessor = new GameScreenInputProcessor(parent, abstractLevel, camera);

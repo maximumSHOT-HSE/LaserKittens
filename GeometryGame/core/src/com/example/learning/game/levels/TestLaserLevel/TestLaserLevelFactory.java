@@ -27,8 +27,6 @@ import javax.swing.Box;
 
 public class TestLaserLevelFactory extends AbstractLevelFactory {
 
-    private BodyFactory bodyFactory;
-    public World world;
     private Entity player;
 
     public TestLaserLevelFactory() {
@@ -71,22 +69,21 @@ public class TestLaserLevelFactory extends AbstractLevelFactory {
     @Override
     public Entity getPlayer() {
         if (player == null) {
-            player = createPlayer();
+            player = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f, 0.8f);
         }
         return player;
     }
 
-    private Entity createPlayer() {
+    @Override
+    protected Entity createPlayer(float px, float py, float radius) {
         // Create the Entity and all the components that will go in the entity
         Entity entity = engine.createEntity();
         BodyComponent body = engine.createComponent(BodyComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         // create the data for the components and add them to the components
-        float radius = 0.8f;
-        float px = RenderingSystem.getScreenSizeInMeters().x / 2;
-        float py = RenderingSystem.getScreenSizeInMeters().y * 0.1f;
-        body.body = bodyFactory.newCircleBody(new Vector2(px, py), radius, BodyDef.BodyType.KinematicBody, false);
+
+        body.body = bodyFactory.newPlayerBody(new Vector2(px, py), radius);
 
         position.position.x = px;
         position.position.y = py;
@@ -164,7 +161,8 @@ public class TestLaserLevelFactory extends AbstractLevelFactory {
         this.manager = assetManager;
         bodyFactory = BodyFactory.getBodyFactory(world);
         createBackground();
-        player = createPlayer();
+
+        player = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f, 0.8f);
 
         createWall(new Vector2(0, height * 0.5f), width * 0.1f, height); // left wall
         createWall(new Vector2(width, height * 0.5f), width * 0.1f, height); // right wall

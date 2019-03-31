@@ -55,6 +55,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     private SpriteBatch batch; // a reference to our spritebatch
+    private ShapeRenderer shapeRenderer; // a reference to our shape renderer for drawing lines
     private Array<Entity> renderQueue; // an array used to allow sorting of images allowing us to draw images on top of each other
     private Comparator<Entity> comparator = new ZComparator(); // a comparator to sort images based on the z position of the transfromComponent
     private OrthographicCamera camera; // a reference to our camera
@@ -64,7 +65,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     private ComponentMapper<TransformComponent> transformM;
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch batch) {
+    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer) {
         // gets all entities with a TransofmComponent and TextureComponent
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
@@ -73,9 +74,10 @@ public class RenderingSystem extends SortedIteratingSystem {
         transformM = ComponentMapper.getFor(TransformComponent.class);
 
         // create the array for sorting entities
-        renderQueue = new Array<Entity>();
+        renderQueue = new Array<>();
 
         this.batch = batch;  // set our batch to the one supplied in constructor
+        this.shapeRenderer = shapeRenderer;
 
         // set up the camera to match our screen size
         camera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
@@ -128,12 +130,8 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         batch.end();
 
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
-
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-
-        System.out.println("\n");
 
         for (Entity entity : renderQueue) {
             BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.example.learning.game.GameScreen;
 import com.example.learning.game.levels.ChooseLevelScreen;
 import com.example.learning.settings.AppPreferences;
@@ -12,6 +13,7 @@ import com.example.learning.settings.SettingsScreen;
 public class LaserKittens extends Game {
 
     public SpriteBatch batch;
+    public ShapeRenderer shapeRenderer;
     public BitmapFont font;
     private final AppPreferences preferences = new AppPreferences();
     public final MyAssetManager assetManager = new MyAssetManager();
@@ -60,6 +62,7 @@ public class LaserKittens extends Game {
         Gdx.input.setCatchBackKey(true);
 
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
 
         assetManager.loadImages();
@@ -80,6 +83,7 @@ public class LaserKittens extends Game {
         batch.dispose();
         font.dispose();
         assetManager.manager.dispose();
+        shapeRenderer.dispose();
     }
 
 }
