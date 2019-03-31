@@ -63,6 +63,29 @@ public class BodyFactory {
         return boxBody;
     }
 
+    public Body newPlayerBody(Vector2 center, float radius) {
+        BodyDef boxBodyDef = new BodyDef();
+        boxBodyDef.type = BodyDef.BodyType.DynamicBody;
+        boxBodyDef.position.x = center.x;
+        boxBodyDef.position.y = center.y;
+        boxBodyDef.fixedRotation = true;
+        boxBodyDef.linearVelocity.y = 0f;
+        boxBodyDef.angle = 0;
+
+        //create the body to attach said definition
+        Body boxBody = world.createBody(boxBodyDef);
+
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(radius);
+
+        FixtureDef fixtureDef = newFixture(circleShape);
+        fixtureDef.density = 100f;
+        boxBody.createFixture(fixtureDef);
+        circleShape.dispose();
+
+        return boxBody;
+    }
+
     public Body newRectangleBody(Vector2 leftDownCorner, float width, float height, BodyDef.BodyType bodyType, boolean fixedRotation){
         leftDownCorner.x += width / 2f;
         leftDownCorner.y += height / 2f;
