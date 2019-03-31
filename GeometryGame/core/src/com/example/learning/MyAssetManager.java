@@ -28,6 +28,7 @@ public class MyAssetManager {
     public void loadImages() {
         manager.load(badlogic, Texture.class);
         manager.load(blueBackground, Texture.class);
+        manager.load("Cat1.png", Texture.class);
     }
 
     public void loadSkins() {
