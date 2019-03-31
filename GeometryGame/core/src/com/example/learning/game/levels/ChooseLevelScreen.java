@@ -19,6 +19,7 @@ import com.example.learning.LaserKittens;
 import com.example.learning.game.GameScreen;
 import com.example.learning.game.levels.TestLaserLevel.TestLaserLevel;
 import com.example.learning.game.levels.TestMovePlayerLevel.TestMovePlayerLevel;
+import com.example.learning.game.levels.TestShooting.ShootingLevel;
 import com.example.learning.game.levels.TestStars.TestStarsLevel;
 import com.example.learning.settings.SettingsScreenInputProcessor;
 
@@ -41,6 +42,7 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new TestLaserLevel());
         abstractLevels.add(new TestMovePlayerLevel());
         abstractLevels.add(new TestStarsLevel());
+        abstractLevels.add(new ShootingLevel());
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {
