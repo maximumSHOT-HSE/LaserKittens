@@ -60,6 +60,8 @@ public class ChooseLevelScreen implements Screen {
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
 
         fillLevels();
+
+        menu = new Menu();
     }
 
     @Override
@@ -67,7 +69,7 @@ public class ChooseLevelScreen implements Screen {
         stage.clear();
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        menu = new Menu(stage);
+        menu.draw(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
@@ -117,15 +119,20 @@ public class ChooseLevelScreen implements Screen {
     private class Menu {
         private Table table = new Table();
         private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-        private SlidingPane slidingPane = new SlidingPane();
+        private SlidingPane slidingPane;
+        private int currentSection = abstractLevels.size();
+        private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
 
-        public Menu(Stage stage) {
+        public void draw(Stage stage) {
+            slidingPane = new SlidingPane();
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
                 levelButton.getLabel().setFontScale(1f);
                 levelButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
+                        currentSection = slidingPane.currentSectionId;
+                        direction = slidingPane.direction;
                         GameScreen gameScreen = new GameScreen(parent, abstractLevel);
                         parent.setScreen(gameScreen);
                     }
@@ -142,6 +149,8 @@ public class ChooseLevelScreen implements Screen {
                 table.setHeight(0.6f * Gdx.graphics.getHeight());
                 slidingPane.addWidget(table);
             }
+
+            slidingPane.setCurrentSection(currentSection, direction);
 
             System.out.println("finish");
             stage.addActor(slidingPane);

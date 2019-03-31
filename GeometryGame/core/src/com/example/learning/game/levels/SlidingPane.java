@@ -32,7 +32,7 @@ public class SlidingPane extends Group {
     * */
     public float stopOffset;
     public float speed = 4000;
-    public int currentSectionId; // 1-indexed
+    public int currentSectionId = 1; // 1-indexed
 
     // speed of gesture which indicates desire to switch section
     public float flingSpeed = 1000;
@@ -61,9 +61,6 @@ public class SlidingPane extends Group {
 
         itemWidth = sectionWidth;
         itemHeight = sectionHeight;
-
-        offsetY = -sectionHeight;
-        stopOffset = -sectionHeight;
 
         actorGestureListener = new ActorGestureListener() {
 
@@ -129,6 +126,13 @@ public class SlidingPane extends Group {
         }
     }
 
+    public void setCurrentSection(int section, DIRECTION direction) {
+        this.currentSectionId = section;
+        this.offsetY = (section - 1) * sectionHeight;
+        this.stopOffset = (section - 1) * sectionHeight;
+        this.direction = direction;
+    }
+
     public void addWidget(Actor widget) {
         widget.setY(sections.getChildren().size * sectionHeight + (sectionHeight - itemHeight) * 0.5f);
         widget.setX((sectionWidth - itemWidth) * 0.5f);
@@ -137,12 +141,6 @@ public class SlidingPane extends Group {
         widget.setHeight(itemHeight);
 
         sections.addActor(widget);
-
-        offsetY += sectionHeight;
-        stopOffset += sectionHeight;
-        currentSectionId++;
-
-//        System.out.println(offsetY + ", " + stopOffset + ", " + currentSectionId);
     }
 
     public int calculateCurrentSection() {
