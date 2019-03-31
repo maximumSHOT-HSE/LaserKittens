@@ -31,8 +31,8 @@ public class SlidingPane extends Group {
     * current sections should be switched
     * */
     public float stopOffset;
-    public float speed = 1500;
-    public int currentSectionId = 1; // 1-indexed
+    public float speed = 4000;
+    public int currentSectionId; // 1-indexed
 
     // speed of gesture which indicates desire to switch section
     public float flingSpeed = 1000;
@@ -56,13 +56,20 @@ public class SlidingPane extends Group {
         sectionWidth = Gdx.app.getGraphics().getWidth();
         sectionHeight = Gdx.app.getGraphics().getHeight();
 
-        itemWidth = sectionWidth * 0.6f;
-        itemHeight = sectionHeight * 0.3f;
+//        itemWidth = sectionWidth * 0.8f;
+//        itemHeight = sectionHeight * 0.6f;
+
+        itemWidth = sectionWidth;
+        itemHeight = sectionHeight;
+
+        offsetY = -sectionHeight;
+        stopOffset = -sectionHeight;
 
         actorGestureListener = new ActorGestureListener() {
 
             @Override
             public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                System.out.println("touch down ??");
             }
 
             @Override
@@ -72,7 +79,7 @@ public class SlidingPane extends Group {
 
             @Override
             public void fling(InputEvent event, float velocityX, float velocityY, int button) {
-                System.out.println("FLING");
+//                System.out.println("FLING");
                 if (Math.abs(velocityY) > flingSpeed) {
                     if (velocityY > 0) {
                         setStopSection(currentSectionId - 1);
@@ -85,7 +92,6 @@ public class SlidingPane extends Group {
 
             @Override
             public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
-                System.out.println("PAN " + direction);
                 if (offsetY < getMinOffsetByY()) {
                     return;
                 }
@@ -93,7 +99,6 @@ public class SlidingPane extends Group {
                     return;
                 }
                 offsetY -= deltaY;
-                System.out.println("STOP AT " + stopOffset + ", cur = " + offsetY);
                 cancelTouchedFocus();
             }
         };
@@ -125,7 +130,6 @@ public class SlidingPane extends Group {
     }
 
     public void addWidget(Actor widget) {
-
         widget.setY(sections.getChildren().size * sectionHeight + (sectionHeight - itemHeight) * 0.5f);
         widget.setX((sectionWidth - itemWidth) * 0.5f);
 
@@ -133,17 +137,22 @@ public class SlidingPane extends Group {
         widget.setHeight(itemHeight);
 
         sections.addActor(widget);
+
+        offsetY += sectionHeight;
+        stopOffset += sectionHeight;
+        currentSectionId++;
+
+//        System.out.println(offsetY + ", " + stopOffset + ", " + currentSectionId);
     }
 
     public int calculateCurrentSection() {
         int section = Math.round(offsetY / sectionHeight) + 1;
-        if ( section > sections.getChildren().size) {
+        if (section > sections.getChildren().size) {
             return sections.getChildren().size;
         }
         if (section < 1) {
             return 1;
         }
-//        System.out.println("SECTION = " + section);
         return section;
     }
 
@@ -178,10 +187,7 @@ public class SlidingPane extends Group {
 
         sections.setCullingArea(cullingArea);
 
-        // if panning
-        if (actorGestureListener.getGestureDetector().isPanning()) {
-            setStopSection(calculateCurrentSection() + 1);
-        } else {
+        if (!actorGestureListener.getGestureDetector().isPanning()) {
             move(delta);
         }
     }
@@ -191,7 +197,6 @@ public class SlidingPane extends Group {
             return;
         }
         this.getStage().cancelTouchFocusExcept(this.actorGestureListener, this);
-//        this.getStage().cancelTouchFocus(this);
         focusedSection = null;
     }
 
