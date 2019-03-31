@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 
-public class GameGestureListener implements GestureListener{
+public class GameGestureListener implements GestureListener {
 
     private OrthographicCamera camera;
     float currentZoom;

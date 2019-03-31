@@ -110,12 +110,27 @@ public class ChooseLevelScreen implements Screen {
     private class Menu {
         private Table table = new Table();
         private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        private SlidingPane slidingPane = new SlidingPane();
 
         public Menu(Stage stage) {
             // creating menu table (actor) for buttons
-            table.setFillParent(true);
-            // table.setDebug(true);
-            stage.addActor(table);
+//            table.setFillParent(true);
+//            // table.setDebug(true);
+//            stage.addActor(table);
+//
+//            for (AbstractLevel abstractLevel : abstractLevels) {
+//                TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
+//                levelButton.getLabel().setFontScale(1f);
+//                levelButton.addListener(new ChangeListener() {
+//                    @Override
+//                    public void changed(ChangeEvent event, Actor actor) {
+//                        GameScreen gameScreen = new GameScreen(parent, abstractLevel);
+//                        parent.setScreen(gameScreen);
+//                    }
+//                });
+//                table.add(levelButton).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+//                table.row().pad(10, 0, 10, 0);
+//            }
 
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
@@ -123,13 +138,14 @@ public class ChooseLevelScreen implements Screen {
                 levelButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        GameScreen gameScreen = new GameScreen(parent, abstractLevel);
-                        parent.setScreen(gameScreen);
+//                        GameScreen gameScreen = new GameScreen(parent, abstractLevel);
+//                        parent.setScreen(gameScreen);
                     }
                 });
-                table.add(levelButton).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
-                table.row().pad(10, 0, 10, 0);
+                slidingPane.addWidget(levelButton);
             }
+
+            stage.addActor(slidingPane);
         }
     }
 }
