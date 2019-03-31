@@ -52,7 +52,7 @@ public class GameScreen implements Screen {
         Entity player = levelFactory.getPlayer();
 
         GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
-        InputProcessor inputProcessor = new GameScreenInputProcessor(parent, player, camera);
+        InputProcessor inputProcessor = new GameScreenInputProcessor(parent, player, camera, abstractLevel.getFactory().getWorld());
         inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
     }
 
