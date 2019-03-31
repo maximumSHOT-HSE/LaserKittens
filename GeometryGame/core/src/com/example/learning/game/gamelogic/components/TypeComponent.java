@@ -9,11 +9,10 @@ public class TypeComponent implements Component, Poolable {
 
     public enum ObjectType {
         PLAYER,
-        OTHER;
+        OTHER
     }
 
     public ObjectType type = ObjectType.OTHER;
-
 
     @Override
     public void reset() {

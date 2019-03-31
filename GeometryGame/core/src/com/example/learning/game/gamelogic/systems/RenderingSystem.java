@@ -5,10 +5,15 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.example.learning.game.Mapper;
+import com.example.learning.game.gamelogic.components.BodyComponent;
+import com.example.learning.game.gamelogic.components.BulletComponent;
 import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
 
@@ -27,14 +32,15 @@ public class RenderingSystem extends SortedIteratingSystem {
     // static method to get screen width in metres
     private static Vector2 meterDimensions = new Vector2();
     private static Vector2 pixelDimensions = new Vector2();
-    public static Vector2 getScreenSizeInMeters(){
+
+    public static Vector2 getScreenSizeInMeters() {
         meterDimensions.set(Gdx.graphics.getWidth()*PIXELS_TO_METRES,
                 Gdx.graphics.getHeight()*PIXELS_TO_METRES);
         return meterDimensions;
     }
 
     // static method to get screen size in pixels
-    public static Vector2 getScreenSizeInPixels(){
+    public static Vector2 getScreenSizeInPixels() {
         pixelDimensions.set(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         return pixelDimensions;
     }
@@ -44,7 +50,12 @@ public class RenderingSystem extends SortedIteratingSystem {
         return pixelValue * PIXELS_TO_METRES;
     }
 
+    public static float MetersToPixels(float meterValue) {
+        return meterValue / PIXELS_TO_METRES;
+    }
+
     private SpriteBatch batch; // a reference to our spritebatch
+    private ShapeRenderer shapeRenderer; // a reference to our shape renderer for drawing lines
     private Array<Entity> renderQueue; // an array used to allow sorting of images allowing us to draw images on top of each other
     private Comparator<Entity> comparator = new ZComparator(); // a comparator to sort images based on the z position of the transfromComponent
     private OrthographicCamera camera; // a reference to our camera
@@ -54,7 +65,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     private ComponentMapper<TransformComponent> transformM;
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch batch) {
+    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer) {
         // gets all entities with a TransofmComponent and TextureComponent
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
@@ -63,14 +74,22 @@ public class RenderingSystem extends SortedIteratingSystem {
         transformM = ComponentMapper.getFor(TransformComponent.class);
 
         // create the array for sorting entities
-        renderQueue = new Array<Entity>();
+        renderQueue = new Array<>();
 
         this.batch = batch;  // set our batch to the one supplied in constructor
+        this.shapeRenderer = shapeRenderer;
 
         // set up the camera to match our screen size
         camera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         camera.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT / 2f, 0);
 
+    }
+
+    private void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer) {
+        float dx = to.x - from.x;
+        float dy = to.y - from.y;
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.line(from, to);
     }
 
     @Override
@@ -95,7 +114,6 @@ public class RenderingSystem extends SortedIteratingSystem {
                 continue;
             }
 
-
             float width = tex.region.getRegionWidth();
             float height = tex.region.getRegionHeight();
 
@@ -111,6 +129,28 @@ public class RenderingSystem extends SortedIteratingSystem {
         }
 
         batch.end();
+
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+        for (Entity entity : renderQueue) {
+            BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
+            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+
+            if (bulletComponent != null && bodyComponent != null) {
+                Vector2 from;
+                from = new Vector2(bulletComponent.path.get(0));
+                for (Vector2 to : bulletComponent.path) {
+                    drawSegment(from, to, shapeRenderer);
+                    from.x = to.x;
+                    from.y = to.y;
+                }
+                drawSegment(from, bodyComponent.body.getPosition(), shapeRenderer);
+            }
+        }
+
+        shapeRenderer.end();
+
         renderQueue.clear();
     }
 
@@ -123,9 +163,6 @@ public class RenderingSystem extends SortedIteratingSystem {
     public OrthographicCamera getCamera() {
         return camera;
     }
-
-
-
 
     private static class ZComparator implements Comparator<Entity> {
         private ComponentMapper<TransformComponent> cmTrans;

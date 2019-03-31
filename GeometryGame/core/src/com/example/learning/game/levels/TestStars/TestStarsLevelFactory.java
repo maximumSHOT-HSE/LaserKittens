@@ -21,7 +21,7 @@ public class TestStarsLevelFactory extends AbstractLevelFactory {
     private Entity player;
 
     public TestStarsLevelFactory(){
-        world = new World(new Vector2(0,0), true);
+        world = new World(new Vector2(0,0), false);
     }
 
     public Entity createBackground() {

@@ -1,7 +1,6 @@
 package com.example.learning.game;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -9,8 +8,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
-
-import java.util.Map;
+import com.example.learning.game.gamelogic.systems.RenderingSystem;
 
 public class BodyFactory {
 
@@ -26,7 +24,31 @@ public class BodyFactory {
         return bodyFactory;
     }
 
-    public static FixtureDef newFixture(Shape shape) {
+    public static FixtureDef newMirrorFixture(Shape shape) {
+        FixtureDef fixtureDef = new FixtureDef();
+
+        // like a mirror (glass)
+
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0.5f;
+        fixtureDef.friction = 0.2f;
+        fixtureDef.restitution = 0.01f;
+
+        return fixtureDef;
+    }
+
+    public static FixtureDef newBouncingBulletFixture(Shape shape) {
+        FixtureDef fixtureDef = new FixtureDef();
+
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0f;
+        fixtureDef.friction = 0;
+        fixtureDef.restitution = 1f;
+
+        return fixtureDef;
+    }
+
+    public static FixtureDef newStoneFixture(Shape shape) {
         FixtureDef fixtureDef = new FixtureDef();
 
         // like a stone
@@ -56,7 +78,7 @@ public class BodyFactory {
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
 
-        FixtureDef fixtureDef = newFixture(circleShape);
+        FixtureDef fixtureDef = newStoneFixture(circleShape);
         boxBody.createFixture(fixtureDef);
         circleShape.dispose();
 
@@ -78,7 +100,7 @@ public class BodyFactory {
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
 
-        FixtureDef fixtureDef = newFixture(circleShape);
+        FixtureDef fixtureDef = newStoneFixture(circleShape);
         fixtureDef.density = 100f;
         boxBody.createFixture(fixtureDef);
         circleShape.dispose();
@@ -86,7 +108,8 @@ public class BodyFactory {
         return boxBody;
     }
 
-    public Body newRectangleBody(Vector2 leftDownCorner, float width, float height, BodyDef.BodyType bodyType, boolean fixedRotation){
+    public Body newRectangleBody(Vector2 leftDownCorner, float width, float height, BodyDef.BodyType bodyType, boolean fixedRotation) {
+
         leftDownCorner.x += width / 2f;
         leftDownCorner.y += height / 2f;
         // create a definition
@@ -100,10 +123,26 @@ public class BodyFactory {
         Body boxBody = world.createBody(boxBodyDef);
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width, height);
-        boxBody.createFixture(newFixture(poly));
+        boxBody.createFixture(newStoneFixture(poly));
         poly.dispose();
 
         return boxBody;
+    }
+
+    public Body newMirror(Vector2 center, float width, float height) {
+        BodyDef boxBodyDef = new BodyDef();
+        boxBodyDef.type = BodyDef.BodyType.StaticBody;
+
+        boxBodyDef.position.x = center.x;
+        boxBodyDef.position.y = center.y;
+
+        Body body = world.createBody(boxBodyDef);
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.setAsBox(width / 2, height / 2);
+        body.createFixture(newMirrorFixture(polygonShape));
+        polygonShape.dispose();
+
+        return body;
     }
 
     public Body newPolygonBody(Vector2[] polygonVertices, Vector2 leftDownCorner, BodyDef.BodyType bodyType, boolean fixedRotation) {
@@ -117,9 +156,8 @@ public class BodyFactory {
 
         PolygonShape polygon = new PolygonShape();
         polygon.set(polygonVertices);
-        boxBody.createFixture(newFixture(polygon));
+        boxBody.createFixture(newStoneFixture(polygon));
         polygon.dispose();
-
 
         return boxBody;
     }
@@ -148,9 +186,34 @@ public class BodyFactory {
 
             PolygonShape polygon = new PolygonShape();
             polygon.set(coordinates);
-            boxBody.createFixture(newFixture(polygon));
+            boxBody.createFixture(newStoneFixture(polygon));
             polygon.dispose();
         }
+
+        return boxBody;
+    }
+
+    public Body newBullet(Vector2 source, Vector2 direction) {
+
+        BodyDef boxBodyDef = new BodyDef();
+        boxBodyDef.type = BodyDef.BodyType.DynamicBody;
+        boxBodyDef.position.x = source.x;
+        boxBodyDef.position.y = source.y;
+        boxBodyDef.linearVelocity.x = 1e9f;
+        boxBodyDef.linearVelocity.y = 1e9f;
+        boxBodyDef.bullet = true;
+        boxBodyDef.linearDamping = 0f;
+        boxBodyDef.gravityScale = 0;
+
+        //create the body to attach said definition
+        Body boxBody = world.createBody(boxBodyDef);
+
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(RenderingSystem.getScreenSizeInMeters().x * 0.0005f);
+
+        FixtureDef fixtureDef = newBouncingBulletFixture(circleShape);
+        boxBody.createFixture(fixtureDef);
+        circleShape.dispose();
 
         return boxBody;
     }

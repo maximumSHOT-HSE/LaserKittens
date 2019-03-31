@@ -12,6 +12,8 @@ import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 abstract public class AbstractLevelFactory {
 
     protected BodyFactory bodyFactory;
@@ -22,6 +24,10 @@ abstract public class AbstractLevelFactory {
     abstract public World getWorld();
 
     abstract public Entity getPlayer();
+
+    public Entity createBullet(Vector2 source, Vector2 direction) {
+        throw new NotImplementedException();
+    }
 
     abstract public void createLevel(PooledEngine engine, MyAssetManager assetManager);
 

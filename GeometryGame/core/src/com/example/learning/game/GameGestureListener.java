@@ -1,6 +1,5 @@
 package com.example.learning.game;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +10,6 @@ public class GameGestureListener implements GestureListener{
     float currentZoom;
 
     public GameGestureListener(OrthographicCamera camera) {
-
         this.camera = camera;
         currentZoom = camera.zoom;
     }
@@ -41,8 +39,6 @@ public class GameGestureListener implements GestureListener{
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
-        //camera.translate(-deltaX * currentZoom * 0.5f, deltaY * currentZoom*0.5f);
-        //camera.update();
         return false;
     }
 
@@ -54,18 +50,18 @@ public class GameGestureListener implements GestureListener{
     }
 
     @Override
-    public boolean zoom (float originalDistance, float currentDistance){
-        camera.zoom = (originalDistance / currentDistance) * currentZoom;
-        camera.update();
+    public boolean zoom (float originalDistance, float currentDistance) {
+//        camera.zoom = (originalDistance / currentDistance) * currentZoom;
+//        camera.update();
         return true;
     }
 
     @Override
-    public boolean pinch (Vector2 initialFirstPointer, Vector2 initialSecondPointer, Vector2 firstPointer, Vector2 secondPointer){
+    public boolean pinch (Vector2 initialFirstPointer, Vector2 initialSecondPointer, Vector2 firstPointer, Vector2 secondPointer) {
 
         return false;
     }
     @Override
-    public void pinchStop () {
+    public void pinchStop() {
     }
 }

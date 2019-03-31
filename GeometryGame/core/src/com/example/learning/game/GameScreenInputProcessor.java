@@ -16,32 +16,41 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.example.learning.LaserKittens;
 import com.example.learning.game.gamelogic.components.PlayerComponent;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
+import com.example.learning.game.levels.AbstractLevel;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 public class GameScreenInputProcessor implements InputProcessor {
 
-    private final LaserKittens laserKittens;
-    private final Entity player;
-    private final OrthographicCamera camera;
-    private final World world;
+    private LaserKittens laserKittens;
+    private Entity player;
+    private AbstractLevel level;
+    private OrthographicCamera camera;
 
     private boolean dragging;
     private int draggingPointer = -1;
     private Vector3 position = new Vector3();
     private Vector2 draggingStartedDiff = new Vector2();
     private MouseJoint mouseJoint = null;
+    private World world;
 
     private final Body ground;
 
-
-    public GameScreenInputProcessor(LaserKittens laserKittens, Entity player, OrthographicCamera camera, World world) {
+    public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera) {
         this.laserKittens = laserKittens;
-        this.player = player;
+        this.player = level.getFactory().getPlayer();
+        this.level = level;
         this.camera = camera;
-        this.world = world;
+        this.world = level.getFactory().getWorld();
 
-        ground = BodyFactory.getBodyFactory(world).newCircleBody(new Vector2(0, 100), 0.1f, BodyDef.BodyType.StaticBody, true);
+        ground = BodyFactory.getBodyFactory(this.world)
+        .newCircleBody(
+            new Vector2(0, 100),
+                0.1f,
+                BodyDef.BodyType.StaticBody,
+                true
+        );
     }
 
     @Override
@@ -85,12 +94,9 @@ public class GameScreenInputProcessor implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         camera.unproject(position.set(screenX, screenY, 0));
 
-
         if (!clickInPlayerRegion()) {
             return false;
         }
-
-
 
         Body playerBody = Mapper.bodyComponent.get(player).body;
         dragging = true;
@@ -115,6 +121,11 @@ public class GameScreenInputProcessor implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         camera.unproject(position.set(screenX, screenY, 0));
+
+        if (pointer != draggingPointer) {
+            return false;
+        }
+
         dragging = false;
         draggingPointer = -1;
         if (mouseJoint != null) {
@@ -129,20 +140,13 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+
         if (!dragging || pointer != draggingPointer) return false;
 
         camera.unproject(position.set(screenX, screenY, 0));
         position.x -= draggingStartedDiff.x;
         position.y -= draggingStartedDiff.y;
         mouseJoint.setTarget(target.set(position.x, position.y));
-
-//        float playerX = Mapper.bodyComponent.get(player).body.getPosition().x;
-//        float playerY = Mapper.bodyComponent.get(player).body.getPosition().y;
-//        Mapper.bodyComponent.get(player).body.setTransform(position.x, position.y, 0);
-//        Mapper.transformComponent.get(player).position.x = position.x;
-//        Mapper.transformComponent.get(player).position.y = position.y;
-
-        //camera.translate(position.x - playerX, position.y - playerY);
 
         return true;
     }

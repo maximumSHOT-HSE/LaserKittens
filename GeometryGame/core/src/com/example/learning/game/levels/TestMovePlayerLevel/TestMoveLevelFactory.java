@@ -22,7 +22,7 @@ public class TestMoveLevelFactory extends AbstractLevelFactory {
     private Entity player;
 
     public TestMoveLevelFactory(){
-        world = new World(new Vector2(0,0), true);
+        world = new World(new Vector2(0,0), false);
     }
 
     public Entity createBackground() {
