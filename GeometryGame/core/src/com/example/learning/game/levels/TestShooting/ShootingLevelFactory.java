@@ -89,8 +89,8 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
 
         position.position.x = px;
         position.position.y = py;
-        position.scale.set(0.05f, 0.05f);
-        texture.region = new TextureRegion(manager.manager.get("badlogic.jpg", Texture.class));
+        position.scale.set(0.2f, 0.2f);
+        texture.region = new TextureRegion(manager.manager.get("Cat1.png", Texture.class));
 
         body.body.setUserData(entity);
 

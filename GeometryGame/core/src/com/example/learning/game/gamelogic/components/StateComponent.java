@@ -7,7 +7,6 @@ public class StateComponent implements Component, Poolable {
 
     public enum State {
         NORMAL,
-        SOME,
         FINISHED
     }
 
@@ -21,12 +20,13 @@ public class StateComponent implements Component, Poolable {
         return state;
     }
 
+    public void finish() {
+        state = State.FINISHED;
+    }
+
     @Override
     public void reset() {
         state = State.NORMAL;
     }
 
-    public void finish() {
-        state = State.FINISHED;
-    }
 }
