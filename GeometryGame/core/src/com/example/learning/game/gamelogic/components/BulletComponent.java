@@ -14,6 +14,7 @@ public class BulletComponent implements Component, Poolable {
     /** Time life of bullet in milliseconds */
     public float lifeTime;
 
+    /** list of broken line points on it's way */
     public java.util.List<Vector2> path = new ArrayList<>();
 
     @Override

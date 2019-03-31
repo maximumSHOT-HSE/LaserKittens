@@ -11,20 +11,16 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.example.learning.game.Mapper;
 import com.example.learning.game.gamelogic.components.BodyComponent;
-import com.example.learning.game.gamelogic.components.StateComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
 
 
 public class PhysicsSystem extends IteratingSystem {
 
-    private static final float MAX_STEP_TIME = 1/45f;
+    private static final float MAX_STEP_TIME = 1 / 45f;
     private static float accumulator = 0f;
 
     private World world;
     private Array<Entity> bodiesQueue;
-
-    private ComponentMapper<BodyComponent> bm = ComponentMapper.getFor(BodyComponent.class);
-    private ComponentMapper<TransformComponent> tm = ComponentMapper.getFor(TransformComponent.class);
 
     @SuppressWarnings("unchecked")
     public PhysicsSystem(World world) {
@@ -44,6 +40,16 @@ public class PhysicsSystem extends IteratingSystem {
         if(accumulator >= MAX_STEP_TIME) {
             world.step(MAX_STEP_TIME, 6, 2);
             accumulator -= MAX_STEP_TIME;
+
+            //Entity Queue
+            for (Entity entity : bodiesQueue) {
+                TransformComponent transformComponent = Mapper.transformComponent.get(entity);
+                BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+                Vector2 position = bodyComponent.body.getPosition();
+                transformComponent.position.x = position.x;
+                transformComponent.position.y = position.y;
+                transformComponent.rotation = bodyComponent.body.getAngle() * MathUtils.radiansToDegrees;
+            }
         }
         bodiesQueue.clear();
     }

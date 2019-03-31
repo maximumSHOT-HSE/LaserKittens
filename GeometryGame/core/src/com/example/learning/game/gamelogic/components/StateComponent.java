@@ -1,7 +1,6 @@
 package com.example.learning.game.gamelogic.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class StateComponent implements Component, Poolable {

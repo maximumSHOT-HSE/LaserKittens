@@ -14,7 +14,6 @@ public class TypeComponent implements Component, Poolable {
 
     public ObjectType type = ObjectType.OTHER;
 
-
     @Override
     public void reset() {
         type = type.OTHER;
