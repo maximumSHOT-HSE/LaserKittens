@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.example.learning.MyAssetManager;
 import com.example.learning.game.BodyFactory;
@@ -72,6 +73,9 @@ public class TestStarsLevelFactory extends AbstractLevelFactory {
         TransformComponent position = engine.createComponent(TransformComponent.class);
 
         body.body = bodyFactory.newStar(new Vector2(x, y), radius, BodyDef.BodyType.DynamicBody, false);
+        for(Fixture fixture : body.body.getFixtureList()) {
+            fixture.setUserData(entity);
+        }
 
         position.position.set(x, y,0);
         body.body.setUserData(entity);

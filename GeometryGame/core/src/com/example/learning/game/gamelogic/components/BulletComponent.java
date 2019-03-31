@@ -1,6 +1,7 @@
 package com.example.learning.game.gamelogic.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
@@ -17,9 +18,12 @@ public class BulletComponent implements Component, Poolable {
     /** list of broken line points on it's way */
     public java.util.List<Vector2> path = new ArrayList<>();
 
+    public Entity player;
+
     @Override
     public void reset() {
         creationTime = 0;
         lifeTime = 0;
+        player = null;
     }
 }

@@ -27,14 +27,13 @@ public class GameScreenInputProcessor implements InputProcessor {
     private Entity player;
     private AbstractLevel level;
     private OrthographicCamera camera;
+    private World world;
 
     private boolean dragging;
     private int draggingPointer = -1;
     private Vector3 position = new Vector3();
     private Vector2 draggingStartedDiff = new Vector2();
     private MouseJoint mouseJoint = null;
-    private World world;
-
     private final Body ground;
 
     public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera) {
@@ -95,7 +94,8 @@ public class GameScreenInputProcessor implements InputProcessor {
         camera.unproject(position.set(screenX, screenY, 0));
 
         if (!clickInPlayerRegion()) {
-            return false;
+            level.getFactory().shoot(position.x, position.y);
+            return true;
         }
 
         Body playerBody = Mapper.bodyComponent.get(player).body;

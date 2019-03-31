@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -135,8 +137,9 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
         body.body = bodyFactory.newBullet(source, direction);
 
         bulletComponent.creationTime = System.currentTimeMillis();
-        bulletComponent.lifeTime = 1500000;
+        bulletComponent.lifeTime = 1500;
         bulletComponent.path.add(source);
+        bulletComponent.player = player;
 
         stateComponent.set(StateComponent.State.NORMAL);
         for(Fixture fixture : body.body.getFixtureList()) {
@@ -150,6 +153,26 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
         entity.add(stateComponent);
 
         engine.addEntity(entity);
+    }
+
+    //TODO Awful function. something to be done
+    private float getPlayerRadius() {
+        Body playerBody = Mapper.bodyComponent.get(player).body;
+        return playerBody.getFixtureList().get(0).getShape().getRadius();
+    }
+
+    @Override
+    public void shoot(float x, float y) {
+        Vector3 playerPosition = Mapper.transformComponent.get(player).position;
+
+        Vector2 direction = new Vector2(x - playerPosition.x, y - playerPosition.y);
+        float length = (float)Math.sqrt(direction.x * direction.x + direction.y * direction.y);
+        direction.set(direction.x / length, direction.y / length);
+        createLaser(
+                new Vector2(playerPosition.x + (getPlayerRadius() + 0.01f) * direction.x,
+                        playerPosition.y + (getPlayerRadius() + 0.01f) * direction.y),
+                direction
+        );
     }
 
     @Override
@@ -170,12 +193,5 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
         createWall(new Vector2(0.5f * width, height), width, 0.1f * height); // up wall
         createWall(new Vector2(0.5f * width, 0.7f * height), 0.5f * width, 0.02f * height); // obstacle
 
-        createLaser(
-                new Vector2(
-                        Mapper.transformComponent.get(player).position.x,
-                        Mapper.transformComponent.get(player).position.y
-                ),
-                new Vector2(+1, +1)
-        );
     }
 }
