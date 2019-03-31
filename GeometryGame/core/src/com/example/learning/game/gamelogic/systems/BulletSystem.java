@@ -27,8 +27,6 @@ public class BulletSystem extends IteratingSystem {
             bulletComponent.path.remove(0);
         }
 
-        Vector3 playerPosition = Mapper.transformComponent.get(bulletComponent.player).position;
-
         if (System.currentTimeMillis() - bulletComponent.creationTime >= bulletComponent.lifeTime) {
             stateComponent.finish();
             bulletComponent.path.clear();
