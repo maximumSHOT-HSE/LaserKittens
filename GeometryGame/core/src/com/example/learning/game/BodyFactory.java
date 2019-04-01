@@ -13,6 +13,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 
+/**
+ * Utility class for creating bodies.
+ */
 public class BodyFactory {
 
     private World world;
@@ -27,49 +30,6 @@ public class BodyFactory {
         return bodyFactory;
     }
 
-    public static FixtureDef newMirrorFixture(Shape shape) {
-        FixtureDef fixtureDef = new FixtureDef();
-
-        // like a mirror (glass)
-
-        fixtureDef.shape = shape;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.2f;
-        fixtureDef.restitution = 0.01f;
-
-        return fixtureDef;
-    }
-
-    public static FixtureDef newBouncingBulletFixture(Shape shape) {
-        FixtureDef fixtureDef = new FixtureDef();
-
-        fixtureDef.shape = shape;
-        fixtureDef.density = 0f;
-        fixtureDef.friction = 0;
-        fixtureDef.restitution = 1f;
-
-
-        return fixtureDef;
-    }
-
-    public static FixtureDef newStoneFixture(Shape shape) {
-        FixtureDef fixtureDef = new FixtureDef();
-
-        // like a stone
-
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        fixtureDef.friction = 0.9f;
-        fixtureDef.restitution = 0.01f;
-
-        return fixtureDef;
-    }
-
-    public static FixtureDef newSensorFixture(Shape shape){
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.isSensor = true;
-        return fixtureDef;
-    }
 
     private enum Category {
 
@@ -267,5 +227,70 @@ public class BodyFactory {
 
         setFilter(boxBody, Category.BULLET.mask, (short)(Category.BULLET.allExceptMe() & ~Category.PLAYER.mask));
         return boxBody;
+    }
+
+
+    private static class BodyBuilder {
+        BodyDef bodyDef = new BodyDef();
+
+        Body
+    }
+
+    /**
+     * Utility class for creating fixtures.
+     */
+    private static class FixtureFactory {
+
+        private static FixtureDef newMirrorFixture(Shape shape) {
+            return (new FixtureBuilder()).setShape(shape).setDensiity(0.5f)
+                    .setFriction(0.2f).setRestitution(0.01f).build();
+        }
+
+        private static FixtureDef newBouncingBulletFixture(Shape shape) {
+            return (new FixtureBuilder()).setShape(shape).setDensiity(0)
+                    .setFriction(0).setRestitution(1).build();
+        }
+
+        private static FixtureDef newStoneFixture(Shape shape) {
+            return (new FixtureBuilder()).setShape(shape).setDensiity(1)
+                    .setFriction(0.9f).setRestitution(0.01f).build();
+        }
+
+        private static FixtureDef newSensorFixture(Shape shape){
+            return (new FixtureBuilder()).setShape(shape).setSensor(true).build();
+        }
+
+        private static class FixtureBuilder {
+            FixtureDef fixtureDef = new FixtureDef();
+
+            FixtureDef build() {
+                return fixtureDef;
+            }
+
+            FixtureBuilder setShape(Shape shape) {
+                fixtureDef.shape = shape;
+                return this;
+            }
+
+            FixtureBuilder setDensiity(float density) {
+                fixtureDef.density = density;
+                return this;
+            }
+
+            FixtureBuilder setFriction(float friction) {
+                fixtureDef.friction = friction;
+                return this;
+            }
+
+            FixtureBuilder setRestitution(float restitution) {
+                fixtureDef.restitution = restitution;
+                return this;
+            }
+
+            FixtureBuilder setSensor(boolean isSensor) {
+                fixtureDef.isSensor = isSensor;
+                return this;
+            }
+        }
     }
 }
