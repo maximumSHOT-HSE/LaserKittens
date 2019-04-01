@@ -75,10 +75,13 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
 
         player = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f, 0.8f);
 
-        createMirror(new Vector2(0, height * 0.5f), width * 0.1f, height); // left wall
-        createMirror(new Vector2(width, height * 0.5f), width * 0.1f, height); // right wall
+        createMirror(new Vector2(0, 0.5f * height), 0.1f * width, height); // left wall
+        createMirror(new Vector2(width, 0.5f * height), 0.1f * width, height); // right wall
         createMirror(new Vector2(0.5f * width, 0), width, 0.1f * height); // down wall
         createMirror(new Vector2(0.5f * width, height), width, 0.1f * height); // up wall
         createMirror(new Vector2(0.5f * width, 0.7f * height), 0.5f * width, 0.02f * height); // obstacle
+
+        createStar(0.25f * width, 0.43f * height, 0.05f * height);
+        createStar(0.25f * width, 0.2f * height, 0.05f * height);
     }
 }

@@ -9,6 +9,9 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.BulletComponent;
+import com.example.learning.game.gamelogic.components.TypeComponent;
+
+import java.util.Map;
 
 public class MyContactListener implements ContactListener {
 
@@ -22,18 +25,54 @@ public class MyContactListener implements ContactListener {
      * if yes then current body position will be added
      * to path of bullet
      * */
+    private void processBullet(Object data) {
+        if (!(data instanceof Entity)) {
+            return;
+        }
+        Entity entity = (Entity) data;
+        TypeComponent typeComponent = Mapper.typeComponent.get(entity);
+        if (typeComponent == null ||
+                typeComponent.type != TypeComponent.ObjectType.BULLET) {
+            return;
+        }
+        BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
+        BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+        bulletComponent.path.add(new Vector2(bodyComponent.body.getPosition()));
+    }
+
     private boolean isBullet(Object data) {
         if (!(data instanceof Entity)) {
             return false;
         }
         Entity entity = (Entity) data;
-        BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
-        BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-        if (bulletComponent == null || bodyComponent == null) {
+        TypeComponent typeComponent = Mapper.typeComponent.get(entity);
+        return typeComponent != null && typeComponent.type == TypeComponent.ObjectType.BULLET;
+    }
+
+    private boolean isStar(Object data) {
+        if (!(data instanceof Entity)) {
             return false;
         }
-        bulletComponent.path.add(new Vector2(bodyComponent.body.getPosition()));
-        return true;
+        Entity entity = (Entity) data;
+        TypeComponent typeComponent = Mapper.typeComponent.get(entity);
+        return typeComponent != null && typeComponent.type == TypeComponent.ObjectType.STAR;
+    }
+
+    private void processBulletStar(Object bullet, Object star) {
+        if (isStar(bullet) && isBullet(star)) {
+            processBulletStar(star, bullet);
+        }
+        if (!isBullet(bullet) || !isStar(star)) {
+            return;
+        }
+        Entity bulletEntity = (Entity) bullet;
+        Entity starEntity = (Entity) star;
+        BodyComponent bodyComponent = Mapper.bodyComponent.get(bulletEntity);
+        bodyComponent.body.setLinearVelocity(0, 0);
+        BulletComponent bulletComponent = Mapper.bulletComponent.get(bulletEntity);
+        bulletComponent.creationTime = System.currentTimeMillis();
+        bulletComponent.lifeTime = 20;
+        Mapper.stateComponent.get(starEntity).finish();
     }
 
     @Override
@@ -42,8 +81,9 @@ public class MyContactListener implements ContactListener {
         Fixture fb = contact.getFixtureB();
         Object oa = fa.getUserData();
         Object ob = fb.getUserData();
-//        isBullet(oa);
-        isBullet(ob);
+        processBulletStar(oa, ob);
+        processBullet(oa);
+        processBullet(ob);
     }
 
     @Override
