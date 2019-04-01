@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
+import com.example.learning.MyAssetManager;
 import com.example.learning.game.GameScreen;
 import com.example.learning.game.levels.TestLaserLevel.TestLaserLevel;
 import com.example.learning.game.levels.TestMovePlayerLevel.TestMovePlayerLevel;
@@ -65,11 +67,11 @@ public class ChooseLevelScreen implements Screen {
         stage.clear();
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        menu.draw(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         parent.batch.setProjectionMatrix(camera.combined);
+
+        menu.draw(stage);
     }
 
     @Override
@@ -82,6 +84,8 @@ public class ChooseLevelScreen implements Screen {
         parent.batch.begin();
         background.draw(parent.batch, camera);
         parent.batch.end();
+
+        menu.render();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -113,11 +117,14 @@ public class ChooseLevelScreen implements Screen {
     }
 
     private class Menu {
-        private Table table = new Table();
-        private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-        private SlidingPane slidingPane;
+        private Skin skin = parent.assetManager.manager.get(MyAssetManager.skin);
+        private SlidingPane slidingPane = new SlidingPane();
         private int currentSection = abstractLevels.size();
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
+        private Texture naviActive = parent.assetManager.manager.get(MyAssetManager.levelIndicatorActive);
+        private Texture naviPassive = parent.assetManager.manager.get(MyAssetManager.levelIndicatorPassive);
+        private final float screenWidth = Gdx.graphics.getWidth();
+        private final float screenHeight = Gdx.graphics.getHeight();
 
         /**
          * Save current section id, which should be drawn
@@ -127,24 +134,30 @@ public class ChooseLevelScreen implements Screen {
             currentSection = slidingPane.currentSectionId;
         }
 
-        /*
-        * Table of small circles.
-        * One of them indicates current level.
-        * Others do not show anything.
-        * */
-        private Table createCircleLevelIndicator() {
-            Table circles = new Table(skin);
-            for (int i = 0; i < abstractLevels.size(); i++) {
-                circles.add(new Label(i + " " + (i + 1 == currentSection ? "!" : "?"), skin));
-                circles.row();
+        public void render() {
+            saveState();
+            parent.batch.begin();
+
+            int levelsCount = abstractLevels.size();
+            float h = naviActive.getHeight();
+            float w = naviActive.getWidth();
+            float x = 0.9f * screenWidth - 0.5f * w;
+            float delta = 0.5f * h;
+            float blockHeight = h * levelsCount + delta * (levelsCount - 1);
+            float y = 0.5f * (screenHeight - blockHeight);
+
+            for (int i = 1; i <= levelsCount; i++) {
+                parent.batch.draw(
+                    i == currentSection ? naviActive : naviPassive,
+                    x,
+                    y + (i - 1) * (h + delta)
+                );
             }
-            circles.setWidth(0.05f * Gdx.graphics.getWidth());
-            circles.setHeight(0.2f * Gdx.graphics.getHeight());
-            return circles;
+
+            parent.batch.end();
         }
 
         public void draw(Stage stage) {
-            slidingPane = new SlidingPane();
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
                 levelButton.getLabel().setFontScale(1f);
@@ -159,20 +172,19 @@ public class ChooseLevelScreen implements Screen {
                 });
                 Table table = new Table();
                 table.row();
-                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
-                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
-                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
+                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.row();
-                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
-                table.add(levelButton).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
+                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                table.add(levelButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.row();
-                table.add(createCircleLevelIndicator());
-                table.row();
-                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
-                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
-                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
-                table.setWidth(0.6f * Gdx.graphics.getWidth());
-                table.setHeight(0.6f * Gdx.graphics.getHeight());
+                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                table.setWidth(0.6f * screenWidth);
+                table.setHeight(0.6f * screenHeight);
                 slidingPane.addWidget(table);
             }
             slidingPane.setCurrentSection(currentSection, direction);
