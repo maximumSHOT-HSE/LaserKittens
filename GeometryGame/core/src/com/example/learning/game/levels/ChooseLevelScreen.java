@@ -127,6 +127,22 @@ public class ChooseLevelScreen implements Screen {
             currentSection = slidingPane.currentSectionId;
         }
 
+        /*
+        * Table of small circles.
+        * One of them indicates current level.
+        * Others do not show anything.
+        * */
+        private Table createCircleLevelIndicator() {
+            Table circles = new Table(skin);
+            for (int i = 0; i < abstractLevels.size(); i++) {
+                circles.add(new Label(i + " " + (i + 1 == currentSection ? "!" : "?"), skin));
+                circles.row();
+            }
+            circles.setWidth(0.05f * Gdx.graphics.getWidth());
+            circles.setHeight(0.2f * Gdx.graphics.getHeight());
+            return circles;
+        }
+
         public void draw(Stage stage) {
             slidingPane = new SlidingPane();
             for (AbstractLevel abstractLevel : abstractLevels) {
@@ -149,7 +165,8 @@ public class ChooseLevelScreen implements Screen {
                 table.row();
                 table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
                 table.add(levelButton).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
-                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
+                table.row();
+                table.add(createCircleLevelIndicator());
                 table.row();
                 table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
                 table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
