@@ -1,7 +1,6 @@
 package com.example.learning.game.gamelogic.systems;
 
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -16,7 +15,7 @@ import com.example.learning.game.gamelogic.components.TransformComponent;
 
 public class PhysicsSystem extends IteratingSystem {
 
-    private static final float MAX_STEP_TIME = 1 / 60f;
+    private static final float MAX_STEP_TIME = 1 / 45f;
     private static float accumulator = 0f;
 
     private World world;
