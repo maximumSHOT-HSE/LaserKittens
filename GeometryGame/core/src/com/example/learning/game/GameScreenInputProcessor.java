@@ -32,6 +32,8 @@ public class GameScreenInputProcessor implements InputProcessor {
     private boolean dragging;
     private int draggingPointer = -1;
     private Vector3 position = new Vector3();
+
+    private Vector3 draggingPosition = new Vector3();
     private Vector2 draggingStartedDiff = new Vector2();
     private MouseJoint mouseJoint = null;
     private final Body ground;
@@ -98,6 +100,10 @@ public class GameScreenInputProcessor implements InputProcessor {
             return true;
         }
 
+        if (dragging) {
+            return false;
+        }
+
         Body playerBody = Mapper.bodyComponent.get(player).body;
         dragging = true;
         draggingPointer = pointer;
@@ -143,10 +149,10 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         if (!dragging || pointer != draggingPointer) return false;
 
-        camera.unproject(position.set(screenX, screenY, 0));
-        position.x -= draggingStartedDiff.x;
-        position.y -= draggingStartedDiff.y;
-        mouseJoint.setTarget(target.set(position.x, position.y));
+        camera.unproject(draggingPosition.set(screenX, screenY, 0));
+        draggingPosition.x -= draggingStartedDiff.x;
+        draggingPosition.y -= draggingStartedDiff.y;
+        mouseJoint.setTarget(target.set(draggingPosition.x, draggingPosition.y));
 
         return true;
     }
