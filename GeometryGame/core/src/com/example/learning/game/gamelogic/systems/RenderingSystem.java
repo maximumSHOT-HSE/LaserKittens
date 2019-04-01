@@ -56,7 +56,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     private SpriteBatch batch; // a reference to our spritebatch
     private ShapeRenderer shapeRenderer; // a reference to our shape renderer for drawing lines
-    private Array<Entity> renderQueue; // an array used to allow sorting of images allowing us to draw images on top of each other
+    private Array<Entity> renderQueue; // an array used to allow sorting of images allowing us to show images on top of each other
     private Comparator<Entity> comparator = new ZComparator(); // a comparator to sort images based on the z position of the transfromComponent
     private OrthographicCamera camera; // a reference to our camera
 

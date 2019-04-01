@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -71,7 +70,7 @@ public class ChooseLevelScreen implements Screen {
         camera.update();
         parent.batch.setProjectionMatrix(camera.combined);
 
-        menu.draw(stage);
+        menu.show(stage);
     }
 
     @Override
@@ -118,7 +117,7 @@ public class ChooseLevelScreen implements Screen {
 
     private class Menu {
         private Skin skin = parent.assetManager.manager.get(MyAssetManager.skin);
-        private SlidingPane slidingPane = new SlidingPane();
+        private SlidingPane slidingPane;
         private int currentSection = abstractLevels.size();
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
         private Texture naviActive = parent.assetManager.manager.get(MyAssetManager.levelIndicatorActive);
@@ -139,6 +138,7 @@ public class ChooseLevelScreen implements Screen {
             parent.batch.begin();
 
             int levelsCount = abstractLevels.size();
+
             float h = naviActive.getHeight();
             float w = naviActive.getWidth();
             float x = 0.9f * screenWidth - 0.5f * w;
@@ -157,7 +157,9 @@ public class ChooseLevelScreen implements Screen {
             parent.batch.end();
         }
 
-        public void draw(Stage stage) {
+        public void show(Stage stage) {
+            // should be created here. Specific of implementation.
+            slidingPane = new SlidingPane();
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
                 levelButton.getLabel().setFontScale(1f);
