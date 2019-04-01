@@ -19,18 +19,15 @@ import com.example.learning.game.gamelogic.systems.RenderingSystem;
 public class BodyFactory {
 
     private World world;
-    private static BodyFactory bodyFactory;
 
     private BodyFactory(World world) {
         this.world = world;
     }
 
     public static BodyFactory getBodyFactory(World world) {
-        bodyFactory = new BodyFactory(world);
-        return bodyFactory;
+        return new BodyFactory(world);
     }
-
-
+    
     private enum Category {
 
         PLAYER((short)1),
@@ -68,86 +65,53 @@ public class BodyFactory {
 
     public Body newCircleBody(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
 
-        // create a definition
-        BodyDef boxBodyDef = new BodyDef();
-        boxBodyDef.type = bodyType;
-        boxBodyDef.position.x = center.x;
-        boxBodyDef.position.y = center.y;
-        boxBodyDef.fixedRotation = fixedRotation;
-        boxBodyDef.linearVelocity.y = 0f;
-        boxBodyDef.angle = 0;
-
-        //create the body to attach said definition
-        Body boxBody = world.createBody(boxBodyDef);
+        Body body = (new BodyBuilder()).setType(bodyType).setPosition(center)
+                .setFixedRotation(fixedRotation).build();
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
-
-        FixtureDef fixtureDef = newStoneFixture(circleShape);
-        boxBody.createFixture(fixtureDef);
+        body.createFixture(FixtureFactory.StoneFixture(circleShape));
         circleShape.dispose();
 
-        setFilter(boxBody, Category.OTHER.mask, Category.all());
-        return boxBody;
+        setFilter(body, Category.OTHER.mask, Category.all());
+        return body;
     }
 
     public Body newPlayerBody(Vector2 center, float radius) {
-        BodyDef boxBodyDef = new BodyDef();
-        boxBodyDef.type = BodyDef.BodyType.DynamicBody;
-        boxBodyDef.position.x = center.x;
-        boxBodyDef.position.y = center.y;
-        boxBodyDef.fixedRotation = true;
-        boxBodyDef.linearVelocity.y = 0f;
-        boxBodyDef.angle = 0;
-
-        //create the body to attach said definition
-        Body boxBody = world.createBody(boxBodyDef);
+        Body body = (new BodyBuilder()).setType(BodyDef.BodyType.DynamicBody)
+                .setPosition(center).setFixedRotation(true).build();
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
-
-        FixtureDef fixtureDef = newStoneFixture(circleShape);
-        fixtureDef.density = 100f;
-        boxBody.createFixture(fixtureDef);
+        body.createFixture(FixtureFactory.PLayerFixture(circleShape));
         circleShape.dispose();
 
-        setFilter(boxBody, Category.PLAYER.mask, (short)(Category.PLAYER.allExceptMe() & ~Category.PLAYER.mask));
-        return boxBody;
+        setFilter(body, Category.PLAYER.mask, (short)(Category.PLAYER.allExceptMe() & ~Category.PLAYER.mask));
+        return body;
     }
 
     public Body newRectangleBody(Vector2 leftDownCorner, float width, float height, BodyDef.BodyType bodyType, boolean fixedRotation) {
 
-        leftDownCorner.x += width / 2f;
-        leftDownCorner.y += height / 2f;
-        // create a definition
-        BodyDef boxBodyDef = new BodyDef();
-        boxBodyDef.type = bodyType;
-        boxBodyDef.position.x = leftDownCorner.x;
-        boxBodyDef.position.y = leftDownCorner.y;
-        boxBodyDef.fixedRotation = fixedRotation;
+        Body body = (new BodyBuilder()).setType(bodyType)
+                .setPosition(leftDownCorner.x + width / 2f, leftDownCorner.y + height / 2f)
+                .setFixedRotation(fixedRotation).build();
 
-        //create the body to attach said definition
-        Body boxBody = world.createBody(boxBodyDef);
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width, height);
-        boxBody.createFixture(newStoneFixture(poly));
+        body.createFixture(FixtureFactory.StoneFixture(poly));
         poly.dispose();
 
-        setFilter(boxBody, Category.OTHER.mask, Category.all());
-        return boxBody;
+        setFilter(body, Category.OTHER.mask, Category.all());
+        return body;
     }
 
     public Body newMirror(Vector2 center, float width, float height) {
-        BodyDef boxBodyDef = new BodyDef();
-        boxBodyDef.type = BodyDef.BodyType.StaticBody;
+        Body body = (new BodyBuilder()).setType(BodyDef.BodyType.StaticBody)
+                .setPosition(center).build();
 
-        boxBodyDef.position.x = center.x;
-        boxBodyDef.position.y = center.y;
-
-        Body body = world.createBody(boxBodyDef);
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(width / 2, height / 2);
-        body.createFixture(newMirrorFixture(polygonShape));
+        body.createFixture(FixtureFactory.MirrorFixture(polygonShape));
         polygonShape.dispose();
 
         setFilter(body, Category.OTHER.mask, Category.all());
@@ -156,35 +120,29 @@ public class BodyFactory {
 
     public Body newPolygonBody(Vector2[] polygonVertices, Vector2 leftDownCorner, BodyDef.BodyType bodyType, boolean fixedRotation) {
 
-        BodyDef boxBodyDef = new BodyDef();
-        boxBodyDef.type = bodyType;
-        boxBodyDef.position.x = leftDownCorner.x;
-        boxBodyDef.position.y = leftDownCorner.y;
-        boxBodyDef.fixedRotation = fixedRotation;
-        Body boxBody = world.createBody(boxBodyDef);
+        Body body = (new BodyBuilder()).setType(bodyType).setPosition(leftDownCorner)
+                .setFixedRotation(fixedRotation).build();
 
         PolygonShape polygon = new PolygonShape();
         polygon.set(polygonVertices);
-        boxBody.createFixture(newStoneFixture(polygon));
+        body.createFixture(FixtureFactory.StoneFixture(polygon));
         polygon.dispose();
 
-        setFilter(boxBody, Category.OTHER.mask, Category.all());
-        return boxBody;
+        setFilter(body, Category.OTHER.mask, Category.all());
+        return body;
     }
 
     private Vector2 coordByAngle(Vector2 center, float angle, float length) {
-        return new Vector2(center.x + (float)Math.cos(Math.toRadians(angle)) * length, center.y + (float)Math.sin(Math.toRadians(angle)) * length);
+        return new Vector2(center.x + (float)Math.cos(Math.toRadians(angle)) * length,
+                center.y + (float)Math.sin(Math.toRadians(angle)) * length);
     }
 
     public Body newStar(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
-        Vector2 leftDownCorner = new Vector2(center.x + radius * (float)Math.cos(Math.toRadians(234)), center.y + radius * (float)Math.sin(Math.toRadians(234f)));
 
-        BodyDef boxBodyDef = new BodyDef();
-        boxBodyDef.type = bodyType;
-        boxBodyDef.position.x = leftDownCorner.x;
-        boxBodyDef.position.y = leftDownCorner.y;
-        boxBodyDef.fixedRotation = fixedRotation;
-        Body boxBody = world.createBody(boxBodyDef);
+        Vector2 leftDownCorner = coordByAngle(center, 234f, radius);
+
+        Body body = (new BodyBuilder()).setType(bodyType).setFixedRotation(fixedRotation)
+                .setPosition(leftDownCorner).build();
 
         for (int i = 0; i < 5; i++) {
             float angle = 234f - i * 72f;
@@ -196,32 +154,23 @@ public class BodyFactory {
 
             PolygonShape polygon = new PolygonShape();
             polygon.set(coordinates);
-            boxBody.createFixture(newSensorFixture(polygon));
+            body.createFixture(FixtureFactory.newSensorFixture(polygon));
             polygon.dispose();
         }
 
-        return boxBody;
+        setFilter(body, Category.OTHER.mask, Category.all());
+        return body;
     }
 
     public Body newBullet(Vector2 source, Vector2 direction) {
 
-        BodyDef boxBodyDef = new BodyDef();
-        boxBodyDef.type = BodyDef.BodyType.DynamicBody;
-        boxBodyDef.position.x = source.x;
-        boxBodyDef.position.y = source.y;
-        boxBodyDef.linearVelocity.x = 1e9f * direction.x;
-        boxBodyDef.linearVelocity.y = 1e9f * direction.y;
-        boxBodyDef.bullet = true;
-        boxBodyDef.linearDamping = 0f;
-        boxBodyDef.gravityScale = 0;
-
-        //create the body to attach said definition
-        Body boxBody = world.createBody(boxBodyDef);
+        Body boxBody  = (new BodyBuilder()).setType(BodyDef.BodyType.DynamicBody).setPosition(source)
+                .setFixedRotation(true).setLinearVelocity(1e9f * direction.x, 1e9f * direction.y)
+                .setIsBullet(true).setLinearDamping(0).setGravityScale(0).build();
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(RenderingSystem.getScreenSizeInMeters().x * 0.0005f);
-
-        FixtureDef fixtureDef = newBouncingBulletFixture(circleShape);
+        FixtureDef fixtureDef = FixtureFactory.BouncingBulletFixture(circleShape);
         boxBody.createFixture(fixtureDef);
         circleShape.dispose();
 
@@ -230,10 +179,57 @@ public class BodyFactory {
     }
 
 
-    private static class BodyBuilder {
-        BodyDef bodyDef = new BodyDef();
+    private class BodyBuilder {
+        private BodyDef bodyDef = new BodyDef();
 
-        Body
+        private Body build() {
+            return world.createBody(bodyDef);
+        }
+
+        private BodyBuilder setType(BodyDef.BodyType bodyType) {
+            bodyDef.type = bodyType;
+            return this;
+        }
+
+        private BodyBuilder setPosition(Vector2 position) {
+            bodyDef.position.set(position);
+            return this;
+        }
+
+        private BodyBuilder setPosition(float x, float y) {
+            bodyDef.position.set(x, y);
+            return this;
+        }
+
+        private BodyBuilder setLinearVelocity(Vector2 linearVelocity) {
+            bodyDef.linearVelocity.set(linearVelocity);
+            return this;
+        }
+
+        private BodyBuilder setLinearVelocity(float x, float y) {
+            bodyDef.linearVelocity.set(x, y);
+            return this;
+        }
+
+        private BodyBuilder setIsBullet(boolean isBullet) {
+            bodyDef.bullet = true;
+            return this;
+        }
+
+        private BodyBuilder setLinearDamping(float linearDamping) {
+            bodyDef.linearDamping = linearDamping;
+            return this;
+        }
+
+        private BodyBuilder setGravityScale(float gravityScale) {
+            bodyDef.gravityScale = gravityScale;
+            return this;
+        }
+
+        private BodyBuilder setFixedRotation(boolean fixedRotation) {
+            bodyDef.fixedRotation = fixedRotation;
+            return this;
+        }
     }
 
     /**
@@ -241,19 +237,30 @@ public class BodyFactory {
      */
     private static class FixtureFactory {
 
-        private static FixtureDef newMirrorFixture(Shape shape) {
+        private static FixtureDef MakeFixture(Shape shape, float density, float friction,
+                                              float restitution) {
+            return (new FixtureBuilder()).setShape(shape).setDensiity(density)
+                    .setFriction(friction).setRestitution(restitution).build();
+        }
+
+        private static FixtureDef MirrorFixture(Shape shape) {
             return (new FixtureBuilder()).setShape(shape).setDensiity(0.5f)
                     .setFriction(0.2f).setRestitution(0.01f).build();
         }
 
-        private static FixtureDef newBouncingBulletFixture(Shape shape) {
+        private static FixtureDef BouncingBulletFixture(Shape shape) {
             return (new FixtureBuilder()).setShape(shape).setDensiity(0)
                     .setFriction(0).setRestitution(1).build();
         }
 
-        private static FixtureDef newStoneFixture(Shape shape) {
+        private static FixtureDef StoneFixture(Shape shape) {
             return (new FixtureBuilder()).setShape(shape).setDensiity(1)
                     .setFriction(0.9f).setRestitution(0.01f).build();
+        }
+
+        private static FixtureDef PLayerFixture(Shape shape) {
+            return (new FixtureBuilder()).setShape(shape).setDensiity(100)
+                    .setFriction(0.9f).setRestitution(0.1f).build();
         }
 
         private static FixtureDef newSensorFixture(Shape shape){
