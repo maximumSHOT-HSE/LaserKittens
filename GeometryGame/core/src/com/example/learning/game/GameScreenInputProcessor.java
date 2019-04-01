@@ -81,8 +81,8 @@ public class GameScreenInputProcessor implements InputProcessor {
         float textureHeight = RenderingSystem.PixelsToMeters(Mapper.textureComponent.get(player).region.getRegionHeight())
                 * Mapper.transformComponent.get(player).scale.y;
 
-        float originX = textureWidth/2f;
-        float originY = textureHeight/2f;
+        float originX = textureWidth / 2f;
+        float originY = textureHeight / 2f;
 
 
         Rectangle textureBounds = new Rectangle(textureX - originX,textureY - originY,textureWidth,textureHeight);

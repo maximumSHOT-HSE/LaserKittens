@@ -8,16 +8,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
@@ -108,7 +104,7 @@ public class ChooseLevelScreen implements Screen {
 
     @Override
     public void hide() {
-
+        menu.saveState();
     }
 
     @Override
@@ -122,6 +118,14 @@ public class ChooseLevelScreen implements Screen {
         private SlidingPane slidingPane;
         private int currentSection = abstractLevels.size();
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
+
+        /**
+         * Save current section id, which should be drawn
+         * next time.
+         * */
+        public void saveState() {
+            currentSection = slidingPane.currentSectionId;
+        }
 
         public void draw(Stage stage) {
             slidingPane = new SlidingPane();
@@ -139,20 +143,22 @@ public class ChooseLevelScreen implements Screen {
                 });
                 Table table = new Table();
                 table.row();
-//                table.add(new TextButton("1", skin).setStyle()).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
+                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
+                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
+                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
                 table.row();
+                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
                 table.add(levelButton).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
+                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
                 table.row();
-//                table.add(new TextButton("2", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
-                table.row();
+                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
+                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
+                table.add(new Label("", skin)).width(0.6f * Gdx.graphics.getWidth()).height(0.2f * Gdx.graphics.getHeight());
                 table.setWidth(0.6f * Gdx.graphics.getWidth());
                 table.setHeight(0.6f * Gdx.graphics.getHeight());
                 slidingPane.addWidget(table);
             }
-
             slidingPane.setCurrentSection(currentSection, direction);
-
-            System.out.println("finish");
             stage.addActor(slidingPane);
         }
     }
