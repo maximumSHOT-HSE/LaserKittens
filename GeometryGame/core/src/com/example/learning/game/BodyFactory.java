@@ -4,10 +4,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 
 public class BodyFactory {
@@ -45,6 +48,7 @@ public class BodyFactory {
         fixtureDef.friction = 0;
         fixtureDef.restitution = 1f;
 
+
         return fixtureDef;
     }
 
@@ -59,6 +63,47 @@ public class BodyFactory {
         fixtureDef.restitution = 0.01f;
 
         return fixtureDef;
+    }
+
+    public static FixtureDef newSensorFixture(Shape shape){
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.isSensor = true;
+        return fixtureDef;
+    }
+
+    private enum Category {
+
+        PLAYER((short)1),
+        BULLET((short)2),
+        OTHER((short)4);
+
+        private Category(short mask) { this.mask = mask; }
+
+        private static short all() {
+            short sum_mask = 0;
+            for (Category category : Category.values()) {
+                sum_mask |= category.mask;
+            }
+            return sum_mask;
+        }
+
+        private short allExceptMe() {
+            return (short) (all() ^ mask);
+        }
+
+        private short mask;
+    }
+
+    private void setFilter(Body body, short categoryBits, short maskBits){
+        if (body != null) {
+            Array<Fixture> fixtures = body.getFixtureList();
+            Filter filter = new Filter();
+            filter.categoryBits = categoryBits;
+            filter.maskBits = maskBits;
+            for (Fixture fixture : fixtures) {
+                fixture.setFilterData(filter);
+            }
+        }
     }
 
     public Body newCircleBody(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
@@ -82,6 +127,7 @@ public class BodyFactory {
         boxBody.createFixture(fixtureDef);
         circleShape.dispose();
 
+        setFilter(boxBody, Category.OTHER.mask, Category.all());
         return boxBody;
     }
 
@@ -105,6 +151,7 @@ public class BodyFactory {
         boxBody.createFixture(fixtureDef);
         circleShape.dispose();
 
+        setFilter(boxBody, Category.PLAYER.mask, (short)(Category.PLAYER.allExceptMe() & ~Category.PLAYER.mask));
         return boxBody;
     }
 
@@ -126,6 +173,7 @@ public class BodyFactory {
         boxBody.createFixture(newStoneFixture(poly));
         poly.dispose();
 
+        setFilter(boxBody, Category.OTHER.mask, Category.all());
         return boxBody;
     }
 
@@ -142,6 +190,7 @@ public class BodyFactory {
         body.createFixture(newMirrorFixture(polygonShape));
         polygonShape.dispose();
 
+        setFilter(body, Category.OTHER.mask, Category.all());
         return body;
     }
 
@@ -159,6 +208,7 @@ public class BodyFactory {
         boxBody.createFixture(newStoneFixture(polygon));
         polygon.dispose();
 
+        setFilter(boxBody, Category.OTHER.mask, Category.all());
         return boxBody;
     }
 
@@ -186,7 +236,7 @@ public class BodyFactory {
 
             PolygonShape polygon = new PolygonShape();
             polygon.set(coordinates);
-            boxBody.createFixture(newStoneFixture(polygon));
+            boxBody.createFixture(newSensorFixture(polygon));
             polygon.dispose();
         }
 
@@ -215,6 +265,7 @@ public class BodyFactory {
         boxBody.createFixture(fixtureDef);
         circleShape.dispose();
 
+        setFilter(boxBody, Category.BULLET.mask, (short)(Category.BULLET.allExceptMe() & ~Category.PLAYER.mask));
         return boxBody;
     }
 }
