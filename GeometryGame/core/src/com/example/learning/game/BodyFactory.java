@@ -139,10 +139,8 @@ public class BodyFactory {
 
     public Body newStar(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
 
-        Vector2 leftDownCorner = coordByAngle(center, 234f, radius);
-
         Body body = (new BodyBuilder()).setType(bodyType).setFixedRotation(fixedRotation)
-                .setPosition(leftDownCorner).build();
+                .setPosition(center).build();
 
         for (int i = 0; i < 5; i++) {
             float angle = 234f - i * 72f;
