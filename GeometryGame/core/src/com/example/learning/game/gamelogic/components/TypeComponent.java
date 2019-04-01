@@ -9,6 +9,10 @@ public class TypeComponent implements Component, Poolable {
 
     public enum ObjectType {
         PLAYER,
+        BULLET,
+        WALL,
+        MIRROR,
+        STAR,
         OTHER
     }
 

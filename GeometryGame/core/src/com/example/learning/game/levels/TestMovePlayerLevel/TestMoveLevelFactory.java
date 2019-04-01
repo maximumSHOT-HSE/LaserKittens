@@ -25,37 +25,6 @@ public class TestMoveLevelFactory extends AbstractLevelFactory {
         world = new World(new Vector2(0,0), false);
     }
 
-    public Entity createBackground() {
-        // Create the Entity and all the components that will go in the entity
-        Entity entity = engine.createEntity();
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-        // create the data for the components and add them to the components
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
-
-        texture.region = new TextureRegion(manager.manager.get("blue-background.jpg", Texture.class));
-
-        position.position.set(
-            RenderingSystem.getScreenSizeInMeters().x / 2,
-            RenderingSystem.getScreenSizeInMeters().y / 2,
-            -1e9f
-        );
-
-        position.scale.set(
-            RenderingSystem.getScreenSizeInPixels().x / texture.region.getRegionWidth(),
-            RenderingSystem.getScreenSizeInPixels().y / texture.region.getRegionHeight()
-        );
-
-        // add the components to the entity
-        entity.add(position);
-        entity.add(texture);
-
-        // add the entity to the engine
-        engine.addEntity(entity);
-        return entity;
-    }
-
     @Override
     public World getWorld() {
         return world;
