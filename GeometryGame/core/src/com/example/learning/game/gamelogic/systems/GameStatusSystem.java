@@ -22,7 +22,7 @@ public class GameStatusSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         PlayerComponent playerComponent = Mapper.playerComponent.get(entity);
         if (playerComponent.readyToFinish()) {
-            gameScreen.showEndGameDialog();
+            gameScreen.endGame();
         }
     }
 }

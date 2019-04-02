@@ -70,7 +70,7 @@ public class BodyFactory {
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
-        body.createFixture(FixtureFactory.StoneFixture(circleShape));
+        body.createFixture(FixtureFactory.newStoneFixture(circleShape));
         circleShape.dispose();
 
         setFilter(body, Category.OTHER.mask, Category.all());
@@ -98,7 +98,7 @@ public class BodyFactory {
 
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width, height);
-        body.createFixture(FixtureFactory.StoneFixture(poly));
+        body.createFixture(FixtureFactory.newStoneFixture(poly));
         poly.dispose();
 
         setFilter(body, Category.OTHER.mask, Category.all());
@@ -125,7 +125,7 @@ public class BodyFactory {
 
         PolygonShape polygon = new PolygonShape();
         polygon.set(polygonVertices);
-        body.createFixture(FixtureFactory.StoneFixture(polygon));
+        body.createFixture(FixtureFactory.newStoneFixture(polygon));
         polygon.dispose();
 
         setFilter(body, Category.OTHER.mask, Category.all());
@@ -256,7 +256,7 @@ public class BodyFactory {
                     .setFriction(0).setRestitution(1).build();
         }
 
-        private static FixtureDef StoneFixture(Shape shape) {
+        private static FixtureDef newStoneFixture(Shape shape) {
             return (new FixtureBuilder()).setShape(shape).setDensiity(1)
                     .setFriction(0.9f).setRestitution(0.01f).build();
         }
