@@ -3,12 +3,14 @@ package com.example.learning.game.levels.TestMovePlayerLevel;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.example.learning.MyAssetManager;
 import com.example.learning.game.BodyFactory;
 import com.example.learning.game.gamelogic.components.BodyComponent;
@@ -41,6 +43,6 @@ public class TestMoveLevelFactory extends AbstractLevelFactory {
         this.manager = assetManager;
         bodyFactory = BodyFactory.getBodyFactory(world);
         createBackground();
-        player = createPlayer(10f, 10f, 5f);
+        player = createPlayer(5, 5, 5);
     }
 }

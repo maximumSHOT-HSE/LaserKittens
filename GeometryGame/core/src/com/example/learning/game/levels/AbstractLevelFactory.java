@@ -15,6 +15,7 @@ import com.example.learning.game.BodyFactory;
 import com.example.learning.game.Mapper;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.BulletComponent;
+import com.example.learning.game.gamelogic.components.PlayerComponent;
 import com.example.learning.game.gamelogic.components.StateComponent;
 import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
@@ -148,23 +149,31 @@ abstract public class AbstractLevelFactory {
         engine.addEntity(entity);
     }
 
-    protected Entity createPlayer(float x, float y, float radius) {
+    protected Entity createPlayer(float px, float py, float radius) {
         // Create the Entity and all the components that will go in the entity
         Entity entity = engine.createEntity();
         BodyComponent body = engine.createComponent(BodyComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
+        PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
+        StateComponent stateComponent = engine.createComponent(StateComponent.class);
         // create the data for the components and add them to the components
-        body.body = bodyFactory.newPlayerBody(new Vector2(x, y), radius);
 
-        position.position.set(x, y,0);
-        texture.region = new TextureRegion(manager.manager.get("badlogic.jpg", Texture.class));
+        body.body = bodyFactory.newPlayerBody(new Vector2(px, py), radius);
+
+        position.position.x = px;
+        position.position.y = py;
+        position.scale.set(0.2f, 0.2f);
+        texture.region = new TextureRegion(manager.manager.get("Cat1.png", Texture.class));
+
         body.body.setUserData(entity);
 
         // add the components to the entity
         entity.add(body);
         entity.add(position);
         entity.add(texture);
+        entity.add(playerComponent);
+        entity.add(stateComponent);
 
         // add the entity to the engine
         engine.addEntity(entity);

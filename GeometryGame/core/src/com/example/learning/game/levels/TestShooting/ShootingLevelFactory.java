@@ -36,34 +36,6 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
     }
 
     @Override
-    protected Entity createPlayer(float px, float py, float radius) {
-        // Create the Entity and all the components that will go in the entity
-        Entity entity = engine.createEntity();
-        BodyComponent body = engine.createComponent(BodyComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-        // create the data for the components and add them to the components
-
-        body.body = bodyFactory.newPlayerBody(new Vector2(px, py), radius);
-
-        position.position.x = px;
-        position.position.y = py;
-        position.scale.set(0.2f, 0.2f);
-        texture.region = new TextureRegion(manager.manager.get("Cat1.png", Texture.class));
-
-        body.body.setUserData(entity);
-
-        // add the components to the entity
-        entity.add(body);
-        entity.add(position);
-        entity.add(texture);
-
-        // add the entity to the engine
-        engine.addEntity(entity);
-        return entity;
-    }
-
-    @Override
     public void createLevel(PooledEngine engine, MyAssetManager assetManager) {
         float width = RenderingSystem.getScreenSizeInMeters().x;
         float height = RenderingSystem.getScreenSizeInMeters().y;
@@ -81,7 +53,8 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
         createMirror(new Vector2(0.5f * width, height), width, 0.1f * height); // up wall
         createMirror(new Vector2(0.5f * width, 0.7f * height), 0.5f * width, 0.02f * height); // obstacle
 
-        createStar(0.25f * width, 0.43f * height, 0.05f * height);
-        createStar(0.25f * width, 0.2f * height, 0.05f * height);
+        createStar(0.5f * width, 0.85f * height, 0.05f * height);
+        createStar(0.25f * width, 0.45f * height, 0.05f * height);
+        createStar(0.75f * width, 0.45f * height, 0.05f * height);
     }
 }
