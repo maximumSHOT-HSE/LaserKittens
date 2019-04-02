@@ -81,32 +81,38 @@ public class MainMenuScreen implements Screen {
     }
 
     private class Menu {
-        private Table menuTable = new Table();
+        private Table table = new Table();
        // private Skin skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
        private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
         private TextButton levels = new TextButton("Levels", skin);
         private TextButton settings = new TextButton("Settings", skin);
+        private TextButton about = new TextButton("About", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
         public Menu(Stage stage) {
             // creating menu table (actor) for buttons
-            menuTable.setFillParent(true);
-         //   menuTable.setDebug(true);
-            stage.addActor(menuTable);
+            table.setFillParent(true);
+         //   table.setDebug(true);
+            stage.addActor(table);
 
             levels.getLabel().setFontScale(2f);
             settings.getLabel().setFontScale(2f);
+            about.getLabel().setFontScale(2f);
             exit.getLabel().setFontScale(2f);
 
-            setLinsteners();
+            setListeners();
 
-            menuTable.add(levels).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
-            menuTable.row().pad(10, 0, 10, 0);
-            menuTable.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).row();
-            menuTable.add(exit).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).row();
+            table.row().pad(5, 10, 5, 10);
+            table.add(levels).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.row().pad(5, 10, 5, 10);
+            table.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.row().pad(5, 10, 5, 10);
+            table.add(about).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.row().pad(5, 10, 5, 10);
+            table.add(exit).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
         }
 
-        private void setLinsteners() {
+        private void setListeners() {
             levels.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -118,6 +124,13 @@ public class MainMenuScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     parent.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
+                }
+            });
+
+            about.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    parent.changeScreen(LaserKittens.SCREEN_TYPE.ABOUT_SCREEN);
                 }
             });
 
