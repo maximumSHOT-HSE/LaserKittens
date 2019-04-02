@@ -34,14 +34,14 @@ public class GarbageCollectionSystem extends IteratingSystem {
         TypeComponent typeComponent = Mapper.typeComponent.get(entity);//may be null
 
         if (stateComponent.get() == StateComponent.State.FINISHED) {
-            engine.removeEntity(entity);
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-            if (bodyComponent != null) {
-                world.destroyBody(bodyComponent.body);
-            }
             if (typeComponent != null && typeComponent.type == TypeComponent.ObjectType.STAR) {
                 gameStatus.removeStar();
             }
+            if (bodyComponent != null) {
+                world.destroyBody(bodyComponent.body);
+            }
+            engine.removeEntity(entity);
         }
         if (stateComponent.get() == StateComponent.State.JUST_CREATED) {
             stateComponent.set(StateComponent.State.NORMAL);

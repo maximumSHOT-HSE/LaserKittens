@@ -164,8 +164,9 @@ abstract public class AbstractLevelFactory {
 
         position.position.x = px;
         position.position.y = py;
-        position.scale.set(0.2f, 0.2f);
         texture.region = new TextureRegion(manager.manager.get(MyAssetManager.Cat3, Texture.class));
+        float regionCatRadius = RenderingSystem.PixelsToMeters(0.5f * texture.region.getRegionHeight() * 0.78f);
+        position.scale.set(radius / regionCatRadius, radius / regionCatRadius);
 
         body.body.setUserData(entity);
 

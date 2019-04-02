@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
     private final LaserKittens parent;
     private OrthographicCamera camera;
     private AbstractLevel level;
-    private GameStatus gameStatus = new GameStatus();
+    private GameStatus gameStatus = new GameStatus(this);
     //adding poolable interface may be needed somewhere
 
     private InputMultiplexer inputMultiplexer;
