@@ -35,28 +35,7 @@ public class TestStarsLevelFactory extends AbstractLevelFactory {
         return player;
     }
 
-    private Entity createStar(float x, float y, float radius) {
-        Entity entity = engine.createEntity();
 
-        BodyComponent body = engine.createComponent(BodyComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-
-        body.body = bodyFactory.newStar(new Vector2(x, y), radius, BodyDef.BodyType.DynamicBody, false);
-        for(Fixture fixture : body.body.getFixtureList()) {
-            fixture.setUserData(entity);
-        }
-
-        position.position.set(x, y,0);
-        body.body.setUserData(entity);
-
-        // add the components to the entity
-        entity.add(body);
-        entity.add(position);
-
-        // add the entity to the engine
-        engine.addEntity(entity);
-        return entity;
-    }
 
     @Override
     public void createLevel(PooledEngine engine, MyAssetManager assetManager) {

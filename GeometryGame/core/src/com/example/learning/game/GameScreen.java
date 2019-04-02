@@ -15,6 +15,7 @@ import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.systems.BulletSystem;
 import com.example.learning.game.gamelogic.systems.CollisionSystem;
 import com.example.learning.game.gamelogic.systems.GarbageCollectionSystem;
+import com.example.learning.game.gamelogic.systems.LevelGenerationSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsDebugSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsSystem;
 import com.example.learning.game.gamelogic.systems.PlayerControlSystem;
@@ -41,7 +42,6 @@ public class GameScreen implements Screen {
         world = levelFactory.getWorld();
         world.setContactListener(new MyContactListener());
 
-
         // Create our new rendering system
         RenderingSystem renderingSystem = new RenderingSystem(parent.batch, parent.shapeRenderer);
         camera = renderingSystem.getCamera();
@@ -53,6 +53,7 @@ public class GameScreen implements Screen {
         engine.addSystem(new PlayerControlSystem());
         engine.addSystem(new BulletSystem());
         engine.addSystem(new GarbageCollectionSystem(world, engine));
+        engine.addSystem(new LevelGenerationSystem(abstractLevel.getFactory()));
 
         GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
         InputProcessor inputProcessor = new GameScreenInputProcessor(parent, abstractLevel, camera);
