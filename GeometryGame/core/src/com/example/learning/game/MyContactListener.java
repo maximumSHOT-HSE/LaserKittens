@@ -75,14 +75,6 @@ public class MyContactListener implements ContactListener {
         bulletComponent.creationTime = System.currentTimeMillis();
         bulletComponent.lifeTime = 20;
         Mapper.stateComponent.get(starEntity).finish();
-
-        PlayerComponent playerComponent = Mapper.playerComponent.get(bulletComponent.player);
-        playerComponent.catchStar();
-        if (playerComponent.readyToFinish()) {
-            System.out.println("READY !");
-            StateComponent stateComponent = Mapper.stateComponent.get(bulletComponent.player);
-//            stateComponent.finish();
-        }
     }
 
     @Override

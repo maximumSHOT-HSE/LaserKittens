@@ -1,6 +1,8 @@
-package com.example.learning.AboutScreen;
+package com.example.learning.about;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
+import com.example.learning.settings.SettingsScreenInputProcessor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,11 +32,16 @@ public class AboutScreen implements Screen {
     private Stage stage;
     private Menu menu;
 
+    private InputMultiplexer inputMultiplexer;
+
     public AboutScreen(final LaserKittens laserKittens) {
         this.parent = laserKittens;
 
         background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
+
+        InputProcessor inputProcessor = new AboutScreenInputProcessor(parent);
+        inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
     }
 
     @Override

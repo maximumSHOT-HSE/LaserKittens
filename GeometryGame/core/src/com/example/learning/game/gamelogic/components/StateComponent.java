@@ -7,6 +7,7 @@ public class StateComponent implements Component, Poolable {
 
     public enum State {
         NORMAL,
+        JUST_CREATED,
         FINISHED
     }
 
