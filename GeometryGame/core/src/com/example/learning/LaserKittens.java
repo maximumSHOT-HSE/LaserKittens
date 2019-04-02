@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.example.learning.game.GameScreen;
+import com.example.learning.AboutScreen.AboutScreen;
 import com.example.learning.game.levels.ChooseLevelScreen;
 import com.example.learning.settings.AppPreferences;
 import com.example.learning.settings.SettingsScreen;
@@ -22,12 +22,14 @@ public class LaserKittens extends Game {
     public enum SCREEN_TYPE {
         MAIN_MENU_SCREEN,
         CHOOSE_LEVEL_SCREEN,
-        SETTINGS_SCREEN
+        SETTINGS_SCREEN,
+        ABOUT_SCREEN;
     }
 
     private MainMenuScreen mainMenuScreen;
     private ChooseLevelScreen chooseLevelScreen;
     private SettingsScreen settingsScreen;
+    private AboutScreen aboutScreen;
 
     public AppPreferences getPreferences() {
         return preferences;
@@ -53,8 +55,13 @@ public class LaserKittens extends Game {
                 }
                 this.setScreen(settingsScreen);
                 break;
+            case ABOUT_SCREEN:
+                if (aboutScreen == null) {
+                    aboutScreen = new AboutScreen(this);
+                }
+                this.setScreen(aboutScreen);
+                break;
         }
-        //should gameScreens be disposed?
     }
 
     @Override
