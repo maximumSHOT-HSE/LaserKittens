@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
@@ -105,30 +106,30 @@ public class SettingsScreen implements Screen {
         private Label volumeMusicLabel = new Label("music volume", skin);
         private Label musicOnOffLabel = new Label("music on/off", skin);
 
-        final TextButton backButton = new TextButton("Back", skin, "small");
+        final TextButton backButton = new TextButton("Back", skin);
         final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin );
         final CheckBox musicCheckbox = new CheckBox(null, skin);
 
         public Menu(Stage stage) {
             // creating menu table (actor) for buttons
             table.setFillParent(true);
-           // table.setDebug(true);
+            //table.setDebug(true);
             stage.addActor(table);
 
-            titleLabel.setFontScale(2f);
+            titleLabel.setFontScale(3f);
             volumeMusicLabel.setFontScale(1.5f);
             musicOnOffLabel.setFontScale(1.5f);
-            backButton.getLabel().setFontScale(2f);
 
-            table.add(titleLabel).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).colspan(2);
+            table.row().pad(10, 10, 30, 10);
+            table.add(titleLabel).colspan(2);
             table.row().pad(10, 10, 10, 10);
-            table.add(volumeMusicLabel).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f);
-            table.add(volumeMusicSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.add(volumeMusicLabel);
+            table.add(volumeMusicSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
             table.row().pad(10, 10, 10, 10);
-            table.add(musicOnOffLabel).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).left();
-            table.add(musicCheckbox).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f);
-            table.row().pad(10, 10, 10, 10);
-            table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.add(musicOnOffLabel);
+            table.add(musicCheckbox).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
+            table.row().pad(30, 10, 10, 10);
+            table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).colspan(2);
 
             setListeners();
         }
