@@ -8,17 +8,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
@@ -104,11 +100,11 @@ public class SettingsScreen implements Screen {
 
         private Label titleLabel = new Label("Settings", skin);
         private Label volumeMusicLabel = new Label("music volume", skin);
-        private Label musicOnOffLabel = new Label("music on/off", skin);
+        private Label volumeSoundLabel = new Label("sound volume", skin);
 
         final TextButton backButton = new TextButton("Back", skin);
         final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin );
-        final CheckBox musicCheckbox = new CheckBox(null, skin);
+        final Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
 
         public Menu(Stage stage) {
             // creating menu table (actor) for buttons
@@ -118,7 +114,7 @@ public class SettingsScreen implements Screen {
 
             titleLabel.setFontScale(3f);
             volumeMusicLabel.setFontScale(1.5f);
-            musicOnOffLabel.setFontScale(1.5f);
+            volumeSoundLabel.setFontScale(1.5f);
 
             table.row().pad(10, 10, 30, 10);
             table.add(titleLabel).colspan(2);
@@ -126,8 +122,8 @@ public class SettingsScreen implements Screen {
             table.add(volumeMusicLabel);
             table.add(volumeMusicSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
             table.row().pad(10, 10, 10, 10);
-            table.add(musicOnOffLabel);
-            table.add(musicCheckbox).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
+            table.add(volumeSoundLabel);
+            table.add(volumeSoundSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
             table.row().pad(30, 10, 10, 10);
             table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).colspan(2);
 
@@ -135,30 +131,19 @@ public class SettingsScreen implements Screen {
         }
 
         private void setListeners() {
-            //volume
+
             volumeMusicSlider.setValue( parent.getPreferences().getMusicVolume() );
-            volumeMusicSlider.addListener( new EventListener() {
-                @Override
-                public boolean handle(Event event) {
-                    parent.getPreferences().setMusicVolume( volumeMusicSlider.getValue() );
-                    return false;
-                }
+            volumeMusicSlider.addListener(event -> {
+                parent.getPreferences().setMusicVolume( volumeMusicSlider.getValue() );
+                return false;
             });
 
-
-            //music
-            musicCheckbox.setChecked( parent.getPreferences().isMusicEnabled() );
-            musicCheckbox.addListener( new EventListener() {
-                @Override
-                public boolean handle(Event event) {
-                    boolean enabled = musicCheckbox.isChecked();
-                    parent.getPreferences().setMusicEnabled( enabled );
-                    return false;
-                }
+            volumeSoundSlider.setValue( parent.getPreferences().getSoundVolume() );
+            volumeSoundSlider.addListener(event -> {
+                parent.getPreferences().setSoundVolume( volumeSoundSlider.getValue() );
+                return false;
             });
 
-
-            // return to main screen button
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
