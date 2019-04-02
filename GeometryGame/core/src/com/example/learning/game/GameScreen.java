@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.LaserKittens;
+import com.example.learning.game.gamelogic.GameStatus;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.systems.BulletSystem;
 import com.example.learning.game.gamelogic.systems.GameStatusSystem;
@@ -29,6 +30,7 @@ public class GameScreen implements Screen {
     private final LaserKittens parent;
     private OrthographicCamera camera;
     private AbstractLevel level;
+    private GameStatus gameStatus = new GameStatus();
     //adding poolable interface may be needed somewhere
 
     private InputMultiplexer inputMultiplexer;
@@ -63,9 +65,9 @@ public class GameScreen implements Screen {
         physicsSystem = new PhysicsSystem(world);
         physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
-        garbageCollectionSystem = new GarbageCollectionSystem(world, engine);
+        garbageCollectionSystem = new GarbageCollectionSystem(world, engine, gameStatus);
         levelGenerationSystem = new LevelGenerationSystem(abstractLevel.getFactory());
-        gameStatusSystem = new GameStatusSystem(this);
+        gameStatusSystem = new GameStatusSystem(gameStatus);
 
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsSystem);

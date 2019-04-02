@@ -54,6 +54,7 @@ abstract public class AbstractLevelFactory {
         body.body.setUserData(entity);
 
         typeComponent.type = TypeComponent.ObjectType.STAR;
+        stateComponent.set(StateComponent.State.JUST_CREATED);
 
         // add the components to the entity
         entity.add(body);

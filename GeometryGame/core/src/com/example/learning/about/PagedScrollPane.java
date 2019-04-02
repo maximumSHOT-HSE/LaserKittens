@@ -1,4 +1,4 @@
-package com.example.learning.AboutScreen;
+package com.example.learning.about;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;

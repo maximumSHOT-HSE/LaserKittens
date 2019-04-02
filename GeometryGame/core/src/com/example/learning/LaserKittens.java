@@ -2,11 +2,10 @@ package com.example.learning;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.example.learning.AboutScreen.AboutScreen;
+import com.example.learning.about.AboutScreen;
 import com.example.learning.game.levels.ChooseLevelScreen;
 import com.example.learning.settings.AppPreferences;
 import com.example.learning.settings.SettingsScreen;
