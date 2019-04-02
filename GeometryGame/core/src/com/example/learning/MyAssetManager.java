@@ -13,6 +13,8 @@ public class MyAssetManager {
     // Textures
     public static final String badlogic = "badlogic.jpg";
     public static final String Cat1 = "Cat1.png";
+    public static final String Cat2 = "Cat2.png";
+    public static final String Cat3 = "Cat3.png";
     public static final String levelIndicatorActive = "levelIndicatorActive.png";
     public static final String levelIndicatorPassive = "levelIndicatorPassive.png";
 
@@ -29,6 +31,8 @@ public class MyAssetManager {
         manager.load(badlogic, Texture.class);
         manager.load(blueBackground, Texture.class);
         manager.load(Cat1, Texture.class);
+        manager.load(Cat2, Texture.class);
+        manager.load(Cat3, Texture.class);
         manager.load(levelIndicatorActive, Texture.class);
         manager.load(levelIndicatorPassive, Texture.class);
     }
