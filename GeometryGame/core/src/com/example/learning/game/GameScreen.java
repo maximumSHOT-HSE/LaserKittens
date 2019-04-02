@@ -36,7 +36,6 @@ public class GameScreen implements Screen {
     private InputMultiplexer inputMultiplexer;
     private PooledEngine engine; // PooledEngine! reuse components. may cause problems
     private World world;
-    private Stage stage;
 
     private RenderingSystem renderingSystem;
     private PhysicsSystem physicsSystem;
@@ -60,8 +59,6 @@ public class GameScreen implements Screen {
         renderingSystem = new RenderingSystem(parent.batch, parent.shapeRenderer);
         camera = renderingSystem.getCamera();
 
-        stage = new Stage(new ScreenViewport());
-
         physicsSystem = new PhysicsSystem(world);
         physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
@@ -79,17 +76,16 @@ public class GameScreen implements Screen {
 
         GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
         InputProcessor inputProcessor = new GameScreenInputProcessor(parent, abstractLevel, camera);
-        inputMultiplexer = new InputMultiplexer(stage, gestureDetector, inputProcessor);
+        inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
     }
 
-    public void showEndGameDialog() {
-        parent.setScreen(new PopUpScreen(parent, stage, level, this));
+    public void endGame() {
+        parent.setScreen(new PopUpScreen(parent, level, this));
         dispose();
     }
 
     @Override
     public void show() {
-        stage.clear();
         parent.batch.setProjectionMatrix(camera.combined);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
@@ -100,14 +96,11 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         engine.update(delta);
-
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+
     }
 
     @Override
