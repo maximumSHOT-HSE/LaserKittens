@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
+import com.example.learning.MyAssetManager;
 
 public class SettingsScreen implements Screen {
 
@@ -96,14 +97,14 @@ public class SettingsScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        private Skin skin = parent.assetManager.manager.get(MyAssetManager.skin, Skin.class);
 
         private Label titleLabel = new Label("Settings", skin);
         private Label volumeMusicLabel = new Label("music volume", skin);
         private Label volumeSoundLabel = new Label("sound volume", skin);
 
         final TextButton backButton = new TextButton("Back", skin);
-        final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin );
+        final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin);
         final Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
 
         public Menu(Stage stage) {
