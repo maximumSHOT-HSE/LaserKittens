@@ -23,17 +23,18 @@ public class LevelGenerationSystem extends IteratingSystem {
 
     @Override
     public void update(float deltaTime) {
-        timeAccumulator += deltaTime;
-        if (timeAccumulator > DELTA_MODIFICATION_TIME) {
-            timeAccumulator = 0;
-            float x = random.nextInt(1_000_000_000) / 1e9f;
-            float y = random.nextInt(1_000_000_000) / 1e9f;
-            x *= 0.5f * RenderingSystem.getScreenSizeInMeters().x;
-            y *= 0.5f * RenderingSystem.getScreenSizeInMeters().y;
-            abstractLevelFactory.createStar(
-                x, y, 0.05f * RenderingSystem.getScreenSizeInMeters().y
-            );
-        }
+//        timeAccumulator += deltaTime;
+//
+//        if (timeAccumulator > DELTA_MODIFICATION_TIME) {
+//            timeAccumulator = 0;
+//            float x = random.nextInt(1_000_000_000) / 1e9f;
+//            float y = random.nextInt(1_000_000_000) / 1e9f;
+//            x *= 0.5f * RenderingSystem.getScreenSizeInMeters().x;
+//            y *= 0.5f * RenderingSystem.getScreenSizeInMeters().y;
+//            abstractLevelFactory.createStar(
+//                x, y, 0.05f * RenderingSystem.getScreenSizeInMeters().y
+//            );
+//        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -42,8 +43,8 @@ public class ChooseLevelScreen implements Screen {
 
     private void fillLevels() {
         abstractLevels.add(new TestLaserLevel());
-        abstractLevels.add(new TestMovePlayerLevel());
         abstractLevels.add(new TestStarsLevel());
+        abstractLevels.add(new TestMovePlayerLevel());
         abstractLevels.add(new ShootingLevel());
     }
 

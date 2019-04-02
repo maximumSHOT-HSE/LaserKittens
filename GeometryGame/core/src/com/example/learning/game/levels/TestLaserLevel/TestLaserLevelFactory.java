@@ -37,34 +37,6 @@ public class TestLaserLevelFactory extends AbstractLevelFactory {
     }
 
     @Override
-    protected Entity createPlayer(float px, float py, float radius) {
-        // Create the Entity and all the components that will go in the entity
-        Entity entity = engine.createEntity();
-        BodyComponent body = engine.createComponent(BodyComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-        // create the data for the components and add them to the components
-
-        body.body = bodyFactory.newPlayerBody(new Vector2(px, py), radius);
-
-        position.position.x = px;
-        position.position.y = py;
-        position.scale.set(0.05f, 0.05f);
-        texture.region = new TextureRegion(manager.manager.get("badlogic.jpg", Texture.class));
-
-        body.body.setUserData(entity);
-
-        // add the components to the entity
-        entity.add(body);
-        entity.add(position);
-        entity.add(texture);
-
-        // add the entity to the engine
-        engine.addEntity(entity);
-        return entity;
-    }
-
-    @Override
     public void createLevel(PooledEngine engine, MyAssetManager assetManager) {
         float width = RenderingSystem.getScreenSizeInMeters().x;
         float height = RenderingSystem.getScreenSizeInMeters().y;

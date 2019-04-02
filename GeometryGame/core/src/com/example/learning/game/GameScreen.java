@@ -10,15 +10,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.LaserKittens;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.systems.BulletSystem;
-import com.example.learning.game.gamelogic.systems.CollisionSystem;
+import com.example.learning.game.gamelogic.systems.GameStatusSystem;
 import com.example.learning.game.gamelogic.systems.GarbageCollectionSystem;
 import com.example.learning.game.gamelogic.systems.LevelGenerationSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsDebugSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsSystem;
-import com.example.learning.game.gamelogic.systems.PlayerControlSystem;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevel;
 import com.example.learning.game.levels.AbstractLevelFactory;
@@ -27,13 +28,25 @@ public class GameScreen implements Screen {
 
     private final LaserKittens parent;
     private OrthographicCamera camera;
-    private PooledEngine engine; // PooledEngine! reuse components. may cause problems
+    private AbstractLevel level;
     //adding poolable interface may be needed somewhere
 
     private InputMultiplexer inputMultiplexer;
+    private PooledEngine engine; // PooledEngine! reuse components. may cause problems
     private World world;
+    private Stage stage;
+
+    private RenderingSystem renderingSystem;
+    private PhysicsSystem physicsSystem;
+    private PhysicsDebugSystem physicsDebugSystem;
+    private BulletSystem bulletSystem;
+    private GarbageCollectionSystem garbageCollectionSystem;
+    private LevelGenerationSystem levelGenerationSystem;
+    private GameStatusSystem gameStatusSystem;
 
     public GameScreen(LaserKittens geometryGame, AbstractLevel abstractLevel) {
+        level = abstractLevel;
+
         this.parent = geometryGame;
 
         engine = new PooledEngine();
@@ -42,26 +55,39 @@ public class GameScreen implements Screen {
         world = levelFactory.getWorld();
         world.setContactListener(new MyContactListener());
 
-        // Create our new rendering system
-        RenderingSystem renderingSystem = new RenderingSystem(parent.batch, parent.shapeRenderer);
+        renderingSystem = new RenderingSystem(parent.batch, parent.shapeRenderer);
         camera = renderingSystem.getCamera();
 
+        stage = new Stage(new ScreenViewport());
+
+        physicsSystem = new PhysicsSystem(world);
+        physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCamera());
+        bulletSystem = new BulletSystem();
+        garbageCollectionSystem = new GarbageCollectionSystem(world, engine);
+        levelGenerationSystem = new LevelGenerationSystem(abstractLevel.getFactory());
+        gameStatusSystem = new GameStatusSystem(this);
+
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PhysicsSystem(world));
-        engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
-        engine.addSystem(new CollisionSystem());
-        engine.addSystem(new PlayerControlSystem());
-        engine.addSystem(new BulletSystem());
-        engine.addSystem(new GarbageCollectionSystem(world, engine));
-        engine.addSystem(new LevelGenerationSystem(abstractLevel.getFactory()));
+        engine.addSystem(physicsSystem);
+        engine.addSystem(physicsDebugSystem);
+        engine.addSystem(bulletSystem);
+        engine.addSystem(garbageCollectionSystem);
+        engine.addSystem(levelGenerationSystem);
+        engine.addSystem(gameStatusSystem);
 
         GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
         InputProcessor inputProcessor = new GameScreenInputProcessor(parent, abstractLevel, camera);
-        inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
+        inputMultiplexer = new InputMultiplexer(stage, gestureDetector, inputProcessor);
+    }
+
+    public void showEndGameDialog() {
+        parent.setScreen(new PopUpScreen(parent, stage, level, this));
+        dispose();
     }
 
     @Override
     public void show() {
+        stage.clear();
         parent.batch.setProjectionMatrix(camera.combined);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
@@ -72,27 +98,26 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         engine.update(delta);
+
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
-
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override

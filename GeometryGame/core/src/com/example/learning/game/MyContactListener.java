@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.BulletComponent;
+import com.example.learning.game.gamelogic.components.PlayerComponent;
+import com.example.learning.game.gamelogic.components.StateComponent;
 import com.example.learning.game.gamelogic.components.TypeComponent;
 
 import java.util.Map;
@@ -73,6 +75,14 @@ public class MyContactListener implements ContactListener {
         bulletComponent.creationTime = System.currentTimeMillis();
         bulletComponent.lifeTime = 20;
         Mapper.stateComponent.get(starEntity).finish();
+
+        PlayerComponent playerComponent = Mapper.playerComponent.get(bulletComponent.player);
+        playerComponent.catchStar();
+        if (playerComponent.readyToFinish()) {
+            System.out.println("READY !");
+            StateComponent stateComponent = Mapper.stateComponent.get(bulletComponent.player);
+//            stateComponent.finish();
+        }
     }
 
     @Override
