@@ -48,7 +48,7 @@ public class AboutScreen implements Screen {
     public void show() {
         stage.clear();
         menu = new Menu(stage);
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
