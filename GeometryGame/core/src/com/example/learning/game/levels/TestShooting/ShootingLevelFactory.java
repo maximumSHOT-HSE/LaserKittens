@@ -19,7 +19,7 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
     private Entity player;
 
     public ShootingLevelFactory() {
-        world = new World(new Vector2(0,0), false);
+        world = new World(new Vector2(0,0), true);
     }
 
     @Override
