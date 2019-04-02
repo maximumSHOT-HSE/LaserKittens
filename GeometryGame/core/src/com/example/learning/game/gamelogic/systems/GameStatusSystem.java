@@ -17,5 +17,10 @@ public class GameStatusSystem extends EntitySystem {
         this.gameStatus = gameStatus;
     }
 
-    public void update(float deltaTime) {}
+    public void update(float deltaTime) {
+        gameStatus.addTime(deltaTime);
+        if (gameStatus.readyToFinish()) {
+            gameStatus.getGameScreen().endGame();
+        }
+    }
 }

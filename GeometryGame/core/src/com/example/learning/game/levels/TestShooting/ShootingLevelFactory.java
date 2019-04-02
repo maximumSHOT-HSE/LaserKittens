@@ -30,7 +30,8 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
     @Override
     public Entity getPlayer() {
         if (player == null) {
-            player = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f, 0.8f);
+            player = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f,
+                    RenderingSystem.getScreenSizeInMeters().x / 10f);
         }
         return player;
     }
@@ -45,7 +46,8 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
         bodyFactory = BodyFactory.getBodyFactory(world);
         createBackground();
 
-        player = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f, 0.8f);
+        player = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f,
+                RenderingSystem.getScreenSizeInMeters().x / 10f);
 
         createMirror(new Vector2(0, 0.5f * height), 0.1f * width, height); // left wall
         createMirror(new Vector2(width, 0.5f * height), 0.1f * width, height); // right wall

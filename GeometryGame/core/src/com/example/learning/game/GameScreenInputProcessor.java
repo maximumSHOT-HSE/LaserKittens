@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.example.learning.LaserKittens;
+import com.example.learning.MyAssetManager;
 import com.example.learning.game.gamelogic.components.PlayerComponent;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevel;
@@ -97,6 +99,8 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         if (!clickInPlayerRegion()) {
             level.getFactory().shoot(position.x, position.y);
+            Sound laser = laserKittens.assetManager.manager.get(MyAssetManager.laserSound, Sound.class);
+            laser.play(laserKittens.getPreferences().getSoundVolume());
             return true;
         }
 

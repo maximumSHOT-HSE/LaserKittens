@@ -5,12 +5,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
 public class AppPreferences {
+
+    private Preferences preferences;
+
     private static final String PREF_MUSIC_VOLUME = "music volume";
     private static final String PREF_SOUND_VOLUME = "sound volume";
     private static final String PREFS_NAME = "CATS ARE NICE";
 
     protected Preferences getPrefs() {
-        return Gdx.app.getPreferences(PREFS_NAME);
+        if (preferences == null) {
+            preferences = Gdx.app.getPreferences(PREFS_NAME);;
+        }
+        return preferences;
     }
 
     public float getMusicVolume() {
