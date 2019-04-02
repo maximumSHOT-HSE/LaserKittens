@@ -2,6 +2,7 @@ package com.example.learning;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -74,6 +75,7 @@ public class LaserKittens extends Game {
 
         assetManager.loadImages();
         assetManager.loadSkins();
+        assetManager.loadSounds();
         assetManager.manager.finishLoading();
 
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);

@@ -2,6 +2,7 @@ package com.example.learning;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -21,12 +22,19 @@ public class MyAssetManager {
     // Skin
     public static final String skin = "skin/glassy-ui.json";
 
+    //Sounds
+    public static final String laserSound = "sounds/laser-shot.wav";
+
     public void loadImages() {
         manager.load(badlogic, Texture.class);
         manager.load(blueBackground, Texture.class);
         manager.load(Cat1, Texture.class);
         manager.load(levelIndicatorActive, Texture.class);
         manager.load(levelIndicatorPassive, Texture.class);
+    }
+
+    public void loadSounds() {
+        manager.load(laserSound, Sound.class);
     }
 
     public void loadSkins() {
