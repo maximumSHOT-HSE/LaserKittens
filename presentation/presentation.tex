@@ -24,7 +24,6 @@
 \usetheme{Warsaw}
 \usecolortheme{beaver}
 
-
 \title[kittens] {Laser Kittens}
 \author[Maxim Surkov, Konstantin Makhnev]
 {Maxim Surkov \and Konstantin Makhnev}
@@ -36,10 +35,19 @@
 {April 3, 2019}
 \subject{Computer Science}
 
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
 
 \begin{document}
 
 \frame{\titlepage}
+
+\section[Section] {Introduction}
 
 \begin{frame}
     \frametitle{This is the first slide}
@@ -50,5 +58,6 @@
     \frametitle{This is the second slide}
 \end{frame}
 
+\section[Section] {Demostration}
 
 \end{document}
