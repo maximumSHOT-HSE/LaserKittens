@@ -1,6 +1,7 @@
 package com.example.learning.game;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -16,17 +17,13 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.example.learning.LaserKittens;
 import com.example.learning.MyAssetManager;
-import com.example.learning.game.gamelogic.components.PlayerComponent;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevel;
-
-import java.util.Map;
-import java.util.logging.Level;
 
 public class GameScreenInputProcessor implements InputProcessor {
 
     private LaserKittens laserKittens;
-    private Entity player;
+    private Entity focusedPlayer;
     private AbstractLevel level;
     private OrthographicCamera camera;
     private World world;
@@ -42,7 +39,7 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera) {
         this.laserKittens = laserKittens;
-        this.player = level.getFactory().getPlayer();
+        this.focusedPlayer = level.getFactory().getPlayer();
         this.level = level;
         this.camera = camera;
         this.world = level.getFactory().getWorld();
@@ -78,12 +75,12 @@ public class GameScreenInputProcessor implements InputProcessor {
     }
 
     private boolean clickInPlayerRegion() {
-        float textureX = Mapper.transformComponent.get(player).position.x;
-        float textureY = Mapper.transformComponent.get(player).position.y;
-        float textureWidth = RenderingSystem.PixelsToMeters(Mapper.textureComponent.get(player).region.getRegionWidth())
-                * Mapper.transformComponent.get(player).scale.x;
-        float textureHeight = RenderingSystem.PixelsToMeters(Mapper.textureComponent.get(player).region.getRegionHeight())
-                * Mapper.transformComponent.get(player).scale.y;
+        float textureX = Mapper.transformComponent.get(focusedPlayer).position.x;
+        float textureY = Mapper.transformComponent.get(focusedPlayer).position.y;
+        float textureWidth = RenderingSystem.PixelsToMeters(Mapper.textureComponent.get(focusedPlayer).region.getRegionWidth())
+                * Mapper.transformComponent.get(focusedPlayer).scale.x;
+        float textureHeight = RenderingSystem.PixelsToMeters(Mapper.textureComponent.get(focusedPlayer).region.getRegionHeight())
+                * Mapper.transformComponent.get(focusedPlayer).scale.y;
 
         float originX = textureWidth / 2f;
         float originY = textureHeight / 2f;
@@ -108,7 +105,7 @@ public class GameScreenInputProcessor implements InputProcessor {
             return false;
         }
 
-        Body playerBody = Mapper.bodyComponent.get(player).body;
+        Body playerBody = Mapper.bodyComponent.get(focusedPlayer).body;
         dragging = true;
         draggingPointer = pointer;
         float playerX = playerBody.getPosition().x;
@@ -142,16 +139,21 @@ public class GameScreenInputProcessor implements InputProcessor {
             world.destroyJoint(mouseJoint);
             mouseJoint = null;
         }
-        Mapper.bodyComponent.get(player).body.setLinearVelocity(0, 0);
+        Mapper.bodyComponent.get(focusedPlayer).body.setLinearVelocity(0, 0);
         return true;
     }
 
     Vector2 target = new Vector2();
 
+    private float distance2D(Vector3 a, Vector3 b) {
+        return (float)Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+    }
+
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
         if (!dragging || pointer != draggingPointer) return false;
+
 
         camera.unproject(draggingPosition.set(screenX, screenY, 0));
         draggingPosition.x -= draggingStartedDiff.x;

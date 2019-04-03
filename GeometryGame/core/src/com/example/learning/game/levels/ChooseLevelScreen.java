@@ -20,6 +20,7 @@ import com.example.learning.Background;
 import com.example.learning.LaserKittens;
 import com.example.learning.MyAssetManager;
 import com.example.learning.game.GameScreen;
+import com.example.learning.game.levels.TestBigLevel.TestBigLevel;
 import com.example.learning.game.levels.TestLaserLevel.TestLaserLevel;
 import com.example.learning.game.levels.TestMovePlayerLevel.TestMovePlayerLevel;
 import com.example.learning.game.levels.TestShooting.ShootingLevel;
@@ -46,6 +47,7 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new TestStarsLevel());
         abstractLevels.add(new TestMovePlayerLevel());
         abstractLevels.add(new ShootingLevel());
+        abstractLevels.add(new TestBigLevel());
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {

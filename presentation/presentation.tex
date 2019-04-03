@@ -17,10 +17,12 @@
 \usepackage{euler}
 \usepackage{eulervm}
 \usepackage{dsfont}
+\usepackage{beamerthemesplit}
 
 \setcounter{page}{1}
 \pagestyle{empty}
 
+\mode<presentation>{}
 \usetheme{Warsaw}
 \usecolortheme{beaver}
 
@@ -35,6 +37,8 @@
 {April 3, 2019}
 \subject{Computer Science}
 
+\setbeamertemplate{footline}[frame number]
+
 \AtBeginSection[]
 {
   \begin{frame}
@@ -42,6 +46,14 @@
     \tableofcontents[currentsection]
   \end{frame}
 }
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+
 
 \begin{document}
 

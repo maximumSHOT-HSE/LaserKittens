@@ -21,8 +21,6 @@ import com.example.learning.game.levels.AbstractLevelFactory;
 
 public class TestMoveLevelFactory extends AbstractLevelFactory {
 
-    private Entity player;
-
     public TestMoveLevelFactory(){
         world = new World(new Vector2(0,0), false);
     }
@@ -32,10 +30,6 @@ public class TestMoveLevelFactory extends AbstractLevelFactory {
         return world;
     }
 
-    @Override
-    public Entity getPlayer() {
-        return player;
-    }
 
     @Override
     public void createLevel(PooledEngine engine, MyAssetManager assetManager) {
@@ -43,6 +37,6 @@ public class TestMoveLevelFactory extends AbstractLevelFactory {
         this.manager = assetManager;
         bodyFactory = BodyFactory.getBodyFactory(world);
         createBackground();
-        player = createPlayer(5, 5, 5);
+        focusedPlayer = createPlayer(5, 5, 5);
     }
 }
