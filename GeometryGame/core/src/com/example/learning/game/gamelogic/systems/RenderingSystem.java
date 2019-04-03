@@ -89,7 +89,9 @@ public class RenderingSystem extends SortedIteratingSystem {
         float dx = to.x - from.x;
         float dy = to.y - from.y;
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.line(from, to);
+//        shapeRenderer.line(from, to);
+        shapeRenderer.rectLine(from, to, 0.1f);
+
     }
 
     @Override
@@ -131,7 +133,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         batch.end();
 
         shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         for (Entity entity : renderQueue) {
             BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
