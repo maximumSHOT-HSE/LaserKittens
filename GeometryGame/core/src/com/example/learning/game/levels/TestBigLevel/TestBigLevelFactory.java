@@ -1,4 +1,4 @@
-package com.example.learning.game.levels.TestShooting;
+package com.example.learning.game.levels.TestBigLevel;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -14,9 +14,9 @@ import com.example.learning.game.gamelogic.components.TransformComponent;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevelFactory;
 
-public class ShootingLevelFactory extends AbstractLevelFactory {
+public class TestBigLevelFactory extends AbstractLevelFactory {
 
-    public ShootingLevelFactory() {
+    public TestBigLevelFactory() {
         world = new World(new Vector2(0,0), true);
     }
 
@@ -27,8 +27,11 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
 
     @Override
     public void createLevel(PooledEngine engine, MyAssetManager assetManager) {
-        float width = RenderingSystem.getScreenSizeInMeters().x;
-        float height = RenderingSystem.getScreenSizeInMeters().y;
+        float screenWidth = RenderingSystem.getScreenSizeInMeters().x;
+        float screenHeight = RenderingSystem.getScreenSizeInMeters().y;
+
+        float levelWidth = screenWidth * widthInScreens;
+        float levelHeight = screenHeight * heightInScreens;
 
         this.engine = engine;
         this.manager = assetManager;
@@ -38,14 +41,11 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
         focusedPlayer = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f,
                 RenderingSystem.getScreenSizeInMeters().x / 10f);
 
-        createMirror(new Vector2(0, 0.5f * height), 0.1f * width, height); // left wall
-        createMirror(new Vector2(width, 0.5f * height), 0.1f * width, height); // right wall
-        createMirror(new Vector2(0.5f * width, 0), width, 0.1f * height); // down wall
-        createMirror(new Vector2(0.5f * width, height), width, 0.1f * height); // up wall
-        createMirror(new Vector2(0.5f * width, 0.7f * height), 0.5f * width, 0.02f * height); // obstacle
+        createMirror(new Vector2(0, 0.5f * levelHeight), 0.1f * screenWidth, levelHeight); // left wall
+        createMirror(new Vector2(levelWidth, 0.5f * levelHeight), 0.1f * screenWidth, levelHeight); // right wall
+        createMirror(new Vector2(0.5f * levelWidth, 0), levelWidth, 0.1f * screenHeight); // down wall
+        createMirror(new Vector2(0.5f * levelWidth, levelHeight), levelWidth, 0.1f * screenHeight); // up wall
 
-        createStar(0.5f * width, 0.85f * height, 0.05f * height);
-        createStar(0.25f * width, 0.45f * height, 0.05f * height);
-        createStar(0.75f * width, 0.45f * height, 0.05f * height);
+        createStar(0.5f * screenWidth, 0.85f * screenHeight, 0.05f * screenHeight);
     }
 }

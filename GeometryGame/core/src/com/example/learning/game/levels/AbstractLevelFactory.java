@@ -22,8 +22,6 @@ import com.example.learning.game.gamelogic.components.TransformComponent;
 import com.example.learning.game.gamelogic.components.TypeComponent;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 
-import java.lang.reflect.Type;
-
 abstract public class AbstractLevelFactory {
 
     protected BodyFactory bodyFactory;
@@ -31,9 +29,29 @@ abstract public class AbstractLevelFactory {
     protected PooledEngine engine;
     protected MyAssetManager manager;
 
+    protected int widthInScreens = 1;
+    protected int heightInScreens = 1;
+
+    protected Entity focusedPlayer;
+
     abstract public World getWorld();
 
-    abstract public Entity getPlayer();
+    public Entity getPlayer() {
+        return focusedPlayer;
+    }
+
+    public void setLevelSize(int widthInScreens, int heightInScreens) {
+        this.widthInScreens = widthInScreens;
+        this.heightInScreens = heightInScreens;
+    }
+
+    public int getLevelWidthInScreens() {
+        return widthInScreens;
+    }
+
+    public int getLevelHeightInScreens() {
+        return heightInScreens;
+    }
 
     abstract public void createLevel(PooledEngine engine, MyAssetManager assetManager);
 
@@ -110,11 +128,13 @@ abstract public class AbstractLevelFactory {
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         // create the data for the components and add them to the components
 
-        texture.region = new TextureRegion(manager.manager.get("blue-background.jpg", Texture.class));
+        Texture background = manager.manager.get("blue-background.jpg", Texture.class);
+        background.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        texture.region = new TextureRegion(background);
 
         position.position.set(
-                RenderingSystem.getScreenSizeInMeters().x / 2,
-                RenderingSystem.getScreenSizeInMeters().y / 2,
+                widthInScreens * RenderingSystem.getScreenSizeInMeters().x / 2,
+                heightInScreens * RenderingSystem.getScreenSizeInMeters().y / 2,
                 -1e9f
         );
 
@@ -122,6 +142,8 @@ abstract public class AbstractLevelFactory {
                 RenderingSystem.getScreenSizeInPixels().x / texture.region.getRegionWidth(),
                 RenderingSystem.getScreenSizeInPixels().y / texture.region.getRegionHeight()
         );
+
+        texture.region.setRegion(0, 0, background.getWidth() * widthInScreens, background.getHeight() * widthInScreens);
 
         // add the components to the entity
         entity.add(position);
