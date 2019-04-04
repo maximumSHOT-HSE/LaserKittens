@@ -4,6 +4,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.example.learning.LaserKittens;
 
+/**
+ * Input processor for settings screen.
+ */
 public class SettingsScreenInputProcessor implements InputProcessor {
 
     LaserKittens laserKittens;

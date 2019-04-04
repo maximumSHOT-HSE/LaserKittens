@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
-import com.example.learning.MyAssetManager;
+import com.example.learning.KittensAssetManager;
 import com.example.learning.game.GameScreen;
 import com.example.learning.game.levels.TestBigLevel.TestBigLevel;
 import com.example.learning.game.levels.TestLaserLevel.TestLaserLevel;
@@ -119,12 +118,12 @@ public class ChooseLevelScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = parent.assetManager.manager.get(MyAssetManager.skin);
+        private Skin skin = parent.assetManager.manager.get(KittensAssetManager.skin);
         private SlidingPane slidingPane;
         private int currentSection = abstractLevels.size();
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
-        private Texture naviActive = parent.assetManager.manager.get(MyAssetManager.levelIndicatorActive);
-        private Texture naviPassive = parent.assetManager.manager.get(MyAssetManager.levelIndicatorPassive);
+        private Texture naviActive = parent.assetManager.manager.get(KittensAssetManager.levelIndicatorActive);
+        private Texture naviPassive = parent.assetManager.manager.get(KittensAssetManager.levelIndicatorPassive);
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
 

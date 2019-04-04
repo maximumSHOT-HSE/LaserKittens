@@ -1,4 +1,4 @@
-package com.example.learning;
+package com.example.learning.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,7 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.example.learning.Background;
+import com.example.learning.LaserKittens;
 
+/**
+ * Main menu screen providing an user interface to move between screens.
+ */
 public class MainMenuScreen implements Screen {
 
     private final LaserKittens parent;
@@ -44,7 +49,7 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update(); // good practise -- update camera one time per frame
+        camera.update();
 
         parent.batch.begin();
         background.draw(parent.batch, camera);
@@ -56,6 +61,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        background.resizeClampToEdge();
         stage.getViewport().update(width, height, true);
     }
 
@@ -82,17 +88,15 @@ public class MainMenuScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-       // private Skin skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
-       private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        private Skin skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
         private TextButton levels = new TextButton("Levels", skin);
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton about = new TextButton("About", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
         public Menu(Stage stage) {
-            // creating menu table (actor) for buttons
             table.setFillParent(true);
-         //   table.setDebug(true);
+            //table.setDebug(true);
             stage.addActor(table);
 
             levels.getLabel().setFontScale(2f);

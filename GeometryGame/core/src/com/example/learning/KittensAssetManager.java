@@ -6,7 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class MyAssetManager {
+public class KittensAssetManager {
 
     public final AssetManager manager = new AssetManager();
 

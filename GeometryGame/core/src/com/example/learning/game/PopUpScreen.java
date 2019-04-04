@@ -16,8 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
-import com.example.learning.MyAssetManager;
-import com.example.learning.game.gamelogic.components.StateComponent;
+import com.example.learning.KittensAssetManager;
 import com.example.learning.game.levels.AbstractLevel;
 import com.example.learning.settings.SettingsScreenInputProcessor;
 
@@ -93,7 +92,7 @@ public class PopUpScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = parent.assetManager.manager.get(MyAssetManager.skin);
+        private Skin skin = parent.assetManager.manager.get(KittensAssetManager.skin);
         private TextButton restartButton = new TextButton("Restart", skin);
         private TextButton quitButton = new TextButton("Quit", skin);
         private Table table = new Table();
