@@ -1,10 +1,9 @@
 package com.example.learning.game.levels.TestBigLevel;
 
 import com.badlogic.ashley.core.PooledEngine;
-import com.example.learning.MyAssetManager;
+import com.example.learning.KittensAssetManager;
 import com.example.learning.game.levels.AbstractLevel;
 import com.example.learning.game.levels.AbstractLevelFactory;
-import com.example.learning.game.levels.TestShooting.ShootingLevelFactory;
 
 public class TestBigLevel extends AbstractLevel {
 
@@ -15,7 +14,7 @@ public class TestBigLevel extends AbstractLevel {
     }
 
     @Override
-    public void createLevel(PooledEngine engine, MyAssetManager assetManager) {
+    public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         testBigLevelFactory.setLevelSize(3, 3);
         testBigLevelFactory.createLevel(engine, assetManager);
     }

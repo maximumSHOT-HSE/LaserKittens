@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.example.learning.about.AboutScreen;
 import com.example.learning.game.levels.ChooseLevelScreen;
+import com.example.learning.mainmenu.MainMenuScreen;
 import com.example.learning.settings.AppPreferences;
 import com.example.learning.settings.SettingsScreen;
 
@@ -16,7 +17,7 @@ public class LaserKittens extends Game {
     public ShapeRenderer shapeRenderer;
     public BitmapFont font;
     private final AppPreferences preferences = new AppPreferences();
-    public final MyAssetManager assetManager = new MyAssetManager();
+    public final KittensAssetManager assetManager = new KittensAssetManager();
 
 
     public enum SCREEN_TYPE {
@@ -35,6 +36,10 @@ public class LaserKittens extends Game {
         return preferences;
     }
 
+    /**
+     * Change screen.
+     * Creates it if it is not created
+     */
     public void changeScreen(SCREEN_TYPE screen) {
         switch (screen) {
             case MAIN_MENU_SCREEN:
@@ -72,9 +77,7 @@ public class LaserKittens extends Game {
         shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
 
-        assetManager.loadImages();
-        assetManager.loadSkins();
-        assetManager.loadSounds();
+        assetManager.loadEverything();
         assetManager.manager.finishLoading();
 
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);

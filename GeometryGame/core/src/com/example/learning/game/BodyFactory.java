@@ -27,14 +27,18 @@ public class BodyFactory {
     public static BodyFactory getBodyFactory(World world) {
         return new BodyFactory(world);
     }
-    
+
+    /**
+     * Enum specifying body type, which is necessary for filtering body collisions.
+     * Box2D allows up to 16 body ty
+     */
     private enum Category {
 
-        PLAYER((short)1),
-        BULLET((short)2),
-        OTHER((short)4);
+        PLAYER((short)0),
+        BULLET((short)1),
+        OTHER((short)2);
 
-        private Category(short mask) { this.mask = mask; }
+        private Category(int index) { this.mask = (short)(1 << index); }
 
         private static short all() {
             short sum_mask = 0;
@@ -51,6 +55,10 @@ public class BodyFactory {
         private short mask;
     }
 
+    /**
+     * Goes though all fixtures in body and sets
+     *  them filter specified by given masks.
+     */
     private void setFilter(Body body, short categoryBits, short maskBits){
         if (body != null) {
             Array<Fixture> fixtures = body.getFixtureList();
@@ -70,7 +78,7 @@ public class BodyFactory {
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
-        body.createFixture(FixtureFactory.newStoneFixture(circleShape));
+        body.createFixture(FixtureFactory.stoneFixture(circleShape));
         circleShape.dispose();
 
         setFilter(body, Category.OTHER.mask, Category.all());
@@ -83,10 +91,10 @@ public class BodyFactory {
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
-        body.createFixture(FixtureFactory.PLayerFixture(circleShape));
+        body.createFixture(FixtureFactory.playerFixture(circleShape));
         circleShape.dispose();
 
-        setFilter(body, Category.PLAYER.mask, (short)(Category.PLAYER.allExceptMe() & ~Category.PLAYER.mask));
+        setFilter(body, Category.PLAYER.mask, (short)(Category.all() & ~Category.BULLET.mask));
         return body;
     }
 
@@ -98,7 +106,7 @@ public class BodyFactory {
 
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width, height);
-        body.createFixture(FixtureFactory.newStoneFixture(poly));
+        body.createFixture(FixtureFactory.stoneFixture(poly));
         poly.dispose();
 
         setFilter(body, Category.OTHER.mask, Category.all());
@@ -125,7 +133,7 @@ public class BodyFactory {
 
         PolygonShape polygon = new PolygonShape();
         polygon.set(polygonVertices);
-        body.createFixture(FixtureFactory.newStoneFixture(polygon));
+        body.createFixture(FixtureFactory.stoneFixture(polygon));
         polygon.dispose();
 
         setFilter(body, Category.OTHER.mask, Category.all());
@@ -139,7 +147,7 @@ public class BodyFactory {
 
     public Body newStar(Vector2 centerArgument, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
 
-        //polygon for some reason takes half values
+        //polygon for some reason takes half values as arguments to wark correctly
         Vector2 center = new Vector2(centerArgument);
         center.x /= 2;
         center.y /= 2;
@@ -157,7 +165,7 @@ public class BodyFactory {
 
             PolygonShape polygon = new PolygonShape();
             polygon.set(coordinates);
-            body.createFixture(FixtureFactory.newSensorFixture(polygon));
+            body.createFixture(FixtureFactory.sensorFixture(polygon));
             polygon.dispose();
         }
 
@@ -173,7 +181,7 @@ public class BodyFactory {
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(RenderingSystem.getScreenSizeInMeters().x * 0.0005f);
-        FixtureDef fixtureDef = FixtureFactory.BouncingBulletFixture(circleShape);
+        FixtureDef fixtureDef = FixtureFactory.bouncingBulletFixture(circleShape);
         boxBody.createFixture(fixtureDef);
         circleShape.dispose();
 
@@ -251,22 +259,22 @@ public class BodyFactory {
                     .setFriction(0.2f).setRestitution(0.01f).build();
         }
 
-        private static FixtureDef BouncingBulletFixture(Shape shape) {
+        private static FixtureDef bouncingBulletFixture(Shape shape) {
             return (new FixtureBuilder()).setShape(shape).setDensiity(0)
                     .setFriction(0).setRestitution(1).build();
         }
 
-        private static FixtureDef newStoneFixture(Shape shape) {
+        private static FixtureDef stoneFixture(Shape shape) {
             return (new FixtureBuilder()).setShape(shape).setDensiity(1)
                     .setFriction(0.9f).setRestitution(0.01f).build();
         }
 
-        private static FixtureDef PLayerFixture(Shape shape) {
+        private static FixtureDef playerFixture(Shape shape) {
             return (new FixtureBuilder()).setShape(shape).setDensiity(100)
                     .setFriction(0.9f).setRestitution(0.1f).build();
         }
 
-        private static FixtureDef newSensorFixture(Shape shape){
+        private static FixtureDef sensorFixture(Shape shape){
             return (new FixtureBuilder()).setShape(shape).setSensor(true).build();
         }
 

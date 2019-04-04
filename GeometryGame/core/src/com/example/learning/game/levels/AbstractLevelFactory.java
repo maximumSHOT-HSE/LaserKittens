@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.example.learning.MyAssetManager;
+import com.example.learning.KittensAssetManager;
 import com.example.learning.game.BodyFactory;
 import com.example.learning.game.Mapper;
 import com.example.learning.game.gamelogic.components.BodyComponent;
@@ -27,7 +27,7 @@ abstract public class AbstractLevelFactory {
     protected BodyFactory bodyFactory;
     protected World world;
     protected PooledEngine engine;
-    protected MyAssetManager manager;
+    protected KittensAssetManager manager;
 
     protected int widthInScreens = 1;
     protected int heightInScreens = 1;
@@ -53,7 +53,7 @@ abstract public class AbstractLevelFactory {
         return heightInScreens;
     }
 
-    abstract public void createLevel(PooledEngine engine, MyAssetManager assetManager);
+    abstract public void createLevel(PooledEngine engine, KittensAssetManager assetManager);
 
     public Entity createStar(float x, float y, float radius) {
         Entity entity = engine.createEntity();
@@ -102,7 +102,6 @@ abstract public class AbstractLevelFactory {
         bulletComponent.creationTime = System.currentTimeMillis();
         bulletComponent.lifeTime = lifeTime;
         bulletComponent.path.add(source);
-        bulletComponent.player = getPlayer();
 
         stateComponent.set(StateComponent.State.NORMAL);
         for(Fixture fixture : body.body.getFixtureList()) {
@@ -186,7 +185,7 @@ abstract public class AbstractLevelFactory {
 
         position.position.x = px;
         position.position.y = py;
-        texture.region = new TextureRegion(manager.manager.get(MyAssetManager.Cat3, Texture.class));
+        texture.region = new TextureRegion(manager.manager.get(KittensAssetManager.Cat3, Texture.class));
         float regionCatRadius = RenderingSystem.PixelsToMeters(0.5f * texture.region.getRegionHeight() * 0.78f);
         position.scale.set(radius / regionCatRadius, radius / regionCatRadius);
 

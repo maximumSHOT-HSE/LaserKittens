@@ -1,9 +1,10 @@
 package com.example.learning.game.gamelogic;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.utils.Pool.Poolable;
 import com.example.learning.game.GameScreen;
 
+/**
+ * Maintains current game status
+ */
 public class GameStatus {
 
     private GameScreen gameScreen;

@@ -1,7 +1,7 @@
 package com.example.learning.game.levels.TestLaserLevel;
 
 import com.badlogic.ashley.core.PooledEngine;
-import com.example.learning.MyAssetManager;
+import com.example.learning.KittensAssetManager;
 import com.example.learning.game.levels.AbstractLevel;
 import com.example.learning.game.levels.AbstractLevelFactory;
 
@@ -14,7 +14,7 @@ public class TestLaserLevel extends AbstractLevel {
     }
 
     @Override
-    public void createLevel(PooledEngine engine, MyAssetManager assetManager) {
+    public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         laserLevelFactory.createLevel(engine, assetManager);
     }
 

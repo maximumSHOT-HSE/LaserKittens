@@ -19,14 +19,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
-import com.example.learning.settings.SettingsScreenInputProcessor;
 
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Screen with general information about the game.
+ * Information list contains
+ *     External libraries, sounds, sceens
+ */
 public class AboutScreen implements Screen {
 
-    private final LaserKittens parent;
+    private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
     private Stage stage;
@@ -35,12 +39,12 @@ public class AboutScreen implements Screen {
     private InputMultiplexer inputMultiplexer;
 
     public AboutScreen(final LaserKittens laserKittens) {
-        this.parent = laserKittens;
+        this.laserKittens = laserKittens;
 
-        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
+        background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
 
-        InputProcessor inputProcessor = new AboutScreenInputProcessor(parent);
+        InputProcessor inputProcessor = new AboutScreenInputProcessor(this.laserKittens);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
     }
 
@@ -52,7 +56,7 @@ public class AboutScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        parent.batch.setProjectionMatrix(camera.combined);
+        laserKittens.batch.setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -62,9 +66,9 @@ public class AboutScreen implements Screen {
 
         camera.update(); // good practise -- update camera one time per frame
 
-        parent.batch.begin();
-        background.draw(parent.batch, camera);
-        parent.batch.end();
+        laserKittens.batch.begin();
+        background.draw(laserKittens.batch, camera);
+        laserKittens.batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -72,6 +76,7 @@ public class AboutScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        background.resizeClampToEdge();
         stage.getViewport().update(width, height, true);
     }
 
@@ -96,6 +101,10 @@ public class AboutScreen implements Screen {
         background.dispose();
     }
 
+
+    /**
+     * Menu with clickable labels and scrollable plane.
+     */
     private class Menu {
         private Table table = new Table();
 
@@ -165,7 +174,7 @@ public class AboutScreen implements Screen {
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
                 }
             });
 

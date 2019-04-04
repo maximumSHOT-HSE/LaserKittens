@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
-import com.example.learning.MyAssetManager;
+import com.example.learning.KittensAssetManager;
 import com.example.learning.game.GameScreen;
 import com.example.learning.game.levels.TestBigLevel.TestBigLevel;
 import com.example.learning.game.levels.TestLaserLevel.TestLaserLevel;
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 
 public class ChooseLevelScreen implements Screen {
 
-    private final LaserKittens parent;
+    private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
 
@@ -51,12 +50,12 @@ public class ChooseLevelScreen implements Screen {
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {
-        this.parent = laserKittens;
-        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
+        this.laserKittens = laserKittens;
+        background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
 
         stage = new Stage(new ScreenViewport());
 
-        InputProcessor inputProcessor = new SettingsScreenInputProcessor(parent);
+        InputProcessor inputProcessor = new SettingsScreenInputProcessor(this.laserKittens);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
 
         fillLevels();
@@ -71,7 +70,7 @@ public class ChooseLevelScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        parent.batch.setProjectionMatrix(camera.combined);
+        laserKittens.batch.setProjectionMatrix(camera.combined);
 
         menu.show(stage);
     }
@@ -83,9 +82,9 @@ public class ChooseLevelScreen implements Screen {
 
         camera.update();
 
-        parent.batch.begin();
-        background.draw(parent.batch, camera);
-        parent.batch.end();
+        laserKittens.batch.begin();
+        background.draw(laserKittens.batch, camera);
+        laserKittens.batch.end();
 
         menu.render();
 
@@ -96,6 +95,7 @@ public class ChooseLevelScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        background.resizeClampToEdge();
     }
 
     @Override
@@ -119,12 +119,12 @@ public class ChooseLevelScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = parent.assetManager.manager.get(MyAssetManager.skin);
+        private Skin skin = laserKittens.assetManager.manager.get(KittensAssetManager.skin);
         private SlidingPane slidingPane;
         private int currentSection = abstractLevels.size();
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
-        private Texture naviActive = parent.assetManager.manager.get(MyAssetManager.levelIndicatorActive);
-        private Texture naviPassive = parent.assetManager.manager.get(MyAssetManager.levelIndicatorPassive);
+        private Texture naviActive = laserKittens.assetManager.manager.get(KittensAssetManager.levelIndicatorActive);
+        private Texture naviPassive = laserKittens.assetManager.manager.get(KittensAssetManager.levelIndicatorPassive);
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
 
@@ -138,7 +138,7 @@ public class ChooseLevelScreen implements Screen {
 
         public void render() {
             saveState();
-            parent.batch.begin();
+            laserKittens.batch.begin();
 
             int levelsCount = abstractLevels.size();
 
@@ -150,14 +150,14 @@ public class ChooseLevelScreen implements Screen {
             float y = 0.5f * (screenHeight - blockHeight);
 
             for (int i = 1; i <= levelsCount; i++) {
-                parent.batch.draw(
+                laserKittens.batch.draw(
                     i == currentSection ? naviActive : naviPassive,
                     x,
                     y + (i - 1) * (h + delta)
                 );
             }
 
-            parent.batch.end();
+            laserKittens.batch.end();
         }
 
         public void show(Stage stage) {
@@ -171,8 +171,8 @@ public class ChooseLevelScreen implements Screen {
                     public void changed(ChangeEvent event, Actor actor) {
                         currentSection = slidingPane.currentSectionId;
                         direction = slidingPane.direction;
-                        GameScreen gameScreen = new GameScreen(parent, abstractLevel);
-                        parent.setScreen(gameScreen);
+                        GameScreen gameScreen = new GameScreen(laserKittens, abstractLevel);
+                        laserKittens.setScreen(gameScreen);
                     }
                 });
                 Table table = new Table();

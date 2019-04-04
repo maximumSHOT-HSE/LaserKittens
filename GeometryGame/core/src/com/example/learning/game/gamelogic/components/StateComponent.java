@@ -3,6 +3,10 @@ package com.example.learning.game.gamelogic.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+/**
+ * Contains information about current entity state.
+ * StateControlSystem uses it
+ */
 public class StateComponent implements Component, Poolable {
 
     public enum State {

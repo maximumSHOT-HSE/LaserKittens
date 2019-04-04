@@ -1,9 +1,7 @@
 package com.example.learning.game.levels;
 
 import com.badlogic.ashley.core.PooledEngine;
-import com.example.learning.MyAssetManager;
-
-import java.util.Map;
+import com.example.learning.KittensAssetManager;
 
 /**
  * Class for encapsulating logic and
@@ -18,7 +16,7 @@ abstract public class AbstractLevel {
         this.name = name;
     }
 
-    abstract public void createLevel(PooledEngine engine, MyAssetManager assetManager);
+    abstract public void createLevel(PooledEngine engine, KittensAssetManager assetManager);
 
     public String getName() {
         return name;
