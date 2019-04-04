@@ -10,6 +10,10 @@ import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
 import com.example.learning.game.gamelogic.components.TypeComponent;
 
+
+/**
+ * Simple class used for getting entity components.
+ */
 public class Mapper {
     public static ComponentMapper<BodyComponent> bodyComponent = ComponentMapper.getFor(BodyComponent.class);
     public static ComponentMapper<CollisionComponent> collisionComponent = ComponentMapper.getFor(CollisionComponent.class);
@@ -19,4 +23,5 @@ public class Mapper {
     public static ComponentMapper<TransformComponent> transformComponent = ComponentMapper.getFor(TransformComponent.class);
     public static ComponentMapper<TypeComponent> typeComponent = ComponentMapper.getFor(TypeComponent.class);
     public static ComponentMapper<BulletComponent> bulletComponent = ComponentMapper.getFor(BulletComponent.class);
+
 }

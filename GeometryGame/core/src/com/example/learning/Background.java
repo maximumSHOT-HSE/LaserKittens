@@ -12,7 +12,7 @@ public class Background {
 
     public Background(Texture background) {
         backgroundTexture = background;
-        backgroundTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
+        resizeClampToEdge();
     }
 
     public void resizeClampToEdge() {

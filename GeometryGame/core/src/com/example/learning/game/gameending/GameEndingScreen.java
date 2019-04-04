@@ -1,4 +1,4 @@
-package com.example.learning.game;
+package com.example.learning.game.gameending;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -17,26 +17,31 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
 import com.example.learning.KittensAssetManager;
+import com.example.learning.game.GameScreen;
 import com.example.learning.game.levels.AbstractLevel;
 import com.example.learning.settings.SettingsScreenInputProcessor;
 
-public class PopUpScreen implements Screen {
 
-    private LaserKittens parent;
+/**
+ * Screen with general information about passed level
+ *  and screens navigating buttons.
+ */
+public class GameEndingScreen implements Screen {
+
+    private LaserKittens laserKittens;
     private AbstractLevel parentLevel;
-    private GameScreen gameScreen;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
     private InputMultiplexer inputMultiplexer;
     private Menu menu;
     private Stage stage;
 
-    public PopUpScreen(LaserKittens parent, AbstractLevel level, GameScreen gameScreen) {
-        this.parent = parent;
+    public GameEndingScreen(LaserKittens laserKittens, AbstractLevel level, GameScreen gameScreen) {
+        this.laserKittens = laserKittens;
         this.parentLevel = level;
-        this.background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
+        this.background = new Background(laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
         this.stage = new Stage(new ScreenViewport());
-        InputProcessor inputProcessor = new SettingsScreenInputProcessor(parent);
+        InputProcessor inputProcessor = new SettingsScreenInputProcessor(laserKittens);
         this.inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
     }
 
@@ -45,11 +50,11 @@ public class PopUpScreen implements Screen {
         stage.clear();
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        this.menu = new Menu(this.stage);
+        menu = new Menu(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        parent.batch.setProjectionMatrix(camera.combined);
+        laserKittens.batch.setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -59,9 +64,9 @@ public class PopUpScreen implements Screen {
 
         camera.update();
 
-        parent.batch.begin();
-        background.draw(parent.batch, camera);
-        parent.batch.end();
+        laserKittens.batch.begin();
+        background.draw(laserKittens.batch, camera);
+        laserKittens.batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -70,6 +75,7 @@ public class PopUpScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        background.resizeClampToEdge();
     }
 
     @Override
@@ -92,7 +98,7 @@ public class PopUpScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = parent.assetManager.manager.get(KittensAssetManager.skin);
+        private Skin skin = laserKittens.assetManager.manager.get(KittensAssetManager.skin);
         private TextButton restartButton = new TextButton("Restart", skin);
         private TextButton quitButton = new TextButton("Quit", skin);
         private Table table = new Table();
@@ -101,20 +107,10 @@ public class PopUpScreen implements Screen {
         private final float screenHeight = Gdx.graphics.getHeight();
 
         public Menu(Stage stage) {
+            stage.addActor(table);
+
             restartButton.getLabel().setFontScale(1f);
-            restartButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    parent.setScreen(new GameScreen(parent, parentLevel));
-                }
-            });
             quitButton.getLabel().setFontScale(1f);
-            quitButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
-                }
-            });
 
             table.setFillParent(true);
             table.add(restartButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
@@ -124,7 +120,25 @@ public class PopUpScreen implements Screen {
             table.setWidth(0.6f * screenWidth);
             table.setHeight(0.6f * screenHeight);
             table.center();
-            stage.addActor(table);
+
+            setListeners();
+        }
+
+        private void setListeners() {
+
+            quitButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                }
+            });
+
+            restartButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    laserKittens.setScreen(new GameScreen(laserKittens, parentLevel));
+                }
+            });
         }
     }
 }

@@ -36,6 +36,10 @@ public class LaserKittens extends Game {
         return preferences;
     }
 
+    /**
+     * Change screen.
+     * Creates it if it is not created
+     */
     public void changeScreen(SCREEN_TYPE screen) {
         switch (screen) {
             case MAIN_MENU_SCREEN:
@@ -73,9 +77,7 @@ public class LaserKittens extends Game {
         shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
 
-        assetManager.loadImages();
-        assetManager.loadSkins();
-        assetManager.loadSounds();
+        assetManager.loadEverything();
         assetManager.manager.finishLoading();
 
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);

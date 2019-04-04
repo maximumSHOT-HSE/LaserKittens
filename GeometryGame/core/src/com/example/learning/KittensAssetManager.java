@@ -46,4 +46,10 @@ public class KittensAssetManager {
         manager.load(skin, Skin.class, params);
     }
 
+    public void loadEverything() {
+        loadImages();
+        loadSkins();
+        loadSounds();
+    }
+
 }

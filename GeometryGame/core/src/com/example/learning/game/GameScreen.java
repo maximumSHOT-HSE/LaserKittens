@@ -3,21 +3,14 @@ package com.example.learning.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.LaserKittens;
 import com.example.learning.game.gamelogic.GameStatus;
 import com.example.learning.game.gamelogic.components.BodyComponent;
-import com.example.learning.game.gamelogic.components.TransformComponent;
 import com.example.learning.game.gamelogic.systems.BulletSystem;
 import com.example.learning.game.gamelogic.systems.GameStatusSystem;
 import com.example.learning.game.gamelogic.systems.GarbageCollectionSystem;
@@ -27,6 +20,7 @@ import com.example.learning.game.gamelogic.systems.PhysicsSystem;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevel;
 import com.example.learning.game.levels.AbstractLevelFactory;
+import com.example.learning.game.gameending.GameEndingScreen;
 
 public class GameScreen implements Screen {
 
@@ -57,7 +51,7 @@ public class GameScreen implements Screen {
         abstractLevel.createLevel(engine, parent.assetManager);
         AbstractLevelFactory levelFactory = abstractLevel.getFactory();
         world = levelFactory.getWorld();
-        world.setContactListener(new MyContactListener());
+        world.setContactListener(new KittensContactListener());
 
         renderingSystem = new RenderingSystem(parent.batch, parent.shapeRenderer);
         camera = renderingSystem.getCamera();
@@ -83,7 +77,7 @@ public class GameScreen implements Screen {
     }
 
     public void endGame() {
-        parent.setScreen(new PopUpScreen(parent, level, this));
+        parent.setScreen(new GameEndingScreen(parent, level, this));
         dispose();
     }
 
