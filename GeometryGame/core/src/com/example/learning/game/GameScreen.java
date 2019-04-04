@@ -11,10 +11,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.example.learning.LaserKittens;
 import com.example.learning.game.gamelogic.GameStatus;
 import com.example.learning.game.gamelogic.components.BodyComponent;
+import com.example.learning.game.gamelogic.components.TransformComponent;
 import com.example.learning.game.gamelogic.systems.BulletSystem;
 import com.example.learning.game.gamelogic.systems.GameStatusSystem;
-import com.example.learning.game.gamelogic.systems.GarbageCollectionSystem;
-import com.example.learning.game.gamelogic.systems.LevelGenerationSystem;
+import com.example.learning.game.gamelogic.systems.StateControlSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsDebugSystem;
 import com.example.learning.game.gamelogic.systems.PhysicsSystem;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
@@ -24,75 +24,64 @@ import com.example.learning.game.gameending.GameEndingScreen;
 
 public class GameScreen implements Screen {
 
-    private final LaserKittens parent;
+    private final LaserKittens laserKittens;
     private OrthographicCamera camera;
     private AbstractLevel level;
     private GameStatus gameStatus = new GameStatus(this);
-    //adding poolable interface may be needed somewhere
-
     private GameScreenInputProcessor inputProcessor;
-    private PooledEngine engine; // PooledEngine! reuse components. may cause problems
-    private World world;
+    private PooledEngine engine;
 
     private RenderingSystem renderingSystem;
     private PhysicsSystem physicsSystem;
     private PhysicsDebugSystem physicsDebugSystem;
     private BulletSystem bulletSystem;
-    private GarbageCollectionSystem garbageCollectionSystem;
-    private LevelGenerationSystem levelGenerationSystem;
+    private StateControlSystem stateControlSystem;
     private GameStatusSystem gameStatusSystem;
 
-    public GameScreen(LaserKittens geometryGame, AbstractLevel abstractLevel) {
+    public GameScreen(LaserKittens laserKittens, AbstractLevel abstractLevel) {
         level = abstractLevel;
 
-        this.parent = geometryGame;
+        this.laserKittens = laserKittens;
 
         engine = new PooledEngine();
-        abstractLevel.createLevel(engine, parent.assetManager);
+        abstractLevel.createLevel(engine, this.laserKittens.assetManager);
         AbstractLevelFactory levelFactory = abstractLevel.getFactory();
-        world = levelFactory.getWorld();
+        World world = levelFactory.getWorld();
         world.setContactListener(new KittensContactListener());
 
-        renderingSystem = new RenderingSystem(parent.batch, parent.shapeRenderer);
+        renderingSystem = new RenderingSystem(this.laserKittens.batch, this.laserKittens.shapeRenderer);
         camera = renderingSystem.getCamera();
+        cameraMovingTo.set(camera.position);
 
         physicsSystem = new PhysicsSystem(world);
         physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
-        garbageCollectionSystem = new GarbageCollectionSystem(world, engine, gameStatus);
-        levelGenerationSystem = new LevelGenerationSystem(abstractLevel.getFactory());
+        stateControlSystem = new StateControlSystem(world, engine, gameStatus);
         gameStatusSystem = new GameStatusSystem(gameStatus);
 
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(bulletSystem);
-        engine.addSystem(garbageCollectionSystem);
-        engine.addSystem(levelGenerationSystem);
+        engine.addSystem(stateControlSystem);
         engine.addSystem(gameStatusSystem);
 
-        cameraMovingTo = new Vector3(camera.position);
-
-        inputProcessor = new GameScreenInputProcessor(parent, abstractLevel, camera);
+        inputProcessor = new GameScreenInputProcessor(this.laserKittens, abstractLevel, camera);
     }
 
     public void endGame() {
-        parent.setScreen(new GameEndingScreen(parent, level, this));
+        laserKittens.setScreen(new GameEndingScreen(laserKittens, level, this));
         dispose();
     }
 
     @Override
     public void show() {
-        parent.batch.setProjectionMatrix(camera.combined);
+        laserKittens.batch.setProjectionMatrix(camera.combined);
         Gdx.input.setInputProcessor(inputProcessor);
     }
 
-    Vector3 cameraMovingTo;
-    Vector3 cameraPosition = new Vector3();
+    Vector3 cameraMovingTo = new Vector3();
 
-    private float distance2D(Vector3 a, Vector3 b) {
-        return (float)Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
-    }
 
     private void makeBordersForCamera() {
         float screenWidth = RenderingSystem.getScreenSizeInMeters().x;
@@ -107,28 +96,20 @@ public class GameScreen implements Screen {
         cameraMovingTo.y = Math.min(cameraMovingTo.y, levelHeight - screenHeight / 2);
     }
 
-    @Override
-    public void render (float delta) {
-        Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    /** Moves camera with speed depended from distance exponentially */
+    private void moveCamera(float delta) {
+        final float speed = 2 * delta;
+        final float ispeed = 1.0f-speed;
 
-        engine.update(delta);
-
-        final float speed= 2 * delta;
-        final float ispeed=1.0f-speed;
-
-        inputProcessor.touchDraggedExplicitly();
-        cameraPosition.set(camera.position);
-        if (level.getFactory().getPlayer() != null) {
-            if (Mapper.transformComponent.get(level.getFactory().getPlayer()) == null) {
+        Vector3 cameraPosition = new Vector3(camera.position);
+        Entity player = level.getFactory().getPlayer();
+        if (player != null) {
+            TransformComponent playerTransform = Mapper.transformComponent.get(player);
+            if (playerTransform == null) {
                 return;
             }
 
-            Vector3 playerPosition = Mapper.transformComponent.get(level.getFactory().getPlayer()).position;
-            if (playerPosition == null) {
-                return;
-            }
-            cameraMovingTo.set(playerPosition);
+            cameraMovingTo.set(playerTransform.position);
             makeBordersForCamera();
 
             cameraPosition.scl(ispeed);
@@ -138,7 +119,17 @@ public class GameScreen implements Screen {
             camera.position.set(cameraPosition);
         }
         camera.update();
+    }
 
+    @Override
+    public void render (float delta) {
+        Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        engine.update(delta);
+
+        inputProcessor.touchDraggedExplicitly();
+        moveCamera(delta);
     }
 
     @Override
@@ -160,6 +151,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        World world = level.getFactory().getWorld();
         for (Entity entity : engine.getEntities()) {
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
             if(bodyComponent != null) {

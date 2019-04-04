@@ -20,6 +20,10 @@ import com.example.learning.KittensAssetManager;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevel;
 
+/**
+ * Input processor for game screen.
+ * Dragging player and shooting implemented here
+ */
 public class GameScreenInputProcessor implements InputProcessor {
 
     private LaserKittens laserKittens;
@@ -34,7 +38,9 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     private Vector3 draggingPosition = new Vector3();
     private Vector2 draggingStartedDiff = new Vector2();
+
     private MouseJoint mouseJoint = null;
+    /** special dummy body for mousejoint */
     private final Body ground;
 
     public static final int MAXIMUM_NUMBER_OF_TOUCHES = 20;
@@ -143,14 +149,11 @@ public class GameScreenInputProcessor implements InputProcessor {
             mouseJoint = null;
         }
         Mapper.bodyComponent.get(focusedPlayer).body.setLinearVelocity(0, 0);
+
         return true;
     }
 
     Vector2 target = new Vector2();
-
-    private float distance2D(Vector3 a, Vector3 b) {
-        return (float)Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
-    }
 
     public void touchDraggedExplicitly() {
 

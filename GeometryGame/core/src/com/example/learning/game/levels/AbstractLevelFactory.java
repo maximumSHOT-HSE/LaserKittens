@@ -102,7 +102,6 @@ abstract public class AbstractLevelFactory {
         bulletComponent.creationTime = System.currentTimeMillis();
         bulletComponent.lifeTime = lifeTime;
         bulletComponent.path.add(source);
-        bulletComponent.player = getPlayer();
 
         stateComponent.set(StateComponent.State.NORMAL);
         for(Fixture fixture : body.body.getFixtureList()) {
