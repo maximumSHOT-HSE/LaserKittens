@@ -36,7 +36,7 @@ public class GameScreen implements Screen {
     private GameStatus gameStatus = new GameStatus(this);
     //adding poolable interface may be needed somewhere
 
-    private InputMultiplexer inputMultiplexer;
+    private GameScreenInputProcessor inputProcessor;
     private PooledEngine engine; // PooledEngine! reuse components. may cause problems
     private World world;
 
@@ -79,9 +79,7 @@ public class GameScreen implements Screen {
 
         cameraMovingTo = new Vector3(camera.position);
 
-        GestureDetector gestureDetector = new GestureDetector(new GameGestureListener(camera));
-        InputProcessor inputProcessor = new GameScreenInputProcessor(parent, abstractLevel, camera);
-        inputMultiplexer = new InputMultiplexer(gestureDetector, inputProcessor);
+        inputProcessor = new GameScreenInputProcessor(parent, abstractLevel, camera);
     }
 
     public void endGame() {
@@ -92,7 +90,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         parent.batch.setProjectionMatrix(camera.combined);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        Gdx.input.setInputProcessor(inputProcessor);
     }
 
     Vector3 cameraMovingTo;
@@ -125,7 +123,7 @@ public class GameScreen implements Screen {
         final float speed= 2 * delta;
         final float ispeed=1.0f-speed;
 
-
+        inputProcessor.touchDraggedExplicitly();
         cameraPosition.set(camera.position);
         if (level.getFactory().getPlayer() != null) {
             if (Mapper.transformComponent.get(level.getFactory().getPlayer()) == null) {

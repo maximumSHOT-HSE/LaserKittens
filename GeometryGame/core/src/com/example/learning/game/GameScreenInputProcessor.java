@@ -37,6 +37,8 @@ public class GameScreenInputProcessor implements InputProcessor {
     private MouseJoint mouseJoint = null;
     private final Body ground;
 
+    public static final int MAXIMUM_NUMBER_OF_TOUCHES = 20;
+
     public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera) {
         this.laserKittens = laserKittens;
         this.focusedPlayer = level.getFactory().getPlayer();
@@ -46,7 +48,8 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         ground = BodyFactory.getBodyFactory(this.world)
         .newCircleBody(
-            new Vector2(0, 100),
+            new Vector2(0, level.getFactory().getLevelHeightInScreens() *
+                    RenderingSystem.getScreenSizeInMeters().y * 2),
                 0.1f,
                 BodyDef.BodyType.StaticBody,
                 true
@@ -147,6 +150,16 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     private float distance2D(Vector3 a, Vector3 b) {
         return (float)Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+    }
+
+    public void touchDraggedExplicitly() {
+
+        if (draggingPointer != -1) {
+            int screenX = Gdx.input.getX(draggingPointer);
+            int screenY = Gdx.input.getY(draggingPointer);
+
+            touchDragged(screenX, screenY, draggingPointer);
+        }
     }
 
     @Override
