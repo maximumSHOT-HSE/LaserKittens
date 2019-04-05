@@ -4,6 +4,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.example.learning.LaserKittens;
 
+/**
+ * Input processor for settings screen.
+ */
 public class SettingsScreenInputProcessor implements InputProcessor {
 
     LaserKittens laserKittens;
@@ -12,6 +15,9 @@ public class SettingsScreenInputProcessor implements InputProcessor {
         this.laserKittens = laserKittens;
     }
 
+    /**
+     * Catches key back and opens MAIN_MENU_SCREEN
+     */
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){

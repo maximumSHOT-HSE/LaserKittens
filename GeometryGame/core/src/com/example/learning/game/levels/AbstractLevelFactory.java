@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.example.learning.MyAssetManager;
+import com.example.learning.KittensAssetManager;
 import com.example.learning.game.BodyFactory;
 import com.example.learning.game.Mapper;
 import com.example.learning.game.gamelogic.components.BodyComponent;
@@ -22,20 +22,38 @@ import com.example.learning.game.gamelogic.components.TransformComponent;
 import com.example.learning.game.gamelogic.components.TypeComponent;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 
-import java.lang.reflect.Type;
-
 abstract public class AbstractLevelFactory {
 
     protected BodyFactory bodyFactory;
     protected World world;
     protected PooledEngine engine;
-    protected MyAssetManager manager;
+    protected KittensAssetManager manager;
+
+    protected int widthInScreens = 1;
+    protected int heightInScreens = 1;
+
+    protected Entity focusedPlayer;
 
     abstract public World getWorld();
 
-    abstract public Entity getPlayer();
+    public Entity getPlayer() {
+        return focusedPlayer;
+    }
 
-    abstract public void createLevel(PooledEngine engine, MyAssetManager assetManager);
+    public void setLevelSize(int widthInScreens, int heightInScreens) {
+        this.widthInScreens = widthInScreens;
+        this.heightInScreens = heightInScreens;
+    }
+
+    public int getLevelWidthInScreens() {
+        return widthInScreens;
+    }
+
+    public int getLevelHeightInScreens() {
+        return heightInScreens;
+    }
+
+    abstract public void createLevel(PooledEngine engine, KittensAssetManager assetManager);
 
     public Entity createStar(float x, float y, float radius) {
         Entity entity = engine.createEntity();
@@ -84,7 +102,6 @@ abstract public class AbstractLevelFactory {
         bulletComponent.creationTime = System.currentTimeMillis();
         bulletComponent.lifeTime = lifeTime;
         bulletComponent.path.add(source);
-        bulletComponent.player = getPlayer();
 
         stateComponent.set(StateComponent.State.NORMAL);
         for(Fixture fixture : body.body.getFixtureList()) {
@@ -110,11 +127,13 @@ abstract public class AbstractLevelFactory {
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         // create the data for the components and add them to the components
 
-        texture.region = new TextureRegion(manager.manager.get("blue-background.jpg", Texture.class));
+        Texture background = manager.manager.get("blue-background.jpg", Texture.class);
+        background.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        texture.region = new TextureRegion(background);
 
         position.position.set(
-                RenderingSystem.getScreenSizeInMeters().x / 2,
-                RenderingSystem.getScreenSizeInMeters().y / 2,
+                widthInScreens * RenderingSystem.getScreenSizeInMeters().x / 2,
+                heightInScreens * RenderingSystem.getScreenSizeInMeters().y / 2,
                 -1e9f
         );
 
@@ -122,6 +141,8 @@ abstract public class AbstractLevelFactory {
                 RenderingSystem.getScreenSizeInPixels().x / texture.region.getRegionWidth(),
                 RenderingSystem.getScreenSizeInPixels().y / texture.region.getRegionHeight()
         );
+
+        texture.region.setRegion(0, 0, background.getWidth() * widthInScreens, background.getHeight() * widthInScreens);
 
         // add the components to the entity
         entity.add(position);
@@ -164,7 +185,7 @@ abstract public class AbstractLevelFactory {
 
         position.position.x = px;
         position.position.y = py;
-        texture.region = new TextureRegion(manager.manager.get(MyAssetManager.Cat3, Texture.class));
+        texture.region = new TextureRegion(manager.manager.get(KittensAssetManager.Cat3, Texture.class));
         float regionCatRadius = RenderingSystem.PixelsToMeters(0.5f * texture.region.getRegionHeight() * 0.78f);
         position.scale.set(radius / regionCatRadius, radius / regionCatRadius);
 

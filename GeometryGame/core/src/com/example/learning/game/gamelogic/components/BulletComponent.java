@@ -18,12 +18,10 @@ public class BulletComponent implements Component, Poolable {
     /** list of broken line points on it's way */
     public java.util.List<Vector2> path = new ArrayList<>();
 
-    public Entity player;
-
     @Override
     public void reset() {
         creationTime = 0;
         lifeTime = 0;
-        player = null;
+        path = new ArrayList<>();
     }
 }

@@ -1,22 +1,14 @@
 package com.example.learning.game.levels.TestShooting;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.example.learning.MyAssetManager;
+import com.example.learning.KittensAssetManager;
 import com.example.learning.game.BodyFactory;
-import com.example.learning.game.gamelogic.components.BodyComponent;
-import com.example.learning.game.gamelogic.components.TextureComponent;
-import com.example.learning.game.gamelogic.components.TransformComponent;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevelFactory;
 
 public class ShootingLevelFactory extends AbstractLevelFactory {
-
-    private Entity player;
 
     public ShootingLevelFactory() {
         world = new World(new Vector2(0,0), true);
@@ -28,16 +20,7 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
     }
 
     @Override
-    public Entity getPlayer() {
-        if (player == null) {
-            player = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f,
-                    RenderingSystem.getScreenSizeInMeters().x / 10f);
-        }
-        return player;
-    }
-
-    @Override
-    public void createLevel(PooledEngine engine, MyAssetManager assetManager) {
+    public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         float width = RenderingSystem.getScreenSizeInMeters().x;
         float height = RenderingSystem.getScreenSizeInMeters().y;
 
@@ -46,7 +29,7 @@ public class ShootingLevelFactory extends AbstractLevelFactory {
         bodyFactory = BodyFactory.getBodyFactory(world);
         createBackground();
 
-        player = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f,
+        focusedPlayer = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f,
                 RenderingSystem.getScreenSizeInMeters().x / 10f);
 
         createMirror(new Vector2(0, 0.5f * height), 0.1f * width, height); // left wall

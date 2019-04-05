@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Background {
     private Texture backgroundTexture;
-    private Sprite backgroundSprite;
 
     public Background(Texture background) {
         backgroundTexture = background;
+        resizeClampToEdge();
+    }
+
+    public void resizeClampToEdge() {
         backgroundTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
-        backgroundSprite = new Sprite(backgroundTexture);
     }
 
     public void draw(SpriteBatch batch, Camera camera) {

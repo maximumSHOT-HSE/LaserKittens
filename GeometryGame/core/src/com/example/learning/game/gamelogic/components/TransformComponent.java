@@ -5,6 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+/**
+ * Contains data used for drawing objects.
+ *  Current disposition on screen
+ */
 public class TransformComponent implements Component, Poolable {
 
     public final Vector3 position = new Vector3();

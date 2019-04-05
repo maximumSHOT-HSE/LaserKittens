@@ -15,9 +15,9 @@ import com.example.learning.game.gamelogic.components.TypeComponent;
 
 import java.util.Map;
 
-public class MyContactListener implements ContactListener {
+public class KittensContactListener implements ContactListener {
 
-    public MyContactListener() {
+    public KittensContactListener() {
 
     }
 
@@ -79,13 +79,14 @@ public class MyContactListener implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        Fixture fa = contact.getFixtureA();
-        Fixture fb = contact.getFixtureB();
-        Object oa = fa.getUserData();
-        Object ob = fb.getUserData();
-        processBulletStar(oa, ob);
-        processBullet(oa);
-        processBullet(ob);
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
+        Object aUserData = fixtureA.getUserData();
+        Object bUserData = fixtureB.getUserData();
+
+        processBulletStar(aUserData, bUserData);
+        processBullet(aUserData);
+        processBullet(bUserData);
     }
 
     @Override

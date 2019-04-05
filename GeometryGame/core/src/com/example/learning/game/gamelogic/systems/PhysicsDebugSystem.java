@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
+/**
+ * Renders world with box2DDebugRenderer.
+ */
 public class PhysicsDebugSystem extends IteratingSystem {
 
     private boolean debug = true;

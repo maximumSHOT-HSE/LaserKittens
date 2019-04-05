@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 public class BodyComponent implements Component, Poolable {
 
+    /** Box2D body for entity */
     public Body body;
 
     @Override

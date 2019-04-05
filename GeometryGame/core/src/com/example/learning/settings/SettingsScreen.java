@@ -18,14 +18,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.example.learning.Background;
 import com.example.learning.LaserKittens;
-import com.example.learning.MyAssetManager;
+import com.example.learning.KittensAssetManager;
 
+/**
+ * Settings screen provides an ability to manage application settings.
+ */
 public class SettingsScreen implements Screen {
 
     private final LaserKittens parent;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-
     private Stage stage;
     private Menu menu;
 
@@ -73,6 +75,7 @@ public class SettingsScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        background.resizeClampToEdge();
     }
 
     @Override
@@ -97,7 +100,7 @@ public class SettingsScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = parent.assetManager.manager.get(MyAssetManager.skin, Skin.class);
+        private Skin skin = parent.assetManager.manager.get(KittensAssetManager.skin, Skin.class);
 
         private Label titleLabel = new Label("Settings", skin);
         private Label volumeMusicLabel = new Label("music volume", skin);
@@ -108,7 +111,6 @@ public class SettingsScreen implements Screen {
         final Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
 
         public Menu(Stage stage) {
-            // creating menu table (actor) for buttons
             table.setFillParent(true);
             //table.setDebug(true);
             stage.addActor(table);

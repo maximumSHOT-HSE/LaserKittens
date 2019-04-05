@@ -1,27 +1,27 @@
-package com.example.learning.about;
+package com.example.learning.game.gameending;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.example.learning.LaserKittens;
 
 /**
- * Input processor for about screen.
+ * Input processor for gameEnding screen.
  */
-public class AboutScreenInputProcessor implements InputProcessor {
+public class GameEndingScreenInputProcessor implements InputProcessor {
 
     LaserKittens laserKittens;
 
-    public AboutScreenInputProcessor(LaserKittens laserKittens) {
+    public GameEndingScreenInputProcessor(LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
     }
 
     /**
-     * Catches key back and opens MAIN_MENU_SCREEN
+     * Catches key back and opens CHOOSE_LEVEL_SCREEN
      */
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
-            laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+            laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
             return true;
         }
         return false;

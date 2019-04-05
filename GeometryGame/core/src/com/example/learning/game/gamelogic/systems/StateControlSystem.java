@@ -11,18 +11,20 @@ import com.example.learning.game.gamelogic.GameStatus;
 import com.example.learning.game.gamelogic.components.StateComponent;
 import com.example.learning.game.gamelogic.components.TypeComponent;
 
-public class GarbageCollectionSystem extends IteratingSystem {
+/**
+ * Processes objects state.
+ * Destroys objects in FINISHED state
+ * NORMAL state is neutral
+ * Processes other states specifically
+ */
+public class StateControlSystem extends IteratingSystem {
 
     private World world;
     private PooledEngine engine;
     private GameStatus gameStatus;
 
-    public GarbageCollectionSystem(World world, PooledEngine engine, GameStatus gameStatus) {
-        super(
-            Family.all(
-                StateComponent.class
-            ).get()
-        );
+    public StateControlSystem(World world, PooledEngine engine, GameStatus gameStatus) {
+        super(Family.all(StateComponent.class).get());
         this.world = world;
         this.engine = engine;
         this.gameStatus = gameStatus;

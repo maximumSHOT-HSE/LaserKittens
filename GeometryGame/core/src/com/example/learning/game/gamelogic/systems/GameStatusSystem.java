@@ -9,6 +9,10 @@ import com.example.learning.game.Mapper;
 import com.example.learning.game.gamelogic.GameStatus;
 import com.example.learning.game.gamelogic.components.PlayerComponent;
 
+/**
+ * Control game status.
+ * Ends level
+ */
 public class GameStatusSystem extends EntitySystem {
 
     private GameStatus gameStatus;
