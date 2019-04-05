@@ -9,8 +9,8 @@ import com.badlogic.gdx.Preferences;
  */
 public class AppPreferences {
 
-  //that pointer needs to be saved due to some strange behavior on android
-  // (if it is not, saved settings get cleared)
+    // that pointer needs to be saved due to some strange behavior on android
+    // (if it is not, saved settings get cleared)
     private Preferences preferences;
 
     private static final String PREF_MUSIC_VOLUME = "music volume";

@@ -3,11 +3,10 @@ package com.example.learning;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Background {
+
     private Texture backgroundTexture;
 
     public Background(Texture background) {
@@ -20,7 +19,6 @@ public class Background {
     }
 
     public void draw(SpriteBatch batch, Camera camera) {
-
         batch.draw(
             backgroundTexture,
                 0f, 0f,

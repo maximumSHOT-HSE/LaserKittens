@@ -15,7 +15,6 @@ import com.example.learning.game.BodyFactory;
 import com.example.learning.game.Mapper;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.BulletComponent;
-import com.example.learning.game.gamelogic.components.PlayerComponent;
 import com.example.learning.game.gamelogic.components.StateComponent;
 import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
@@ -177,7 +176,6 @@ abstract public class AbstractLevelFactory {
         BodyComponent body = engine.createComponent(BodyComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
-        PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
         StateComponent stateComponent = engine.createComponent(StateComponent.class);
         // create the data for the components and add them to the components
 
@@ -186,7 +184,7 @@ abstract public class AbstractLevelFactory {
         position.position.x = px;
         position.position.y = py;
         texture.region = new TextureRegion(manager.manager.get(KittensAssetManager.Cat3, Texture.class));
-        float regionCatRadius = RenderingSystem.PixelsToMeters(0.5f * texture.region.getRegionHeight() * 0.78f);
+        float regionCatRadius = RenderingSystem.pixelsToMeters(0.5f * texture.region.getRegionHeight() * 0.78f);
         position.scale.set(radius / regionCatRadius, radius / regionCatRadius);
 
         body.body.setUserData(entity);
@@ -195,7 +193,6 @@ abstract public class AbstractLevelFactory {
         entity.add(body);
         entity.add(position);
         entity.add(texture);
-        entity.add(playerComponent);
         entity.add(stateComponent);
 
         // add the entity to the engine

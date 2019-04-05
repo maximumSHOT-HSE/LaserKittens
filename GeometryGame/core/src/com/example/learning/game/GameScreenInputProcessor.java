@@ -45,6 +45,8 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     public static final int MAXIMUM_NUMBER_OF_TOUCHES = 20;
 
+    private Vector2 target = new Vector2();
+
     public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera) {
         this.laserKittens = laserKittens;
         this.focusedPlayer = level.getFactory().getPlayer();
@@ -86,9 +88,9 @@ public class GameScreenInputProcessor implements InputProcessor {
     private boolean clickInPlayerRegion() {
         float textureX = Mapper.transformComponent.get(focusedPlayer).position.x;
         float textureY = Mapper.transformComponent.get(focusedPlayer).position.y;
-        float textureWidth = RenderingSystem.PixelsToMeters(Mapper.textureComponent.get(focusedPlayer).region.getRegionWidth())
+        float textureWidth = RenderingSystem.pixelsToMeters(Mapper.textureComponent.get(focusedPlayer).region.getRegionWidth())
                 * Mapper.transformComponent.get(focusedPlayer).scale.x;
-        float textureHeight = RenderingSystem.PixelsToMeters(Mapper.textureComponent.get(focusedPlayer).region.getRegionHeight())
+        float textureHeight = RenderingSystem.pixelsToMeters(Mapper.textureComponent.get(focusedPlayer).region.getRegionHeight())
                 * Mapper.transformComponent.get(focusedPlayer).scale.y;
 
         float originX = textureWidth / 2f;
@@ -152,8 +154,6 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         return true;
     }
-
-    Vector2 target = new Vector2();
 
     public void touchDraggedExplicitly() {
 

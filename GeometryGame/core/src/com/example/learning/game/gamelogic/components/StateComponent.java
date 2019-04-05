@@ -21,7 +21,7 @@ public class StateComponent implements Component, Poolable {
         state = newState;
     }
 
-    public State get(){
+    public State get() {
         return state;
     }
 
@@ -33,5 +33,4 @@ public class StateComponent implements Component, Poolable {
     public void reset() {
         state = State.NORMAL;
     }
-
 }

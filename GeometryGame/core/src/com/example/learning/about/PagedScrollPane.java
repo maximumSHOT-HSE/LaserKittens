@@ -42,7 +42,7 @@ public class PagedScrollPane extends ScrollPane {
         super.setWidget(content);
     }
 
-    public void addPages (Actor ... pages) {
+    public void addPages (Actor... pages) {
         for (Actor page : pages) {
             content.add(page).expandX().fillX();
         }
@@ -69,7 +69,6 @@ public class PagedScrollPane extends ScrollPane {
     public void setWidget (Actor widget) {
         throw new UnsupportedOperationException("Use PagedScrollPane#addPage.");
     }
-
 
     @Override
     public void setHeight (float height) {
@@ -113,5 +112,4 @@ public class PagedScrollPane extends ScrollPane {
             setScrollY(MathUtils.clamp(pageY - (height - pageHeight) / 2, 0, maxY));
         }
     }
-
 }

@@ -25,6 +25,7 @@ public class GameStatus {
     public void addStar() {
         starCounter++;
     }
+
     public void removeStar() {
         starCounter--;
     }

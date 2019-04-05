@@ -18,13 +18,13 @@ public class KittensAssetManager {
     public static final String levelIndicatorActive = "levelIndicatorActive.png";
     public static final String levelIndicatorPassive = "levelIndicatorPassive.png";
 
-    //BackGrounds
+    // BackGrounds
     public static final String blueBackground = "blue-background.jpg";
 
     // Skin
     public static final String skin = "skin/glassy-ui.json";
 
-    //Sounds
+    // Sounds
     public static final String laserSound = "sounds/laser-shot.wav";
 
     public void loadImages() {
@@ -51,5 +51,4 @@ public class KittensAssetManager {
         loadSkins();
         loadSounds();
     }
-
 }

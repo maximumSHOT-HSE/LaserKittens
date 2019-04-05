@@ -1,6 +1,5 @@
 package com.example.learning.game.gamelogic.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
@@ -16,12 +15,12 @@ import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.BulletComponent;
 import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
-import com.example.learning.game.levels.AbstractLevel;
 
 import java.util.Comparator;
 
 public class RenderingSystem extends SortedIteratingSystem {
 
+    // pixels per meter
     public static final float PPM = 32.0f;
 
     static final float SCREEN_WIDTH = Gdx.graphics.getWidth()/PPM;
@@ -35,14 +34,16 @@ public class RenderingSystem extends SortedIteratingSystem {
     public static Vector2 getScreenSizeInMeters() {
         return meterDimensions;
     }
+
     public static Vector2 getScreenSizeInPixels() {
         return pixelDimensions;
     }
 
-    public static float PixelsToMeters(float pixelValue){
+    public static float pixelsToMeters(float pixelValue){
         return pixelValue * PIXELS_TO_METRES;
     }
-    public static float MetersToPixels(float meterValue) {
+
+    public static float metersToPixels(float meterValue) {
         return meterValue / PIXELS_TO_METRES;
     }
 
@@ -94,14 +95,14 @@ public class RenderingSystem extends SortedIteratingSystem {
             float width = texture.region.getRegionWidth();
             float height = texture.region.getRegionHeight();
 
-            float originX = width/2f;
-            float originY = height/2f;
+            float originX = width / 2f;
+            float originY = height / 2f;
 
             batch.draw(texture.region,
                     transformComponent.position.x - originX, transformComponent.position.y - originY,
                     originX, originY,
                     width, height,
-                    PixelsToMeters(transformComponent.scale.x), PixelsToMeters(transformComponent.scale.y),
+                    pixelsToMeters(transformComponent.scale.x), pixelsToMeters(transformComponent.scale.y),
                     transformComponent.rotation);
         }
 
@@ -113,7 +114,6 @@ public class RenderingSystem extends SortedIteratingSystem {
         for (Entity entity : renderQueue) {
             BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-
             if (bulletComponent != null && bodyComponent != null) {
                 Vector2 from = new Vector2(bulletComponent.path.get(0));
                 for (Vector2 to : bulletComponent.path) {
@@ -139,7 +139,8 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     private static class ZComparator implements Comparator<Entity> {
-        private ZComparator(){
+
+        private ZComparator() {
 
         }
 
@@ -150,5 +151,4 @@ public class RenderingSystem extends SortedIteratingSystem {
             return Double.compare(az, bz);
         }
     }
-
 }

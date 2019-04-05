@@ -3,9 +3,9 @@ package com.example.learning.game.gamelogic.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
-/*
+/**
  * Stores the type of entity.
- *  This data used to handle entities interaction
+ * This data is used to handle entities interaction
  */
 public class TypeComponent implements Component, Poolable {
 

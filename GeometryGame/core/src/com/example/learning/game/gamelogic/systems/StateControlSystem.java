@@ -33,7 +33,7 @@ public class StateControlSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         StateComponent stateComponent = Mapper.stateComponent.get(entity);
-        TypeComponent typeComponent = Mapper.typeComponent.get(entity);//may be null
+        TypeComponent typeComponent = Mapper.typeComponent.get(entity); // may be null
 
         if (stateComponent.get() == StateComponent.State.FINISHED) {
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);

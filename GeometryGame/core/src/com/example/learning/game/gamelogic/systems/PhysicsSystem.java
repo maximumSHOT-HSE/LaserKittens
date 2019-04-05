@@ -17,7 +17,7 @@ import com.example.learning.game.gamelogic.components.TransformComponent;
  *  Do world step iterations.
  *  Once in MAX_STEP_TIME
  *  Controls Transform position be equal to body position
- *      for entities with bodies
+ *  for entities with bodies.
  */
 public class PhysicsSystem extends IteratingSystem {
 
@@ -45,7 +45,6 @@ public class PhysicsSystem extends IteratingSystem {
         if(accumulator >= MAX_STEP_TIME) {
             world.step(MAX_STEP_TIME, 6, 2);
             accumulator -= MAX_STEP_TIME;
-
             for (Entity entity : bodiesQueue) {
                 TransformComponent transformComponent = Mapper.transformComponent.get(entity);
                 BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
