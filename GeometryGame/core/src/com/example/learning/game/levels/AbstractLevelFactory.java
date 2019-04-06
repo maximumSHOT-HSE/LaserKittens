@@ -93,6 +93,7 @@ abstract public class AbstractLevelFactory {
                 -1e9f);
         Vector2 scale = new Vector2( RenderingSystem.getScreenSizeInPixels().x / backgroundRegion.getRegionWidth(),
                 RenderingSystem.getScreenSizeInPixels().y / backgroundRegion.getRegionHeight());
+        backgroundRegion.setRegion(0, 0, background.getWidth() * widthInScreens, background.getHeight() * widthInScreens);
 
         Entity entity = (new EntityBuilder())
                 .addTransformComponent(position, scale, 0, false)
