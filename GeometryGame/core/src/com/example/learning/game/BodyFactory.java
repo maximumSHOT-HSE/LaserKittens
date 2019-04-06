@@ -132,13 +132,9 @@ public class BodyFactory {
                 center.y + (float)Math.sin(Math.toRadians(angle)) * length);
     }
 
-    public Body newStar(Vector2 centerArgument, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
+    public Body newStar(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
 
-        //polygon for some reason takes half values as arguments to wark correctly
-        Vector2 center = new Vector2(centerArgument);
-        center.x /= 2;
-        center.y /= 2;
-
+        Vector2 origin = new Vector2(0, 0);
         Body body = (new BodyBuilder()).setType(bodyType).setFixedRotation(fixedRotation)
                 .setPosition(center).build();
 
@@ -147,8 +143,8 @@ public class BodyFactory {
             float angleR = angle - 36f;
             float angleL = angle + 36f;
 
-            Vector2[] coordinates = {coordByAngle(center, angle, radius), coordByAngle(center, angleL, radius / 2),
-                    center, coordByAngle(center, angleR, radius / 2)};
+            Vector2[] coordinates = {coordByAngle(origin, angle, radius), coordByAngle(origin, angleL, radius / 2),
+                    origin, coordByAngle(origin, angleR, radius / 2)};
 
             PolygonShape polygon = new PolygonShape();
             polygon.set(coordinates);
