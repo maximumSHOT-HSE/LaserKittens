@@ -10,21 +10,26 @@ public class KittensAssetManager {
 
     public final AssetManager manager = new AssetManager();
 
-    // Textures
+    //Textures
     public static final String badlogic = "badlogic.jpg";
-    public static final String Cat1 = "Cat1.png";
-    public static final String Cat2 = "Cat2.png";
-    public static final String Cat3 = "Cat3.png";
     public static final String levelIndicatorActive = "levelIndicatorActive.png";
     public static final String levelIndicatorPassive = "levelIndicatorPassive.png";
+        //Cats
+        public static final String Cat1 = "Cat1.png";
+        public static final String Cat2 = "Cat2.png";
+        public static final String Cat3 = "Cat3.png";
+        //Stars
+        public static final String Star1 = "Star1.png";
+        public static final String Star2 = "Star2.png";
 
-    // BackGrounds
+
+    //BackGrounds
     public static final String blueBackground = "blue-background.jpg";
 
-    // Skin
+    //Skin
     public static final String skin = "skin/glassy-ui.json";
 
-    // Sounds
+    //Sounds
     public static final String laserSound = "sounds/laser-shot.wav";
 
     public void loadImages() {
@@ -35,6 +40,8 @@ public class KittensAssetManager {
         manager.load(Cat3, Texture.class);
         manager.load(levelIndicatorActive, Texture.class);
         manager.load(levelIndicatorPassive, Texture.class);
+        manager.load(Star1, Texture.class);
+        manager.load(Star2, Texture.class);
     }
 
     public void loadSounds() {
