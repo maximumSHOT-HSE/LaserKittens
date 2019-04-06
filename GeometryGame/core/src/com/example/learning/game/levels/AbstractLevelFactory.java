@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.example.learning.KittensAssetManager;
 import com.example.learning.game.BodyFactory;
@@ -39,7 +38,10 @@ abstract public class AbstractLevelFactory {
         return focusedPlayer;
     }
 
-    public AbstractLevelFactory() {};
+    public AbstractLevelFactory() {
+
+    }
+
     public AbstractLevelFactory(int widthInScreens, int heightInScreens) {
         setLevelSize(widthInScreens, heightInScreens);
     }
@@ -65,6 +67,7 @@ abstract public class AbstractLevelFactory {
                 .addTransformComponent(new Vector3(x, y, 0))
                 .addTypeComponent(TypeComponent.Type.STAR)
                 .addStateComponent(StateComponent.State.JUST_CREATED)
+                .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.Star1, Texture.class)))
                 .build();
 
         return entity;
@@ -93,7 +96,7 @@ abstract public class AbstractLevelFactory {
                 -1e9f);
         Vector2 scale = new Vector2( RenderingSystem.getScreenSizeInPixels().x / backgroundRegion.getRegionWidth(),
                 RenderingSystem.getScreenSizeInPixels().y / backgroundRegion.getRegionHeight());
-        backgroundRegion.setRegion(0, 0, background.getWidth() * widthInScreens, background.getHeight() * widthInScreens);
+        backgroundRegion.setRegion(0, 0, background.getWidth() * widthInScreens, background.getHeight() * heightInScreens);
 
         Entity entity = (new EntityBuilder())
                 .addTransformComponent(position, scale, 0, false)
@@ -106,9 +109,7 @@ abstract public class AbstractLevelFactory {
     protected Entity createMirror(Vector2 center, float width, float height) {
 
         Entity entity = (new EntityBuilder())
-                .addBodyComponent(bodyFactory.newMirror(center, width, height))
-                .addTextureComponent(null)
-                .addTransformComponent(new Vector3(center.x, center.y, 0))
+                .addBodyComponent(bodyFactory.newRectangle(center, width, height))
                 .addTypeComponent(TypeComponent.Type.MIRROR)
                 .build();
 
@@ -130,6 +131,23 @@ abstract public class AbstractLevelFactory {
                 .addTypeComponent(TypeComponent.Type.PLAYER)
                 .build();
 
+        return entity;
+    }
+
+    protected Entity createDisappearingWall(Vector2 center, float width, float height) {
+        Entity entity = (new EntityBuilder())
+            .addBodyComponent(bodyFactory.newRectangle(center, width, height))
+            .addTypeComponent(TypeComponent.Type.DISAPPEARING_WALL)
+            .addStateComponent(StateComponent.State.JUST_CREATED)
+            .build();
+        return entity;
+    }
+
+    protected Entity createImpenetrableWall(Vector2 center, float width, float height) {
+        Entity entity = (new EntityBuilder())
+            .addBodyComponent(bodyFactory.newRectangle(center, width, height))
+            .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
+            .build();
         return entity;
     }
 

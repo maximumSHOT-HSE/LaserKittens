@@ -11,6 +11,8 @@ import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.BulletComponent;
 import com.example.learning.game.gamelogic.components.TypeComponent;
 
+import java.util.Map;
+
 public class KittensContactListener implements ContactListener {
 
     public KittensContactListener() {
@@ -23,48 +25,14 @@ public class KittensContactListener implements ContactListener {
      * if yes then current body position will be added
      * to path of bullet
      * */
-    private void processBullet(Object data) {
-        if (!(data instanceof Entity)) {
-            return;
-        }
-        Entity entity = (Entity) data;
+    private void processBullet(Entity entity) {
         TypeComponent typeComponent = Mapper.typeComponent.get(entity);
-        if (typeComponent == null ||
-                typeComponent.type != TypeComponent.Type.BULLET) {
-            return;
-        }
         BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
         BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
         bulletComponent.path.add(new Vector2(bodyComponent.body.getPosition()));
     }
 
-    private boolean isBullet(Object data) {
-        if (!(data instanceof Entity)) {
-            return false;
-        }
-        Entity entity = (Entity) data;
-        TypeComponent typeComponent = Mapper.typeComponent.get(entity);
-        return typeComponent != null && typeComponent.type == TypeComponent.Type.BULLET;
-    }
-
-    private boolean isStar(Object data) {
-        if (!(data instanceof Entity)) {
-            return false;
-        }
-        Entity entity = (Entity) data;
-        TypeComponent typeComponent = Mapper.typeComponent.get(entity);
-        return typeComponent != null && typeComponent.type == TypeComponent.Type.STAR;
-    }
-
-    private void processBulletStar(Object bullet, Object star) {
-        if (isStar(bullet) && isBullet(star)) {
-            processBulletStar(star, bullet);
-        }
-        if (!isBullet(bullet) || !isStar(star)) {
-            return;
-        }
-        Entity bulletEntity = (Entity) bullet;
-        Entity starEntity = (Entity) star;
+    private void processBulletStar(Entity bulletEntity, Entity starEntity) {
         BodyComponent bodyComponent = Mapper.bodyComponent.get(bulletEntity);
         bodyComponent.body.setLinearVelocity(0, 0);
         BulletComponent bulletComponent = Mapper.bulletComponent.get(bulletEntity);
@@ -73,16 +41,65 @@ public class KittensContactListener implements ContactListener {
         Mapper.stateComponent.get(starEntity).finish();
     }
 
+    private void processBulletDisappearingWall(Entity bullet, Entity disappearingWall) {
+        Mapper.stateComponent.get(bullet).finish();
+        Mapper.stateComponent.get(disappearingWall).finish();
+    }
+
+    private void processBulletImpenetrableWall(Entity bullet, Entity impenetrableWall) {
+        BodyComponent bodyComponent = Mapper.bodyComponent.get(bullet);
+        bodyComponent.body.setLinearVelocity(0, 0);
+        BulletComponent bulletComponent = Mapper.bulletComponent.get(bullet);
+        bulletComponent.creationTime = System.currentTimeMillis();
+        bulletComponent.lifeTime = 20;
+    }
+
+    // Checks whether entity has given type
+    private boolean checkType(Entity entity, TypeComponent.Type type) {
+        TypeComponent typeComponent = Mapper.typeComponent.get(entity);
+        if (typeComponent == null) {
+            return false;
+        }
+        return typeComponent.type.equals(type);
+    }
+
+    private void process(Entity entityA, Entity entityB, boolean areSwapped) {
+        if (!areSwapped) {
+            process(entityB, entityA, true);
+        }
+        if (checkType(entityA, TypeComponent.Type.BULLET)) {
+            processBullet(entityA);
+        }
+        if (checkType(entityA, TypeComponent.Type.BULLET) &&
+            checkType(entityB, TypeComponent.Type.STAR)) {
+            processBulletStar(entityA, entityB);
+        }
+        if (checkType(entityA, TypeComponent.Type.BULLET) &&
+            checkType(entityB, TypeComponent.Type.DISAPPEARING_WALL)) {
+            processBulletDisappearingWall(entityA, entityB);
+        }
+        if (checkType(entityA, TypeComponent.Type.BULLET) &&
+            checkType(entityB, TypeComponent.Type.IMPENETRABLE_WALL)) {
+            processBulletImpenetrableWall(entityA, entityB);
+        }
+    }
+
     @Override
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
+
         Object aUserData = fixtureA.getBody().getUserData();
         Object bUserData = fixtureB.getBody().getUserData();
 
-        processBulletStar(aUserData, bUserData);
-        processBullet(aUserData);
-        processBullet(bUserData);
+        if (!(aUserData instanceof Entity) || !(bUserData instanceof Entity)) {
+            return;
+        }
+
+        Entity entityA = (Entity) aUserData;
+        Entity entityB = (Entity) bUserData;
+
+        process(entityA, entityB, false);
     }
 
     @Override

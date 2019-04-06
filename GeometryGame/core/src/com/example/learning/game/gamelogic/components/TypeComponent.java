@@ -12,7 +12,8 @@ public class TypeComponent implements Component, Poolable {
     public enum Type {
         PLAYER,
         BULLET,
-        WALL,
+        DISAPPEARING_WALL,
+        IMPENETRABLE_WALL,
         MIRROR,
         STAR,
         OTHER

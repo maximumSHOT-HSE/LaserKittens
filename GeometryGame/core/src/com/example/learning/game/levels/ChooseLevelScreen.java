@@ -21,7 +21,7 @@ import com.example.learning.KittensAssetManager;
 import com.example.learning.game.GameScreen;
 import com.example.learning.game.levels.TestBigLevel.TestBigLevel;
 import com.example.learning.game.levels.TestShooting.ShootingLevel;
-import com.example.learning.game.levels.TestStars.TestStarsLevel;
+import com.example.learning.game.levels.TestLongCorridor.TestLongCorridorLevel;
 import com.example.learning.settings.SettingsScreenInputProcessor;
 
 import java.util.ArrayList;
@@ -40,9 +40,9 @@ public class ChooseLevelScreen implements Screen {
     private java.util.List<AbstractLevel> abstractLevels = new ArrayList<>();
 
     private void fillLevels() {
-        abstractLevels.add(new TestStarsLevel());
         abstractLevels.add(new ShootingLevel());
         abstractLevels.add(new TestBigLevel());
+        abstractLevels.add(new TestLongCorridorLevel());
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {

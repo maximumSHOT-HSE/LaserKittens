@@ -82,7 +82,6 @@ public class GameScreen implements Screen {
 
     Vector3 cameraMovingTo = new Vector3();
 
-
     private void makeBordersForCamera() {
         float screenWidth = RenderingSystem.getScreenSizeInMeters().x;
         float screenHeight = RenderingSystem.getScreenSizeInMeters().y;
@@ -98,6 +97,7 @@ public class GameScreen implements Screen {
 
     /** Moves camera with speed depended from distance exponentially */
     private void moveCamera(float delta) {
+        delta = Math.max(delta, 0.1f); // when delta is near to zero problems occur
         final float speed = 2 * delta;
         final float ispeed = 1.0f-speed;
 
@@ -105,6 +105,7 @@ public class GameScreen implements Screen {
         Entity player = level.getFactory().getPlayer();
         if (player != null) {
             TransformComponent playerTransform = Mapper.transformComponent.get(player);
+
             if (playerTransform == null) {
                 return;
             }

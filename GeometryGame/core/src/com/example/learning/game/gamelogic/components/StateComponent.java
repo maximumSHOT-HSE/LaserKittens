@@ -17,7 +17,7 @@ public class StateComponent implements Component, Poolable {
 
     private State state = State.NORMAL;
 
-    public void set(StateComponent.State newState){
+    public void set(StateComponent.State newState) {
         state = newState;
     }
 

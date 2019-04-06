@@ -30,7 +30,7 @@ public class BodyFactory {
 
     /**
      * Enum specifying body type, which is necessary for filtering body collisions.
-     * Box2D allows up to 16 body ty
+     * Box2D allows up to 16 body types
      */
     private enum Category {
 
@@ -38,14 +38,16 @@ public class BodyFactory {
         BULLET((short)1),
         OTHER((short)2);
 
-        private Category(int index) { this.mask = (short)(1 << index); }
+        private Category(int index) {
+            this.mask = (short)(1 << index);
+        }
 
         private static short all() {
-            short sum_mask = 0;
+            short sumMask = 0;
             for (Category category : Category.values()) {
-                sum_mask |= category.mask;
+                sumMask |= category.mask;
             }
-            return sum_mask;
+            return sumMask;
         }
 
         private short allExceptMe() {
@@ -98,22 +100,7 @@ public class BodyFactory {
         return body;
     }
 
-    public Body newRectangleBody(Vector2 leftDownCorner, float width, float height, BodyDef.BodyType bodyType, boolean fixedRotation) {
-
-        Body body = (new BodyBuilder()).setType(bodyType)
-                .setPosition(leftDownCorner.x + width / 2f, leftDownCorner.y + height / 2f)
-                .setFixedRotation(fixedRotation).build();
-
-        PolygonShape poly = new PolygonShape();
-        poly.setAsBox(width, height);
-        body.createFixture(FixtureFactory.stoneFixture(poly));
-        poly.dispose();
-
-        setFilter(body, Category.OTHER.mask, Category.all());
-        return body;
-    }
-
-    public Body newMirror(Vector2 center, float width, float height) {
+    public Body newRectangle(Vector2 center, float width, float height) {
         Body body = (new BodyBuilder()).setType(BodyDef.BodyType.StaticBody)
                 .setPosition(center).build();
 
