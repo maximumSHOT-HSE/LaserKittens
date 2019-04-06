@@ -53,7 +53,6 @@ public class RenderingSystem extends SortedIteratingSystem {
     private Comparator<Entity> comparator = new ZComparator();
     private OrthographicCamera camera;
 
-
     @SuppressWarnings("unchecked")
     public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());

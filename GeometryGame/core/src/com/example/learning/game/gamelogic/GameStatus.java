@@ -37,4 +37,8 @@ public class GameStatus {
     public boolean readyToFinish() {
         return currentTime > minEndTime && starCounter == 0;
     }
+
+    public int getStarCounter() {
+        return starCounter;
+    }
 }

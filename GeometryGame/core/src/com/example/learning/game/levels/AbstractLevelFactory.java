@@ -62,12 +62,16 @@ abstract public class AbstractLevelFactory {
     abstract public void createLevel(PooledEngine engine, KittensAssetManager assetManager);
 
     public Entity createStar(float x, float y, float radius) {
+        Texture texture = manager.manager.get(KittensAssetManager.Star2, Texture.class);
+        Vector2 scale = new Vector2(2 * radius / RenderingSystem.pixelsToMeters(texture.getWidth()),
+                2 * radius / RenderingSystem.pixelsToMeters(texture.getHeight()));
+
         Entity entity = (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newStar(new Vector2(x, y), radius, BodyDef.BodyType.DynamicBody, false))
-                .addTransformComponent(new Vector3(x, y, 0))
+                .addTransformComponent(new Vector3(x, y, 0), scale, 0, false)
                 .addTypeComponent(TypeComponent.Type.STAR)
                 .addStateComponent(StateComponent.State.JUST_CREATED)
-                .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.Star1, Texture.class)))
+                .addTextureComponent(new TextureRegion(texture))
                 .build();
 
         return entity;
@@ -121,7 +125,6 @@ abstract public class AbstractLevelFactory {
         float regionCatRadius = RenderingSystem.pixelsToMeters(
                 manager.manager.get(KittensAssetManager.Cat3, Texture.class).getHeight() * 0.78f * 0.5f);
         Vector2 scale = new Vector2(radius / regionCatRadius, radius / regionCatRadius);
-
 
         Entity entity = (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newPlayerBody(new Vector2(playerX, playerY), radius))
