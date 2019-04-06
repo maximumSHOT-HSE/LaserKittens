@@ -1,7 +1,10 @@
 package com.example.learning.game.levels;
 
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.example.learning.KittensAssetManager;
+import com.example.learning.game.Mapper;
 
 /**
  * Class for encapsulating logic and
@@ -9,7 +12,11 @@ import com.example.learning.KittensAssetManager;
  * (creating, drawing and storing data, e.g. score, times, etc.).
  * */
 abstract public class AbstractLevel {
-    // name of level
+
+    /**
+     * Name of the level.
+     * User will see it in choose level screen
+     */
     private String name;
 
     public AbstractLevel(String name) {
@@ -23,4 +30,18 @@ abstract public class AbstractLevel {
     }
 
     abstract public AbstractLevelFactory getFactory();
+
+    public void shoot(float x, float y) {
+        Vector3 playerPosition = Mapper.transformComponent.get(getFactory().getPlayer()).position;
+
+        Vector2 direction = new Vector2(x - playerPosition.x, y - playerPosition.y);
+        float length = (float)Math.sqrt(direction.x * direction.x + direction.y * direction.y);
+        direction.set(direction.x / length, direction.y / length);
+        float playerRadius = getFactory().getPlayerRadius();
+        getFactory().createLaser(
+                new Vector2(playerPosition.x + playerRadius * direction.x,
+                        playerPosition.y + playerRadius * direction.y),
+                direction, 1500
+        );
+    }
 }
