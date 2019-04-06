@@ -106,7 +106,7 @@ public class GameScreenInputProcessor implements InputProcessor {
         camera.unproject(position.set(screenX, screenY, 0));
 
         if (!clickInPlayerRegion()) {
-            level.getFactory().shoot(position.x, position.y);
+            level.shoot(position.x, position.y);
             Sound laser = laserKittens.assetManager.manager.get(KittensAssetManager.laserSound, Sound.class);
             laser.play(laserKittens.getPreferences().getSoundVolume());
             return true;

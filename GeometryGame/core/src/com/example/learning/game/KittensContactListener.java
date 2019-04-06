@@ -30,7 +30,7 @@ public class KittensContactListener implements ContactListener {
         Entity entity = (Entity) data;
         TypeComponent typeComponent = Mapper.typeComponent.get(entity);
         if (typeComponent == null ||
-                typeComponent.type != TypeComponent.ObjectType.BULLET) {
+                typeComponent.type != TypeComponent.Type.BULLET) {
             return;
         }
         BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
@@ -44,7 +44,7 @@ public class KittensContactListener implements ContactListener {
         }
         Entity entity = (Entity) data;
         TypeComponent typeComponent = Mapper.typeComponent.get(entity);
-        return typeComponent != null && typeComponent.type == TypeComponent.ObjectType.BULLET;
+        return typeComponent != null && typeComponent.type == TypeComponent.Type.BULLET;
     }
 
     private boolean isStar(Object data) {
@@ -53,7 +53,7 @@ public class KittensContactListener implements ContactListener {
         }
         Entity entity = (Entity) data;
         TypeComponent typeComponent = Mapper.typeComponent.get(entity);
-        return typeComponent != null && typeComponent.type == TypeComponent.ObjectType.STAR;
+        return typeComponent != null && typeComponent.type == TypeComponent.Type.STAR;
     }
 
     private void processBulletStar(Object bullet, Object star) {
@@ -77,8 +77,8 @@ public class KittensContactListener implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-        Object aUserData = fixtureA.getUserData();
-        Object bUserData = fixtureB.getUserData();
+        Object aUserData = fixtureA.getBody().getUserData();
+        Object bUserData = fixtureB.getBody().getUserData();
 
         processBulletStar(aUserData, bUserData);
         processBullet(aUserData);

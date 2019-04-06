@@ -37,7 +37,7 @@ public class StateControlSystem extends IteratingSystem {
 
         if (stateComponent.get() == StateComponent.State.FINISHED) {
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-            if (typeComponent != null && typeComponent.type == TypeComponent.ObjectType.STAR) {
+            if (typeComponent != null && typeComponent.type == TypeComponent.Type.STAR) {
                 gameStatus.removeStar();
             }
             if (bodyComponent != null) {
@@ -47,7 +47,7 @@ public class StateControlSystem extends IteratingSystem {
         }
         if (stateComponent.get() == StateComponent.State.JUST_CREATED) {
             stateComponent.set(StateComponent.State.NORMAL);
-            if (typeComponent != null && typeComponent.type == TypeComponent.ObjectType.STAR) {
+            if (typeComponent != null && typeComponent.type == TypeComponent.Type.STAR) {
                 gameStatus.addStar();
             }
         }

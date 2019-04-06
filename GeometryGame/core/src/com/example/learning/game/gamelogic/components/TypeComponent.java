@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  */
 public class TypeComponent implements Component, Poolable {
 
-    public enum ObjectType {
+    public enum Type {
         PLAYER,
         BULLET,
         WALL,
@@ -18,7 +18,7 @@ public class TypeComponent implements Component, Poolable {
         OTHER
     }
 
-    public ObjectType type = ObjectType.OTHER;
+    public Type type = Type.OTHER;
 
     @Override
     public void reset() {
