@@ -1,4 +1,4 @@
-package com.example.learning.game.levels.TestLongCorridor;
+package com.example.learning.game.levels.TestDoorsAndKeys;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -9,11 +9,12 @@ import com.example.learning.game.BodyFactory;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevelFactory;
 
-public class TestLongCorridorFactory extends AbstractLevelFactory {
+
+public class TestDoorsAndKeysLevelFactory extends AbstractLevelFactory {
 
     private Entity player;
 
-    public TestLongCorridorFactory() {
+    public TestDoorsAndKeysLevelFactory() {
         world = new World(new Vector2(0,0), true);
     }
 
@@ -53,3 +54,4 @@ public class TestLongCorridorFactory extends AbstractLevelFactory {
         }
     }
 }
+

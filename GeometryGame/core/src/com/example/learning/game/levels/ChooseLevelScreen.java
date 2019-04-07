@@ -20,6 +20,7 @@ import com.example.learning.LaserKittens;
 import com.example.learning.KittensAssetManager;
 import com.example.learning.game.GameScreen;
 import com.example.learning.game.levels.TestBigLevel.TestBigLevel;
+import com.example.learning.game.levels.TestDoorsAndKeys.TestDoorsAndKeysLevel;
 import com.example.learning.game.levels.TestShooting.ShootingLevel;
 import com.example.learning.game.levels.TestLongCorridor.TestLongCorridorLevel;
 import com.example.learning.settings.SettingsScreenInputProcessor;
@@ -43,6 +44,7 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new ShootingLevel());
         abstractLevels.add(new TestBigLevel());
         abstractLevels.add(new TestLongCorridorLevel());
+        abstractLevels.add(new TestDoorsAndKeysLevel());
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {

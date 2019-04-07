@@ -143,6 +143,8 @@ abstract public class AbstractLevelFactory {
     protected Entity createDisappearingWall(Vector2 center, float width, float height) {
         Entity entity = (new EntityBuilder())
             .addBodyComponent(bodyFactory.newRectangle(center, width, height))
+            .addTransformComponent(new Vector3(center.x, center.y, 10))
+            .addTextureComponent(null)
             .addTypeComponent(TypeComponent.Type.DISAPPEARING_WALL)
             .addStateComponent(StateComponent.State.JUST_CREATED)
             .build();
@@ -152,8 +154,21 @@ abstract public class AbstractLevelFactory {
     protected Entity createImpenetrableWall(Vector2 center, float width, float height) {
         Entity entity = (new EntityBuilder())
             .addBodyComponent(bodyFactory.newRectangle(center, width, height))
+            .addTransformComponent(new Vector3(center.x, center.y, 10))
+            .addTextureComponent(null)
             .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
             .build();
+        return entity;
+    }
+
+    protected Entity createDoor(Vector2 center, float width, float height) {
+        Entity entity = (new EntityBuilder())
+                .addBodyComponent(bodyFactory.newRectangle(center, width, height))
+                .addTransformComponent(new Vector3(center.x, center.y, 10))
+                .addTextureComponent(null)
+                .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
+                .addStateComponent(StateComponent.State.NORMAL)
+                .build();
         return entity;
     }
 
@@ -163,6 +178,7 @@ abstract public class AbstractLevelFactory {
                 .addTransformComponent(new Vector3(center.x, center.y, 10))
                 .addTextureComponent(null)
                 .addTypeComponent(TypeComponent.Type.KEY)
+                .addStateComponent(StateComponent.State.NORMAL)
                 .addKeyComponent(door)
                 .build();
         return entity;
