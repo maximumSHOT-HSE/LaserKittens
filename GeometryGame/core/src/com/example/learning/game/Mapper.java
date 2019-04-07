@@ -1,8 +1,10 @@
 package com.example.learning.game;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.BulletComponent;
+import com.example.learning.game.gamelogic.components.KeyComponent;
 import com.example.learning.game.gamelogic.components.StateComponent;
 import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
@@ -18,4 +20,5 @@ public class Mapper {
     public static ComponentMapper<TransformComponent> transformComponent = ComponentMapper.getFor(TransformComponent.class);
     public static ComponentMapper<TypeComponent> typeComponent = ComponentMapper.getFor(TypeComponent.class);
     public static ComponentMapper<BulletComponent> bulletComponent = ComponentMapper.getFor(BulletComponent.class);
+    public static ComponentMapper<KeyComponent> keyComponent = ComponentMapper.getFor(KeyComponent.class);
 }

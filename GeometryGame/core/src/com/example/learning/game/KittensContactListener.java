@@ -26,19 +26,14 @@ public class KittensContactListener implements ContactListener {
      * to path of bullet
      * */
     private void processBullet(Entity entity) {
-        TypeComponent typeComponent = Mapper.typeComponent.get(entity);
         BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
         BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
         bulletComponent.path.add(new Vector2(bodyComponent.body.getPosition()));
     }
 
-    private void processBulletStar(Entity bulletEntity, Entity starEntity) {
-        BodyComponent bodyComponent = Mapper.bodyComponent.get(bulletEntity);
-        bodyComponent.body.setLinearVelocity(0, 0);
-        BulletComponent bulletComponent = Mapper.bulletComponent.get(bulletEntity);
-        bulletComponent.creationTime = System.currentTimeMillis();
-        bulletComponent.lifeTime = 20;
-        Mapper.stateComponent.get(starEntity).finish();
+    private void processBulletStar(Entity bullet, Entity star) {
+        stopBullet(bullet);
+        Mapper.stateComponent.get(star).finish();
     }
 
     private void processBulletDisappearingWall(Entity bullet, Entity disappearingWall) {
@@ -47,6 +42,15 @@ public class KittensContactListener implements ContactListener {
     }
 
     private void processBulletImpenetrableWall(Entity bullet, Entity impenetrableWall) {
+        stopBullet(bullet);
+    }
+
+    private void processBulletKey(Entity bullet, Entity key) {
+        stopBullet(bullet);
+        Mapper.stateComponent.get(key).finish();
+    }
+
+    private void stopBullet(Entity bullet) {
         BodyComponent bodyComponent = Mapper.bodyComponent.get(bullet);
         bodyComponent.body.setLinearVelocity(0, 0);
         BulletComponent bulletComponent = Mapper.bulletComponent.get(bullet);
@@ -73,6 +77,10 @@ public class KittensContactListener implements ContactListener {
         if (checkType(entityA, TypeComponent.Type.BULLET) &&
             checkType(entityB, TypeComponent.Type.STAR)) {
             processBulletStar(entityA, entityB);
+        }
+        if (checkType(entityA, TypeComponent.Type.BULLET) &&
+                checkType(entityB, TypeComponent.Type.KEY)) {
+            processBulletKey(entityA, entityB);
         }
         if (checkType(entityA, TypeComponent.Type.BULLET) &&
             checkType(entityB, TypeComponent.Type.DISAPPEARING_WALL)) {

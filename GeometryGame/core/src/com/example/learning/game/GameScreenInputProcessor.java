@@ -80,25 +80,20 @@ public class GameScreenInputProcessor implements InputProcessor {
         return false;
     }
 
+    private float distance2D(Vector2 a, Vector2 b) {
+        return a.dst(b);
+    }
+
     @Override
     public boolean keyTyped(char character) {
         return false;
     }
 
     private boolean clickInPlayerRegion() {
-        float textureX = Mapper.transformComponent.get(focusedPlayer).position.x;
-        float textureY = Mapper.transformComponent.get(focusedPlayer).position.y;
-        float textureWidth = RenderingSystem.pixelsToMeters(Mapper.textureComponent.get(focusedPlayer).region.getRegionWidth())
-                * Mapper.transformComponent.get(focusedPlayer).scale.x;
-        float textureHeight = RenderingSystem.pixelsToMeters(Mapper.textureComponent.get(focusedPlayer).region.getRegionHeight())
-                * Mapper.transformComponent.get(focusedPlayer).scale.y;
+        Body body = Mapper.bodyComponent.get(focusedPlayer).body;
+        float radius = level.getFactory().getPlayerRadius();
 
-        float originX = textureWidth / 2f;
-        float originY = textureHeight / 2f;
-
-
-        Rectangle textureBounds = new Rectangle(textureX - originX,textureY - originY,textureWidth,textureHeight);
-        return textureBounds.contains(position.x, position.y);
+        return distance2D(body.getPosition(), new Vector2(position.x, position.y)) < radius;
     }
 
     @Override

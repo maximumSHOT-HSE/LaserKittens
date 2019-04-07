@@ -14,6 +14,7 @@ import com.example.learning.game.BodyFactory;
 import com.example.learning.game.Mapper;
 import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.components.BulletComponent;
+import com.example.learning.game.gamelogic.components.KeyComponent;
 import com.example.learning.game.gamelogic.components.StateComponent;
 import com.example.learning.game.gamelogic.components.TextureComponent;
 import com.example.learning.game.gamelogic.components.TransformComponent;
@@ -114,6 +115,8 @@ abstract public class AbstractLevelFactory {
 
         Entity entity = (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height))
+                .addTransformComponent(new Vector3(center.x, center.y, 0))
+                .addTextureComponent(null)
                 .addTypeComponent(TypeComponent.Type.MIRROR)
                 .build();
 
@@ -151,6 +154,17 @@ abstract public class AbstractLevelFactory {
             .addBodyComponent(bodyFactory.newRectangle(center, width, height))
             .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
             .build();
+        return entity;
+    }
+
+    protected Entity createKey(Vector2 center, float width, float height, Entity door) {
+        Entity entity = (new EntityBuilder())
+                .addBodyComponent(bodyFactory.newRectangle(center, width, height))
+                .addTransformComponent(new Vector3(center.x, center.y, 10))
+                .addTextureComponent(null)
+                .addTypeComponent(TypeComponent.Type.KEY)
+                .addKeyComponent(door)
+                .build();
         return entity;
     }
 
@@ -219,6 +233,13 @@ abstract public class AbstractLevelFactory {
             TypeComponent typeComponent = engine.createComponent(TypeComponent.class);
             typeComponent.type = type;
             entity.add(typeComponent);
+            return this;
+        }
+
+        public EntityBuilder addKeyComponent(Entity door) {
+            KeyComponent keyComponent = engine.createComponent(KeyComponent.class);
+            keyComponent.door = door;
+            entity.add(keyComponent);
             return this;
         }
     }
