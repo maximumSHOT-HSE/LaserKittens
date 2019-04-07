@@ -37,8 +37,16 @@ public class StateControlSystem extends IteratingSystem {
 
         if (stateComponent.get() == StateComponent.State.FINISHED) {
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-            if (typeComponent != null && typeComponent.type == TypeComponent.Type.STAR) {
-                gameStatus.removeStar();
+
+            if (typeComponent != null) {
+                if (typeComponent.type == TypeComponent.Type.STAR) {
+                    gameStatus.removeStar();
+                }
+                if (typeComponent.type == TypeComponent.Type.KEY) {
+                    Entity door = Mapper.keyComponent.get(entity).door;
+                    StateComponent doorState = Mapper.stateComponent.get(door);
+                    doorState.finish();
+                }
             }
             if (bodyComponent != null) {
                 world.destroyBody(bodyComponent.body);

@@ -16,6 +16,7 @@ public class TypeComponent implements Component, Poolable {
         IMPENETRABLE_WALL,
         MIRROR,
         STAR,
+        KEY,
         OTHER
     }
 
