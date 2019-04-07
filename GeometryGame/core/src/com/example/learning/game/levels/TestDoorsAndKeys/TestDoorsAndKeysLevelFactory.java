@@ -46,12 +46,11 @@ public class TestDoorsAndKeysLevelFactory extends AbstractLevelFactory {
         createImpenetrableWall(new Vector2(levelWidth * 0.5f, 0), levelWidth, 0.1f * screenHeight);
         createImpenetrableWall(new Vector2(levelWidth * 0.5f, levelHeight), levelWidth, 0.1f * screenHeight);
 
-        createStar(0.5f * screenWidth, 0.25f * screenHeight, 0.05f * screenHeight);
+        createImpenetrableWall(new Vector2(0.25f * screenWidth,0.25f * screenHeight), 0.5f * screenWidth, 0.1f * screenHeight);
+        createStar(0.25f * screenWidth, 0.125f * screenHeight, 0.05f * screenHeight);
 
-        for (int i = 0; i < 8; i++) {
-            createDisappearingWall(new Vector2(0.5f * screenWidth, (i + 1) * 0.5f * screenHeight), levelWidth, 0.1f * screenHeight);
-            createStar(0.5f * screenWidth, (i + 1.5f) * 0.5f * screenHeight, 0.05f * screenHeight);
-        }
+        Entity door = createDoor(new Vector2(0.5f * screenWidth, 0.15f * screenHeight), 0.1f * screenWidth, 0.3f * screenHeight);
+        createKey(new Vector2(levelWidth - 0.5f * screenWidth, 0.5f * screenHeight), 0.1f * screenWidth, 0.2f * screenHeight, door);
     }
 }
 
