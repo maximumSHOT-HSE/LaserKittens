@@ -39,7 +39,7 @@ public class PagedScrollPane extends ScrollPane {
     private void setup() {
         content = new Table();
         content.defaults().space(50);
-        super.setWidget(content);
+        super.setActor(content);
     }
 
     public void addPages (Actor... pages) {
