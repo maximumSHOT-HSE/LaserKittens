@@ -10,6 +10,7 @@ public class KittensAssetManager {
 
     public final AssetManager manager = new AssetManager();
 
+
     //Textures
     public static final String badlogic = "badlogic.jpg";
     public static final String levelIndicatorActive = "levelIndicatorActive.png";
@@ -32,6 +33,9 @@ public class KittensAssetManager {
     //Sounds
     public static final String laserSound = "sounds/laser-shot.wav";
 
+    //Font
+
+
     public void loadImages() {
         manager.load(badlogic, Texture.class);
         manager.load(blueBackground, Texture.class);
@@ -53,9 +57,14 @@ public class KittensAssetManager {
         manager.load(skin, Skin.class, params);
     }
 
+    public void loadFonts() {
+        //TODO add nice font
+    }
+
     public void loadEverything() {
         loadImages();
         loadSkins();
         loadSounds();
+        loadFonts();
     }
 }
