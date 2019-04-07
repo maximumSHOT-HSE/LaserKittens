@@ -27,7 +27,7 @@ public class GameScreen implements Screen {
     private final LaserKittens laserKittens;
     private OrthographicCamera camera;
     private AbstractLevel level;
-    private GameStatus gameStatus = new GameStatus(this);
+    private GameStatus gameStatus;
     private GameScreenInputProcessor inputProcessor;
     private PooledEngine engine;
 
@@ -40,6 +40,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(LaserKittens laserKittens, AbstractLevel abstractLevel) {
         level = abstractLevel;
+        gameStatus = new GameStatus(this, laserKittens.font, laserKittens.batch);
 
         this.laserKittens = laserKittens;
 
@@ -130,6 +131,7 @@ public class GameScreen implements Screen {
         engine.update(delta);
 
         inputProcessor.touchDraggedExplicitly();
+        gameStatus.draw();
         moveCamera(delta);
     }
 

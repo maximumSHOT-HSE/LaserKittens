@@ -1,6 +1,10 @@
 package com.example.learning.game.gamelogic;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.example.learning.game.GameScreen;
+import com.example.learning.game.gamelogic.systems.RenderingSystem;
 
 /**
  * Maintains current game status
@@ -8,9 +12,17 @@ import com.example.learning.game.GameScreen;
 public class GameStatus {
 
     private GameScreen gameScreen;
+    private BitmapFont font;
+    private SpriteBatch batch;
+    private OrthographicCamera camera;
 
-    public GameStatus(GameScreen gameScreen) {
+    public GameStatus(GameScreen gameScreen, BitmapFont font, SpriteBatch batch) {
         this.gameScreen = gameScreen;
+        this.font = font;
+        this.batch = batch;
+        camera = new OrthographicCamera(RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
+        camera.position.set(RenderingSystem.SCREEN_WIDTH / 2f, RenderingSystem.SCREEN_HEIGHT / 2f, 0);
+        draw();
     }
 
     public GameScreen getGameScreen() {
@@ -40,5 +52,8 @@ public class GameStatus {
 
     public int getStarCounter() {
         return starCounter;
+    }
+
+    public void draw() {
     }
 }
