@@ -23,8 +23,8 @@ public class RenderingSystem extends SortedIteratingSystem {
     // pixels per meter
     public static final float PPM = 32.0f;
 
-    static final float SCREEN_WIDTH = Gdx.graphics.getWidth()/PPM;
-    static final float SCREEN_HEIGHT = Gdx.graphics.getHeight()/PPM;
+    public static final float SCREEN_WIDTH = Gdx.graphics.getWidth()/PPM;
+    public static final float SCREEN_HEIGHT = Gdx.graphics.getHeight()/PPM;
 
     public static final float PIXELS_TO_METRES = 1.0f / PPM;
 

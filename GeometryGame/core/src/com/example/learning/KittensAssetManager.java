@@ -34,7 +34,7 @@ public class KittensAssetManager {
     public static final String laserSound = "sounds/laser-shot.wav";
 
     //Font
-
+    public static final String font = "skin/font-export.fnt";
 
     public void loadImages() {
         manager.load(badlogic, Texture.class);
