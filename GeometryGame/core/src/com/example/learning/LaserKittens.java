@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.example.learning.about.AboutScreen;
+import com.example.learning.database.AppDatabase;
 import com.example.learning.game.levels.ChooseLevelScreen;
 import com.example.learning.mainmenu.MainMenuScreen;
 import com.example.learning.settings.AppPreferences;
@@ -18,6 +19,11 @@ public class LaserKittens extends Game {
     public BitmapFont font;
     private final AppPreferences preferences = new AppPreferences();
     public final KittensAssetManager assetManager = new KittensAssetManager();
+    public final AppDatabase database;
+
+    public LaserKittens(AppDatabase database) {
+        this.database = database;
+    }
 
 
     public enum SCREEN_TYPE {

@@ -4,6 +4,6 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 
 @Database(entities = {LevelStatistics.class}, version = 1)
-public abstract class AppDatabase extends RoomDatabase {
-    public abstract LevelStatistics levelStatistics();
+public abstract class AppDatabaseAndroid extends RoomDatabase implements AppDatabase {
+    public abstract StatisticsDaoAndroid statisticsDao();
 }

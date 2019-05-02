@@ -17,6 +17,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.learning"
         minSdkVersion 23
         targetSdkVersion 28
