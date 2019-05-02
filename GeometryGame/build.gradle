@@ -50,6 +50,9 @@ project(":desktop") {
         implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         implementation "com.badlogicgames.ashley:ashley:1.7.3"
         implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+
+        implementation "android.arch.persistence.room:runtime:1.0.0"
+        annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
     }
 }
 
@@ -80,6 +83,9 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+
+        implementation "android.arch.persistence.room:runtime:1.0.0"
+        annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
         
     }
 }
@@ -94,5 +100,8 @@ project(":core") {
         implementation "junit:junit:$junitVersion"
         implementation "com.badlogicgames.ashley:ashley:1.7.3"
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+
+        implementation "android.arch.persistence.room:runtime:1.0.0"
+        annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
     }
 }
