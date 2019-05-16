@@ -1,6 +1,7 @@
 package com.example.learning.settings;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -106,9 +108,11 @@ public class SettingsScreen implements Screen {
         private Label volumeMusicLabel = new Label("music volume", skin);
         private Label volumeSoundLabel = new Label("sound volume", skin);
 
-        final TextButton backButton = new TextButton("Back", skin);
-        final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin);
-        final Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
+        final private TextButton backButton = new TextButton("Back", skin);
+        final private Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin);
+        final private Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
+
+        final private CheckBox enableAccelerometer = new CheckBox("accelerometer", skin);
 
         public Menu(Stage stage) {
             table.setFillParent(true);
@@ -116,8 +120,13 @@ public class SettingsScreen implements Screen {
             stage.addActor(table);
 
             titleLabel.setFontScale(3f);
-            volumeMusicLabel.setFontScale(1.5f);
-            volumeSoundLabel.setFontScale(1.5f);
+            volumeMusicLabel.setFontScale(2);
+            volumeSoundLabel.setFontScale(2);
+            enableAccelerometer.getLabel().setFontScale(2);
+            enableAccelerometer.getLabelCell().padLeft(50);
+            enableAccelerometer.getImageCell().size(20, 20);
+            enableAccelerometer.getImage().scaleBy(1.5f);
+
 
             table.row().pad(10, 10, 30, 10);
             table.add(titleLabel).colspan(2);
@@ -128,6 +137,8 @@ public class SettingsScreen implements Screen {
             table.add(volumeSoundLabel);
             table.add(volumeSoundSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
             table.row().pad(30, 10, 10, 10);
+            table.add(enableAccelerometer).width(Gdx.graphics.getWidth() * 0.5f).height(Gdx.graphics.getHeight() * 0.1f).colspan(2);
+            table.row().pad(30, 10, 10, 10);
             table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).colspan(2);
 
             setListeners();
@@ -135,15 +146,15 @@ public class SettingsScreen implements Screen {
 
         private void setListeners() {
 
-            volumeMusicSlider.setValue( parent.getPreferences().getMusicVolume() );
+            volumeMusicSlider.setValue(parent.getPreferences().getMusicVolume());
             volumeMusicSlider.addListener(event -> {
-                parent.getPreferences().setMusicVolume( volumeMusicSlider.getValue() );
+                parent.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
                 return false;
             });
 
-            volumeSoundSlider.setValue( parent.getPreferences().getSoundVolume() );
+            volumeSoundSlider.setValue(parent.getPreferences().getSoundVolume());
             volumeSoundSlider.addListener(event -> {
-                parent.getPreferences().setSoundVolume( volumeSoundSlider.getValue() );
+                parent.getPreferences().setSoundVolume(volumeSoundSlider.getValue());
                 return false;
             });
 
@@ -154,7 +165,19 @@ public class SettingsScreen implements Screen {
                 }
             });
 
+            enableAccelerometer.setChecked(parent.getPreferences().isEnabledAccelerometer());
+            if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
+                enableAccelerometer.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        parent.getPreferences().setEnableAccelerometer(enableAccelerometer.isChecked());
+                    }
+                });
+            } else {
+                enableAccelerometer.setDisabled(true);
+            }
         }
+
 
     }
 }
