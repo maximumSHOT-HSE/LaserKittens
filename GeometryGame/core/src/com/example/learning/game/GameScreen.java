@@ -131,6 +131,7 @@ public class GameScreen implements Screen {
         engine.update(delta);
 
         inputProcessor.touchDraggedExplicitly();
+        inputProcessor.moveWithAccelerometer(delta);
         gameStatus.draw();
         moveCamera(delta);
     }

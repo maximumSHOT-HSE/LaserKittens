@@ -36,6 +36,9 @@ public class GameScreenInputProcessor implements InputProcessor {
     private int draggingPointer = -1;
     private Vector3 position = new Vector3();
 
+    /** won't change during level */
+    private final boolean enabledAccelerometer;
+
     private Vector3 draggingPosition = new Vector3();
     private Vector2 draggingStartedDiff = new Vector2();
 
@@ -53,6 +56,8 @@ public class GameScreenInputProcessor implements InputProcessor {
         this.level = level;
         this.camera = camera;
         this.world = level.getFactory().getWorld();
+
+        enabledAccelerometer = laserKittens.getPreferences().isEnabledAccelerometer();
 
         ground = BodyFactory.getBodyFactory(this.world)
         .newCircleBody(
@@ -111,6 +116,10 @@ public class GameScreenInputProcessor implements InputProcessor {
             return false;
         }
 
+        if (enabledAccelerometer) {
+            return false;
+        }
+
         Body playerBody = Mapper.bodyComponent.get(focusedPlayer).body;
         dragging = true;
         draggingPointer = pointer;
@@ -139,6 +148,10 @@ public class GameScreenInputProcessor implements InputProcessor {
             return false;
         }
 
+        if (enabledAccelerometer) {
+            return false;
+        }
+
         dragging = false;
         draggingPointer = -1;
         if (mouseJoint != null) {
@@ -152,6 +165,8 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     public void touchDraggedExplicitly() {
 
+        if (enabledAccelerometer) return;
+
         if (draggingPointer != -1) {
             int screenX = Gdx.input.getX(draggingPointer);
             int screenY = Gdx.input.getY(draggingPointer);
@@ -164,7 +179,7 @@ public class GameScreenInputProcessor implements InputProcessor {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
         if (!dragging || pointer != draggingPointer) return false;
-
+        if (enabledAccelerometer) return false;
 
         camera.unproject(draggingPosition.set(screenX, screenY, 0));
         draggingPosition.x -= draggingStartedDiff.x;
@@ -172,6 +187,31 @@ public class GameScreenInputProcessor implements InputProcessor {
         mouseJoint.setTarget(target.set(draggingPosition.x, draggingPosition.y));
 
         return true;
+    }
+
+    public void moveWithAccelerometer(float delta) {
+        float accelerometerX = Gdx.input.getAccelerometerX();
+        float accelerometerY = Gdx.input.getAccelerometerY();
+
+        final Body playerBody =  Mapper.bodyComponent.get(focusedPlayer).body;
+        System.out.println(accelerometerX + " " + accelerometerY);
+
+        if (Math.abs(accelerometerX) > 1) {
+            playerBody.applyForce(Math.abs(accelerometerX) * delta, 0,
+                    Math.signum(accelerometerX) + playerBody.getPosition().x, playerBody.getPosition().y, true);
+        }
+        else {
+            playerBody.setLinearVelocity(0, playerBody.getLinearVelocity().y);
+        }
+
+        if (Math.abs(accelerometerY) > 1) {
+            playerBody.applyForce(0, Math.abs(accelerometerY) * delta,
+                     playerBody.getPosition().x, Math.signum(accelerometerY) + playerBody.getPosition().y, true);
+        } else {
+            playerBody.setLinearVelocity(playerBody.getLinearVelocity().x, 0);
+        }
+
+
     }
 
     @Override
