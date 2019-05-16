@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.example.learning.LaserKittens;
 import com.example.learning.KittensAssetManager;
+import com.example.learning.game.gamelogic.components.BodyComponent;
 import com.example.learning.game.gamelogic.systems.RenderingSystem;
 import com.example.learning.game.levels.AbstractLevel;
 
@@ -118,9 +119,13 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         if (enabledAccelerometer) {
             return false;
-        }
+        };
 
-        Body playerBody = Mapper.bodyComponent.get(focusedPlayer).body;
+        final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
+        if (playerBodyComponent == null) return false;
+        final Body playerBody = playerBodyComponent.body;
+        if (playerBody == null) return false;
+
         dragging = true;
         draggingPointer = pointer;
         float playerX = playerBody.getPosition().x;
@@ -158,7 +163,13 @@ public class GameScreenInputProcessor implements InputProcessor {
             world.destroyJoint(mouseJoint);
             mouseJoint = null;
         }
-        Mapper.bodyComponent.get(focusedPlayer).body.setLinearVelocity(0, 0);
+
+        final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
+        if (playerBodyComponent == null) return false;
+        final Body playerBody = playerBodyComponent.body;
+        if (playerBody == null) return false;
+
+        playerBody.setLinearVelocity(0, 0);
 
         return true;
     }
@@ -190,26 +201,30 @@ public class GameScreenInputProcessor implements InputProcessor {
     }
 
     public void moveWithAccelerometer(float delta) {
-        float accelerometerX = Gdx.input.getAccelerometerX();
-        float accelerometerY = Gdx.input.getAccelerometerY();
+        if (!enabledAccelerometer) return;
 
-        final Body playerBody =  Mapper.bodyComponent.get(focusedPlayer).body;
-        System.out.println(accelerometerX + " " + accelerometerY);
+        final float accelerometerX = Gdx.input.getAccelerometerX();
+        final float accelerometerY = Gdx.input.getAccelerometerY();
 
-        if (Math.abs(accelerometerX) > 1) {
-            playerBody.applyForce(Math.abs(accelerometerX) * delta, 0,
-                    Math.signum(accelerometerX) + playerBody.getPosition().x, playerBody.getPosition().y, true);
-        }
-        else {
-            playerBody.setLinearVelocity(0, playerBody.getLinearVelocity().y);
+        final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
+        if (playerBodyComponent == null) return;
+        final Body playerBody = playerBodyComponent.body;
+        if (playerBody == null) return;
+
+        if (Math.abs(accelerometerX) < 0.3 && Math.abs(accelerometerY) < 0.3) {
+            playerBody.applyForce(
+                    -playerBody.getLinearVelocity().x * delta * 1e3f * playerBody.getMass(),
+                    -playerBody.getLinearVelocity().y * delta * 1e3f * playerBody.getMass(),
+                    playerBody.getPosition().x, playerBody.getPosition().y, true);
+            return;
         }
 
-        if (Math.abs(accelerometerY) > 1) {
-            playerBody.applyForce(0, Math.abs(accelerometerY) * delta,
-                     playerBody.getPosition().x, Math.signum(accelerometerY) + playerBody.getPosition().y, true);
-        } else {
-            playerBody.setLinearVelocity(playerBody.getLinearVelocity().x, 0);
-        }
+        float forceX = Math.max(2, Math.abs(accelerometerX)) * delta * 1e3f * playerBody.getMass();
+        float forceY = Math.max(2, Math.abs(accelerometerY)) * delta * 1e3f * playerBody.getMass();
+
+        playerBody.applyForce(-Math.signum(accelerometerX) * forceX, -Math.signum(accelerometerY) * forceY                                                                      ,
+                accelerometerX + playerBody.getPosition().x, accelerometerY + playerBody.getPosition().y, true);
+
 
 
     }
