@@ -48,7 +48,7 @@ public class PhysicsSystem extends IteratingSystem {
             for (Entity entity : bodiesQueue) {
                 TransformComponent transformComponent = Mapper.transformComponent.get(entity);
                 BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-                if (bodyComponent.body == null) continue;
+                if (bodyComponent == null || bodyComponent.body == null) continue;
                 Vector2 position = bodyComponent.body.getPosition();
                 transformComponent.position.x = position.x;
                 transformComponent.position.y = position.y;
