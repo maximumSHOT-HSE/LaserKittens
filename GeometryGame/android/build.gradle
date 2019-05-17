@@ -18,21 +18,32 @@ android {
     }
     defaultConfig {
         multiDexEnabled true
-        applicationId "com.example.learning"
+        applicationId "ru.hse.team"
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
-    buildTypes {
+    signingConfigs {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            storeFile file('/home/kostya/.keystore.txt')
+            storePassword 'CATS ARE NICE!!!'
+            keyAlias 'key0'
+            keyPassword 'k74617461'
         }
     }
-}
+    buildTypes {
+        release {
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            useProguard false
+            //zipAlignEnabled true
+            minifyEnabled false
+           // shrinkResources true
+            signingConfig signingConfigs.release
+        }
+    }
 
-android {
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
@@ -55,10 +66,10 @@ task copyAndroidNatives {
             def outputDir = null
             if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
             if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
-            if(jar.name.endsWith("natives-armeabi.jar")) outputDir = file("libs/armeabi")
-            if(jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
-            if(jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
-            if(outputDir != null) {
+            if (jar.name.endsWith("natives-armeabi.jar")) outputDir = file("libs/armeabi")
+            if (jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
+            if (jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
+            if (outputDir != null) {
                 copy {
                     from zipTree(jar)
                     into outputDir
@@ -89,20 +100,20 @@ task run(type: Exec) {
         } else {
             path = "$System.env.ANDROID_HOME"
         }
+
     } else {
         path = "$System.env.ANDROID_HOME"
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.example.learning/com.example.learning.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'ru.hse.team/ru.hse.team.AndroidLauncher'
 }
-
 
 // sets up the Android Idea project, using the old Ant based build.
 idea {
     module {
         sourceDirs += file("src");
-        scopes = [ COMPILE: [plus:[project.configurations.compile]]]
+        scopes = [COMPILE: [plus: [project.configurations.compile]]]
 
         iml {
             withXml {
@@ -112,11 +123,15 @@ idea {
                 builder.component(name: "FacetManager") {
                     facet(type: "android", name: "Android") {
                         configuration {
-                            option(name: "UPDATE_PROPERTY_FILES", value:"true")
+                            option(name: "UPDATE_PROPERTY_FILES", value: "true")
                         }
                     }
                 }
             }
         }
     }
+}
+
+dependencies {
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
 }

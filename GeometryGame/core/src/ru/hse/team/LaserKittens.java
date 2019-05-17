@@ -19,10 +19,13 @@ public class LaserKittens extends Game {
     public BitmapFont font;
     private final AppPreferences preferences = new AppPreferences();
     public final KittensAssetManager assetManager = new KittensAssetManager();
-    public final AppDatabase database;
 
-    public LaserKittens(AppDatabase database) {
+    public final AppDatabase database;
+    public final AndroidActionResolver androidAction;
+
+    public LaserKittens(AppDatabase database, AndroidActionResolver androidAction) {
         this.database = database;
+        this.androidAction = androidAction;
     }
 
 
