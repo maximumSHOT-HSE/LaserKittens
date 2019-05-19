@@ -21,11 +21,11 @@ public class LaserKittens extends Game {
     public final KittensAssetManager assetManager = new KittensAssetManager();
 
     public final AppDatabase database;
-    public final AndroidActionResolver androidAction;
+    public final GoogleServicesAction googleServices;
 
-    public LaserKittens(AppDatabase database, AndroidActionResolver androidAction) {
+    public LaserKittens(AppDatabase database, GoogleServicesAction googleServicesAction) {
         this.database = database;
-        this.androidAction = androidAction;
+        this.googleServices = googleServicesAction;
     }
 
 
@@ -89,6 +89,9 @@ public class LaserKittens extends Game {
         assetManager.loadEverything();
         assetManager.manager.finishLoading();
 
+        googleServices.signIn();
+        googleServices.rateGame();
+
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }
 
@@ -100,6 +103,7 @@ public class LaserKittens extends Game {
     @Override
     public void dispose() {
         super.dispose();
+        googleServices.signOut();
         batch.dispose();
         font.dispose();
         assetManager.manager.dispose();
