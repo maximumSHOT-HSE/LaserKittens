@@ -24,12 +24,12 @@ public class GestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        if (count >= 2) {
+        if (count == 2 && renderingSystem.getCameraWaiting() <= 0) {
             renderingSystem.getCamera().position.set(
                     renderingSystem.getCamera().unproject(new Vector3(x, y, 0))
             );
             renderingSystem.getCamera().update();
-            renderingSystem.setCameraWaiting(12f);
+            renderingSystem.setCameraWaiting(10f);
         }
         return false;
     }
@@ -58,8 +58,11 @@ public class GestureProcessor implements GestureDetector.GestureListener {
     @Override
     public boolean zoom(float initialDistance, float distance) {
         renderingSystem.getCamera().zoom = scale * initialDistance / distance;
-        if (renderingSystem.getCamera().zoom >= 5) {
-            renderingSystem.getCamera().zoom = 5;
+        if (renderingSystem.getCamera().zoom >= 3) {
+            renderingSystem.getCamera().zoom = 3;
+        }
+        if (renderingSystem.getCamera().zoom < 1) {
+            renderingSystem.getCamera().zoom = 1;
         }
         return false;
     }
