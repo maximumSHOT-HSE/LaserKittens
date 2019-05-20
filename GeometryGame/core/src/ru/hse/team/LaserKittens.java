@@ -90,7 +90,10 @@ public class LaserKittens extends Game {
         assetManager.manager.finishLoading();
 
         googleServices.signIn();
-        googleServices.rateGame();
+
+        while(!googleServices.isSignedIn()){};
+        googleServices.submitScore(1000_1000_1791L);
+        googleServices.showScores();
 
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }
