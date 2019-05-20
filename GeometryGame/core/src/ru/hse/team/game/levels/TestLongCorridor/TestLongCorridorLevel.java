@@ -6,7 +6,7 @@ import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class TestLongCorridorLevel extends AbstractLevel {
-    private TestLongCorridorFactory testLongCorridorFactory = new TestLongCorridorFactory();
+    private TestLongCorridorFactory testLongCorridorFactory;
 
     public TestLongCorridorLevel() {
         super("Long Corridor");
@@ -14,6 +14,7 @@ public class TestLongCorridorLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+        testLongCorridorFactory = new TestLongCorridorFactory();
         testLongCorridorFactory.setLevelSize(1, 5);
         testLongCorridorFactory.createLevel(engine, assetManager);
     }

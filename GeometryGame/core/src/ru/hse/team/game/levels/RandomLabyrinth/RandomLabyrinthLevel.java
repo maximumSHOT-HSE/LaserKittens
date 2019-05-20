@@ -8,7 +8,7 @@ import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class RandomLabyrinthLevel extends AbstractLevel {
 
-    private RandomLabyrinthLevelFactory randomLabyrinthLevelFactory = new RandomLabyrinthLevelFactory();
+    private RandomLabyrinthLevelFactory randomLabyrinthLevelFactory;
 
     private int keys;
     private int stars;
@@ -32,6 +32,7 @@ public class RandomLabyrinthLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+        randomLabyrinthLevelFactory = new RandomLabyrinthLevelFactory();
         randomLabyrinthLevelFactory.setLevelSize(widthInScreens, heightInScreens);
         randomLabyrinthLevelFactory.setKeys(keys);
         randomLabyrinthLevelFactory.setStars(stars);

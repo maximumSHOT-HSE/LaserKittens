@@ -41,7 +41,7 @@ public class GameEndingScreen implements Screen {
         this.parentLevel = level;
         this.background = new Background(laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
         this.stage = new Stage(new ScreenViewport());
-        InputProcessor inputProcessor = new SettingsScreenInputProcessor(laserKittens);
+        InputProcessor inputProcessor = new GameEndingScreenInputProcessor(laserKittens);
         this.inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
     }
 

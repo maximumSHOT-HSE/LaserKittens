@@ -7,7 +7,7 @@ import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class ShootingLevel extends AbstractLevel {
 
-    private ShootingLevelFactory shootingLevelFactory = new ShootingLevelFactory();
+    private ShootingLevelFactory shootingLevelFactory;
 
     public ShootingLevel() {
         super("Test Shooting");
@@ -15,6 +15,7 @@ public class ShootingLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+        shootingLevelFactory = new ShootingLevelFactory();
         shootingLevelFactory.createLevel(engine, assetManager);
     }
 

@@ -8,7 +8,7 @@ import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class QuizLevel extends AbstractLevel {
 
-    private QuizLevelFactory quizLevelFactory = new QuizLevelFactory();
+    private QuizLevelFactory quizLevelFactory;
 
     public QuizLevel() {
         super("Quiz");
@@ -16,6 +16,7 @@ public class QuizLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+        quizLevelFactory = new QuizLevelFactory();
         quizLevelFactory.setLevelSize(8, 9);
         quizLevelFactory.createLevel(engine, assetManager);
     }

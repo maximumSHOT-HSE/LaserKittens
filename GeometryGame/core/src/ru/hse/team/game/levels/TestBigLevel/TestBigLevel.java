@@ -7,7 +7,7 @@ import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class TestBigLevel extends AbstractLevel {
 
-    private TestBigLevelFactory testBigLevelFactory = new TestBigLevelFactory();
+    private TestBigLevelFactory testBigLevelFactory;
 
     public TestBigLevel() {
         super("Test Big Level");
@@ -15,6 +15,7 @@ public class TestBigLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+        testBigLevelFactory = new TestBigLevelFactory();
         testBigLevelFactory.setLevelSize(3, 3);
         testBigLevelFactory.createLevel(engine, assetManager);
     }

@@ -179,5 +179,6 @@ public class GameScreen implements Screen {
             }
         }
         engine.removeAllEntities();
+        world.dispose();
     }
 }

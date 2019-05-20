@@ -6,7 +6,7 @@ import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class TestDoorsAndKeysLevel extends AbstractLevel {
-    private TestDoorsAndKeysLevelFactory testDoorsAndKeysLevelFactory = new TestDoorsAndKeysLevelFactory();
+    private TestDoorsAndKeysLevelFactory testDoorsAndKeysLevelFactory;
 
     public TestDoorsAndKeysLevel() {
         super("Door and Key");
@@ -14,6 +14,7 @@ public class TestDoorsAndKeysLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+        testDoorsAndKeysLevelFactory = new TestDoorsAndKeysLevelFactory();
         testDoorsAndKeysLevelFactory.setLevelSize(2, 1);
         testDoorsAndKeysLevelFactory.createLevel(engine, assetManager);
     }
