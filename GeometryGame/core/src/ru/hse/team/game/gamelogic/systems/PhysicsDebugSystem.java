@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class PhysicsDebugSystem extends IteratingSystem {
 
-    private boolean debug = false;
+    private boolean debug = true;
 
     private Box2DDebugRenderer debugRenderer;
     private World world;

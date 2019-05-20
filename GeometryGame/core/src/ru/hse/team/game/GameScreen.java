@@ -94,16 +94,16 @@ public class GameScreen implements Screen {
     Vector3 cameraMovingTo = new Vector3();
 
     private void makeBordersForCamera() {
-        float screenWidth = RenderingSystem.getScreenSizeInMeters().x * camera.zoom;
-        float screenHeight = RenderingSystem.getScreenSizeInMeters().y * camera.zoom;
+        float screenWidth = RenderingSystem.getScreenSizeInMeters().x;
+        float screenHeight = RenderingSystem.getScreenSizeInMeters().y;
 
         float levelWidth = screenWidth * level.getFactory().getLevelWidthInScreens();
         float levelHeight = screenHeight * level.getFactory().getLevelHeightInScreens();
 
-        cameraMovingTo.x = Math.max(cameraMovingTo.x, screenWidth / 2);
-        cameraMovingTo.y = Math.max(cameraMovingTo.y, screenHeight / 2);
-        cameraMovingTo.x = Math.min(cameraMovingTo.x, levelWidth - screenWidth / 2);
-        cameraMovingTo.y = Math.min(cameraMovingTo.y, levelHeight - screenHeight / 2);
+        cameraMovingTo.x = Math.max(cameraMovingTo.x, screenWidth * camera.zoom / 2);
+        cameraMovingTo.y = Math.max(cameraMovingTo.y, screenHeight * camera.zoom / 2);
+        cameraMovingTo.x = Math.min(cameraMovingTo.x, levelWidth - screenWidth * camera.zoom / 2);
+        cameraMovingTo.y = Math.min(cameraMovingTo.y, levelHeight - screenHeight * camera.zoom / 2);
     }
 
     /** Moves camera with speed depended from distance exponentially */
