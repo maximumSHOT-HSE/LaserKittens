@@ -52,6 +52,22 @@ public class RenderingSystem extends SortedIteratingSystem {
     private Array<Entity> renderQueue;
     private Comparator<Entity> comparator = new ZComparator();
     private OrthographicCamera camera;
+    private float cameraWaiting = 0;
+
+    public void decreaseCameraWaitingTime(float deltaTime) {
+        cameraWaiting -= deltaTime;
+        if (cameraWaiting < 0) {
+            cameraWaiting = 0;
+        }
+    }
+
+    public float getCameraWaiting() {
+        return cameraWaiting;
+    }
+
+    public void setCameraWaiting(float cameraWaiting) {
+        this.cameraWaiting = cameraWaiting;
+    }
 
     @SuppressWarnings("unchecked")
     public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer) {
@@ -63,13 +79,11 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         camera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
         camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
-
     }
 
     private void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer) {
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rectLine(from, to, 0.1f);
-
     }
 
     @Override

@@ -3,13 +3,16 @@ package ru.hse.team.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.game.gamelogic.GameStatus;
+import ru.hse.team.game.gamelogic.GestureProcessor;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
 import ru.hse.team.game.gamelogic.systems.BulletSystem;
@@ -29,6 +32,8 @@ public class GameScreen implements Screen {
     private AbstractLevel level;
     private GameStatus gameStatus;
     private GameScreenInputProcessor inputProcessor;
+    private GestureProcessor gestureProcessor;
+    private InputMultiplexer inputMultiplexer;
     private PooledEngine engine;
 
     private RenderingSystem renderingSystem;
@@ -48,10 +53,11 @@ public class GameScreen implements Screen {
         abstractLevel.createLevel(engine, this.laserKittens.assetManager);
         AbstractLevelFactory levelFactory = abstractLevel.getFactory();
         World world = levelFactory.getWorld();
-        world.setContactListener(new KittensContactListener());
+        world.setContactListener(new ContractProcessor());
 
         renderingSystem = new RenderingSystem(this.laserKittens.batch, this.laserKittens.shapeRenderer);
         camera = renderingSystem.getCamera();
+        camera.zoom = 1.5f;
         cameraMovingTo.set(camera.position);
 
         physicsSystem = new PhysicsSystem(world);
@@ -68,6 +74,10 @@ public class GameScreen implements Screen {
         engine.addSystem(gameStatusSystem);
 
         inputProcessor = new GameScreenInputProcessor(this.laserKittens, abstractLevel, camera);
+        gestureProcessor = new GestureProcessor(renderingSystem);
+        inputMultiplexer = new InputMultiplexer(
+                new GestureDetector(gestureProcessor),
+                inputProcessor);
     }
 
     public void endGame() {
@@ -78,14 +88,14 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         laserKittens.batch.setProjectionMatrix(camera.combined);
-        Gdx.input.setInputProcessor(inputProcessor);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     Vector3 cameraMovingTo = new Vector3();
 
     private void makeBordersForCamera() {
-        float screenWidth = RenderingSystem.getScreenSizeInMeters().x;
-        float screenHeight = RenderingSystem.getScreenSizeInMeters().y;
+        float screenWidth = RenderingSystem.getScreenSizeInMeters().x * camera.zoom;
+        float screenHeight = RenderingSystem.getScreenSizeInMeters().y * camera.zoom;
 
         float levelWidth = screenWidth * level.getFactory().getLevelWidthInScreens();
         float levelHeight = screenHeight * level.getFactory().getLevelHeightInScreens();
@@ -98,13 +108,17 @@ public class GameScreen implements Screen {
 
     /** Moves camera with speed depended from distance exponentially */
     private void moveCamera(float delta) {
+
         delta = Math.max(delta, 0.1f); // when delta is near to zero problems occur
         final float speed = 2 * delta;
         final float ispeed = 1.0f-speed;
 
         Vector3 cameraPosition = new Vector3(camera.position);
         Entity player = level.getFactory().getPlayer();
-        if (player != null) {
+
+        renderingSystem.decreaseCameraWaitingTime(delta);
+
+        if (player != null && renderingSystem.getCameraWaiting() == 0) {
             TransformComponent playerTransform = Mapper.transformComponent.get(player);
 
             if (playerTransform == null) {
@@ -120,6 +134,7 @@ public class GameScreen implements Screen {
             cameraMovingTo.scl(1f / speed);
             camera.position.set(cameraPosition);
         }
+
         camera.update();
     }
 
@@ -133,6 +148,7 @@ public class GameScreen implements Screen {
         inputProcessor.touchDraggedExplicitly();
         inputProcessor.moveWithAccelerometer(delta);
         gameStatus.draw();
+
         moveCamera(delta);
     }
 

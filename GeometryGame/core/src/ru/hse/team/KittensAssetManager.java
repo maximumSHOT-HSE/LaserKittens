@@ -6,6 +6,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import javax.xml.soap.Text;
+
 public class KittensAssetManager {
 
     public final AssetManager manager = new AssetManager();
@@ -15,17 +17,24 @@ public class KittensAssetManager {
     public static final String badlogic = "badlogic.jpg";
     public static final String levelIndicatorActive = "levelIndicatorActive.png";
     public static final String levelIndicatorPassive = "levelIndicatorPassive.png";
-        //Cats
-        public static final String Cat1 = "Cat1.png";
-        public static final String Cat2 = "Cat2.png";
-        public static final String Cat3 = "Cat3.png";
-        //Stars
-        public static final String Star1 = "Star1.png";
-        public static final String Star2 = "Star2.png";
+    //Cats
+    public static final String Cat1 = "Cat1.png";
+    public static final String Cat2 = "Cat2.png";
+    public static final String Cat3 = "Cat3.png";
+    //Stars
+    public static final String Star1 = "Star1.png";
+    public static final String Star2 = "Star2.png";
 
+    // Pointer
+    public static final String Pointer = "pointer.png";
+
+    // Question
+    public static final String Question = "question.png";
 
     //BackGrounds
     public static final String blueBackground = "blue-background.jpg";
+    public static final String ICE_WALL = "ice-wall.png";
+    public static final String TRANSPARENT_WALL = "transparent-wall.png";
 
     //Skin
     public static final String skin = "skin/glassy-ui.json";
@@ -39,6 +48,8 @@ public class KittensAssetManager {
     public void loadImages() {
         manager.load(badlogic, Texture.class);
         manager.load(blueBackground, Texture.class);
+        manager.load(ICE_WALL, Texture.class);
+        manager.load(TRANSPARENT_WALL, Texture.class);
         manager.load(Cat1, Texture.class);
         manager.load(Cat2, Texture.class);
         manager.load(Cat3, Texture.class);
@@ -46,6 +57,8 @@ public class KittensAssetManager {
         manager.load(levelIndicatorPassive, Texture.class);
         manager.load(Star1, Texture.class);
         manager.load(Star2, Texture.class);
+        manager.load(Pointer, Texture.class);
+        manager.load(Question, Texture.class);
     }
 
     public void loadSounds() {

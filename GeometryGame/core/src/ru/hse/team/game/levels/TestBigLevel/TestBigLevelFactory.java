@@ -32,7 +32,9 @@ public class TestBigLevelFactory extends AbstractLevelFactory {
         bodyFactory = BodyFactory.getBodyFactory(world);
         createBackground();
 
-        focusedPlayer = createPlayer(RenderingSystem.getScreenSizeInMeters().x / 2, RenderingSystem.getScreenSizeInMeters().y * 0.1f,
+        focusedPlayer = createPlayer(
+                RenderingSystem.getScreenSizeInMeters().x / 2,
+                RenderingSystem.getScreenSizeInMeters().y * 0.1f,
                 RenderingSystem.getScreenSizeInMeters().x / 10f);
 
         createMirror(new Vector2(0, 0.5f * levelHeight), 0.1f * screenWidth, levelHeight); // left wall

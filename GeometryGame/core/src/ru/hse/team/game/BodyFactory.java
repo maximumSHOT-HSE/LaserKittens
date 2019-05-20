@@ -36,7 +36,8 @@ public class BodyFactory {
 
         PLAYER((short)0),
         BULLET((short)1),
-        OTHER((short)2);
+        OTHER((short)2),
+        TRANSPARENT((short)3);
 
         private Category(int index) {
             this.mask = (short)(1 << index);
@@ -71,6 +72,12 @@ public class BodyFactory {
                 fixture.setFilterData(filter);
             }
         }
+    }
+
+    public Body newTransparentRectangle(Vector2 center, float width, float height) {
+        Body body = newRectangle(center, width, height);
+        setFilter(body, Category.TRANSPARENT.mask, (short) (Category.all() ^ Category.BULLET.mask));
+        return body;
     }
 
     public Body newCircleBody(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
@@ -127,7 +134,7 @@ public class BodyFactory {
         return body;
     }
 
-    private Vector2 coordByAngle(Vector2 center, float angle, float length) {
+    private Vector2 coordinatesByAngle(Vector2 center, float angle, float length) {
         return new Vector2(center.x + (float)Math.cos(Math.toRadians(angle)) * length,
                 center.y + (float)Math.sin(Math.toRadians(angle)) * length);
     }
@@ -143,8 +150,8 @@ public class BodyFactory {
             float angleR = angle - 36f;
             float angleL = angle + 36f;
 
-            Vector2[] coordinates = {coordByAngle(origin, angle, radius), coordByAngle(origin, angleL, radius / 2),
-                    origin, coordByAngle(origin, angleR, radius / 2)};
+            Vector2[] coordinates = {coordinatesByAngle(origin, angle, radius), coordinatesByAngle(origin, angleL, radius / 2),
+                    origin, coordinatesByAngle(origin, angleR, radius / 2)};
 
             PolygonShape polygon = new PolygonShape();
             polygon.set(coordinates);

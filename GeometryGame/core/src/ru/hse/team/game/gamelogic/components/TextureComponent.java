@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  * Contains image to draw.
  */
 public class TextureComponent implements Component, Poolable {
+
     public TextureRegion region;
 
     @Override
