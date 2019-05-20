@@ -14,12 +14,13 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.1'
     }
+
 }
 
 allprojects {
     apply plugin: "idea"
 
-    version = '1.0'
+    version = '1.2'
     ext {
         appName = "LaserKittens"
         gdxVersion = '1.9.9'
@@ -33,6 +34,7 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
         google()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
@@ -59,8 +61,11 @@ project(":desktop") {
 
 project(":android") {
     apply plugin: "android"
+    apply plugin: 'com.android.application'
 
     configurations { natives }
+
+
 
     dependencies {
         implementation project(":core")
@@ -88,6 +93,17 @@ project(":android") {
         implementation "android.arch.persistence.room:runtime:1.1.1"
         annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
         testImplementation'android.arch.persistence.room:testing:1.1.1'
+
+            implementation "com.android.support:appcompat-v7:28.0.0"
+            implementation "com.android.support:support-v4:28.0.0"
+            implementation "com.google.android.gms:play-services-games:17.0.0"
+            implementation "com.google.android.gms:play-services-auth:16.0.1"
+            implementation "com.google.android.gms:play-services-identity:16.0.0"
+
+          implementation "com.google.android.gms:play-services-appstate:8.4.0"
+            implementation "com.google.android.gms:play-services-plus:16.0.0"
+
+
         
     }
 }
