@@ -3,13 +3,16 @@ package ru.hse.team.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.game.gamelogic.GameStatus;
+import ru.hse.team.game.gamelogic.GestureProcessor;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
 import ru.hse.team.game.gamelogic.systems.BulletSystem;
@@ -29,6 +32,8 @@ public class GameScreen implements Screen {
     private AbstractLevel level;
     private GameStatus gameStatus;
     private GameScreenInputProcessor inputProcessor;
+    private GestureProcessor gestureProcessor;
+    private InputMultiplexer inputMultiplexer;
     private PooledEngine engine;
 
     private RenderingSystem renderingSystem;
@@ -68,6 +73,8 @@ public class GameScreen implements Screen {
         engine.addSystem(gameStatusSystem);
 
         inputProcessor = new GameScreenInputProcessor(this.laserKittens, abstractLevel, camera);
+        gestureProcessor = new GestureProcessor(camera);
+        inputMultiplexer = new InputMultiplexer(new GestureDetector(gestureProcessor));
     }
 
     public void endGame() {
@@ -78,7 +85,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         laserKittens.batch.setProjectionMatrix(camera.combined);
-        Gdx.input.setInputProcessor(inputProcessor);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     Vector3 cameraMovingTo = new Vector3();
