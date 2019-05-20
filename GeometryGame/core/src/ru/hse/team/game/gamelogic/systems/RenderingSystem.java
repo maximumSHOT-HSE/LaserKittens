@@ -3,12 +3,14 @@ package ru.hse.team.game.gamelogic.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
@@ -49,7 +51,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
-    private Array<Entity> renderQueue;
+    private ImmutableArray<Entity> renderQueue;
     private Comparator<Entity> comparator = new ZComparator();
     private OrthographicCamera camera;
     private float cameraWaiting = 0;
@@ -72,7 +74,6 @@ public class RenderingSystem extends SortedIteratingSystem {
     @SuppressWarnings("unchecked")
     public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
-        renderQueue = new Array<>();
 
         this.batch = batch;
         this.shapeRenderer = shapeRenderer;
@@ -86,11 +87,18 @@ public class RenderingSystem extends SortedIteratingSystem {
         shapeRenderer.rectLine(from, to, 0.1f);
     }
 
+    private float distance2D(Vector3 positionA, Vector3 positionB) {
+        return (float)Math.sqrt((positionA.x - positionB.x) * (positionA.x - positionB.x) + (positionA.y - positionB.y) * (positionA.y - positionB.y));
+    }
+    private float length2D(Vector2 a) {
+        return (float)Math.sqrt(a.x * a.x + a.y * a.y);
+    }
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        renderQueue.sort(comparator);
+        renderQueue = getEntities();
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -104,9 +112,12 @@ public class RenderingSystem extends SortedIteratingSystem {
             if (texture.region == null || transformComponent.isHidden) {
                 continue;
             }
-
             float width = texture.region.getRegionWidth();
             float height = texture.region.getRegionHeight();
+
+            //if (distance2D(camera.position, transformComponent.position) > length2D(RenderingSystem.getScreenSizeInMeters())) {
+            //    continue;
+            //}
 
             float originX = width / 2f;
             float originY = height / 2f;
@@ -139,12 +150,11 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         shapeRenderer.end();
 
-        renderQueue.clear();
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
-        renderQueue.add(entity);
+
     }
 
     public OrthographicCamera getCamera() {
