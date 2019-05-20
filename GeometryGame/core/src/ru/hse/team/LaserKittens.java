@@ -89,7 +89,7 @@ public class LaserKittens extends Game {
         assetManager.loadEverything();
         assetManager.manager.finishLoading();
 
-        googleServices.signIn();
+       // googleServices.signIn();
 
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }

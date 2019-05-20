@@ -1,0 +1,45 @@
+package ru.hse.team.game.levels.RandomLabyrinth;
+
+import com.badlogic.ashley.core.PooledEngine;
+
+import ru.hse.team.KittensAssetManager;
+import ru.hse.team.game.levels.AbstractLevel;
+import ru.hse.team.game.levels.AbstractLevelFactory;
+
+public class RandomLabyrinthLevel extends AbstractLevel {
+
+    private RandomLabyrinthLevelFactory randomLabyrinthLevelFactory = new RandomLabyrinthLevelFactory();
+
+    private int keys;
+    private int stars;
+    private int widthInScreens;
+    private int heightInScreens;
+
+    public RandomLabyrinthLevel(int widthInScreens, int heightInScreens, int keys, int stars) {
+        super("Random Labyrinth");
+        if (stars <= 0) {
+            throw new IllegalArgumentException("There should be at least one star");
+        }
+        if (widthInScreens * heightInScreens * 2 < keys + stars + 1) {
+            throw new IllegalArgumentException("No enough place for keys and stars");
+        }
+
+        this.widthInScreens = widthInScreens;
+        this.heightInScreens = heightInScreens;
+        this.keys = keys;
+        this.stars = stars;
+    }
+
+    @Override
+    public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+        randomLabyrinthLevelFactory.setLevelSize(widthInScreens, heightInScreens);
+        randomLabyrinthLevelFactory.setKeys(keys);
+        randomLabyrinthLevelFactory.setStars(stars);
+        randomLabyrinthLevelFactory.createLevel(engine, assetManager);
+    }
+
+    @Override
+    public AbstractLevelFactory getFactory() {
+        return randomLabyrinthLevelFactory;
+    }
+}
