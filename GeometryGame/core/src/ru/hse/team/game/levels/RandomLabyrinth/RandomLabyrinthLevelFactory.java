@@ -171,6 +171,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
         hasObject = new boolean[n][m];
         door = new boolean[n][m][4];
         keyByDoor = new int[n][m][4];
+        keyPositions = new ArrayList<>();
 
         int startX = getRandom(n);
         int startY = getRandom(m);
@@ -249,16 +250,17 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                 if (door[i][j][0]) {
                     final Entity door = createDoor(new Vector2(i * screenWidth / cellsPerWidth, (j + 0.5f) * screenHeight / cellsPerHeight),
                             wallThickness,screenHeight / cellsPerHeight);
-                    createKey(new Vector2(keyPositions.get(keyByDoor[i][j][0])), keyWidth, keyHeight, door);
+                    createKey(new Vector2(keyPositions.get(keyByDoor[i][j][0])).add(new Vector2(0.5f, 0.5f)).scl(screenWidth / cellsPerWidth, screenHeight / cellsPerHeight) , keyWidth, keyHeight, door);
                 }
 
                 if (door[i][j][1]) {
                     final Entity door = createDoor(new Vector2((i + 0.5f) * screenWidth / cellsPerWidth, j * screenHeight / cellsPerHeight),
                             screenWidth / cellsPerWidth, wallThickness);
-                    createKey(new Vector2(keyPositions.get(keyByDoor[i][j][1])), keyWidth, keyHeight, door);
+                    createKey(new Vector2(keyPositions.get(keyByDoor[i][j][1])).add(new Vector2(0.5f, 0.5f)).scl(screenWidth / cellsPerWidth, screenHeight / cellsPerHeight), keyWidth, keyHeight, door);
                 }
             }
         }
+        System.out.println(keyPositions.get(0));
 
         for (Vector2 starPosition : starsPositions) {
             createStar((starPosition.x + 0.5f) * screenWidth / cellsPerWidth,
