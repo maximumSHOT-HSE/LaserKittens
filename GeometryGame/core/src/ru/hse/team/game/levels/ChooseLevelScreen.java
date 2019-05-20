@@ -20,6 +20,7 @@ import ru.hse.team.LaserKittens;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.levels.Quiz.QuizLevel;
+import ru.hse.team.game.levels.RandomLabyrinth.RandomLabyrinthLevel;
 import ru.hse.team.game.levels.TestBigLevel.TestBigLevel;
 import ru.hse.team.game.levels.TestDoorsAndKeys.TestDoorsAndKeysLevel;
 import ru.hse.team.game.levels.TestShooting.ShootingLevel;
@@ -47,6 +48,7 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new TestLongCorridorLevel());
         abstractLevels.add(new TestDoorsAndKeysLevel());
         abstractLevels.add(new QuizLevel());
+        abstractLevels.add(new RandomLabyrinthLevel(5, 5, 1, 3));
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {

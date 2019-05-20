@@ -95,10 +95,14 @@ public class GameScreenInputProcessor implements InputProcessor {
     }
 
     private boolean clickInPlayerRegion() {
-        Body body = Mapper.bodyComponent.get(focusedPlayer).body;
-        float radius = level.getFactory().getPlayerRadius();
+        final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
+        if (playerBodyComponent == null) return false;
+        final Body playerBody = playerBodyComponent.body;
+        if (playerBody == null) return false;
 
-        return distance2D(body.getPosition(), new Vector2(position.x, position.y)) < radius;
+
+        float radius = level.getFactory().getPlayerRadius();
+        return distance2D(playerBody.getPosition(), new Vector2(position.x, position.y)) < radius;
     }
 
     @Override
