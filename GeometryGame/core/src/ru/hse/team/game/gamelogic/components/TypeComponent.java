@@ -14,6 +14,7 @@ public class TypeComponent implements Component, Poolable {
         BULLET,
         DISAPPEARING_WALL,
         IMPENETRABLE_WALL,
+        TRANSPARENT_WALL,
         MIRROR,
         STAR,
         KEY,

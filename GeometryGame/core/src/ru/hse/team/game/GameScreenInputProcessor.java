@@ -118,7 +118,7 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         if (enabledAccelerometer) {
             return false;
-        };
+        }
 
         final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
         if (playerBodyComponent == null) return false;
@@ -223,9 +223,6 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         playerBody.applyForce(-Math.signum(accelerometerX) * forceX, -Math.signum(accelerometerY) * forceY                                                                      ,
                 accelerometerX + playerBody.getPosition().x, accelerometerY + playerBody.getPosition().y, true);
-
-
-
     }
 
     @Override
