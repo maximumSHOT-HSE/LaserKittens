@@ -5,16 +5,21 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import ru.hse.team.game.GameScreen;
+import ru.hse.team.game.GameScreenInputProcessor;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 public class GestureProcessor implements GestureDetector.GestureListener {
 
     private float scale = 1;
     private RenderingSystem renderingSystem;
+    private GameScreenInputProcessor gameScreenInputProcessor;
 
     public GestureProcessor(
-            RenderingSystem renderingSystem) {
+            RenderingSystem renderingSystem,
+            GameScreenInputProcessor gameScreenInputProcessor) {
         this.renderingSystem = renderingSystem;
+        this.gameScreenInputProcessor = gameScreenInputProcessor;
     }
 
     @Override
@@ -24,13 +29,13 @@ public class GestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        if (count == 2 && renderingSystem.getCameraWaiting() <= 0) {
-            renderingSystem.getCamera().position.set(
-                    renderingSystem.getCamera().unproject(new Vector3(x, y, 0))
-            );
-            renderingSystem.getCamera().update();
-            renderingSystem.setCameraWaiting(10f);
-        }
+//        if (count == 2 && renderingSystem.getCameraWaiting() <= 0) {
+//            renderingSystem.getCamera().position.set(
+//                    renderingSystem.getCamera().unproject(new Vector3(x, y, 0))
+//            );
+//            renderingSystem.getCamera().update();
+//            renderingSystem.setCameraWaiting(10f);
+//        }
         return false;
     }
 
@@ -41,29 +46,43 @@ public class GestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public boolean fling(float velocityX, float velocityY, int button) {
+//        renderingSystem.getCamera().position.set(
+//                renderingSystem.getCamera().unproject(new Vector3(x, y, 0))
+//        );
         return false;
     }
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
+        if (gameScreenInputProcessor.isDragging()) {
+            return false;
+        }
+        x = renderingSystem.getCamera().position.x;
+        y = renderingSystem.getCamera().position.y;
+        renderingSystem.getCamera().position.set(
+                x - deltaX / 10, y + deltaY / 10, 0
+        );
+        renderingSystem.getCamera().update();
+        renderingSystem.setCameraWaiting((float) 1e9);
         return false;
     }
 
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
         scale = renderingSystem.getCamera().zoom;
+        renderingSystem.setCameraWaiting(0);
         return false;
     }
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
-        renderingSystem.getCamera().zoom = scale * initialDistance / distance;
-        if (renderingSystem.getCamera().zoom >= 3) {
-            renderingSystem.getCamera().zoom = 3;
-        }
-        if (renderingSystem.getCamera().zoom < 1) {
-            renderingSystem.getCamera().zoom = 1;
-        }
+//        renderingSystem.getCamera().zoom = scale * initialDistance / distance;
+//        if (renderingSystem.getCamera().zoom >= 3) {
+//            renderingSystem.getCamera().zoom = 3;
+//        }
+//        if (renderingSystem.getCamera().zoom < 1) {
+//            renderingSystem.getCamera().zoom = 1;
+//        }
         return false;
     }
 

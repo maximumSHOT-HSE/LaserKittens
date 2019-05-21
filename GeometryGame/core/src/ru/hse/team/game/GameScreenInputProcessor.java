@@ -50,6 +50,10 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     private Vector2 target = new Vector2();
 
+    public boolean isDragging() {
+        return dragging;
+    }
+
     public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera) {
         this.laserKittens = laserKittens;
         this.focusedPlayer = level.getFactory().getPlayer();
