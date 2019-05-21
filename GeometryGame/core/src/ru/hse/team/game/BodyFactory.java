@@ -1,5 +1,6 @@
 package ru.hse.team.game;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -107,9 +108,12 @@ public class BodyFactory {
         return body;
     }
 
-    public Body newRectangle(Vector2 center, float width, float height) {
-        Body body = (new BodyBuilder()).setType(BodyDef.BodyType.StaticBody)
-                .setPosition(center).build();
+    public Body newRectangle(Vector2 center, float width, float height, float rotation) {
+        Body body = (new BodyBuilder())
+                .setType(BodyDef.BodyType.KinematicBody)
+                .setPosition(center)
+                .setRotation(rotation)
+                .build();
 
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(width / 2, height / 2);
@@ -118,6 +122,10 @@ public class BodyFactory {
 
         setFilter(body, Category.OTHER.mask, Category.all());
         return body;
+    }
+
+    public Body newRectangle(Vector2 center, float width, float height) {
+        return newRectangle(center, width, height, 0);
     }
 
     public Body newPolygonBody(Vector2[] polygonVertices, Vector2 leftDownCorner, BodyDef.BodyType bodyType, boolean fixedRotation) {
@@ -229,6 +237,11 @@ public class BodyFactory {
 
         private BodyBuilder setFixedRotation(boolean fixedRotation) {
             bodyDef.fixedRotation = fixedRotation;
+            return this;
+        }
+
+        private BodyBuilder setRotation(float rotation) {
+            bodyDef.angle = rotation;
             return this;
         }
     }

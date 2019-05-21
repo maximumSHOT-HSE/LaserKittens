@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
+import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.levels.AbstractLevelFactory;
@@ -75,6 +76,42 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 scale);
     }
 
+    private Entity placeMirror(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight,
+            float rotation,
+            float angularVelocity) {
+        Entity entity = createMirror(
+            new Vector2(
+                    relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
+                    relativeY * RenderingSystem.getScreenSizeInMeters().y * CH
+            ),
+            relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
+            relativeHeight * RenderingSystem.getScreenSizeInMeters().y,
+            rotation
+        );
+        entity.getComponent(BodyComponent.class).body.setAngularVelocity(angularVelocity);
+        return entity;
+    }
+
+    private Entity placeMirror(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight,
+            float rotation) {
+        return placeMirror(
+                relativeX,
+                relativeY,
+                relativeWidth,
+                relativeHeight,
+                rotation,
+                0
+        );
+    }
+
     private void createBorders() {
         placeImpenetrableWall(0, 0.5f, 0.2f, CH);
         placeImpenetrableWall(1, 0.5f, 0.2f, CH);
@@ -93,7 +130,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createBackground();
 
         focusedPlayer = createPlayer(
-                RenderingSystem.getScreenSizeInMeters().x * 2.5f,
+                RenderingSystem.getScreenSizeInMeters().x * 3.5f,
                 RenderingSystem.getScreenSizeInMeters().y * 0.1f,
                 3f
         );
@@ -159,5 +196,22 @@ public class QuizLevelFactory extends AbstractLevelFactory {
 
         placePointer(2.5f / CW, 1f / CH, 180);
         placePointer(2.5f / CW, 0.4f / CH, 135);
+
+        placeMirror(0.2f / CW, 0.2f / CH, 0.05f, 0.4f, -40);
+        placeMirror(0.2f / CW, 1.355f / CH, 0.05f, 0.4f, 40);
+        placeMirror(1.85f / CW, 1.365f / CH, 0.05f, 0.4f, -50);
+        placeMirror(0.7f / CW, 0.825f / CH, 0.05f, 0.2f, 0, 1);
+
+        createStar(
+                1 * RenderingSystem.getScreenSizeInMeters().x,
+                1f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
+        );
+
+        createStar(
+                1 * RenderingSystem.getScreenSizeInMeters().x,
+                0.65f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
+        );
     }
 }

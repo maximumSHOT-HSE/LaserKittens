@@ -113,14 +113,24 @@ abstract public class AbstractLevelFactory {
                 .build();
     }
 
-    protected Entity createMirror(Vector2 center, float width, float height) {
-
+    protected Entity createMirror(Vector2 center, float width, float height, float rotation) {
+        Texture texture = new Texture(KittensAssetManager.MIRROR);
+        texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        TextureRegion textureRegion = new TextureRegion(
+                texture, 0, 0,
+                (int) RenderingSystem.metersToPixels(width),
+                (int) RenderingSystem.metersToPixels(height)
+        );
         return (new EntityBuilder())
-                .addBodyComponent(bodyFactory.newRectangle(center, width, height))
+                .addBodyComponent(bodyFactory.newRectangle(center, width, height, rotation))
                 .addTransformComponent(new Vector3(center.x, center.y, 0))
-                .addTextureComponent(null)
+                .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.MIRROR)
                 .build();
+    }
+
+    protected Entity createMirror(Vector2 center, float width, float height) {
+        return createMirror(center, width, height, 0);
     }
 
     protected Entity createPlayer(float playerX, float playerY, float radius) {

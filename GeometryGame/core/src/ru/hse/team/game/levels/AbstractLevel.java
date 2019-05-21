@@ -41,7 +41,7 @@ abstract public class AbstractLevel {
         getFactory().createLaser(
                 new Vector2(playerPosition.x + playerRadius * direction.x,
                         playerPosition.y + playerRadius * direction.y),
-                direction, 1500
+                direction, 10000
         );
     }
 }
