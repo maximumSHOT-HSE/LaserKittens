@@ -1,12 +1,8 @@
 package ru.hse.team.game.gamelogic;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
-import ru.hse.team.game.GameScreen;
-import ru.hse.team.game.GameScreenInputProcessor;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 public class GestureProcessor implements GestureDetector.GestureListener {

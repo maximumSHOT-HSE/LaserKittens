@@ -11,6 +11,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.game.gamelogic.GameScreenInputProcessor;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.GestureProcessor;
 import ru.hse.team.game.gamelogic.components.BodyComponent;

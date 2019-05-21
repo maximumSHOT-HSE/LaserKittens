@@ -1,4 +1,4 @@
-package ru.hse.team.game;
+package ru.hse.team.game.gamelogic;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -16,6 +16,8 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.game.BodyFactory;
+import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.levels.AbstractLevel;
