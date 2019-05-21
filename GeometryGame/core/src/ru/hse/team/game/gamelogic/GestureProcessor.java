@@ -76,13 +76,13 @@ public class GestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
-//        renderingSystem.getCamera().zoom = scale * initialDistance / distance;
-//        if (renderingSystem.getCamera().zoom >= 3) {
-//            renderingSystem.getCamera().zoom = 3;
-//        }
-//        if (renderingSystem.getCamera().zoom < 1) {
-//            renderingSystem.getCamera().zoom = 1;
-//        }
+        renderingSystem.getCamera().zoom = scale * initialDistance / distance;
+        if (renderingSystem.getCamera().zoom >= 3) {
+            renderingSystem.getCamera().zoom = 3;
+        }
+        if (renderingSystem.getCamera().zoom < 1) {
+            renderingSystem.getCamera().zoom = 1;
+        }
         return false;
     }
 

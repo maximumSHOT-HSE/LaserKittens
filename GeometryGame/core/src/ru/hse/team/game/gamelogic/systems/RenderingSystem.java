@@ -94,6 +94,18 @@ public class RenderingSystem extends SortedIteratingSystem {
         return (float)Math.sqrt(a.x * a.x + a.y * a.y);
     }
 
+    private float distanceToStrip(float a, float left, float right) {
+        float distance = 0;
+
+        if (a < left) {
+            distance = Math.max(distance, left - a);
+        }
+        if (a > right) {
+            distance = Math.max(distance, a - right);
+        }
+        return distance;
+    }
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -114,13 +126,22 @@ public class RenderingSystem extends SortedIteratingSystem {
             }
             float width = texture.region.getRegionWidth();
             float height = texture.region.getRegionHeight();
-
-            //if (distance2D(camera.position, transformComponent.position) > length2D(RenderingSystem.getScreenSizeInMeters())) {
-            //    continue;
-            //}
-
             float originX = width / 2f;
             float originY = height / 2f;
+
+            float pixelHalfWidth = pixelsToMeters(originX) * transformComponent.scale.x;
+            float pixelHalfHeight = pixelsToMeters(originY) * transformComponent.scale.y;
+
+            if (distanceToStrip(camera.position.x, transformComponent.position.x - pixelHalfWidth,
+                    transformComponent.position.x + pixelHalfWidth) > getScreenSizeInMeters().x * camera.zoom / 1.8) {
+                continue;
+            }
+
+            if (distanceToStrip(camera.position.y, transformComponent.position.y - pixelHalfHeight,
+                    transformComponent.position.y + pixelHalfHeight) > getScreenSizeInMeters().y * camera.zoom / 1.8) {
+                continue;
+            }
+
 
             batch.draw(texture.region,
                     transformComponent.position.x - originX, transformComponent.position.y - originY,
