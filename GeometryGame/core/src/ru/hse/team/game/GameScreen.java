@@ -74,7 +74,7 @@ public class GameScreen implements Screen {
         engine.addSystem(gameStatusSystem);
 
         inputProcessor = new GameScreenInputProcessor(this.laserKittens, abstractLevel, camera);
-        gestureProcessor = new GestureProcessor(renderingSystem);
+        gestureProcessor = new GestureProcessor(renderingSystem, inputProcessor);
         inputMultiplexer = new InputMultiplexer(
                 new GestureDetector(gestureProcessor),
                 inputProcessor);

@@ -93,7 +93,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createBackground();
 
         focusedPlayer = createPlayer(
-                RenderingSystem.getScreenSizeInMeters().x * 3.5f,
+                RenderingSystem.getScreenSizeInMeters().x * 2.5f,
                 RenderingSystem.getScreenSizeInMeters().y * 0.1f,
                 3f
         );
@@ -147,5 +147,17 @@ public class QuizLevelFactory extends AbstractLevelFactory {
 
         placeQuestion(3.15f / CW, 0.9f / CH, 2f);
         placeQuestion(2.15f / CW, 1.6f / CH, 2f);
+
+        placeImpenetrableWall(1f / CW, 1.5f / CH, 2.1f, 0.05f);
+        placeImpenetrableWall(2f / CW, 1.2f / CH, 0.1f, 1.7f);
+        placeImpenetrableWall(1.25f / CW, 0.35f / CH, 1.6f, 0.05f);
+        placeImpenetrableWall(0.45f / CW, 0.8f / CH, 0.1f, 0.95f);
+        placeImpenetrableWall(1f / CW, 1.25f / CH, 1, 0.05f);
+        placeTransparentWall(1f / CW, 0.175f / CH, 0.1f, 0.35f);
+
+        placeQuestion(2f / CW, 0.15f / CH, 2);
+
+        placePointer(2.5f / CW, 1f / CH, 180);
+        placePointer(2.5f / CW, 0.4f / CH, 135);
     }
 }
