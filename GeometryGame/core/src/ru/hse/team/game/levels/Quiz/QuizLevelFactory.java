@@ -199,7 +199,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
 
         placeMirror(0.2f / CW, 0.2f / CH, 0.05f, 0.4f, -40);
         placeMirror(0.2f / CW, 1.355f / CH, 0.05f, 0.4f, 40);
-        placeMirror(1.85f / CW, 1.365f / CH, 0.05f, 0.4f, -50);
+        placeMirror(1.89f / CW, 1.31f / CH, 0.05f, 0.4f, -50);
         placeMirror(0.7f / CW, 0.825f / CH, 0.05f, 0.2f, 0, 1);
 
         createStar(
