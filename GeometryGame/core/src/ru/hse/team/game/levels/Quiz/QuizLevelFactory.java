@@ -33,8 +33,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             float relativeHeight) {
         return createImpenetrableWall(
             new Vector2(
-                relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
-                    relativeY * RenderingSystem.getScreenSizeInMeters().y * CH
+                relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                    relativeY * RenderingSystem.getScreenSizeInMeters().y
             ),
             relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
                 relativeHeight * RenderingSystem.getScreenSizeInMeters().y
@@ -52,8 +52,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             float relativeHeight) {
         return createTransparentWall(
                 new Vector2(
-                        relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
-                        relativeY * RenderingSystem.getScreenSizeInMeters().y * CH
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
                 ),
                 relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
                 relativeHeight * RenderingSystem.getScreenSizeInMeters().y
@@ -67,8 +67,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             float relativeHeight) {
         return createDoor(
                 new Vector2(
-                        relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
-                        relativeY * RenderingSystem.getScreenSizeInMeters().y * CH
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
                 ),
                 relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
                 relativeHeight * RenderingSystem.getScreenSizeInMeters().y
@@ -81,8 +81,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             float rotation) {
         return createPointer(
             new Vector2(
-                relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
-                    relativeY * RenderingSystem.getScreenSizeInMeters().y * CH
+                relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                    relativeY * RenderingSystem.getScreenSizeInMeters().y
             ),
             rotation
         );
@@ -90,8 +90,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
 
     private Entity placeQuestion(float relativeX, float relativeY, float scale) {
         return createQuestion(new Vector2(
-                relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
-                relativeY * RenderingSystem.getScreenSizeInMeters().y * CH),
+                relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                relativeY * RenderingSystem.getScreenSizeInMeters().y),
                 scale);
     }
 
@@ -103,8 +103,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             float rotation) {
         return createMirror(
             new Vector2(
-                    relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
-                    relativeY * RenderingSystem.getScreenSizeInMeters().y * CH
+                    relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                    relativeY * RenderingSystem.getScreenSizeInMeters().y
             ),
             relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
             relativeHeight * RenderingSystem.getScreenSizeInMeters().y,
@@ -113,10 +113,10 @@ public class QuizLevelFactory extends AbstractLevelFactory {
     }
 
     private void createBorders() {
-        placeImpenetrableWall(0, 0.5f, 0.2f, CH);
-        placeImpenetrableWall(1, 0.5f, 0.2f, CH);
-        placeImpenetrableWall(0.5f, 0, 1.025f * CW, 0.2f);
-        placeImpenetrableWall(0.5f, 1, 1.025f * CW, 0.2f);
+        placeImpenetrableWall(0, 0.5f * CH, 0.2f, CH);
+        placeImpenetrableWall(CW, 0.5f * CH, 0.2f, CH);
+        placeImpenetrableWall(0.5f * CW, 0, 1.025f * CW, 0.2f);
+        placeImpenetrableWall(0.5f * CW, CH, 1.025f * CW, 0.2f);
     }
 
     @Override
@@ -137,10 +137,10 @@ public class QuizLevelFactory extends AbstractLevelFactory {
 
         createBorders();
 
-        placeImpenetrableWall(3 / CW, 0.5f / CH, 0.1f, 1);
-        placeImpenetrableWall(4 / CW, 0.5f / CH, 0.1f, 1);
-        placeImpenetrableWall(3.15f / CW, 1f / CH, 0.4f, 0.1f);
-        placeImpenetrableWall(3.85f / CW, 1f / CH, 0.4f, 0.1f);
+        placeImpenetrableWall(3, 0.5f, 0.1f, 1);
+        placeImpenetrableWall(4, 0.5f, 0.1f, 1);
+        placeImpenetrableWall(3.15f, 1f, 0.4f, 0.1f);
+        placeImpenetrableWall(3.85f, 1f, 0.4f, 0.1f);
 
         createStar(
             RenderingSystem.getScreenSizeInMeters().x * 3.5f,
@@ -154,13 +154,13 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 4
         );
 
-        placePointer(3.5f / CW, 1.25f / CH, 90f);
+        placePointer(3.5f, 1.25f, 90f);
 
-        placeImpenetrableWall(3.5f / CW, 1.5f / CH, 1.1f, 0.1f);
-        placeImpenetrableWall(2f / CW, 2f / CH, 0.1f, 1);
-        placeImpenetrableWall(3f / CW, 2f / CH, 0.1f, 1);
-        placeImpenetrableWall(2.5f / CW, 2.45f / CH, 1, 0.1f);
-        placeTransparentWall(2.5f / CW, 1.7f / CH, 1, 0.1f);
+        placeImpenetrableWall(3.5f, 1.5f, 1.1f, 0.1f);
+        placeImpenetrableWall(2f, 2f, 0.1f, 1);
+        placeImpenetrableWall(3f, 2f, 0.1f, 1);
+        placeImpenetrableWall(2.5f, 2.45f, 1, 0.1f);
+        placeTransparentWall(2.5f, 1.7f, 1, 0.1f);
 
         createStar(
             2.5f * RenderingSystem.getScreenSizeInMeters().x,
@@ -180,27 +180,27 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 2f
         );
 
-        placePointer(3.5f / CW, 0.5f / CH, 0f);
+        placePointer(3.5f, 0.5f, 0f);
 
-        placeQuestion(3.15f / CW, 0.9f / CH, 2f);
-        placeQuestion(2.15f / CW, 1.6f / CH, 2f);
+        placeQuestion(3.15f, 0.9f, 2f);
+        placeQuestion(2.15f, 1.6f, 2f);
 
-        placeImpenetrableWall(1f / CW, 1.5f / CH, 2.1f, 0.05f);
-        placeImpenetrableWall(2f / CW, 1.2f / CH, 0.1f, 1.7f);
-        placeImpenetrableWall(1.25f / CW, 0.35f / CH, 1.6f, 0.05f);
-        placeImpenetrableWall(0.45f / CW, 0.8f / CH, 0.1f, 0.95f);
-        placeImpenetrableWall(1f / CW, 1.25f / CH, 1, 0.05f);
-        placeTransparentWall(1f / CW, 0.175f / CH, 0.1f, 0.35f);
+        placeImpenetrableWall(1f, 1.5f, 2.1f, 0.05f);
+        placeImpenetrableWall(2f, 1.2f, 0.1f, 1.7f);
+        placeImpenetrableWall(1.25f, 0.35f, 1.6f, 0.05f);
+        placeImpenetrableWall(0.45f, 0.8f, 0.1f, 0.95f);
+        placeImpenetrableWall(1f, 1.25f, 1, 0.05f);
+        placeTransparentWall(1f, 0.175f, 0.1f, 0.35f);
 
-        placeQuestion(2f / CW, 0.15f / CH, 2);
+        placeQuestion(2f, 0.15f, 2);
 
-        placePointer(2.5f / CW, 1f / CH, 180);
-        placePointer(2.5f / CW, 0.4f / CH, 135);
+        placePointer(2.5f, 1f, 180);
+        placePointer(2.5f, 0.4f, 135);
 
-        placeMirror(0.2f / CW, 0.2f / CH, 0.05f, 0.4f, -40);
-        placeMirror(0.2f / CW, 1.355f / CH, 0.05f, 0.4f, 40);
-        placeMirror(1.89f / CW, 1.31f / CH, 0.05f, 0.4f, -50);
-        addAngularVelocity(placeMirror(0.7f / CW, 0.825f / CH, 0.05f, 0.2f, 0), 1);
+        placeMirror(0.2f, 0.2f, 0.05f, 0.4f, -40);
+        placeMirror(0.2f, 1.355f, 0.05f, 0.4f, 40);
+        placeMirror(1.89f, 1.31f, 0.05f, 0.4f, -50);
+        addAngularVelocity(placeMirror(0.7f, 0.825f, 0.05f, 0.2f, 0), 1);
 
         createStar(
                 1 * RenderingSystem.getScreenSizeInMeters().x,
@@ -214,16 +214,15 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 2f
         );
 
-        placeImpenetrableWall(3.25f / CW, 2.45f / CH, 0.5f, 0.1f);
-        placeImpenetrableWall(4.25f / CW, 2.45f / CH, 0.5f, 0.1f);
-        placeImpenetrableWall(4.75f / CW, 1.5f / CH, 0.5f, 0.1f);
-        placeImpenetrableWall(4.5f / CW, 1f / CH, 1, 0.1f);
-        placeImpenetrableWall(4.5f / CW, 1.975f / CH, 0.1f, 1.05f);
-        addAngularVelocity(placeImpenetrableWall(4.25f / CW, 1.5f / CH, 0.4f, 0.01f), 1);
-        placeTransparentWall(4.25f / CW, 1.5f / CH, 0.4f, 0.1f);
-        placeDoor(4.95f / CW, 1.25f / CH, 0.1f, 0.5f);
-        placeMirror(3.75f / CW, 2.425f / CH, 0.5f, 0.05f, 0);
-        placeImpenetrableWall(3.75f / CW, 2.475f / CH, 0.5f, 0.05f);
-
+        placeImpenetrableWall(3.25f, 2.45f, 0.5f, 0.1f);
+        placeImpenetrableWall(4.25f, 2.45f, 0.5f, 0.1f);
+        placeImpenetrableWall(4.75f, 1.5f, 0.5f, 0.1f);
+        placeImpenetrableWall(4.5f, 1f, 1, 0.1f);
+        placeImpenetrableWall(4.5f, 1.975f, 0.1f, 1.05f);
+        addAngularVelocity(placeImpenetrableWall(4.25f, 1.5f, 0.4f, 0.01f), 1);
+        placeTransparentWall(4.25f, 1.5f, 0.4f, 0.1f);
+        placeDoor(4.95f, 1.25f, 0.1f, 0.5f);
+        placeMirror(3.75f, 2.425f, 0.5f, 0.05f, 0);
+        placeImpenetrableWall(3.75f, 2.475f, 0.5f, 0.05f);
     }
 }
