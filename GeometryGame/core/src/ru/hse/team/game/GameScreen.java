@@ -11,12 +11,12 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.game.gamelogic.GameScreenInputProcessor;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.GestureProcessor;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
 import ru.hse.team.game.gamelogic.systems.BulletSystem;
-import ru.hse.team.game.gamelogic.systems.GameStatusSystem;
 import ru.hse.team.game.gamelogic.systems.StateControlSystem;
 import ru.hse.team.game.gamelogic.systems.PhysicsDebugSystem;
 import ru.hse.team.game.gamelogic.systems.PhysicsSystem;
@@ -41,7 +41,6 @@ public class GameScreen implements Screen {
     private PhysicsDebugSystem physicsDebugSystem;
     private BulletSystem bulletSystem;
     private StateControlSystem stateControlSystem;
-    private GameStatusSystem gameStatusSystem;
 
     public GameScreen(LaserKittens laserKittens, AbstractLevel abstractLevel) {
         level = abstractLevel;
@@ -64,16 +63,14 @@ public class GameScreen implements Screen {
         physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
         stateControlSystem = new StateControlSystem(world, engine, gameStatus);
-        gameStatusSystem = new GameStatusSystem(gameStatus);
 
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(bulletSystem);
         engine.addSystem(stateControlSystem);
-        engine.addSystem(gameStatusSystem);
 
-        inputProcessor = new GameScreenInputProcessor(this.laserKittens, abstractLevel, camera);
+        inputProcessor = new GameScreenInputProcessor(this.laserKittens, abstractLevel, camera, gameStatus);
         gestureProcessor = new GestureProcessor(renderingSystem, inputProcessor);
         inputMultiplexer = new InputMultiplexer(
                 new GestureDetector(gestureProcessor),
@@ -147,6 +144,11 @@ public class GameScreen implements Screen {
 
         inputProcessor.touchDraggedExplicitly();
         inputProcessor.moveWithAccelerometer(delta);
+
+        gameStatus.update(delta);
+        if (gameStatus.readyToFinish()) {
+            gameStatus.getGameScreen().endGame();
+        }
         gameStatus.draw();
 
         moveCamera(delta);

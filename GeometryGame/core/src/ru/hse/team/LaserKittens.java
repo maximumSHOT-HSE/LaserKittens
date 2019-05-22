@@ -84,10 +84,12 @@ public class LaserKittens extends Game {
 
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-        font = new BitmapFont();
 
         assetManager.loadEverything();
         assetManager.manager.finishLoading();
+
+        //font = assetManager.manager.get(KittensAssetManager.font, BitmapFont.class);
+        font = new BitmapFont(Gdx.files.internal("skin/font.txt"), Gdx.files.internal("skin/font.png"), false);
 
 //        googleServices.signIn();
 
