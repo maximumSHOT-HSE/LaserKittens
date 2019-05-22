@@ -62,7 +62,7 @@ public class GameStatus {
 
     public void draw() {
         batch.begin();
-        font.draw(batch, Long.toString(System.nanoTime() - startNano), 0, 0);
+//        font.draw(batch, Long.toString(System.nanoTime() - startNano), 0, 0);
         batch.end();
     }
 }

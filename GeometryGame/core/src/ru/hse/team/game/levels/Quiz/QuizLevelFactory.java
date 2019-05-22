@@ -41,12 +41,31 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         );
     }
 
+    private void addAngularVelocity(Entity entity, float angularVelocity) {
+        entity.getComponent(BodyComponent.class).body.setAngularVelocity(angularVelocity);
+    }
+
     private Entity placeTransparentWall(
             float relativeX,
             float relativeY,
             float relativeWidth,
             float relativeHeight) {
         return createTransparentWall(
+                new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y * CH
+                ),
+                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
+                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        );
+    }
+
+    private Entity placeDoor(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight) {
+        return createDoor(
                 new Vector2(
                         relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
                         relativeY * RenderingSystem.getScreenSizeInMeters().y * CH
@@ -81,9 +100,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             float relativeY,
             float relativeWidth,
             float relativeHeight,
-            float rotation,
-            float angularVelocity) {
-        Entity entity = createMirror(
+            float rotation) {
+        return createMirror(
             new Vector2(
                     relativeX * RenderingSystem.getScreenSizeInMeters().x * CW,
                     relativeY * RenderingSystem.getScreenSizeInMeters().y * CH
@@ -91,24 +109,6 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
             relativeHeight * RenderingSystem.getScreenSizeInMeters().y,
             rotation
-        );
-        entity.getComponent(BodyComponent.class).body.setAngularVelocity(angularVelocity);
-        return entity;
-    }
-
-    private Entity placeMirror(
-            float relativeX,
-            float relativeY,
-            float relativeWidth,
-            float relativeHeight,
-            float rotation) {
-        return placeMirror(
-                relativeX,
-                relativeY,
-                relativeWidth,
-                relativeHeight,
-                rotation,
-                0
         );
     }
 
@@ -200,7 +200,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placeMirror(0.2f / CW, 0.2f / CH, 0.05f, 0.4f, -40);
         placeMirror(0.2f / CW, 1.355f / CH, 0.05f, 0.4f, 40);
         placeMirror(1.89f / CW, 1.31f / CH, 0.05f, 0.4f, -50);
-        placeMirror(0.7f / CW, 0.825f / CH, 0.05f, 0.2f, 0, 1);
+        addAngularVelocity(placeMirror(0.7f / CW, 0.825f / CH, 0.05f, 0.2f, 0), 1);
 
         createStar(
                 1 * RenderingSystem.getScreenSizeInMeters().x,
@@ -213,5 +213,17 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 0.65f * RenderingSystem.getScreenSizeInMeters().y,
                 2f
         );
+
+        placeImpenetrableWall(3.25f / CW, 2.45f / CH, 0.5f, 0.1f);
+        placeImpenetrableWall(4.25f / CW, 2.45f / CH, 0.5f, 0.1f);
+        placeImpenetrableWall(4.75f / CW, 1.5f / CH, 0.5f, 0.1f);
+        placeImpenetrableWall(4.5f / CW, 1f / CH, 1, 0.1f);
+        placeImpenetrableWall(4.5f / CW, 1.975f / CH, 0.1f, 1.05f);
+        addAngularVelocity(placeImpenetrableWall(4.25f / CW, 1.5f / CH, 0.4f, 0.01f), 1);
+        placeTransparentWall(4.25f / CW, 1.5f / CH, 0.4f, 0.1f);
+        placeDoor(4.95f / CW, 1.25f / CH, 0.1f, 0.5f);
+        placeMirror(3.75f / CW, 2.425f / CH, 0.5f, 0.05f, 0);
+        placeImpenetrableWall(3.75f / CW, 2.475f / CH, 0.5f, 0.05f);
+
     }
 }

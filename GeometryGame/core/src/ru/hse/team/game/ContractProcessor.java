@@ -55,6 +55,10 @@ public class ContractProcessor implements ContactListener {
         Mapper.stateComponent.get(star).finish();
     }
 
+    private void processPlayerKey(Entity player, Entity key) {
+        Mapper.stateComponent.get(key).finish();
+    }
+
     private void stopBullet(Entity bullet) {
         BodyComponent bodyComponent = Mapper.bodyComponent.get(bullet);
         bodyComponent.body.setLinearVelocity(0, 0);
@@ -98,6 +102,10 @@ public class ContractProcessor implements ContactListener {
         if (checkType(entityA, TypeComponent.Type.PLAYER) &&
             checkType(entityB, TypeComponent.Type.STAR)) {
             processPlayerStar(entityA, entityB);
+        }
+        if (checkType(entityA, TypeComponent.Type.PLAYER) &&
+            checkType(entityB, TypeComponent.Type.KEY)) {
+            processPlayerKey(entityA, entityB);
         }
     }
 

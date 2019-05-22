@@ -31,6 +31,9 @@ public class KittensAssetManager {
     // Pointer
     public static final String Pointer = "pointer.png";
 
+    // Key
+    public static final String KEY = "key.png";
+
     // Question
     public static final String Question = "question.png";
 
@@ -66,6 +69,7 @@ public class KittensAssetManager {
         manager.load(Star2, Texture.class);
         manager.load(Pointer, Texture.class);
         manager.load(Question, Texture.class);
+        manager.load(KEY, Texture.class);
     }
 
     public void loadSounds() {
