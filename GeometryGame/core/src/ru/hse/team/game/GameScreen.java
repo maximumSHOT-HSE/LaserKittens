@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import ru.hse.team.LaserKittens;
@@ -41,6 +42,8 @@ public class GameScreen implements Screen {
     private PhysicsDebugSystem physicsDebugSystem;
     private BulletSystem bulletSystem;
     private StateControlSystem stateControlSystem;
+
+    private Vector3 cameraMovingTo = new Vector3();
 
     public GameScreen(LaserKittens laserKittens, AbstractLevel abstractLevel) {
         level = abstractLevel;
@@ -88,19 +91,17 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
-    Vector3 cameraMovingTo = new Vector3();
-
-    private void makeBordersForCamera() {
+    private void makeBordersForCamera(Vector3 position) {
         float screenWidth = RenderingSystem.getScreenSizeInMeters().x;
         float screenHeight = RenderingSystem.getScreenSizeInMeters().y;
 
         float levelWidth = screenWidth * level.getFactory().getLevelWidthInScreens();
         float levelHeight = screenHeight * level.getFactory().getLevelHeightInScreens();
 
-        cameraMovingTo.x = Math.max(cameraMovingTo.x, screenWidth * camera.zoom / 2);
-        cameraMovingTo.y = Math.max(cameraMovingTo.y, screenHeight * camera.zoom / 2);
-        cameraMovingTo.x = Math.min(cameraMovingTo.x, levelWidth - screenWidth * camera.zoom / 2);
-        cameraMovingTo.y = Math.min(cameraMovingTo.y, levelHeight - screenHeight * camera.zoom / 2);
+        position.x = Math.max(position.x, screenWidth * camera.zoom / 2 - screenWidth / (2 * camera.zoom));
+        position.y = Math.max(position.y, screenHeight - camera.zoom * camera.zoom / 2 - screenHeight / (2 * camera.zoom));
+        position.x = Math.min(position.x, levelWidth - screenWidth * camera.zoom / 2 + screenWidth / (2 * camera.zoom));
+        position.y = Math.min(position.y, levelHeight - screenHeight * camera.zoom / 2 + screenHeight / (2 * camera.zoom));
     }
 
     /** Moves camera with speed depended from distance exponentially */
@@ -123,7 +124,7 @@ public class GameScreen implements Screen {
             }
 
             cameraMovingTo.set(playerTransform.position);
-            makeBordersForCamera();
+            makeBordersForCamera(cameraMovingTo);
 
             cameraPosition.scl(ispeed);
             cameraMovingTo.scl(speed);
@@ -131,6 +132,8 @@ public class GameScreen implements Screen {
             cameraMovingTo.scl(1f / speed);
             camera.position.set(cameraPosition);
         }
+
+        makeBordersForCamera(camera.position);
 
         camera.update();
     }

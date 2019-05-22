@@ -5,9 +5,13 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.physics.box2d.World;
+
+import java.util.Map;
+
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.GameStatus;
+import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 
@@ -45,7 +49,11 @@ public class StateControlSystem extends IteratingSystem {
                 if (typeComponent.type == TypeComponent.Type.KEY) {
                     Entity door = Mapper.keyComponent.get(entity).door;
                     StateComponent doorState = Mapper.stateComponent.get(door);
-                    doorState.finish();
+                    DoorComponent doorComponent = Mapper.doorComponent.get(door);
+                    doorComponent.removeKey(entity);
+                    if (doorComponent.remainingKeys() == 0) {
+                        doorState.finish();
+                    }
                 }
             }
             if (bodyComponent != null) {
