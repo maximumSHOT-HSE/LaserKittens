@@ -4,9 +4,12 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import javax.xml.soap.Text;
+
+import ru.hse.team.game.gamelogic.components.TextureComponent;
 
 public class KittensAssetManager {
 
@@ -45,7 +48,7 @@ public class KittensAssetManager {
     public static final String laserSound = "sounds/laser-shot.wav";
 
     //Font
-    public static final String font = "skin/font-export.fnt";
+    public static final String font = "skin/font.fnt";
 
     public void loadImages() {
         manager.load(badlogic, Texture.class);
@@ -75,7 +78,7 @@ public class KittensAssetManager {
     }
 
     public void loadFonts() {
-        //TODO add nice font
+        //manager.load(font, BitmapFont.class);
     }
 
     public void loadEverything() {
