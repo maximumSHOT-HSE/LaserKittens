@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
+import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
@@ -250,7 +251,12 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                 if (door[i][j][0]) {
                     final Entity door = createDoor(new Vector2(i * screenWidth / cellsPerWidth, (j + 0.5f) * screenHeight / cellsPerHeight),
                             wallThickness,screenHeight / cellsPerHeight);
-                    createKey(new Vector2(keyPositions.get(keyByDoor[i][j][0])).add(new Vector2(0.5f, 0.5f)).scl(screenWidth / cellsPerWidth, screenHeight / cellsPerHeight) , keyWidth, keyHeight, door);
+                    createKey(new Vector2(keyPositions.get(keyByDoor[i][j][0]))
+                                    .add(new Vector2(0.5f, 0.5f))
+                                    .scl(screenWidth / cellsPerWidth, screenHeight / cellsPerHeight),
+                            keyWidth,
+                            keyHeight,
+                            door);
                 }
 
                 if (door[i][j][1]) {

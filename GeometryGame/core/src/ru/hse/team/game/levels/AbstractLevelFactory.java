@@ -13,6 +13,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.Map;
+
 import javax.xml.soap.Text;
 
 import ru.hse.team.KittensAssetManager;
@@ -20,6 +22,7 @@ import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
+import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.KeyComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
@@ -188,6 +191,7 @@ abstract public class AbstractLevelFactory {
                 .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
                 .addStateComponent(StateComponent.State.NORMAL)
+                .addDoorComponent()
                 .build();
     }
 
@@ -310,6 +314,13 @@ abstract public class AbstractLevelFactory {
             KeyComponent keyComponent = engine.createComponent(KeyComponent.class);
             keyComponent.door = door;
             entity.add(keyComponent);
+            Mapper.doorComponent.get(door).addKey(entity);
+            return this;
+        }
+
+        public EntityBuilder addDoorComponent() {
+            DoorComponent doorComponent = engine.createComponent(DoorComponent.class);
+            entity.add(doorComponent);
             return this;
         }
     }
