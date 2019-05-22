@@ -36,6 +36,7 @@ public class KittensAssetManager {
     public static final String ICE_WALL = "ice-wall.png";
     public static final String TRANSPARENT_WALL = "transparent-wall.png";
     public static final String MIRROR = "mirror.png";
+    public static final String DOOR = "door.png";
 
     //Skin
     public static final String skin = "skin/glassy-ui.json";
@@ -52,6 +53,7 @@ public class KittensAssetManager {
         manager.load(ICE_WALL, Texture.class);
         manager.load(TRANSPARENT_WALL, Texture.class);
         manager.load(MIRROR, Texture.class);
+        manager.load(DOOR, Texture.class);
         manager.load(Cat1, Texture.class);
         manager.load(Cat2, Texture.class);
         manager.load(Cat3, Texture.class);

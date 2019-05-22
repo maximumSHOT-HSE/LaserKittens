@@ -175,10 +175,17 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createDoor(Vector2 center, float width, float height) {
+        Texture texture = new Texture(KittensAssetManager.DOOR);
+        texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        TextureRegion textureRegion = new TextureRegion(
+                texture, 0, 0,
+                (int) RenderingSystem.metersToPixels(width),
+                (int) RenderingSystem.metersToPixels(height)
+        );
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height))
                 .addTransformComponent(new Vector3(center.x, center.y, 10))
-                .addTextureComponent(null)
+                .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
                 .addStateComponent(StateComponent.State.NORMAL)
                 .build();
