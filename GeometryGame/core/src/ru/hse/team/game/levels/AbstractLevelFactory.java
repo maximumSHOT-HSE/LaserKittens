@@ -198,7 +198,7 @@ abstract public class AbstractLevelFactory {
     protected Entity createKey(Vector2 center, float width, float height, Entity door) {
         Texture texture = manager.manager.get(KittensAssetManager.KEY, Texture.class);
         return (new EntityBuilder())
-                .addBodyComponent(bodyFactory.newTransparentRectangle(center, width, height))
+                .addBodyComponent(bodyFactory.newRectangle(center, width, height))
                 .addTransformComponent(new Vector3(center.x, center.y, 10))
                 .addTextureComponent(new TextureRegion(texture))
                 .addTypeComponent(TypeComponent.Type.KEY)
