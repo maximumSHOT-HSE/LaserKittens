@@ -33,6 +33,7 @@ public class GameScreenInputProcessor implements InputProcessor {
     private AbstractLevel level;
     private OrthographicCamera camera;
     private World world;
+    private GameStatus gameStatus;
 
     private boolean dragging;
     private int draggingPointer = -1;
@@ -56,12 +57,13 @@ public class GameScreenInputProcessor implements InputProcessor {
         return dragging;
     }
 
-    public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera) {
+    public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera, GameStatus gameStatus) {
         this.laserKittens = laserKittens;
         this.focusedPlayer = level.getFactory().getPlayer();
         this.level = level;
         this.camera = camera;
         this.world = level.getFactory().getWorld();
+        this.gameStatus = gameStatus;
 
         enabledAccelerometer = laserKittens.getPreferences().isEnabledAccelerometer();
 
@@ -114,6 +116,7 @@ public class GameScreenInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         camera.unproject(position.set(screenX, screenY, 0));
+        gameStatus.start();
 
         if (!clickInPlayerRegion()) {
             level.shoot(position.x, position.y);

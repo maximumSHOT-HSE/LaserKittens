@@ -16,6 +16,8 @@ public class GameStatus {
     private SpriteBatch batch;
     private OrthographicCamera camera;
 
+    private long startNano = 0;
+
     public GameStatus(GameScreen gameScreen, BitmapFont font, SpriteBatch batch) {
         this.gameScreen = gameScreen;
         this.font = font;
@@ -29,9 +31,13 @@ public class GameStatus {
         return gameScreen;
     }
 
+    public void start() {
+        startNano = System.nanoTime();
+    }
+
     private int starCounter = 0;
 
-    private float currentTime = 0f;
+    private float currentTimeToEnd = 0f;
     private float minEndTime = 1f;
 
     public void addStar() {
@@ -42,12 +48,12 @@ public class GameStatus {
         starCounter--;
     }
 
-    public void addTime(float delta) {
-        currentTime += delta;
+    public void update(float delta) {
+        currentTimeToEnd += delta;
     }
 
     public boolean readyToFinish() {
-        return currentTime > minEndTime && starCounter == 0;
+        return currentTimeToEnd > minEndTime && starCounter == 0;
     }
 
     public int getStarCounter() {
@@ -55,5 +61,8 @@ public class GameStatus {
     }
 
     public void draw() {
+        batch.begin();
+        font.draw(batch, Long.toString(System.nanoTime() - startNano), 0, 0);
+        batch.end();
     }
 }
