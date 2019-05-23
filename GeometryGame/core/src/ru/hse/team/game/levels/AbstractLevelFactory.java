@@ -255,8 +255,7 @@ abstract public class AbstractLevelFactory {
             float width,
             float height,
             Runnable task) {
-        Texture texture = new Texture(KittensAssetManager.badlogic);
-        texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        Texture texture = new Texture(KittensAssetManager.YELLOW_TUMBLER);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
                 (int) RenderingSystem.metersToPixels(width),

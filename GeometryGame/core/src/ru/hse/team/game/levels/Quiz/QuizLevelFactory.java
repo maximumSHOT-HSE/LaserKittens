@@ -2,6 +2,7 @@ package ru.hse.team.game.levels.Quiz;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -10,6 +11,8 @@ import java.util.Map;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
+import ru.hse.team.game.gamelogic.components.TextureComponent;
+import ru.hse.team.game.gamelogic.components.TumblerComponent;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
@@ -279,6 +282,11 @@ public class QuizLevelFactory extends AbstractLevelFactory {
 
 
         final Entity movableWall = placeDynamicImpenetrableWall(4.5f, 0.375f, 0.05f, 0.5f);
+        final Entity tumbler = createTumbler(new Vector2(
+                5.4f * RenderingSystem.getScreenSizeInMeters().x,
+                0.8f * RenderingSystem.getScreenSizeInMeters().y),
+            0.1f * RenderingSystem.getScreenSizeInMeters().x,
+            0.06f * RenderingSystem.getScreenSizeInMeters().y, () -> {});
         Runnable task = new Runnable() {
 
             private int state = 0;
@@ -287,19 +295,20 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             public void run() {
                 if (state == 0) {
                     movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, 5);
+                    tumbler.getComponent(TextureComponent.class).region.setTexture(new Texture(KittensAssetManager.BLUE_TUMBLER));
                 } else {
                     movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, -5);
+                    tumbler.getComponent(TextureComponent.class).region.setTexture(new Texture(KittensAssetManager.YELLOW_TUMBLER));
                 }
                 state ^= 1;
             }
         };
-        createTumbler(new Vector2(
-                5.25f * RenderingSystem.getScreenSizeInMeters().x,
-                0.8f * RenderingSystem.getScreenSizeInMeters().y),
-            0.1f * RenderingSystem.getScreenSizeInMeters().x,
-            0.06f * RenderingSystem.getScreenSizeInMeters().y,
-                task);
+
+        tumbler.getComponent(TumblerComponent.class).setAction(task);
         placeMirror(4.8f, 0.1f, 0.05f, 0.3f, -70);
+
+        placeQuestion(4.6f, 0.9f, 2);
+        placePointer(5.25f, 1.25f, 180);
     }
 
     @Override
