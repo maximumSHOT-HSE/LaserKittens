@@ -29,6 +29,8 @@ public class GameStatus {
     private boolean started = false;
     private boolean stopped = false;
 
+    private OrthographicCamera statusCamera = new OrthographicCamera(RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
+
     public GameStatus(GameScreen gameScreen, BitmapFont font, SpriteBatch batch) {
         this.gameScreen = gameScreen;
         this.font = font;
@@ -102,11 +104,13 @@ public class GameStatus {
     }
 
     public void draw() {
+
+        statusCamera.zoom = 10f;
+        statusCamera.update();
+
+        batch.setProjectionMatrix(statusCamera.combined);
         batch.begin();
-        final float positionX = gameScreen.getCamera().position.x - RenderingSystem.SCREEN_WIDTH;
-        final float positionY = gameScreen.getCamera().position.y - RenderingSystem.SCREEN_HEIGHT;
-        final float width = RenderingSystem.SCREEN_WIDTH / 3;
-        font.draw(batch, getTimeStamp(timeGone()), positionX, positionY, width / 10, Align.center, false);
+        font.draw(batch, getTimeStamp(timeGone()), -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2, statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2);
         batch.end();
     }
 }
