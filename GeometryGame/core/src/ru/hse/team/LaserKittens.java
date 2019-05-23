@@ -2,6 +2,7 @@ package ru.hse.team;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -97,6 +98,9 @@ public class LaserKittens extends Game {
         assetManager.manager.finishLoading();
 
         font = assetManager.manager.get(KittensAssetManager.font, BitmapFont.class);
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        font.getData().scale(0.01f);
+
 
 //        googleServices.signIn();
 

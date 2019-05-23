@@ -15,7 +15,6 @@ public class KittensAssetManager {
 
     public final AssetManager manager = new AssetManager();
 
-
     //Textures
     public static final String badlogic = "badlogic.jpg";
     public static final String levelIndicatorActive = "levelIndicatorActive.png";

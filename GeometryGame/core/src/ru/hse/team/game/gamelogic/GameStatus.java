@@ -104,9 +104,9 @@ public class GameStatus {
     public void draw() {
         batch.begin();
         final float positionX = gameScreen.getCamera().position.x - RenderingSystem.SCREEN_WIDTH;
-        final float positionY = gameScreen.getCamera().position.y + RenderingSystem.SCREEN_HEIGHT;
+        final float positionY = gameScreen.getCamera().position.y - RenderingSystem.SCREEN_HEIGHT;
         final float width = RenderingSystem.SCREEN_WIDTH / 3;
-        font.draw(batch, getTimeStamp(timeGone()), positionX, positionY, width, Align.center, true);
+        font.draw(batch, getTimeStamp(timeGone()), positionX, positionY, width / 10, Align.center, false);
         batch.end();
     }
 }
