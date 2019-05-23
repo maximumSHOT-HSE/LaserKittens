@@ -7,26 +7,31 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity
 public class LevelStatistics {
 
-    public LevelStatistics(int id, String timeStamp, int stars) {
-        this.id = id;
-        this.timeStamp = timeStamp;
+    public LevelStatistics(String levelName, long timeNano, int stars) {
+        this.timeNano = timeNano;
         this.stars = stars;
+        this.levelName = levelName;
     }
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
 
+    @ColumnInfo(name = "levelName")
+    public String levelName;
+
     @ColumnInfo(name = "time")
-    public String timeStamp;
+    public long timeNano;
 
     @ColumnInfo(name = "stars")
     public int stars;
 
+
     @Override
     public String toString() {
         return "Level " + id + " statistics:" +
-                " time " + timeStamp +
+                " time " + timeNano +
                 ", stars" + stars +
+                ", level name: " + levelName +
                 ".";
     }
 }

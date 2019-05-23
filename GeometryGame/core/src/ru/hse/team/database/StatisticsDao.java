@@ -8,6 +8,8 @@ public interface StatisticsDao {
 
     LevelStatistics getById(long id);
 
+    LevelStatistics getBestByLevelName(String levelName);
+
     void insert(LevelStatistics statistics);
 
     void insertAll(LevelStatistics ... statistics);

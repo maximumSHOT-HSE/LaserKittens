@@ -3,6 +3,13 @@ package ru.hse.team.game.gamelogic;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
@@ -17,6 +24,10 @@ public class GameStatus {
     private OrthographicCamera camera;
 
     private long startNano = 0;
+    private long stopNano = 0;
+
+    private boolean started = false;
+    private boolean stopped = false;
 
     public GameStatus(GameScreen gameScreen, BitmapFont font, SpriteBatch batch) {
         this.gameScreen = gameScreen;
@@ -32,16 +43,49 @@ public class GameStatus {
     }
 
     public void start() {
+        if (started) {
+            return;
+        }
+        started = true;
         startNano = System.nanoTime();
     }
 
+    public void stop() {
+        if (stopped) {
+            return;
+        }
+        stopped = true;
+        stopNano = System.nanoTime();
+    }
+
+    public long timeGone() {
+        long start = 0;
+        long end = 0;
+        if (startNano != 0) {
+            start = startNano;
+            end = System.nanoTime();
+            if (stopNano != 0) {
+                end = stopNano;
+            }
+        }
+        return end - start;
+    }
+
+    public static String getTimeStamp(long timeNano) {
+        SimpleDateFormat dateFormat = (SimpleDateFormat)SimpleDateFormat.getTimeInstance();
+        dateFormat.applyPattern("mm:ss:SS");
+        return dateFormat.format(new Date(TimeUnit.NANOSECONDS.toMillis(timeNano)));
+    }
+
     private int starCounter = 0;
+    private int starsInLevel = 0;
 
     private float currentTimeToEnd = 0f;
     private float minEndTime = 1f;
 
     public void addStar() {
         starCounter++;
+        starsInLevel++;
     }
 
     public void removeStar() {
@@ -56,13 +100,13 @@ public class GameStatus {
         return currentTimeToEnd > minEndTime && starCounter == 0;
     }
 
-    public int getStarCounter() {
-        return starCounter;
+    public int getStarsInLevel() {
+        return starsInLevel;
     }
 
     public void draw() {
         batch.begin();
-//        font.draw(batch, Long.toString(System.nanoTime() - startNano), 0, 0);
+        font.draw(batch, getTimeStamp(timeGone()), 0, 0);
         batch.end();
     }
 }

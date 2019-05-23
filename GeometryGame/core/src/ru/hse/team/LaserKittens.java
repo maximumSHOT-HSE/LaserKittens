@@ -20,8 +20,8 @@ public class LaserKittens extends Game {
     private final AppPreferences preferences = new AppPreferences();
     public final KittensAssetManager assetManager = new KittensAssetManager();
 
-    public final AppDatabase database;
-    public final GoogleServicesAction googleServices;
+    private final AppDatabase database;
+    private final GoogleServicesAction googleServices;
 
     public LaserKittens(AppDatabase database, GoogleServicesAction googleServicesAction) {
         this.database = database;
@@ -45,6 +45,14 @@ public class LaserKittens extends Game {
         return preferences;
     }
 
+    public AppDatabase getDatabase() {
+        return database;
+    }
+
+    public GoogleServicesAction getGoogleServices() {
+        return googleServices;
+    }
+
     /**
      * Change screen.
      * Creates it if it is not created
@@ -58,9 +66,9 @@ public class LaserKittens extends Game {
                 this.setScreen(mainMenuScreen);
                 break;
             case CHOOSE_LEVEL_SCREEN:
-                if (chooseLevelScreen == null) {
+                //if (chooseLevelScreen == null) {
                     chooseLevelScreen = new ChooseLevelScreen(this);
-                }
+                //}
                 this.setScreen(chooseLevelScreen);
                 break;
             case SETTINGS_SCREEN:
@@ -90,6 +98,7 @@ public class LaserKittens extends Game {
 
         //font = assetManager.manager.get(KittensAssetManager.font, BitmapFont.class);
 //        font = new BitmapFont(Gdx.files.internal("skin/font.txt"), Gdx.files.internal("skin/font.png"), false);
+        font = new BitmapFont();
 
 //        googleServices.signIn();
 

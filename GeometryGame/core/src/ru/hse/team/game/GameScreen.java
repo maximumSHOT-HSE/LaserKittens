@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
     }
 
     public void endGame() {
-        laserKittens.setScreen(new GameEndingScreen(laserKittens, level, this));
+        laserKittens.setScreen(new GameEndingScreen(laserKittens, level, gameStatus));
         dispose();
     }
 
@@ -147,12 +147,6 @@ public class GameScreen implements Screen {
 
         inputProcessor.touchDraggedExplicitly();
         inputProcessor.moveWithAccelerometer(delta);
-
-        gameStatus.update(delta);
-        if (gameStatus.readyToFinish()) {
-            gameStatus.getGameScreen().endGame();
-        }
-        gameStatus.draw();
 
         moveCamera(delta);
     }

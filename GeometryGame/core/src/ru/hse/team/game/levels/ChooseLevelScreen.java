@@ -14,11 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.database.LevelStatistics;
 import ru.hse.team.game.GameScreen;
+import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.levels.Quiz.QuizLevel;
 import ru.hse.team.game.levels.RandomLabyrinth.RandomLabyrinthLevel;
 import ru.hse.team.game.levels.TestBigLevel.TestBigLevel;
@@ -162,11 +165,29 @@ public class ChooseLevelScreen implements Screen {
             laserKittens.batch.end();
         }
 
+        private Label getBestResult(String levelName) {
+            Label[] label = new Label[1];
+            Thread queryThread = (new Thread(() -> {
+                LevelStatistics statistics = laserKittens.getDatabase().statisticsDao().getBestByLevelName(levelName);
+                if (statistics != null) {
+                    label[0] = new Label(GameStatus.getTimeStamp(statistics.timeNano), skin);
+                }
+            }));
+            queryThread.start();
+            try {
+                queryThread.join();
+            } catch (InterruptedException exception) {
+                Gdx.app.log("fail", "Database query interrupted");
+            }
+            return label[0];
+        }
+
         public void show(Stage stage) {
             // should be created here. Specific of implementation.
             slidingPane = new SlidingPane();
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
+                Label statusLabel = getBestResult(abstractLevel.getName());
                 levelButton.getLabel().setFontScale(1f);
                 levelButton.addListener(new ChangeListener() {
                     @Override
@@ -178,6 +199,16 @@ public class ChooseLevelScreen implements Screen {
                     }
                 });
                 Table table = new Table();
+                table.setWidth(0.6f * screenWidth);
+                table.setHeight(0.6f * screenHeight);
+
+                if (statusLabel != null) {
+                    table.row();
+                    table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                }
+
                 table.row();
                 table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
@@ -187,11 +218,17 @@ public class ChooseLevelScreen implements Screen {
                 table.add(levelButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.row();
+                if (statusLabel != null) {
+                    statusLabel.setFontScale(5f);
+                    table.add(statusLabel).width(0.6f * screenWidth).height(0.2f * screenHeight).align(Align.center).colspan(3);
+                    statusLabel.setAlignment(Align.center);
+                    table.row().pad(5, 10, 5, 10);
+                }
+
                 table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-                table.setWidth(0.6f * screenWidth);
-                table.setHeight(0.6f * screenHeight);
+
                 slidingPane.addWidget(table);
             }
             slidingPane.setCurrentSection(currentSection, direction);
