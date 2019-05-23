@@ -241,6 +241,27 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placePointer(4.5f, 1.25f, -90);
     }
 
+    private void createSection3() {
+        Entity upDoor = placeDoor(5.25f, 1.5f, 0.5f, 0.05f);
+        placeImpenetrableWall(5.5f, 1.15f, 0.1f, 0.8f);
+        placeImpenetrableWall(5.25f, 0.75f, 0.6f, 0.05f);
+        placeTransparentWall(4.75f, 0.75f, 0.5f, 0.05f);
+        placeImpenetrableWall(5, 0.375f, 0.1f, 0.75f);
+        createKey(new Vector2(
+                        4.25f * RenderingSystem.getScreenSizeInMeters().x,
+                        0.25f * RenderingSystem.getScreenSizeInMeters().y),
+                0.1f * RenderingSystem.getScreenSizeInMeters().x,
+                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                upDoor);
+        createKey(new Vector2(
+                        4.25f * RenderingSystem.getScreenSizeInMeters().x,
+                        0.5f * RenderingSystem.getScreenSizeInMeters().y),
+                0.1f * RenderingSystem.getScreenSizeInMeters().x,
+                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                upDoor);
+
+    }
+
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         CH = getLevelHeightInScreens();
@@ -252,7 +273,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createBackground();
 
         focusedPlayer = createPlayer(
-                RenderingSystem.getScreenSizeInMeters().x * 3.5f,
+                RenderingSystem.getScreenSizeInMeters().x * 5f,
                 RenderingSystem.getScreenSizeInMeters().y * 0.1f,
                 3f
         );
@@ -260,5 +281,6 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createBorders();
         createSection1();
         createSection2();
+        createSection3();
     }
 }
