@@ -155,6 +155,8 @@ public class GameScreen implements Screen {
         return camera;
     }
 
+    public LaserKittens getGame() { return laserKittens; }
+
     @Override
     public void resize(int width, int height) {
 

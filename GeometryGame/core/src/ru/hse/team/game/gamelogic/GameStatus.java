@@ -105,12 +105,18 @@ public class GameStatus {
 
     public void draw() {
 
-        statusCamera.zoom = 10f;
-        statusCamera.update();
+        if (gameScreen.getGame().getPreferences().isShowTime()) {
+            statusCamera.zoom = 10f;
+            statusCamera.update();
 
-        batch.setProjectionMatrix(statusCamera.combined);
-        batch.begin();
-        font.draw(batch, getTimeStamp(timeGone()), -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2, statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2);
-        batch.end();
+            batch.setProjectionMatrix(statusCamera.combined);
+            batch.begin();
+            font.draw(batch, getTimeStamp(timeGone()), -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2, statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2);
+            batch.end();
+        }
+    }
+
+    public void dispose() {
+
     }
 }

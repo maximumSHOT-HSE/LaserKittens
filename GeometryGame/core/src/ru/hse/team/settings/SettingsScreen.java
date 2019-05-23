@@ -112,20 +112,25 @@ public class SettingsScreen implements Screen {
         final private Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin);
         final private Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
 
-        final private CheckBox enableAccelerometer = new CheckBox("accelerometer", skin);
+        private CheckBox enableAccelerometer = new CheckBox(null, skin);
+        private Label accelerometerLabel = new Label("accelerometer", skin);
+
+        private CheckBox showTime = new CheckBox(null, skin);
+        private Label showTimeLabel = new Label("show level time", skin);
 
         public Menu(Stage stage) {
             table.setFillParent(true);
-            //table.setDebug(true);
             stage.addActor(table);
 
             titleLabel.setFontScale(3f);
             volumeMusicLabel.setFontScale(2);
             volumeSoundLabel.setFontScale(2);
-            enableAccelerometer.getLabel().setFontScale(2);
-            enableAccelerometer.getLabelCell().padLeft(50);
             enableAccelerometer.getImageCell().size(20, 20);
             enableAccelerometer.getImage().scaleBy(1.5f);
+            showTime.getImageCell().size(20, 20);
+            showTime.getImage().scaleBy(1.5f);
+            accelerometerLabel.setFontScale(2);
+            showTimeLabel.setFontScale(2);
 
 
             table.row().pad(10, 10, 30, 10);
@@ -137,7 +142,11 @@ public class SettingsScreen implements Screen {
             table.add(volumeSoundLabel);
             table.add(volumeSoundSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
             table.row().pad(30, 10, 10, 10);
-            table.add(enableAccelerometer).width(Gdx.graphics.getWidth() * 0.5f).height(Gdx.graphics.getHeight() * 0.1f).colspan(2);
+            table.add(accelerometerLabel);
+            table.add(enableAccelerometer).width(Gdx.graphics.getWidth() * 0.5f).height(Gdx.graphics.getHeight() * 0.1f);
+            table.row().pad(30, 10, 10, 10);
+            table.add(showTimeLabel);
+            table.add(showTime).width(Gdx.graphics.getWidth() * 0.5f).height(Gdx.graphics.getHeight() * 0.1f);
             table.row().pad(30, 10, 10, 10);
             table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).colspan(2);
 
@@ -176,6 +185,14 @@ public class SettingsScreen implements Screen {
             } else {
                 enableAccelerometer.setDisabled(true);
             }
+
+            showTime.setChecked(parent.getPreferences().isShowTime());
+            showTime.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    parent.getPreferences().setShowTime(showTime.isChecked());
+                }
+            });
         }
 
 
