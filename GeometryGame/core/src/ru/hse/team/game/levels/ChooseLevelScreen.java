@@ -44,6 +44,7 @@ public class ChooseLevelScreen implements Screen {
     private InputMultiplexer inputMultiplexer;
 
     private java.util.List<AbstractLevel> abstractLevels = new ArrayList<>();
+    private int currentSection;
 
     private void fillLevels() {
         abstractLevels.add(new ShootingLevel());
@@ -64,6 +65,7 @@ public class ChooseLevelScreen implements Screen {
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
 
         fillLevels();
+        currentSection = abstractLevels.size();
 
         menu = new Menu();
     }
@@ -77,6 +79,7 @@ public class ChooseLevelScreen implements Screen {
         camera.update();
         laserKittens.batch.setProjectionMatrix(camera.combined);
 
+        menu = new Menu();
         menu.show(stage);
     }
 
@@ -126,7 +129,6 @@ public class ChooseLevelScreen implements Screen {
     private class Menu {
         private Skin skin = laserKittens.assetManager.manager.get(KittensAssetManager.skin);
         private SlidingPane slidingPane;
-        private int currentSection = abstractLevels.size();
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
         private Texture naviActive = laserKittens.assetManager.manager.get(KittensAssetManager.levelIndicatorActive);
         private Texture naviPassive = laserKittens.assetManager.manager.get(KittensAssetManager.levelIndicatorPassive);

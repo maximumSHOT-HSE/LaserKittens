@@ -66,9 +66,9 @@ public class LaserKittens extends Game {
                 this.setScreen(mainMenuScreen);
                 break;
             case CHOOSE_LEVEL_SCREEN:
-                //if (chooseLevelScreen == null) {
+                if (chooseLevelScreen == null) {
                     chooseLevelScreen = new ChooseLevelScreen(this);
-                //}
+                }
                 this.setScreen(chooseLevelScreen);
                 break;
             case SETTINGS_SCREEN:
