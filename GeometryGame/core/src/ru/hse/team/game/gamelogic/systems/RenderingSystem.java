@@ -11,14 +11,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.physics.box2d.Body;
+
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
+import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
 
 import java.util.Comparator;
+import java.util.Set;
 
 public class RenderingSystem extends SortedIteratingSystem {
 
@@ -82,8 +85,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
     }
 
-    private void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.RED);
+    private void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
+        shapeRenderer.setColor(color);
         shapeRenderer.rectLine(from, to, 0.1f);
     }
 
@@ -104,6 +107,38 @@ public class RenderingSystem extends SortedIteratingSystem {
             distance = Math.max(distance, a - right);
         }
         return distance;
+    }
+
+    private void drawBulletTrack() {
+        for (Entity entity : renderQueue) {
+            BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
+            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+            if (bulletComponent != null && bodyComponent != null) {
+                Vector2 from = new Vector2(bulletComponent.path.get(0));
+                for (Vector2 to : bulletComponent.path) {
+                    drawSegment(from, to, shapeRenderer, Color.RED);
+                    from.set(to);
+                }
+                drawSegment(from, bodyComponent.body.getPosition(), shapeRenderer, Color.RED);
+            }
+        }
+    }
+
+    private void drawHintsForDoors() {
+        for (Entity entity : renderQueue) {
+            DoorComponent doorComponent = Mapper.doorComponent.get(entity);
+            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+            if (doorComponent != null && bodyComponent != null &&
+                doorComponent.getDoorHits() == 0) {
+                Vector2 doorCenterPosition = bodyComponent.body.getPosition();
+                Set<Entity> keyEntities = doorComponent.getKeys();
+                for (Entity keyEntity : keyEntities) {
+                    Body keyBody = Mapper.bodyComponent.get(keyEntity).body;
+                    Vector2 keyPosition = keyBody.getPosition();
+                    drawSegment(doorCenterPosition, keyPosition, shapeRenderer, Color.YELLOW);
+                }
+            }
+        }
     }
 
     @Override
@@ -142,7 +177,6 @@ public class RenderingSystem extends SortedIteratingSystem {
                 continue;
             }
 
-
             batch.draw(texture.region,
                     transformComponent.position.x - originX, transformComponent.position.y - originY,
                     originX, originY,
@@ -156,18 +190,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        for (Entity entity : renderQueue) {
-            BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
-            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-            if (bulletComponent != null && bodyComponent != null) {
-                Vector2 from = new Vector2(bulletComponent.path.get(0));
-                for (Vector2 to : bulletComponent.path) {
-                    drawSegment(from, to, shapeRenderer);
-                    from.set(to);
-                }
-                drawSegment(from, bodyComponent.body.getPosition(), shapeRenderer);
-            }
-        }
+        drawBulletTrack();
+        drawHintsForDoors();
 
         shapeRenderer.end();
 
