@@ -35,11 +35,6 @@ public class ContractProcessor implements ContactListener {
         Mapper.stateComponent.get(star).finish();
     }
 
-    private void processBulletDisappearingWall(Entity bullet, Entity disappearingWall) {
-        Mapper.stateComponent.get(bullet).finish();
-        Mapper.stateComponent.get(disappearingWall).finish();
-    }
-
     private void processBulletImpenetrableWall(Entity bullet, Entity impenetrableWall) {
         stopBullet(bullet);
     }
@@ -93,10 +88,6 @@ public class ContractProcessor implements ContactListener {
         if (checkType(entityA, TypeComponent.Type.BULLET) &&
                 checkType(entityB, TypeComponent.Type.KEY)) {
             processBulletKey(entityA, entityB);
-        }
-        if (checkType(entityA, TypeComponent.Type.BULLET) &&
-            checkType(entityB, TypeComponent.Type.DISAPPEARING_WALL)) {
-            processBulletDisappearingWall(entityA, entityB);
         }
         if (checkType(entityA, TypeComponent.Type.BULLET) &&
             checkType(entityB, TypeComponent.Type.IMPENETRABLE_WALL)) {

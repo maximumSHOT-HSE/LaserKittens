@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import java.util.Map;
 
 import javax.xml.soap.Text;
+import javax.xml.stream.events.EntityDeclaration;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
@@ -149,16 +150,6 @@ abstract public class AbstractLevelFactory {
                 .addStateComponent(StateComponent.State.NORMAL)
                 .addTypeComponent(TypeComponent.Type.PLAYER)
                 .build();
-    }
-
-    protected Entity createDisappearingWall(Vector2 center, float width, float height) {
-        return (new EntityBuilder())
-            .addBodyComponent(bodyFactory.newRectangle(center, width, height))
-            .addTransformComponent(new Vector3(center.x, center.y, 10))
-            .addTextureComponent(null)
-            .addTypeComponent(TypeComponent.Type.DISAPPEARING_WALL)
-            .addStateComponent(StateComponent.State.JUST_CREATED)
-            .build();
     }
 
     protected Entity createImpenetrableWall(Vector2 center, float width, float height) {
