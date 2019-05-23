@@ -16,6 +16,7 @@ public class TypeComponent implements Component, Poolable {
         TRANSPARENT_WALL,
         DOOR,
         MIRROR,
+        TUMBLER,
         STAR,
         KEY,
         OTHER

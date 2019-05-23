@@ -1,5 +1,6 @@
 package ru.hse.team.game;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
@@ -8,6 +9,7 @@ import ru.hse.team.game.gamelogic.components.KeyComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
+import ru.hse.team.game.gamelogic.components.TumblerComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 
 /**
@@ -22,4 +24,5 @@ public class Mapper {
     public static ComponentMapper<BulletComponent> bulletComponent = ComponentMapper.getFor(BulletComponent.class);
     public static ComponentMapper<KeyComponent> keyComponent = ComponentMapper.getFor(KeyComponent.class);
     public static ComponentMapper<DoorComponent> doorComponent = ComponentMapper.getFor(DoorComponent.class);
+    public static ComponentMapper<TumblerComponent> tumblerComponent = ComponentMapper.getFor(TumblerComponent.class);
 }

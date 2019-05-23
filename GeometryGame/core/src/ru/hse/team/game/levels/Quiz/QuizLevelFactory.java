@@ -5,6 +5,8 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.Map;
+
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
@@ -36,6 +38,21 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                     relativeY * RenderingSystem.getScreenSizeInMeters().y
             ),
             relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
+                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        );
+    }
+
+    private Entity placeDynamicImpenetrableWall(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight) {
+        return createImpenetrableDynamicWall(
+                new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
+                ),
+                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
                 relativeHeight * RenderingSystem.getScreenSizeInMeters().y
         );
     }
@@ -248,8 +265,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placeTransparentWall(4.75f, 0.75f, 0.5f, 0.05f);
         placeImpenetrableWall(5, 0.375f, 0.1f, 0.75f);
         createKey(new Vector2(
-                        4.25f * RenderingSystem.getScreenSizeInMeters().x,
-                        0.25f * RenderingSystem.getScreenSizeInMeters().y),
+                        4.4f * RenderingSystem.getScreenSizeInMeters().x,
+                        0.15f * RenderingSystem.getScreenSizeInMeters().y),
                 0.1f * RenderingSystem.getScreenSizeInMeters().x,
                 0.1f * RenderingSystem.getScreenSizeInMeters().y,
                 upDoor);
@@ -260,6 +277,29 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 0.1f * RenderingSystem.getScreenSizeInMeters().y,
                 upDoor);
 
+
+        final Entity movableWall = placeDynamicImpenetrableWall(4.5f, 0.375f, 0.05f, 0.5f);
+        Runnable task = new Runnable() {
+
+            private int state = 0;
+
+            @Override
+            public void run() {
+                if (state == 0) {
+                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, 5);
+                } else {
+                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, -5);
+                }
+                state ^= 1;
+            }
+        };
+        createTumbler(new Vector2(
+                5.25f * RenderingSystem.getScreenSizeInMeters().x,
+                0.8f * RenderingSystem.getScreenSizeInMeters().y),
+            0.1f * RenderingSystem.getScreenSizeInMeters().x,
+            0.06f * RenderingSystem.getScreenSizeInMeters().y,
+                task);
+        placeMirror(4.8f, 0.1f, 0.05f, 0.3f, -70);
     }
 
     @Override
@@ -273,8 +313,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createBackground();
 
         focusedPlayer = createPlayer(
-                RenderingSystem.getScreenSizeInMeters().x * 5f,
-                RenderingSystem.getScreenSizeInMeters().y * 0.1f,
+                RenderingSystem.getScreenSizeInMeters().x * 5.25f,
+                RenderingSystem.getScreenSizeInMeters().y * 1f,
                 3f
         );
 

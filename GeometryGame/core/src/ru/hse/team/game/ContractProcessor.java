@@ -57,6 +57,11 @@ public class ContractProcessor implements ContactListener {
         stopBullet(bullet);
     }
 
+    private void processBulletTumbler(Entity bullet, Entity tumbler) {
+        Mapper.tumblerComponent.get(tumbler).getAction().run();
+        stopBullet(bullet);
+    }
+
     private void stopBullet(Entity bullet) {
         BodyComponent bodyComponent = Mapper.bodyComponent.get(bullet);
         bodyComponent.body.setLinearVelocity(0, 0);
@@ -104,6 +109,10 @@ public class ContractProcessor implements ContactListener {
         if (checkType(entityA, TypeComponent.Type.BULLET) &&
             checkType(entityB, TypeComponent.Type.DOOR)) {
             processBulletDoor(entityA, entityB);
+        }
+        if (checkType(entityA, TypeComponent.Type.BULLET) &&
+            checkType(entityB, TypeComponent.Type.TUMBLER)) {
+            processBulletTumbler(entityA, entityB);
         }
     }
 
