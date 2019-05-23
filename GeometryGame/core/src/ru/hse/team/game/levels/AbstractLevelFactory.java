@@ -189,7 +189,7 @@ abstract public class AbstractLevelFactory {
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height))
                 .addTransformComponent(new Vector3(center.x, center.y, 5))
                 .addTextureComponent(textureRegion)
-                .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
+                .addTypeComponent(TypeComponent.Type.DOOR)
                 .addStateComponent(StateComponent.State.NORMAL)
                 .addDoorComponent()
                 .build();

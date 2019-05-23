@@ -8,8 +8,6 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-import java.util.Map;
-
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
@@ -59,6 +57,11 @@ public class ContractProcessor implements ContactListener {
         Mapper.stateComponent.get(key).finish();
     }
 
+    private void processBulletDoor(Entity bullet, Entity door) {
+        Mapper.doorComponent.get(door).hitDoor();
+        stopBullet(bullet);
+    }
+
     private void stopBullet(Entity bullet) {
         BodyComponent bodyComponent = Mapper.bodyComponent.get(bullet);
         bodyComponent.body.setLinearVelocity(0, 0);
@@ -106,6 +109,10 @@ public class ContractProcessor implements ContactListener {
         if (checkType(entityA, TypeComponent.Type.PLAYER) &&
             checkType(entityB, TypeComponent.Type.KEY)) {
             processPlayerKey(entityA, entityB);
+        }
+        if (checkType(entityA, TypeComponent.Type.BULLET) &&
+            checkType(entityB, TypeComponent.Type.DOOR)) {
+            processBulletDoor(entityA, entityB);
         }
     }
 

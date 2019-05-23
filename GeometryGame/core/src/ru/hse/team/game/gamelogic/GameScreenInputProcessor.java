@@ -115,6 +115,7 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        
         camera.unproject(position.set(screenX, screenY, 0));
         gameStatus.start();
 
