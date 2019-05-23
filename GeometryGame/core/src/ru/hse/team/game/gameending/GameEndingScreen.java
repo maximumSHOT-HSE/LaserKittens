@@ -75,6 +75,7 @@ public class GameEndingScreen implements Screen {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        laserKittens.batch.setProjectionMatrix(camera.combined);
         camera.update();
 
         laserKittens.batch.begin();

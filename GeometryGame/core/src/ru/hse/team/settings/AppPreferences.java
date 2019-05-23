@@ -17,6 +17,7 @@ public class AppPreferences {
     private static final String PREF_SOUND_VOLUME = "sound volume";
     private static final String PREFS_NAME = "CATS ARE NICE";
     private static final String PREF_ACCELEROMETER = "ACCELEROMETER";
+    private static final String PREF_SHOW_TIME = "SHOW_TIME";
 
     protected Preferences getPrefs() {
         if (preferences == null) {
@@ -50,5 +51,14 @@ public class AppPreferences {
     public void setEnableAccelerometer(boolean enabled) {
         getPrefs().putBoolean(PREF_ACCELEROMETER, enabled);
         getPrefs().flush();
+    }
+
+    public boolean isShowTime() {
+        return getPrefs().getBoolean(PREF_SHOW_TIME, true);
+    }
+
+    public void setShowTime(boolean value) {
+        getPrefs().putBoolean(PREF_SHOW_TIME, value);
+        getPrefs().flush();;
     }
 }
