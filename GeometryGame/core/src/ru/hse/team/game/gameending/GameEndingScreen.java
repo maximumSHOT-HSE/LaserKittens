@@ -9,17 +9,20 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.database.LevelStatistics;
 import ru.hse.team.game.GameScreen;
+import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.levels.AbstractLevel;
-import ru.hse.team.settings.SettingsScreenInputProcessor;
 
 
 /**
@@ -35,14 +38,24 @@ public class GameEndingScreen implements Screen {
     private InputMultiplexer inputMultiplexer;
     private Menu menu;
     private Stage stage;
+    private GameStatus gameStatus;
 
-    public GameEndingScreen(LaserKittens laserKittens, AbstractLevel level, GameScreen gameScreen) {
+    public GameEndingScreen(LaserKittens laserKittens, AbstractLevel level, GameStatus gameStatus) {
         this.laserKittens = laserKittens;
         this.parentLevel = level;
         this.background = new Background(laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
         this.stage = new Stage(new ScreenViewport());
         InputProcessor inputProcessor = new GameEndingScreenInputProcessor(laserKittens);
         this.inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
+        this.gameStatus = gameStatus;
+
+        addResultToDatabase(gameStatus);
+    }
+
+    private void addResultToDatabase(GameStatus gameStatus) {
+        new Thread(() ->
+                laserKittens.getDatabase().statisticsDao().insert(new LevelStatistics(parentLevel.getName(),gameStatus.timeGone(), gameStatus.getStarsInLevel())))
+                .start();
     }
 
     @Override
@@ -106,20 +119,27 @@ public class GameEndingScreen implements Screen {
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
 
+        private final Label statusLabel;
+
         public Menu(Stage stage) {
             stage.addActor(table);
+            table.setWidth(0.6f * screenWidth);
+            table.setHeight(0.6f * screenHeight);
+            table.center();
 
             restartButton.getLabel().setFontScale(1f);
             quitButton.getLabel().setFontScale(1f);
+            statusLabel = new Label(GameStatus.getTimeStamp(gameStatus.timeGone()), skin);
+            statusLabel.setFontScale(5f);
 
             table.setFillParent(true);
             table.add(restartButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
             table.row().pad(5, 10, 5, 10);
             table.add(quitButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
             table.row().pad(5, 10, 5, 10);
-            table.setWidth(0.6f * screenWidth);
-            table.setHeight(0.6f * screenHeight);
-            table.center();
+            table.add(statusLabel).width(0.6f * screenWidth).height(0.2f * screenHeight).align(Align.center);
+            statusLabel.setAlignment(Align.center);
+            table.row().pad(5, 10, 5, 10);
 
             setListeners();
         }

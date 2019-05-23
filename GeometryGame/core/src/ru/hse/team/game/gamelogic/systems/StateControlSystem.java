@@ -35,6 +35,19 @@ public class StateControlSystem extends IteratingSystem {
     }
 
     @Override
+    public void update(float delta) {
+        for (Entity entity : getEntities()) {
+            processEntity(entity, delta);
+        }
+
+        gameStatus.update(delta);
+        if (gameStatus.readyToFinish()) {
+            gameStatus.getGameScreen().endGame();
+        }
+        gameStatus.draw();
+    }
+
+    @Override
     protected void processEntity(Entity entity, float deltaTime) {
         StateComponent stateComponent = Mapper.stateComponent.get(entity);
         TypeComponent typeComponent = Mapper.typeComponent.get(entity); // may be null

@@ -1,9 +1,11 @@
 package ru.hse.team.database;
 
+import android.arch.persistence.db.SupportSQLiteQuery;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.RawQuery;
 import android.arch.persistence.room.Update;
 
 import java.util.List;
@@ -11,11 +13,17 @@ import java.util.List;
 @Dao
 public interface StatisticsDaoAndroid extends StatisticsDao {
 
+    @RawQuery
+    LevelStatistics getStatisticsByQuery(SupportSQLiteQuery query);
+
     @Query("SELECT * FROM LevelStatistics")
     List<LevelStatistics> getAll();
 
     @Query("SELECT * FROM LevelStatistics WHERE id = :id")
     LevelStatistics getById(long id);
+
+    @Query("SELECT * FROM LevelStatistics WHERE levelName = :levelName AND time = (SELECT MIN(time) FROM LevelStatistics where levelName = :levelName)")
+    LevelStatistics getBestByLevelName (String levelName);
 
     @Insert
     void insert(LevelStatistics statistics);
@@ -31,4 +39,5 @@ public interface StatisticsDaoAndroid extends StatisticsDao {
 
     @Delete
     void deleteAll(LevelStatistics ... statistics);
+
 }
