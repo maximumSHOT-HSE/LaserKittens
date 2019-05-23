@@ -151,6 +151,10 @@ public class GameScreen implements Screen {
         moveCamera(delta);
     }
 
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
     @Override
     public void resize(int width, int height) {
 

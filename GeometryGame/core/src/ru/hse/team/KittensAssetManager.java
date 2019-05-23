@@ -51,7 +51,7 @@ public class KittensAssetManager {
     public static final String laserSound = "sounds/laser-shot.wav";
 
     //Font
-    public static final String font = "skin/font.fnt";
+    public static final String font = "skin/gameFont.fnt";
 
     public void loadImages() {
         manager.load(badlogic, Texture.class);
@@ -82,7 +82,7 @@ public class KittensAssetManager {
     }
 
     public void loadFonts() {
-        //manager.load(font, BitmapFont.class);
+        manager.load(font, BitmapFont.class);
     }
 
     public void loadEverything() {

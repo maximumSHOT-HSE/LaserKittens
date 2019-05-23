@@ -3,6 +3,7 @@ package ru.hse.team.game.gamelogic;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 
 import java.sql.Time;
 import java.text.DateFormat;
@@ -21,7 +22,6 @@ public class GameStatus {
     private GameScreen gameScreen;
     private BitmapFont font;
     private SpriteBatch batch;
-    private OrthographicCamera camera;
 
     private long startNano = 0;
     private long stopNano = 0;
@@ -33,9 +33,6 @@ public class GameStatus {
         this.gameScreen = gameScreen;
         this.font = font;
         this.batch = batch;
-        camera = new OrthographicCamera(RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
-        camera.position.set(RenderingSystem.SCREEN_WIDTH / 2f, RenderingSystem.SCREEN_HEIGHT / 2f, 0);
-        draw();
     }
 
     public GameScreen getGameScreen() {
@@ -106,7 +103,10 @@ public class GameStatus {
 
     public void draw() {
         batch.begin();
-        font.draw(batch, getTimeStamp(timeGone()), 0, 0);
+        final float positionX = gameScreen.getCamera().position.x - RenderingSystem.SCREEN_WIDTH;
+        final float positionY = gameScreen.getCamera().position.y + RenderingSystem.SCREEN_HEIGHT;
+        final float width = RenderingSystem.SCREEN_WIDTH / 3;
+        font.draw(batch, getTimeStamp(timeGone()), positionX, positionY, width, Align.center, true);
         batch.end();
     }
 }

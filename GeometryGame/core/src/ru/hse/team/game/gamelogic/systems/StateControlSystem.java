@@ -42,6 +42,7 @@ public class StateControlSystem extends IteratingSystem {
 
         gameStatus.update(delta);
         if (gameStatus.readyToFinish()) {
+            gameStatus.stop();
             gameStatus.getGameScreen().endGame();
         }
         gameStatus.draw();
