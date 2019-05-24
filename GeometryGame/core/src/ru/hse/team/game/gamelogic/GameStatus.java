@@ -3,11 +3,9 @@ package ru.hse.team.game.gamelogic;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Align;
 
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -55,6 +53,7 @@ public class GameStatus {
         }
         stopped = true;
         stopNano = System.nanoTime();
+        putEndTime();
     }
 
     public long timeGone() {
@@ -74,6 +73,23 @@ public class GameStatus {
         SimpleDateFormat dateFormat = (SimpleDateFormat)SimpleDateFormat.getTimeInstance();
         dateFormat.applyPattern("mm:ss:SS");
         return dateFormat.format(new Date(TimeUnit.NANOSECONDS.toMillis(timeNano)));
+    }
+
+    private String endDate = "Date";
+
+    private void putEndTime() {
+        Calendar nowCalendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = (SimpleDateFormat)SimpleDateFormat.getTimeInstance();
+        dateFormat.applyPattern("yyyy/MM/dd hh:mm aa");
+        endDate = dateFormat.format(nowCalendar.getTime());
+    }
+
+    public String getCalendarDate() {
+        return endDate;
+    }
+
+    public long getStopNanoTime() {
+        return stopNano;
     }
 
     private int starCounter = 0;

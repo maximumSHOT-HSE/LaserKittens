@@ -21,6 +21,7 @@ import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.about.PagedScrollPane;
 import ru.hse.team.database.LevelStatistics;
+import ru.hse.team.game.gamelogic.GameStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,15 +115,16 @@ public class StatisticsScreen implements Screen {
         private Table table = new Table();
 
         private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-        private Label titleLabel = new Label("About", skin);
+        private Label titleLabel = new Label("Statistics", skin);
         private final TextButton backButton = new TextButton("Back", skin);
 
         List< List<Label> > listOfStatistics;
 
         private List<Label> levelStatisticsToLabels(LevelStatistics levelStatistics) {
             List<Label> statisticsLabels = new ArrayList<>();
-            statisticsLabels.add(new Label("HI", skin));
-            statisticsLabels.add(new Label("LOL", skin));
+            statisticsLabels.add(new Label(levelStatistics.date, skin));
+            statisticsLabels.add(new Label(levelStatistics.levelName, skin));
+            statisticsLabels.add(new Label(GameStatus.getTimeStamp(levelStatistics.timeNano), skin));
             return statisticsLabels;
         }
 
@@ -147,7 +149,7 @@ public class StatisticsScreen implements Screen {
             table.setFillParent(true);
             stage.addActor(table);
 
-            titleLabel.setFontScale(3f);
+            titleLabel.setFontScale(5f);
 
             table.row().pad(10, 10, 30, 10);
             table.add(titleLabel).colspan(2).expand();

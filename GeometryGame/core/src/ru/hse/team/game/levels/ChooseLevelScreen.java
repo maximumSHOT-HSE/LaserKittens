@@ -65,7 +65,7 @@ public class ChooseLevelScreen implements Screen {
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
 
         fillLevels();
-        currentSection = abstractLevels.size();
+        currentSection = abstractLevels.size() + 1;
 
         menu = new Menu();
     }
