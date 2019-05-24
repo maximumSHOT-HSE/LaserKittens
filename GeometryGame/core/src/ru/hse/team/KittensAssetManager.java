@@ -33,6 +33,10 @@ public class KittensAssetManager {
     // Key
     public static final String KEY = "key.png";
 
+    // Tumblers
+    public static final String YELLOW_TUMBLER = "yellow-tumbler.png";
+    public static final String BLUE_TUMBLER = "blue-tumbler.png";
+
     // Question
     public static final String Question = "question.png";
 
@@ -69,6 +73,8 @@ public class KittensAssetManager {
         manager.load(Pointer, Texture.class);
         manager.load(Question, Texture.class);
         manager.load(KEY, Texture.class);
+        manager.load(YELLOW_TUMBLER, Texture.class);
+        manager.load(BLUE_TUMBLER, Texture.class);
     }
 
     public void loadSounds() {

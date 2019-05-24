@@ -35,11 +35,6 @@ public class ContractProcessor implements ContactListener {
         Mapper.stateComponent.get(star).finish();
     }
 
-    private void processBulletDisappearingWall(Entity bullet, Entity disappearingWall) {
-        Mapper.stateComponent.get(bullet).finish();
-        Mapper.stateComponent.get(disappearingWall).finish();
-    }
-
     private void processBulletImpenetrableWall(Entity bullet, Entity impenetrableWall) {
         stopBullet(bullet);
     }
@@ -59,6 +54,11 @@ public class ContractProcessor implements ContactListener {
 
     private void processBulletDoor(Entity bullet, Entity door) {
         Mapper.doorComponent.get(door).hitDoor();
+        stopBullet(bullet);
+    }
+
+    private void processBulletTumbler(Entity bullet, Entity tumbler) {
+        Mapper.tumblerComponent.get(tumbler).getAction().run();
         stopBullet(bullet);
     }
 
@@ -95,10 +95,6 @@ public class ContractProcessor implements ContactListener {
             processBulletKey(entityA, entityB);
         }
         if (checkType(entityA, TypeComponent.Type.BULLET) &&
-            checkType(entityB, TypeComponent.Type.DISAPPEARING_WALL)) {
-            processBulletDisappearingWall(entityA, entityB);
-        }
-        if (checkType(entityA, TypeComponent.Type.BULLET) &&
             checkType(entityB, TypeComponent.Type.IMPENETRABLE_WALL)) {
             processBulletImpenetrableWall(entityA, entityB);
         }
@@ -113,6 +109,10 @@ public class ContractProcessor implements ContactListener {
         if (checkType(entityA, TypeComponent.Type.BULLET) &&
             checkType(entityB, TypeComponent.Type.DOOR)) {
             processBulletDoor(entityA, entityB);
+        }
+        if (checkType(entityA, TypeComponent.Type.BULLET) &&
+            checkType(entityB, TypeComponent.Type.TUMBLER)) {
+            processBulletTumbler(entityA, entityB);
         }
     }
 

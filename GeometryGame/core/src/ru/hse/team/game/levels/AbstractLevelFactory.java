@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import java.util.Map;
 
 import javax.xml.soap.Text;
+import javax.xml.stream.events.EntityDeclaration;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
@@ -27,6 +28,7 @@ import ru.hse.team.game.gamelogic.components.KeyComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
+import ru.hse.team.game.gamelogic.components.TumblerComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
@@ -151,16 +153,6 @@ abstract public class AbstractLevelFactory {
                 .build();
     }
 
-    protected Entity createDisappearingWall(Vector2 center, float width, float height) {
-        return (new EntityBuilder())
-            .addBodyComponent(bodyFactory.newRectangle(center, width, height))
-            .addTransformComponent(new Vector3(center.x, center.y, 10))
-            .addTextureComponent(null)
-            .addTypeComponent(TypeComponent.Type.DISAPPEARING_WALL)
-            .addStateComponent(StateComponent.State.JUST_CREATED)
-            .build();
-    }
-
     protected Entity createImpenetrableWall(Vector2 center, float width, float height) {
         Texture texture = new Texture(KittensAssetManager.ICE_WALL);
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
@@ -175,6 +167,22 @@ abstract public class AbstractLevelFactory {
             .addTextureComponent(textureRegion)
             .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
             .build();
+    }
+
+    protected Entity createImpenetrableDynamicWall(Vector2 center, float width, float height) {
+        Texture texture = new Texture(KittensAssetManager.ICE_WALL);
+        texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        TextureRegion textureRegion = new TextureRegion(
+                texture, 0, 0,
+                (int) RenderingSystem.metersToPixels(width),
+                (int) RenderingSystem.metersToPixels(height)
+        );
+        return (new EntityBuilder())
+                .addBodyComponent(bodyFactory.newDynamicRectangle(center, width, height, 0))
+                .addTransformComponent(new Vector3(center.x, center.y, 10))
+                .addTextureComponent(textureRegion)
+                .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
+                .build();
     }
 
     protected Entity createDoor(Vector2 center, float width, float height) {
@@ -239,6 +247,26 @@ abstract public class AbstractLevelFactory {
                 .addTransformComponent(new Vector3(center.x, center.y, 8))
                 .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.TRANSPARENT_WALL)
+                .build();
+    }
+
+    protected Entity createTumbler(
+            Vector2 center,
+            float width,
+            float height,
+            Runnable task) {
+        Texture texture = new Texture(KittensAssetManager.YELLOW_TUMBLER);
+        TextureRegion textureRegion = new TextureRegion(
+                texture, 0, 0,
+                (int) RenderingSystem.metersToPixels(width),
+                (int) RenderingSystem.metersToPixels(height)
+        );
+        return (new EntityBuilder())
+                .addBodyComponent(bodyFactory.newRectangle(center, width, height, 0))
+                .addTransformComponent(new Vector3(center, 0))
+                .addTextureComponent(textureRegion)
+                .addTumblerComponent(task)
+                .addTypeComponent(TypeComponent.Type.TUMBLER)
                 .build();
     }
 
@@ -321,6 +349,13 @@ abstract public class AbstractLevelFactory {
         public EntityBuilder addDoorComponent() {
             DoorComponent doorComponent = engine.createComponent(DoorComponent.class);
             entity.add(doorComponent);
+            return this;
+        }
+
+        public EntityBuilder addTumblerComponent(Runnable task) {
+            TumblerComponent tumblerComponent = engine.createComponent(TumblerComponent.class);
+            tumblerComponent.setAction(task);
+            entity.add(tumblerComponent);
             return this;
         }
     }

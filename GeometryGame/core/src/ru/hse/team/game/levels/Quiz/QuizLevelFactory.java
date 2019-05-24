@@ -2,12 +2,17 @@ package ru.hse.team.game.levels.Quiz;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+
+import java.util.Map;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
+import ru.hse.team.game.gamelogic.components.TextureComponent;
+import ru.hse.team.game.gamelogic.components.TumblerComponent;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
@@ -36,6 +41,21 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                     relativeY * RenderingSystem.getScreenSizeInMeters().y
             ),
             relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
+                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        );
+    }
+
+    private Entity placeDynamicImpenetrableWall(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight) {
+        return createImpenetrableDynamicWall(
+                new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
+                ),
+                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
                 relativeHeight * RenderingSystem.getScreenSizeInMeters().y
         );
     }
@@ -241,6 +261,56 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placePointer(4.5f, 1.25f, -90);
     }
 
+    private void createSection3() {
+        Entity upDoor = placeDoor(5.25f, 1.5f, 0.5f, 0.05f);
+        placeImpenetrableWall(5.5f, 1.15f, 0.1f, 0.8f);
+        placeImpenetrableWall(5.25f, 0.75f, 0.6f, 0.05f);
+        placeTransparentWall(4.75f, 0.75f, 0.5f, 0.05f);
+        placeImpenetrableWall(5, 0.375f, 0.1f, 0.75f);
+        createKey(new Vector2(
+                        4.4f * RenderingSystem.getScreenSizeInMeters().x,
+                        0.15f * RenderingSystem.getScreenSizeInMeters().y),
+                0.1f * RenderingSystem.getScreenSizeInMeters().x,
+                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                upDoor);
+        createKey(new Vector2(
+                        4.25f * RenderingSystem.getScreenSizeInMeters().x,
+                        0.5f * RenderingSystem.getScreenSizeInMeters().y),
+                0.1f * RenderingSystem.getScreenSizeInMeters().x,
+                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                upDoor);
+
+
+        final Entity movableWall = placeDynamicImpenetrableWall(4.5f, 0.375f, 0.05f, 0.5f);
+        final Entity tumbler = createTumbler(new Vector2(
+                5.4f * RenderingSystem.getScreenSizeInMeters().x,
+                0.8f * RenderingSystem.getScreenSizeInMeters().y),
+            0.1f * RenderingSystem.getScreenSizeInMeters().x,
+            0.06f * RenderingSystem.getScreenSizeInMeters().y, () -> {});
+        Runnable task = new Runnable() {
+
+            private int state = 0;
+
+            @Override
+            public void run() {
+                if (state == 0) {
+                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, 5);
+                    tumbler.getComponent(TextureComponent.class).region.setTexture(new Texture(KittensAssetManager.BLUE_TUMBLER));
+                } else {
+                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, -5);
+                    tumbler.getComponent(TextureComponent.class).region.setTexture(new Texture(KittensAssetManager.YELLOW_TUMBLER));
+                }
+                state ^= 1;
+            }
+        };
+
+        tumbler.getComponent(TumblerComponent.class).setAction(task);
+        placeMirror(4.8f, 0.1f, 0.05f, 0.3f, -70);
+
+        placeQuestion(4.6f, 0.9f, 2);
+        placePointer(5.25f, 1.25f, 180);
+    }
+
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         CH = getLevelHeightInScreens();
@@ -252,13 +322,14 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createBackground();
 
         focusedPlayer = createPlayer(
-                RenderingSystem.getScreenSizeInMeters().x * 3.5f,
-                RenderingSystem.getScreenSizeInMeters().y * 0.1f,
+                RenderingSystem.getScreenSizeInMeters().x * 5.25f,
+                RenderingSystem.getScreenSizeInMeters().y * 1f,
                 3f
         );
 
         createBorders();
         createSection1();
         createSection2();
+        createSection3();
     }
 }
