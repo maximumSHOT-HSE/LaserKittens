@@ -147,7 +147,7 @@ public class ChooseLevelScreen implements Screen {
             saveState();
             laserKittens.batch.begin();
 
-            int levelsCount = abstractLevels.size();
+            int levelsCount = abstractLevels.size() + 1;
 
             float h = naviActive.getHeight();
             float w = naviActive.getWidth();
@@ -184,9 +184,40 @@ public class ChooseLevelScreen implements Screen {
             return label[0];
         }
 
+        private void addDumpLabels(Table table) {
+            table.row();
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+        }
+
+        private Table statisticsTable() {
+            TextButton statisticsButton = new TextButton("Statistics", skin);
+            statisticsButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    currentSection = slidingPane.currentSectionId;
+                    direction = slidingPane.direction;
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.STATISTICS_SCREEN);
+                }
+            });
+            Table table = new Table();
+            table.setWidth(0.6f * screenWidth);
+            table.setHeight(0.6f * screenHeight);
+
+            addDumpLabels(table);
+            table.row();
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(statisticsButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            addDumpLabels(table);
+            return table;
+        }
+
         public void show(Stage stage) {
             // should be created here. Specific of implementation.
             slidingPane = new SlidingPane();
+            slidingPane.addWidget(statisticsTable());
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
                 Label statusLabel = getBestResult(abstractLevel.getName());
@@ -205,16 +236,10 @@ public class ChooseLevelScreen implements Screen {
                 table.setHeight(0.6f * screenHeight);
 
                 if (statusLabel != null) {
-                    table.row();
-                    table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-                    table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-                    table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    addDumpLabels(table);
                 }
 
-                table.row();
-                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                addDumpLabels(table);
                 table.row();
                 table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.add(levelButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
@@ -227,12 +252,13 @@ public class ChooseLevelScreen implements Screen {
                     table.row().pad(5, 10, 5, 10);
                 }
 
-                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                addDumpLabels(table);
 
                 slidingPane.addWidget(table);
             }
+
+
+
             slidingPane.setCurrentSection(currentSection, direction);
             stage.addActor(slidingPane);
         }

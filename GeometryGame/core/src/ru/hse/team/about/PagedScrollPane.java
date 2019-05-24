@@ -57,7 +57,6 @@ public class PagedScrollPane extends ScrollPane {
         super.act(delta);
         if (wasPanDragFling && !isPanning() && !isDragging() && !isFlinging()) {
             wasPanDragFling = false;
-            scrollToPage();
         } else {
             if (isPanning() || isDragging() || isFlinging()) {
                 wasPanDragFling = true;
@@ -83,28 +82,6 @@ public class PagedScrollPane extends ScrollPane {
                 cell.space(pageSpacing);
             }
             content.invalidate();
-        }
-    }
-
-    private void scrollToPage () {
-        final float height = getHeight();
-        final float scrollY = getScrollY();
-        final float maxY = getMaxY();
-
-        if (scrollY >= maxY || scrollY <= 0) return;
-
-        Array<Actor> pages = content.getChildren();
-        float pageY = 0;
-        float pageHeight = 0;
-        if (pages.size > 0) {
-            for (Actor a : pages) {
-                pageY = a.getHeight();
-                pageHeight = a.getHeight();
-                if (scrollY < (pageY + pageHeight * 0.5)) {
-                    break;
-                }
-            }
-            setScrollY(MathUtils.clamp(pageY - (height - pageHeight) / 2, 0, maxY));
         }
     }
 }
