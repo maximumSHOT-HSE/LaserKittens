@@ -1,5 +1,6 @@
 package ru.hse.team.game;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -105,6 +106,22 @@ public class BodyFactory {
         circleShape.dispose();
 
         setFilter(body, Category.PLAYER.mask, (short)(Category.all() & ~Category.BULLET.mask));
+        return body;
+    }
+
+    public Body newDynamicRectangle(Vector2 center, float width, float height, float rotation) {
+        Body body = (new BodyBuilder())
+                .setType(BodyDef.BodyType.DynamicBody)
+                .setPosition(center)
+                .setRotation(rotation)
+                .setGravityScale(10)
+                .build();
+
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.setAsBox(width / 2, height / 2);
+        body.createFixture(FixtureFactory.ignoringWallFixture(polygonShape));
+        polygonShape.dispose();
+        setFilter(body, Category.OTHER.mask, Category.all());
         return body;
     }
 
@@ -265,6 +282,15 @@ public class BodyFactory {
         private static FixtureDef bouncingBulletFixture(Shape shape) {
             return (new FixtureBuilder()).setShape(shape).setDensiity(0)
                     .setFriction(0).setRestitution(1).build();
+        }
+
+        private static FixtureDef ignoringWallFixture(Shape shape) {
+            return (new FixtureBuilder())
+                    .setShape(shape)
+                    .setDensiity(10)
+                    .setFriction(0)
+                    .setRestitution(0)
+                    .build();
         }
 
         private static FixtureDef stoneFixture(Shape shape) {
