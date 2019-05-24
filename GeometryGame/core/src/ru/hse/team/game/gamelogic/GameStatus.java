@@ -80,7 +80,7 @@ public class GameStatus {
     private void putEndTime() {
         Calendar nowCalendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = (SimpleDateFormat)SimpleDateFormat.getTimeInstance();
-        dateFormat.applyPattern("yyyy/MM/dd hh:mm aa");
+        dateFormat.applyPattern("yyyy/MM/dd HH:mm");
         endDate = dateFormat.format(nowCalendar.getTime());
     }
 
