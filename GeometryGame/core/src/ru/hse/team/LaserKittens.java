@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import ru.hse.team.about.AboutScreen;
 import ru.hse.team.database.AppDatabase;
+import ru.hse.team.database.statistics.StatisticsScreen;
 import ru.hse.team.game.levels.ChooseLevelScreen;
 import ru.hse.team.mainmenu.MainMenuScreen;
 import ru.hse.team.settings.AppPreferences;
@@ -34,13 +35,15 @@ public class LaserKittens extends Game {
         MAIN_MENU_SCREEN,
         CHOOSE_LEVEL_SCREEN,
         SETTINGS_SCREEN,
-        ABOUT_SCREEN;
+        ABOUT_SCREEN,
+        STATISTICS_SCREEN;
     }
 
     private MainMenuScreen mainMenuScreen;
     private ChooseLevelScreen chooseLevelScreen;
     private SettingsScreen settingsScreen;
     private AboutScreen aboutScreen;
+    private StatisticsScreen statisticsScreen;
 
     public AppPreferences getPreferences() {
         return preferences;
@@ -83,6 +86,12 @@ public class LaserKittens extends Game {
                     aboutScreen = new AboutScreen(this);
                 }
                 this.setScreen(aboutScreen);
+                break;
+            case STATISTICS_SCREEN:
+                if (statisticsScreen == null) {
+                    statisticsScreen = new StatisticsScreen(this);
+                }
+                this.setScreen(statisticsScreen);
                 break;
         }
     }
