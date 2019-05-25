@@ -19,6 +19,7 @@ import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
+import ru.hse.team.game.levels.AbstractLevel;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -59,6 +60,8 @@ public class RenderingSystem extends SortedIteratingSystem {
     private OrthographicCamera camera;
     private float cameraWaiting = 0;
 
+    private AbstractLevel abstractLevel;
+
     public void decreaseCameraWaitingTime(float deltaTime) {
         cameraWaiting -= deltaTime;
         if (cameraWaiting < 0) {
@@ -75,8 +78,10 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer, AbstractLevel abstractLevel) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
+
+        this.abstractLevel = abstractLevel;
 
         this.batch = batch;
         this.shapeRenderer = shapeRenderer;
@@ -141,6 +146,14 @@ public class RenderingSystem extends SortedIteratingSystem {
         }
     }
 
+    private void drawGraph() {
+        System.out.println("is draw = " + abstractLevel.getAbstractGraph().isDrawGraph());
+        if (abstractLevel.getAbstractGraph().isDrawGraph()) {
+            System.out.println("drawGraph()");
+            abstractLevel.getAbstractGraph().draw(shapeRenderer);
+        }
+    }
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -192,6 +205,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         drawBulletTrack();
         drawHintsForDoors();
+        drawGraph();
 
         shapeRenderer.end();
 

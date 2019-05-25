@@ -348,6 +348,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 RenderingSystem.getScreenSizeInMeters().x * 4.75f,
                 RenderingSystem.getScreenSizeInMeters().y * 2.35f,
                 3f, path, 50);
+        placeQuestion(5.4f, 1.425f, 2);
     }
 
     @Override

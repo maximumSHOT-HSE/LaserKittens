@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
         World world = levelFactory.getWorld();
         world.setContactListener(new ContractProcessor());
 
-        renderingSystem = new RenderingSystem(this.laserKittens.batch, this.laserKittens.shapeRenderer);
+        renderingSystem = new RenderingSystem(this.laserKittens.batch, this.laserKittens.shapeRenderer, abstractLevel);
         camera = renderingSystem.getCamera();
         camera.zoom = 1.5f;
         cameraMovingTo.set(camera.position);
@@ -74,7 +74,7 @@ public class GameScreen implements Screen {
         engine.addSystem(stateControlSystem);
 
         inputProcessor = new GameScreenInputProcessor(this.laserKittens, abstractLevel, camera, gameStatus);
-        gestureProcessor = new GestureProcessor(renderingSystem, inputProcessor);
+        gestureProcessor = new GestureProcessor(renderingSystem, inputProcessor, abstractLevel);
         inputMultiplexer = new InputMultiplexer(
                 new GestureDetector(gestureProcessor),
                 inputProcessor);

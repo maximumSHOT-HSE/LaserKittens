@@ -4,18 +4,22 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
+import ru.hse.team.game.levels.AbstractLevel;
 
 public class GestureProcessor implements GestureDetector.GestureListener {
 
     private float scale = 1;
     private RenderingSystem renderingSystem;
     private GameScreenInputProcessor gameScreenInputProcessor;
+    private AbstractLevel abstractLevel;
 
     public GestureProcessor(
             RenderingSystem renderingSystem,
-            GameScreenInputProcessor gameScreenInputProcessor) {
+            GameScreenInputProcessor gameScreenInputProcessor,
+            AbstractLevel abstractLevel) {
         this.renderingSystem = renderingSystem;
         this.gameScreenInputProcessor = gameScreenInputProcessor;
+        this.abstractLevel = abstractLevel;
     }
 
     @Override
@@ -37,6 +41,7 @@ public class GestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public boolean longPress(float x, float y) {
+        abstractLevel.getAbstractGraph().setDrawGraph(true);
         return false;
     }
 
