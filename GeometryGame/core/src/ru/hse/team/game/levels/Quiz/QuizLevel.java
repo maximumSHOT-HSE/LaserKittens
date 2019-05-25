@@ -17,7 +17,7 @@ public class QuizLevel extends AbstractLevel {
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         quizLevelFactory = new QuizLevelFactory();
-        quizLevelFactory.setLevelSize(18, 19);
+        quizLevelFactory.setLevelSize(8, 9);
         quizLevelFactory.createLevel(engine, assetManager);
     }
 
