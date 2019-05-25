@@ -153,12 +153,6 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 4
         );
 
-        createStar(
-                RenderingSystem.getScreenSizeInMeters().x * 3.5f,
-                RenderingSystem.getScreenSizeInMeters().y * 4f,
-                4
-        );
-
         placePointer(3.5f, 1.25f, 90f);
 
         placeImpenetrableWall(3.5f, 1.5f, 1.1f, 0.1f);
