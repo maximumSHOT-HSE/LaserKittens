@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Vector;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
@@ -332,6 +335,25 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 0.05f * RenderingSystem.getScreenSizeInMeters().x,
                 0.03f * RenderingSystem.getScreenSizeInMeters().y,
                 door);
+        List<Vector2> path = new ArrayList<>();
+        path.add(new Vector2(6.75f, 1.6f));
+        path.add(new Vector2(4.75f, 1.6f));
+        path.add(new Vector2(4.75f, 2.35f));
+        path.add(new Vector2(6.75f, 2.35f));
+        for (Vector2 vertex : path) {
+            vertex.x *= RenderingSystem.getScreenSizeInMeters().x;
+            vertex.y *= RenderingSystem.getScreenSizeInMeters().y;
+        }
+        createGuardian(
+                RenderingSystem.getScreenSizeInMeters().x * 6.75f,
+                RenderingSystem.getScreenSizeInMeters().y * 1.6f,
+                3f, path, 30);
+        path = new Vector<>(path);
+        Collections.rotate(path, 2);
+        createGuardian(
+                RenderingSystem.getScreenSizeInMeters().x * 4.75f,
+                RenderingSystem.getScreenSizeInMeters().y * 2.35f,
+                3f, path, 50);
     }
 
     @Override

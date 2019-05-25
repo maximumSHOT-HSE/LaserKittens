@@ -62,7 +62,7 @@ public class BodyFactory {
 
     /**
      * Goes though all fixtures in body and sets
-     *  them filter specified by given masks.
+     * them filter specified by given masks.
      */
     private void setFilter(Body body, short categoryBits, short maskBits){
         if (body != null) {
@@ -97,8 +97,11 @@ public class BodyFactory {
     }
 
     public Body newPlayerBody(Vector2 center, float radius) {
-        Body body = (new BodyBuilder()).setType(BodyDef.BodyType.DynamicBody)
-                .setPosition(center).setFixedRotation(true).build();
+        Body body = (new BodyBuilder())
+                .setType(BodyDef.BodyType.DynamicBody)
+                .setPosition(center)
+                .setFixedRotation(true)
+                .build();
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
@@ -106,6 +109,21 @@ public class BodyFactory {
         circleShape.dispose();
 
         setFilter(body, Category.PLAYER.mask, (short)(Category.all() & ~Category.BULLET.mask));
+        return body;
+    }
+
+    public Body newGuardianBody(Vector2 center, float radius) {
+        Body body = (new BodyBuilder())
+                .setType(BodyDef.BodyType.KinematicBody)
+                .setPosition(center)
+                .setFixedRotation(false)
+                .build();
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(radius);
+        body.createFixture(FixtureFactory.playerFixture(circleShape));
+        circleShape.dispose();
+
+        setFilter(body, Category.OTHER.mask, Category.all());
         return body;
     }
 
