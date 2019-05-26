@@ -36,6 +36,7 @@ public class MultiplayerScreen implements Screen {
         InputProcessor inputProcessor = new MultiplayerScreenInputProcessor(parent);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
 
+
     }
 
     @Override

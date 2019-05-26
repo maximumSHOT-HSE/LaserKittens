@@ -41,7 +41,9 @@ public class GestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public boolean longPress(float x, float y) {
-        abstractLevel.getAbstractGraph().setDrawGraph(true);
+        if (abstractLevel.getAbstractGraph() != null) {
+            abstractLevel.getAbstractGraph().setDrawGraph(true);
+        }
         return false;
     }
 
