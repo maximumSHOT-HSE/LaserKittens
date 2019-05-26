@@ -1,5 +1,6 @@
 package ru.hse.team;
 
+import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.net.Uri;
@@ -26,7 +27,8 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 		GameHelper.GameHelperListener gameHelperListener = new GameHelper.GameHelperListener() {
 			@Override
 			public void onSignInFailed() {
-				Log.i("Game Helper", "Sign in failed");
+
+			    Log.i("Game Helper", "Sign in failed");
 			}
 
 			@Override
@@ -37,17 +39,38 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 
 		gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
 		gameHelper.enableDebugLog(true);
-		gameHelper.setup(gameHelperListener);
+		gameHelper.setConnectOnStart(false);
 
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		config.useAccelerometer = true;
-		config.useCompass = false;
-		config.useGyroscope = false;
+        gameHelper.setup(gameHelperListener);
 
-		initialize(new LaserKittens(Room.databaseBuilder(this, AppDatabaseAndroid.class, "database").build(),
-				this),
-				config);
+
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        config.useAccelerometer = true;
+        config.useCompass = false;
+        config.useGyroscope = false;
+        initialize(new LaserKittens(Room.databaseBuilder(this, AppDatabaseAndroid.class, "database").build(),
+                        this),
+                config);
 	}
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        gameHelper.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+	@Override
+    public void onStart() {
+	    super.onStart();
+        gameHelper.onStart(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        gameHelper.onStop();
+    }
 
 	@Override
 	public void signIn() {
