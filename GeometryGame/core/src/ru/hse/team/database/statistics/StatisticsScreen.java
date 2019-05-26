@@ -144,7 +144,12 @@ public class StatisticsScreen implements Screen {
 
         public Menu(Stage stage) {
 
-            listOfStatistics = getAllLevels().stream().map(this::levelStatisticsToLabels).collect(Collectors.toList());
+            List<List<Label>> list = new ArrayList<>();
+            for (LevelStatistics levelStatistics : getAllLevels()) {
+                List<Label> labels = levelStatisticsToLabels(levelStatistics);
+                list.add(labels);
+            }
+            listOfStatistics = list;
 
             table.setFillParent(true);
             stage.addActor(table);

@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.soap.Text;
@@ -25,6 +26,7 @@ import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.KeyComponent;
+import ru.hse.team.game.gamelogic.components.PatrolComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
@@ -150,6 +152,21 @@ abstract public class AbstractLevelFactory {
                 .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.Cat3, Texture.class)))
                 .addStateComponent(StateComponent.State.NORMAL)
                 .addTypeComponent(TypeComponent.Type.PLAYER)
+                .build();
+    }
+
+    protected Entity createGuardian(float guardianX, float guardianY, float radius, List<Vector2> path, float velocty) {
+        float regionGuardianRadius = RenderingSystem.pixelsToMeters(
+                manager.manager.get(KittensAssetManager.Cat2, Texture.class).getHeight() * 0.78f * 0.5f);
+        Vector2 scale = new Vector2(radius / regionGuardianRadius, radius / regionGuardianRadius);
+
+        return (new EntityBuilder())
+                .addBodyComponent(bodyFactory.newGuardianBody(new Vector2(guardianX, guardianY), radius))
+                .addTransformComponent(new Vector3(guardianX, guardianY, 100), scale, 0, false)
+                .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.Cat2, Texture.class)))
+                .addStateComponent(StateComponent.State.NORMAL)
+                .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
+                .addPatrolComponent(path, velocty)
                 .build();
     }
 
@@ -297,6 +314,15 @@ abstract public class AbstractLevelFactory {
             bulletComponent.lifeTime = lifeTime;
             bulletComponent.path.add(source);
             entity.add(bulletComponent);
+            return this;
+        }
+
+        public EntityBuilder addPatrolComponent(List<Vector2> path, float velocity) {
+            PatrolComponent patrolComponent = engine.createComponent(PatrolComponent.class);
+            patrolComponent.setPath(path);
+            patrolComponent.setEntity(entity);
+            patrolComponent.setVelocity(velocity);
+            entity.add(patrolComponent);
             return this;
         }
 

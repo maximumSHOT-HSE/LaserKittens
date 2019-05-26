@@ -19,6 +19,7 @@ import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
+import ru.hse.team.game.levels.AbstractLevel;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -59,6 +60,8 @@ public class RenderingSystem extends SortedIteratingSystem {
     private OrthographicCamera camera;
     private float cameraWaiting = 0;
 
+    private AbstractLevel abstractLevel;
+
     public void decreaseCameraWaitingTime(float deltaTime) {
         cameraWaiting -= deltaTime;
         if (cameraWaiting < 0) {
@@ -75,8 +78,10 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer, AbstractLevel abstractLevel) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
+
+        this.abstractLevel = abstractLevel;
 
         this.batch = batch;
         this.shapeRenderer = shapeRenderer;
@@ -85,7 +90,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
     }
 
-    private void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
+    public void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
         shapeRenderer.setColor(color);
         shapeRenderer.rectLine(from, to, 0.1f);
     }
@@ -99,7 +104,6 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     private float distanceToStrip(float a, float left, float right) {
         float distance = 0;
-
         if (a < left) {
             distance = Math.max(distance, left - a);
         }
@@ -136,8 +140,15 @@ public class RenderingSystem extends SortedIteratingSystem {
                     Body keyBody = Mapper.bodyComponent.get(keyEntity).body;
                     Vector2 keyPosition = keyBody.getPosition();
                     drawSegment(doorCenterPosition, keyPosition, shapeRenderer, Color.YELLOW);
+                    System.out.println("HINT KEY (" + keyPosition.x + ", " + keyPosition.y + ")");
                 }
             }
+        }
+    }
+
+    private void drawGraph() {
+        if (abstractLevel.getAbstractGraph().isDrawGraph()) {
+            abstractLevel.getAbstractGraph().draw(shapeRenderer);
         }
     }
 
@@ -192,6 +203,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         drawBulletTrack();
         drawHintsForDoors();
+        drawGraph();
 
         shapeRenderer.end();
 
