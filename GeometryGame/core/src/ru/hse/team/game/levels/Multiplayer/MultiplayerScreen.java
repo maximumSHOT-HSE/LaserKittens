@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.sun.xml.internal.fastinfoset.algorithm.BuiltInEncodingAlgorithm;
 
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
@@ -35,6 +36,7 @@ public class MultiplayerScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         InputProcessor inputProcessor = new MultiplayerScreenInputProcessor(parent);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
+
     }
 
     @Override
