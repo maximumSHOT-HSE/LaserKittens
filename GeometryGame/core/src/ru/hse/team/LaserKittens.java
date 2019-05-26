@@ -117,8 +117,6 @@ public class LaserKittens extends Game {
 
         font = assetManager.manager.get(KittensAssetManager.font, BitmapFont.class);
 
-//        googleServices.signIn();
-
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }
 

@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ru.hse.team.Background;
+import ru.hse.team.GoogleServicesAction;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.KittensAssetManager;
 
@@ -179,6 +180,9 @@ public class SettingsScreen implements Screen {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         parent.getPreferences().setEnableAccelerometer(enableAccelerometer.isChecked());
+                        if (enableAccelerometer.isChecked()) {
+                            parent.getGoogleServices().unlockAchievement(GoogleServicesAction.accelerometerAchievement);
+                        }
                     }
                 });
             } else {

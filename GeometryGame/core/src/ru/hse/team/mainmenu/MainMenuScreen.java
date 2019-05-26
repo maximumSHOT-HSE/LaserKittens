@@ -7,15 +7,19 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import javax.xml.soap.Text;
 
 import ru.hse.team.Background;
+import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 
 /**
@@ -98,6 +102,10 @@ public class MainMenuScreen implements Screen {
         private TextButton about = new TextButton("About", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
+        private ImageButton loginButton = new ImageButton(new TextureRegionDrawable(parent.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+        private ImageButton achievementsButton = new ImageButton(new TextureRegionDrawable(parent.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+        private ImageButton rateButton = new ImageButton(new TextureRegionDrawable(parent.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+
         public Menu(Stage stage) {
             table.setFillParent(true);
             //table.setDebug(true);
@@ -112,15 +120,25 @@ public class MainMenuScreen implements Screen {
             setListeners();
 
             table.row().pad(5, 10, 5, 10);
-            table.add(levels).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.add(levels).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
             table.row().pad(5, 10, 5, 10);
-            table.add(multiplayer).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
             table.row().pad(5, 10, 5, 10);
-            table.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.add(multiplayer).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
             table.row().pad(5, 10, 5, 10);
-            table.add(about).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
             table.row().pad(5, 10, 5, 10);
-            table.add(exit).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.add(about).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
+            table.row().pad(5, 10, 5, 10);
+            table.add(exit).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
+            table.row().pad(5, 10, 5, 10);
+
+            final float googleButtonWidth = Gdx.graphics.getWidth() * 0.2f;
+            final float googleButtonHeight = Gdx.graphics.getHeight() * 0.1f;
+            table.add(loginButton).width(googleButtonWidth).height(googleButtonHeight);
+            table.add(achievementsButton).width(googleButtonWidth).height(googleButtonHeight);
+            table.add(rateButton).width(googleButtonWidth).height(googleButtonHeight);
+
         }
 
         private void setListeners() {
@@ -158,6 +176,28 @@ public class MainMenuScreen implements Screen {
                     Gdx.app.exit();
                 }
             });
+
+            loginButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    parent.getGoogleServices().signIn();
+                }
+            });
+
+            achievementsButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    parent.getGoogleServices().showAchievements();
+                }
+            });
+
+            rateButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    parent.getGoogleServices().rateGame();
+                }
+            });
+
         }
     }
 }
