@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
+import ru.hse.team.game.gamelogic.components.PatrolComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
 
 
@@ -53,6 +54,11 @@ public class PhysicsSystem extends IteratingSystem {
                 transformComponent.position.x = position.x;
                 transformComponent.position.y = position.y;
                 transformComponent.rotation = bodyComponent.body.getAngle() * MathUtils.radiansToDegrees;
+            }
+            for (Entity entity : bodiesQueue) {
+                PatrolComponent patrolComponent = Mapper.patrolComponent.get(entity);
+                if (patrolComponent == null) continue;
+                patrolComponent.action();
             }
             bodiesQueue.clear();
         }

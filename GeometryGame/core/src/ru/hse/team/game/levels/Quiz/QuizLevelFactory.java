@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Vector;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
@@ -150,12 +153,6 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 4
         );
 
-        createStar(
-                RenderingSystem.getScreenSizeInMeters().x * 3.5f,
-                RenderingSystem.getScreenSizeInMeters().y * 4f,
-                4
-        );
-
         placePointer(3.5f, 1.25f, 90f);
 
         placeImpenetrableWall(3.5f, 1.5f, 1.1f, 0.1f);
@@ -226,36 +223,36 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placeImpenetrableWall(4.5f, 1.975f, 0.1f, 1.05f);
         addAngularVelocity(placeImpenetrableWall(4.25f, 1.5f, 0.4f, 0.01f), 1);
         placeTransparentWall(4.25f, 1.5f, 0.4f, 0.1f);
-        Entity rightDoor = placeDoor(4.95f, 1.25f, 0.1f, 0.5f);
+        Entity rightDoor = placeDoor(4.9f, 1.25f, 0.1f, 0.5f);
         placeMirror(3.75f, 2.425f, 0.5f, 0.05f, 0);
         placeImpenetrableWall(3.75f, 2.475f, 0.5f, 0.05f);
         placeImpenetrableWall(4.75f, 1f, 0.5f, 0.1f);
         placeImpenetrableWall(4.25f, 0.75f, 0.6f, 0.05f);
         placeImpenetrableWall(4.5f, 0.9f, 0.1f, 0.3f);
-        Entity downDoor = placeDoor(4.25f, 1.025f, 0.6f, 0.05f);
+        Entity downDoor = placeDoor(4.25f, 1f, 0.6f, 0.05f);
         createKey(new Vector2(
                 3.2f * RenderingSystem.getScreenSizeInMeters().x,
                     2.1f * RenderingSystem.getScreenSizeInMeters().y),
-                0.1f * RenderingSystem.getScreenSizeInMeters().x,
-                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                0.05f * RenderingSystem.getScreenSizeInMeters().x,
+                0.03f * RenderingSystem.getScreenSizeInMeters().y,
                 downDoor);
         createKey(new Vector2(
                         4.4f * RenderingSystem.getScreenSizeInMeters().x,
                         2.375f * RenderingSystem.getScreenSizeInMeters().y),
-                0.1f * RenderingSystem.getScreenSizeInMeters().x,
-                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                0.05f * RenderingSystem.getScreenSizeInMeters().x,
+                0.03f * RenderingSystem.getScreenSizeInMeters().y,
                 downDoor);
         createKey(new Vector2(
                         3.1f * RenderingSystem.getScreenSizeInMeters().x,
                         1.585f * RenderingSystem.getScreenSizeInMeters().y),
-                0.1f * RenderingSystem.getScreenSizeInMeters().x,
-                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                0.05f * RenderingSystem.getScreenSizeInMeters().x,
+                0.03f * RenderingSystem.getScreenSizeInMeters().y,
                 downDoor);
         createKey(new Vector2(
                         4.25f * RenderingSystem.getScreenSizeInMeters().x,
                         0.9f * RenderingSystem.getScreenSizeInMeters().y),
-                0.1f * RenderingSystem.getScreenSizeInMeters().x,
-                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                0.05f * RenderingSystem.getScreenSizeInMeters().x,
+                0.03f * RenderingSystem.getScreenSizeInMeters().y,
                 rightDoor);
         placeQuestion(4.8f, 1.4f, 2);
         placePointer(4.5f, 1.25f, -90);
@@ -270,23 +267,21 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createKey(new Vector2(
                         4.4f * RenderingSystem.getScreenSizeInMeters().x,
                         0.15f * RenderingSystem.getScreenSizeInMeters().y),
-                0.1f * RenderingSystem.getScreenSizeInMeters().x,
-                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                0.05f * RenderingSystem.getScreenSizeInMeters().x,
+                0.03f * RenderingSystem.getScreenSizeInMeters().y,
                 upDoor);
         createKey(new Vector2(
                         4.25f * RenderingSystem.getScreenSizeInMeters().x,
                         0.5f * RenderingSystem.getScreenSizeInMeters().y),
-                0.1f * RenderingSystem.getScreenSizeInMeters().x,
-                0.1f * RenderingSystem.getScreenSizeInMeters().y,
+                0.05f * RenderingSystem.getScreenSizeInMeters().x,
+                0.03f * RenderingSystem.getScreenSizeInMeters().y,
                 upDoor);
-
-
         final Entity movableWall = placeDynamicImpenetrableWall(4.5f, 0.375f, 0.05f, 0.5f);
         final Entity tumbler = createTumbler(new Vector2(
                 5.4f * RenderingSystem.getScreenSizeInMeters().x,
                 0.8f * RenderingSystem.getScreenSizeInMeters().y),
-            0.1f * RenderingSystem.getScreenSizeInMeters().x,
-            0.06f * RenderingSystem.getScreenSizeInMeters().y, () -> {});
+            0.07f * RenderingSystem.getScreenSizeInMeters().x,
+            0.04f * RenderingSystem.getScreenSizeInMeters().y, () -> {});
         Runnable task = new Runnable() {
 
             private int state = 0;
@@ -311,6 +306,56 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placePointer(5.25f, 1.25f, 180);
     }
 
+    private void createSection4() {
+        placeImpenetrableWall(5.75f, 2.45f, 2.5f, 0.1f);
+        placeImpenetrableWall(7f, 1.625f, 0.1f, 0.25f);
+        placeImpenetrableWall(7f, 2.375f, 0.1f, 0.25f);
+        placeImpenetrableWall(6.25f, 1.5f, 1.6f, 0.1f);
+        Entity door = placeDoor(7f, 2f, 0.1f, 0.5f);
+        placeImpenetrableWall(5.5f, 1.75f, 1f, 0.03f);
+        placeImpenetrableWall(6.25f, 2.25f, 0.5f, 0.03f);
+        placeImpenetrableWall(5.25f, 2.25f, 0.5f, 0.03f);
+        placeImpenetrableWall(6.5f, 2f, 0.05f, 0.5f);
+        placeImpenetrableWall(5f, 1.875f, 0.03f, 0.25f);
+        createKey(new Vector2(
+                        5.075f * RenderingSystem.getScreenSizeInMeters().x,
+                        1.8f * RenderingSystem.getScreenSizeInMeters().y),
+                0.05f * RenderingSystem.getScreenSizeInMeters().x,
+                0.03f * RenderingSystem.getScreenSizeInMeters().y,
+                door);
+        createKey(new Vector2(
+                        6.425f * RenderingSystem.getScreenSizeInMeters().x,
+                        2.2f * RenderingSystem.getScreenSizeInMeters().y),
+                0.05f * RenderingSystem.getScreenSizeInMeters().x,
+                0.03f * RenderingSystem.getScreenSizeInMeters().y,
+                door);
+        List<Vector2> path = new ArrayList<>();
+        path.add(new Vector2(6.75f, 1.6f));
+        path.add(new Vector2(4.75f, 1.6f));
+        path.add(new Vector2(4.75f, 2.35f));
+        path.add(new Vector2(6.75f, 2.35f));
+        for (Vector2 vertex : path) {
+            vertex.x *= RenderingSystem.getScreenSizeInMeters().x;
+            vertex.y *= RenderingSystem.getScreenSizeInMeters().y;
+        }
+        createGuardian(
+                RenderingSystem.getScreenSizeInMeters().x * 6.75f,
+                RenderingSystem.getScreenSizeInMeters().y * 1.6f,
+                3f, path, 30);
+        path = new Vector<>(path);
+        Collections.rotate(path, 2);
+        createGuardian(
+                RenderingSystem.getScreenSizeInMeters().x * 4.75f,
+                RenderingSystem.getScreenSizeInMeters().y * 2.35f,
+                3f, path, 50);
+        placeQuestion(5.4f, 1.425f, 2);
+        createStar(
+                7.5f * RenderingSystem.getScreenSizeInMeters().x,
+                2f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
+        );
+    }
+
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         CH = getLevelHeightInScreens();
@@ -322,8 +367,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createBackground();
 
         focusedPlayer = createPlayer(
-                RenderingSystem.getScreenSizeInMeters().x * 5.25f,
-                RenderingSystem.getScreenSizeInMeters().y * 1f,
+                RenderingSystem.getScreenSizeInMeters().x * 3.5f,
+                RenderingSystem.getScreenSizeInMeters().y * 0.5f,
                 3f
         );
 
@@ -331,5 +376,6 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createSection1();
         createSection2();
         createSection3();
+        createSection4();
     }
 }

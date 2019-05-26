@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.Mapper;
+import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
 
 /**
  * Class for encapsulating logic and
@@ -18,6 +19,15 @@ abstract public class AbstractLevel {
      * User will see it in choose level screen
      */
     private String name;
+    private AbstractGraph abstractGraph;
+
+    public AbstractGraph getAbstractGraph() {
+        return abstractGraph;
+    }
+
+    public void setAbstractGraph(AbstractGraph abstractGraph) {
+        this.abstractGraph = abstractGraph;
+    }
 
     public AbstractLevel(String name) {
         this.name = name;
@@ -35,7 +45,7 @@ abstract public class AbstractLevel {
         Vector3 playerPosition = Mapper.transformComponent.get(getFactory().getPlayer()).position;
 
         Vector2 direction = new Vector2(x - playerPosition.x, y - playerPosition.y);
-        float length = (float)Math.sqrt(direction.x * direction.x + direction.y * direction.y);
+        float length = (float) Math.sqrt(direction.x * direction.x + direction.y * direction.y);
         direction.set(direction.x / length, direction.y / length);
         float playerRadius = getFactory().getPlayerRadius();
         getFactory().createLaser(
