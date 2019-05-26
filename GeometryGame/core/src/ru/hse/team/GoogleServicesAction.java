@@ -1,6 +1,6 @@
 package ru.hse.team;
 
-interface GoogleServicesAction {
+public interface GoogleServicesAction {
 
     void signIn();
     void signOut();
