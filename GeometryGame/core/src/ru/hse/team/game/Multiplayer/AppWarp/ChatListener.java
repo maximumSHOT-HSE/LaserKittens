@@ -1,5 +1,6 @@
 package ru.hse.team.game.Multiplayer.AppWarp;
 
+import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 import com.shephertz.app42.gaming.multiplayer.client.events.ChatEvent;
 import com.shephertz.app42.gaming.multiplayer.client.listener.ChatRequestListener;
 
@@ -15,7 +16,7 @@ public class ChatListener implements ChatRequestListener {
 
     @Override
     public void onSendChatDone(byte b) {
-
+        warpController.onSendChatDone(b == WarpResponseResultCode.SUCCESS);
     }
 
     @Override

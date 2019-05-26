@@ -7,25 +7,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import ru.hse.team.Background;
-import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
+import ru.hse.team.game.Multiplayer.AppWarp.WarpListener;
 
-public class MultiplayerScreen implements Screen {
+public class MultiplayerScreen implements Screen, WarpListener {
 
     private final LaserKittens parent;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
     private Stage stage;
-    private Menu menu;
 
     private InputMultiplexer inputMultiplexer;
 
@@ -35,16 +30,18 @@ public class MultiplayerScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         InputProcessor inputProcessor = new MultiplayerScreenInputProcessor(parent);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
-
-
+        WarpController.getInstance().setWarpListener(this);
     }
+
+    private final String[] tryingToConnect = {"Connecting","to AppWarp"};
+    private final String[] waitForOtherUser = {"Waiting for","other user"};
+    private final String[] errorInConnection = {"Error in","Connection", "Go Back"};
+    private String[] msg = tryingToConnect;
 
     @Override
     public void show() {
         stage.clear();
         Gdx.input.setInputProcessor(inputMultiplexer);
-
-        menu = new Menu(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
@@ -57,6 +54,12 @@ public class MultiplayerScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
+
+        System.out.println("-------------------");
+        for (String word : msg) {
+            System.out.println(word);
+        }
+        System.out.println("-------------------");
 
         parent.batch.begin();
         background.draw(parent.batch, camera);
@@ -92,34 +95,32 @@ public class MultiplayerScreen implements Screen {
 
     }
 
-    private class Menu {
-        private Table table = new Table();
-        private Skin skin = parent.assetManager.manager.get(KittensAssetManager.skin, Skin.class);
+    // methods from WarpListener BEGIN
 
-        final private TextButton backButton = new TextButton("Back", skin);
+    @Override
+    public void onWaitingStarted(String message) {
 
-        public Menu(Stage stage) {
-            table.setFillParent(true);
-            //table.setDebug(true);
-            stage.addActor(table);
-
-            backButton.getLabel().setFontScale(3f);
-
-            setListeners();
-
-            table.row().pad(5, 10, 5, 10);
-            table.add(backButton).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
-        }
-
-        private void setListeners() {
-
-            backButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
-                }
-            });
-
-        }
     }
+
+    @Override
+    public void onError(String message) {
+        this.msg = errorInConnection;
+    }
+
+    @Override
+    public void onGameStarted(String message) {
+        System.out.println("GAME STARTED!!!!!!!!");
+    }
+
+    @Override
+    public void onGameFinished(WarpController.EndType endType, boolean isRemote) {
+        System.out.println("GAME FINISHED!!!!!!!");
+    }
+
+    @Override
+    public void onGameUpdateReceived(String message) {
+        this.msg = waitForOtherUser;
+    }
+
+    // methods from WarpListener END
 }

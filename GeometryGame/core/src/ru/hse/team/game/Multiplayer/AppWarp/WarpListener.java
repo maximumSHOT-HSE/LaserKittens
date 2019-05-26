@@ -8,7 +8,7 @@ public interface WarpListener {
 
     void onGameStarted(String message);
 
-    void onGameFinished(int code, boolean isRemote);
+    void onGameFinished(WarpController.EndType endType, boolean isRemote);
 
     void onGameUpdateReceived(String message);
 }

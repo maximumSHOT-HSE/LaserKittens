@@ -64,7 +64,7 @@ public class NotificationListener implements NotifyListener {
 
     @Override
     public void onUpdatePeersReceived(UpdateEvent updateEvent) {
-
+        warpController.onGameUpdateReceived(updateEvent);
     }
 
     @Override
