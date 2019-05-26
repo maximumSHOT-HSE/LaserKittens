@@ -90,7 +90,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
     }
 
-    private void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
+    public void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
         shapeRenderer.setColor(color);
         shapeRenderer.rectLine(from, to, 0.1f);
     }
@@ -104,7 +104,6 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     private float distanceToStrip(float a, float left, float right) {
         float distance = 0;
-
         if (a < left) {
             distance = Math.max(distance, left - a);
         }
@@ -141,15 +140,14 @@ public class RenderingSystem extends SortedIteratingSystem {
                     Body keyBody = Mapper.bodyComponent.get(keyEntity).body;
                     Vector2 keyPosition = keyBody.getPosition();
                     drawSegment(doorCenterPosition, keyPosition, shapeRenderer, Color.YELLOW);
+                    System.out.println("HINT KEY (" + keyPosition.x + ", " + keyPosition.y + ")");
                 }
             }
         }
     }
 
     private void drawGraph() {
-        System.out.println("is draw = " + abstractLevel.getAbstractGraph().isDrawGraph());
         if (abstractLevel.getAbstractGraph().isDrawGraph()) {
-            System.out.println("drawGraph()");
             abstractLevel.getAbstractGraph().draw(shapeRenderer);
         }
     }

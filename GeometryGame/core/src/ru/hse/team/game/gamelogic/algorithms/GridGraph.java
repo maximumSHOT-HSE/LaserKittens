@@ -11,33 +11,43 @@ import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 public class GridGraph extends AbstractGraph {
 
-    private static int VERTEX_COUNT_WIDTH = 2;
-    private static int VERTEX_COUNT_HEIGHT = 4;
+    private static int VERTEX_COUNT_IN_CELL_WIDTH = 2;
+    private static int VERTEX_COUNT_IN_CELL_HEIGHT = 4;
 
-    private int countWidth;
-    private int countHeight;
+    private int countScreensWidth;
+    private int countScreensHeight;
     private float cellWidth;
     private float cellHeight;
 
     private Vertex[][] graph;
 
-    public GridGraph(int countWidth, int countHeight, float cellWidth, float cellHeight) {
-        this.countWidth = countWidth;
-        this.countHeight = countHeight;
+    public GridGraph(int countScreensWidth, int countScreensHeight, float cellWidth, float cellHeight) {
+        this.countScreensWidth = countScreensWidth;
+        this.countScreensHeight = countScreensHeight;
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         buildGraph();
     }
 
     private void buildGraph() {
-        int n = VERTEX_COUNT_WIDTH * countWidth;
-        int m = VERTEX_COUNT_HEIGHT * countHeight;
-        float dx = cellWidth / (countWidth + 1);
-        float dy = cellHeight / (countHeight + 1);
+        int n = VERTEX_COUNT_IN_CELL_WIDTH * countScreensWidth;
+        int m = VERTEX_COUNT_IN_CELL_HEIGHT * countScreensHeight;
+        float dx = cellWidth / (VERTEX_COUNT_IN_CELL_WIDTH + 1);
+        float dy = cellHeight / (VERTEX_COUNT_IN_CELL_HEIGHT + 1);
         graph = new Vertex[n][m];
+        float currentX = -dx;
         for (int i = 0; i < n; i++) {
+            float currentY = -dy;
+            currentX += dx;
+            if (i % VERTEX_COUNT_IN_CELL_WIDTH == 0) {
+                currentX += dx;
+            }
             for (int j = 0; j < m; j++) {
-                graph[i][j] = new Vertex(new Vector2((i + 1) * dx, (j + 1) * dy));
+                currentY += dy;
+                if (j % VERTEX_COUNT_IN_CELL_HEIGHT == 0) {
+                    currentY += dy;
+                }
+                graph[i][j] = new Vertex(new Vector2(currentX, currentY));
             }
         }
     }
@@ -73,11 +83,11 @@ public class GridGraph extends AbstractGraph {
     public void draw(ShapeRenderer shapeRenderer) {
         int n = graph.length;
         int m = graph[0].length;
+        shapeRenderer.setColor(Color.GOLD);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 Vertex v = graph[i][j];
-                shapeRenderer.setColor(Color.YELLOW);
-                shapeRenderer.circle(v.position.x, v.position.y, 0.1f);
+                shapeRenderer.circle(v.position.x, v.position.y, 1f);
             }
         }
     }

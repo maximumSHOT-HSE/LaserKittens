@@ -349,6 +349,11 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 RenderingSystem.getScreenSizeInMeters().y * 2.35f,
                 3f, path, 50);
         placeQuestion(5.4f, 1.425f, 2);
+        createStar(
+                7.5f * RenderingSystem.getScreenSizeInMeters().x,
+                2f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
+        );
     }
 
     @Override
@@ -362,8 +367,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createBackground();
 
         focusedPlayer = createPlayer(
-                RenderingSystem.getScreenSizeInMeters().x * 4.8f,
-                RenderingSystem.getScreenSizeInMeters().y * 1.6f,
+                RenderingSystem.getScreenSizeInMeters().x * 3.5f,
+                RenderingSystem.getScreenSizeInMeters().y * 0.5f,
                 3f
         );
 
