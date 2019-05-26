@@ -45,7 +45,6 @@ allprojects {
 project(":desktop") {
     apply plugin: "java"
 
-
     dependencies {
         implementation project(":core")
         implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -64,8 +63,6 @@ project(":android") {
     apply plugin: 'com.android.application'
 
     configurations { natives }
-
-
 
     dependencies {
         implementation project(":core")

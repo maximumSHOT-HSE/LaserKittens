@@ -1,4 +1,4 @@
-package ru.hse.team.game.levels.Multiplayer;
+package ru.hse.team.game.Multiplayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.sun.xml.internal.fastinfoset.algorithm.BuiltInEncodingAlgorithm;
 
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;

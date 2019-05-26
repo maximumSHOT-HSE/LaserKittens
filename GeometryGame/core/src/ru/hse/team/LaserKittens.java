@@ -10,7 +10,7 @@ import ru.hse.team.about.AboutScreen;
 import ru.hse.team.database.AppDatabase;
 import ru.hse.team.database.statistics.StatisticsScreen;
 import ru.hse.team.game.levels.ChooseLevelScreen;
-import ru.hse.team.game.levels.Multiplayer.MultiplayerScreen;
+import ru.hse.team.game.Multiplayer.MultiplayerScreen;
 import ru.hse.team.mainmenu.MainMenuScreen;
 import ru.hse.team.settings.AppPreferences;
 import ru.hse.team.settings.SettingsScreen;
