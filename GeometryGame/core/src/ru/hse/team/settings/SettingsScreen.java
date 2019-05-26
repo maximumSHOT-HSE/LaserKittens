@@ -44,7 +44,6 @@ public class SettingsScreen implements Screen {
 
         InputProcessor inputProcessor = new SettingsScreenInputProcessor(parent);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
-
     }
 
     @Override
@@ -198,7 +197,5 @@ public class SettingsScreen implements Screen {
                 }
             });
         }
-
-
     }
 }
