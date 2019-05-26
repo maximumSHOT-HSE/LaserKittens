@@ -99,7 +99,6 @@ public class MainMenuScreen implements Screen {
         private TextButton levels = new TextButton("Levels", skin);
         private TextButton multiplayer = new TextButton("Multiplayer", skin);
         private TextButton settings = new TextButton("Settings", skin);
-        private TextButton about = new TextButton("About", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
         private ImageButton loginButton = new ImageButton(new TextureRegionDrawable(parent.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
@@ -114,23 +113,20 @@ public class MainMenuScreen implements Screen {
             levels.getLabel().setFontScale(2f);
             multiplayer.getLabel().setFontScale(2f);
             settings.getLabel().setFontScale(2f);
-            about.getLabel().setFontScale(2f);
             exit.getLabel().setFontScale(2f);
 
             setListeners();
 
+            final float buttonHeight = Gdx.graphics.getHeight() * 0.15f;
+            final float buttonWidth = Gdx.graphics.getWidth() * 0.65f;
             table.row().pad(5, 10, 5, 10);
-            table.add(levels).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
+            table.add(levels).width(buttonWidth).height(buttonHeight).colspan(3);
             table.row().pad(5, 10, 5, 10);
-            table.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
+            table.add(multiplayer).width(buttonWidth).height(buttonHeight).colspan(3);
             table.row().pad(5, 10, 5, 10);
-            table.add(multiplayer).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
+            table.add(settings).width(buttonWidth).height(buttonHeight).colspan(3);
             table.row().pad(5, 10, 5, 10);
-            table.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
-            table.row().pad(5, 10, 5, 10);
-            table.add(about).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
-            table.row().pad(5, 10, 5, 10);
-            table.add(exit).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
+            table.add(exit).width(buttonWidth).height(buttonHeight).colspan(3);
             table.row().pad(5, 10, 5, 10);
 
             final float googleButtonWidth = Gdx.graphics.getWidth() * 0.2f;
@@ -163,12 +159,6 @@ public class MainMenuScreen implements Screen {
                 }
             });
 
-            about.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.ABOUT_SCREEN);
-                }
-            });
 
             exit.addListener(new ChangeListener() {
                 @Override

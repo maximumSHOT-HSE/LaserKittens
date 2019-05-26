@@ -109,6 +109,7 @@ public class SettingsScreen implements Screen {
         private Label volumeSoundLabel = new Label("sound volume", skin);
 
         final private TextButton backButton = new TextButton("Back", skin);
+        private TextButton about = new TextButton("About", skin);
         final private Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin);
         final private Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
 
@@ -132,23 +133,24 @@ public class SettingsScreen implements Screen {
             accelerometerLabel.setFontScale(2);
             showTimeLabel.setFontScale(2);
 
-
-            table.row().pad(10, 10, 30, 10);
+            table.row().pad(10, 10, 10, 10);
             table.add(titleLabel).colspan(2);
             table.row().pad(10, 10, 10, 10);
             table.add(volumeMusicLabel);
             table.add(volumeMusicSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
-            table.row().pad(10, 10, 10, 10);
+            table.row().pad(10, 10, 5, 10);
             table.add(volumeSoundLabel);
             table.add(volumeSoundSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
-            table.row().pad(30, 10, 10, 10);
+            table.row().pad(10, 10, 5, 10);
             table.add(accelerometerLabel);
             table.add(enableAccelerometer).width(Gdx.graphics.getWidth() * 0.5f).height(Gdx.graphics.getHeight() * 0.1f);
-            table.row().pad(30, 10, 10, 10);
+            table.row().pad(10, 10, 5, 10);
             table.add(showTimeLabel);
             table.add(showTime).width(Gdx.graphics.getWidth() * 0.5f).height(Gdx.graphics.getHeight() * 0.1f);
-            table.row().pad(30, 10, 10, 10);
-            table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).colspan(2);
+            table.row().pad(10, 10, 10, 10);
+            table.add(about).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.row().pad(10, 10, 10, 10);
 
             setListeners();
         }
@@ -159,6 +161,13 @@ public class SettingsScreen implements Screen {
             volumeMusicSlider.addListener(event -> {
                 parent.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
                 return false;
+            });
+
+            about.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    parent.changeScreen(LaserKittens.SCREEN_TYPE.ABOUT_SCREEN);
+                }
             });
 
             volumeSoundSlider.setValue(parent.getPreferences().getSoundVolume());

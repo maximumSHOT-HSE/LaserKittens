@@ -174,7 +174,7 @@ public class AboutScreen implements Screen {
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
                 }
             });
 
