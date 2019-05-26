@@ -86,13 +86,30 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 
 	@Override
 	public void showScores() {
-		if (isSignedIn())
-			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_id)), REQUEST_CODE_UNUSED);
+		if (isSignedIn()) {
+            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_id)), REQUEST_CODE_UNUSED);
+        }
 		else {
 		}
 	}
 
-	@Override
+    @Override
+    public void unlockAchievement(String achievementId) {
+	    if (isSignedIn()) {
+            Games.Achievements.unlock(gameHelper.getApiClient(), achievementId);
+            startActivityForResult(Games.Achievements.getAchievementsIntent(gameHelper.getApiClient()), REQUEST_CODE_UNUSED);
+        } else {
+        }
+    }
+
+    @Override
+    public void showAchievements() {
+        if (isSignedIn()) {
+            startActivityForResult(Games.Achievements.getAchievementsIntent(gameHelper.getApiClient()), REQUEST_CODE_UNUSED);
+        }
+    }
+
+    @Override
 	public boolean isSignedIn()
 	{
 		return gameHelper.isSignedIn();
