@@ -122,8 +122,6 @@ public class MainMenuScreen implements Screen {
             table.row().pad(5, 10, 5, 10);
             table.add(levels).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
             table.row().pad(5, 10, 5, 10);
-            table.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
-            table.row().pad(5, 10, 5, 10);
             table.add(multiplayer).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
             table.row().pad(5, 10, 5, 10);
             table.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f).colspan(3);
