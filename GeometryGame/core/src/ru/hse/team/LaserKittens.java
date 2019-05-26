@@ -2,14 +2,15 @@ package ru.hse.team;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 import ru.hse.team.about.AboutScreen;
 import ru.hse.team.database.AppDatabase;
 import ru.hse.team.database.statistics.StatisticsScreen;
 import ru.hse.team.game.levels.ChooseLevelScreen;
+import ru.hse.team.game.levels.Multiplayer.MultiplayerScreen;
 import ru.hse.team.mainmenu.MainMenuScreen;
 import ru.hse.team.settings.AppPreferences;
 import ru.hse.team.settings.SettingsScreen;
@@ -34,6 +35,7 @@ public class LaserKittens extends Game {
     public enum SCREEN_TYPE {
         MAIN_MENU_SCREEN,
         CHOOSE_LEVEL_SCREEN,
+        MULTIPLAYER_SCREEN,
         SETTINGS_SCREEN,
         ABOUT_SCREEN,
         STATISTICS_SCREEN;
@@ -41,6 +43,7 @@ public class LaserKittens extends Game {
 
     private MainMenuScreen mainMenuScreen;
     private ChooseLevelScreen chooseLevelScreen;
+    private MultiplayerScreen multiplayerScreen;
     private SettingsScreen settingsScreen;
     private AboutScreen aboutScreen;
     private StatisticsScreen statisticsScreen;
@@ -68,6 +71,12 @@ public class LaserKittens extends Game {
                     mainMenuScreen = new MainMenuScreen(this);
                 }
                 this.setScreen(mainMenuScreen);
+                break;
+            case MULTIPLAYER_SCREEN:
+                if (multiplayerScreen == null) {
+                    multiplayerScreen = new MultiplayerScreen(this);
+                }
+                this.setScreen(multiplayerScreen);
                 break;
             case CHOOSE_LEVEL_SCREEN:
                 if (chooseLevelScreen == null) {

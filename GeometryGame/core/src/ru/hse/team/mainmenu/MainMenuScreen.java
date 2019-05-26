@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import javax.xml.soap.Text;
+
 import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
 
@@ -90,6 +93,7 @@ public class MainMenuScreen implements Screen {
         private Table table = new Table();
         private Skin skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
         private TextButton levels = new TextButton("Levels", skin);
+        private TextButton multiplayer = new TextButton("Multiplayer", skin);
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton about = new TextButton("About", skin);
         private TextButton exit = new TextButton("Exit", skin);
@@ -100,6 +104,7 @@ public class MainMenuScreen implements Screen {
             stage.addActor(table);
 
             levels.getLabel().setFontScale(2f);
+            multiplayer.getLabel().setFontScale(2f);
             settings.getLabel().setFontScale(2f);
             about.getLabel().setFontScale(2f);
             exit.getLabel().setFontScale(2f);
@@ -108,6 +113,8 @@ public class MainMenuScreen implements Screen {
 
             table.row().pad(5, 10, 5, 10);
             table.add(levels).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
+            table.row().pad(5, 10, 5, 10);
+            table.add(multiplayer).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
             table.row().pad(5, 10, 5, 10);
             table.add(settings).width(Gdx.graphics.getWidth() * 0.65f).height(Gdx.graphics.getHeight() * 0.15f);
             table.row().pad(5, 10, 5, 10);
@@ -121,6 +128,13 @@ public class MainMenuScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     parent.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                }
+            });
+
+            multiplayer.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MULTIPLAYER_SCREEN);
                 }
             });
 
