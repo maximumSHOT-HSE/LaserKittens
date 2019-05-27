@@ -41,6 +41,8 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     @Override
     public void show() {
+        WarpController.getInstance().start(WarpController.generateRandomName());
+
         stage.clear();
         Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -95,34 +97,35 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     @Override
     public void dispose() {
-
     }
 
     // methods from WarpListener BEGIN
 
     @Override
     public void onWaitingStarted(String message) {
-        System.out.println("WAITING FOR OTHER USER STARTED: msg = " + message);
+        System.out.println("MultiplayerScreen.onWaitingStarted: msg = " + message);
         this.msg = waitForOtherUser;
     }
 
     @Override
     public void onError(String message) {
+        System.out.println("MultiplayerScreen.onError: msg = " + message);
         this.msg = errorInConnection;
     }
 
     @Override
     public void onGameStarted(String message) {
-        System.out.println("GAME STARTED!!!!!!!!");
+        System.out.println("MultiplayerScreen.onGameStarted: msg = " + message);
     }
 
     @Override
     public void onGameFinished(WarpController.EndType endType, boolean isRemote) {
-        System.out.println("GAME FINISHED!!!!!!!");
+        System.out.println("MultiplayerScreen.onGameFinished: endType = " + endType);
     }
 
     @Override
     public void onGameUpdateReceived(String message) {
+        System.out.println("MultiplayerScreen.onGameUpdateReceived: msg = " + message);
     }
 
     // methods from WarpListener END

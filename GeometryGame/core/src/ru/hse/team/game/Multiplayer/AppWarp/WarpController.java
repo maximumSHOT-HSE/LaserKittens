@@ -7,9 +7,11 @@ import com.shephertz.app42.gaming.multiplayer.client.events.RoomData;
 import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.UpdateEvent;
 
-import java.util.HashMap;
+import java.util.Random;
 
 public class WarpController {
+
+    private static final Random random = new Random(System.currentTimeMillis());
 
     private final String API_KEY = "73b9a6fc13b16819e033f3be473a6da0cfb460b5dc396cbeadadf945fb26736b";
     private final String SECRET_KEY = "e6b08e9e2b7c46d20ae29f5705646791d5ee135966c80d0dd0a9f412298f16ff";
@@ -57,11 +59,12 @@ public class WarpController {
 
     private void startGame() {
         warpState = WarpState.STARTED;
+        warpListener.onGameStarted("Start the Game");
     }
 
     private void waitForOtherUser() {
         warpState = WarpState.WAITING;
-        warpListener.onWaitingStarted("Waiting for other player");
+        warpListener.onWaitingStarted("Waiting for the other player");
     }
 
     public static WarpController getInstance() {
@@ -72,7 +75,7 @@ public class WarpController {
     }
 
     public void onConnectDone(boolean status) {
-//        System.out.println("WarpController.onConnectDone: status = " + status);
+        System.out.println("WarpController.onConnectDone: status = " + status);
         if (status) {
             warpClient.initUDP();
             warpClient.joinRoomInRange(1, 5, false);
@@ -91,7 +94,7 @@ public class WarpController {
     }
 
     public void onUserJoinedRoom(RoomData roomData, String userName) {
-        if (localUser.equals(userName)) {
+        if (!localUser.equals(userName)) {
             startGame();
         }
     }
@@ -104,7 +107,8 @@ public class WarpController {
 
     public void onRoomSubscribed(RoomEvent roomEvent) {
         if (roomEvent == null) {
-
+            warpClient.disconnect();
+            processError();
         } else {
             isConnected = true;
             warpClient.getLiveRoomInfo(roomEvent.getData().getId());
@@ -124,9 +128,9 @@ public class WarpController {
     }
 
     public void onGetLiveRoomInfoDone(LiveRoomInfoEvent liveRoomInfoEvent) {
-        String[] joinedUsers = liveRoomInfoEvent.getJoinedUsers();
-        if (joinedUsers != null) {
-            if (joinedUsers.length == 2) {
+        String[] liveUsers = liveRoomInfoEvent.getJoinedUsers();
+        if (liveUsers != null) {
+            if (liveUsers.length == 2) {
                 startGame();
             } else {
                 waitForOtherUser();
@@ -145,9 +149,9 @@ public class WarpController {
             System.out.println("ROOM ID = " + this.roomId);
         } else {
             if (event.getResult() == WarpResponseResultCode.RESOURCE_NOT_FOUND) {
-                HashMap<String, Object> data = new HashMap<>();
-                data.put("result", "");
-                warpClient.createRoom("LaserKittens", "maximumSHOT", 2, data);
+                warpClient.createRoom("Room#" + WarpController.generateRandomName(),
+                        "RoomOwner#" + WarpController.generateRandomName(),
+                        2, null);
             } else {
                 warpClient.disconnect();
                 processError();
@@ -155,11 +159,23 @@ public class WarpController {
         }
     }
 
-    private void processError(){
+    private void processError() {
         if (roomId != null && roomId.length() > 0) {
             warpClient.deleteRoom(roomId);
         }
         disconnect();
+    }
+
+    private void processLeave() {
+        if (isConnected) {
+            warpClient.unsubscribeRoom(roomId);
+            warpClient.leaveRoom(roomId);
+
+            if (!warpState.equals(WarpState.STARTED)) {
+                warpClient.deleteRoom(roomId);
+            }
+            warpClient.disconnect();
+        }
     }
 
     public void start(String localUser) {
@@ -191,5 +207,14 @@ public class WarpController {
 
     public String getRoomId() {
         return roomId;
+    }
+
+    public static String generateRandomName() {
+        int length = 8;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            stringBuilder.append((char) (random.nextInt(26) + 'A'));
+        }
+        return stringBuilder.toString();
     }
 }
