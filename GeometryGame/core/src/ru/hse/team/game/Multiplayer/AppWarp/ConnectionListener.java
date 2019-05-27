@@ -14,6 +14,7 @@ public class ConnectionListener implements ConnectionRequestListener {
 
     @Override
     public void onConnectDone(ConnectEvent connectEvent) {
+        System.out.println("ConnectionListener.onConnectDone: " + connectEvent.getResult());
         warpController.onConnectDone(connectEvent.getResult() == WarpResponseResultCode.SUCCESS);
     }
 
@@ -25,6 +26,7 @@ public class ConnectionListener implements ConnectionRequestListener {
     @Override
     public void onInitUDPDone(byte b) {
         if (b == WarpResponseResultCode.SUCCESS) {
+            System.out.println("ConnectionListener.onInitUPDDone: b = " + b);
             warpController.setUDPEnabled(true);
         }
     }

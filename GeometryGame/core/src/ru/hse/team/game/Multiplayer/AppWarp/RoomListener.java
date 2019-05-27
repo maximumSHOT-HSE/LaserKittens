@@ -29,6 +29,7 @@ public class RoomListener implements RoomRequestListener {
 
     @Override
     public void onJoinRoomDone(RoomEvent roomEvent) {
+        System.out.println("RoomListener.onJoinRoomDone " + roomEvent.getResult());
         warpController.onJoinRoomDone(roomEvent);
     }
 

@@ -23,7 +23,7 @@ public class WarpController {
     private boolean isUDPEnabled = false;
 
     private WarpListener warpListener;
-    private static WarpController instance;
+    private static WarpController instance = null;
 
     public enum WarpState {
         PREPARING,
@@ -57,12 +57,11 @@ public class WarpController {
 
     private void startGame() {
         warpState = WarpState.STARTED;
-        warpListener.onGameStarted("START!");
     }
 
     private void waitForOtherUser() {
         warpState = WarpState.WAITING;
-        warpListener.onWaitingStarted("WAITING!");
+        warpListener.onWaitingStarted("Waiting for other player");
     }
 
     public static WarpController getInstance() {
@@ -73,6 +72,7 @@ public class WarpController {
     }
 
     public void onConnectDone(boolean status) {
+//        System.out.println("WarpController.onConnectDone: status = " + status);
         if (status) {
             warpClient.initUDP();
             warpClient.joinRoomInRange(1, 5, false);
@@ -138,14 +138,16 @@ public class WarpController {
     }
 
     public void onJoinRoomDone(RoomEvent event) {
+        System.out.println("WarpController.onJoinRoomDone: " + event.getResult());
         if (event.getResult() == WarpResponseResultCode.SUCCESS) {
             this.roomId = event.getData().getId();
             warpClient.subscribeRoom(roomId);
+            System.out.println("ROOM ID = " + this.roomId);
         } else {
             if (event.getResult() == WarpResponseResultCode.RESOURCE_NOT_FOUND) {
                 HashMap<String, Object> data = new HashMap<>();
                 data.put("result", "");
-                warpClient.createRoom("LaserKittner", "CAT", 2, data);
+                warpClient.createRoom("LaserKittens", "maximumSHOT", 2, data);
             } else {
                 warpClient.disconnect();
                 processError();
@@ -173,12 +175,21 @@ public class WarpController {
         isUDPEnabled = UDPEnabled;
     }
 
-    private void disconnect(){
+    private void disconnect() {
+        System.out.println("DISCONNECT");
         warpClient.removeConnectionRequestListener(new ConnectionListener(this));
         warpClient.removeChatRequestListener(new ChatListener(this));
         warpClient.removeZoneRequestListener(new ZoneListener(this));
         warpClient.removeRoomRequestListener(new RoomListener(this));
         warpClient.removeNotificationListener(new NotificationListener(this));
         warpClient.disconnect();
+    }
+
+    public String getLocalUser() {
+        return localUser;
+    }
+
+    public String getRoomId() {
+        return roomId;
     }
 }

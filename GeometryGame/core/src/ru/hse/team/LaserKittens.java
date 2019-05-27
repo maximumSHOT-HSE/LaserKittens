@@ -6,17 +6,21 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import java.util.Random;
+
 import ru.hse.team.about.AboutScreen;
 import ru.hse.team.database.AppDatabase;
 import ru.hse.team.database.statistics.StatisticsScreen;
-import ru.hse.team.game.levels.ChooseLevelScreen;
+import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.MultiplayerScreen;
+import ru.hse.team.game.levels.ChooseLevelScreen;
 import ru.hse.team.mainmenu.MainMenuScreen;
 import ru.hse.team.settings.AppPreferences;
 import ru.hse.team.settings.SettingsScreen;
 
 public class LaserKittens extends Game {
 
+    private static final Random random = new Random(System.currentTimeMillis());
     public SpriteBatch batch;
     public ShapeRenderer shapeRenderer;
     public BitmapFont font;
@@ -76,6 +80,7 @@ public class LaserKittens extends Game {
                 if (multiplayerScreen == null) {
                     multiplayerScreen = new MultiplayerScreen(this);
                 }
+                WarpController.getInstance().start(generateRandomName());
                 this.setScreen(multiplayerScreen);
                 break;
             case CHOOSE_LEVEL_SCREEN:
@@ -135,4 +140,12 @@ public class LaserKittens extends Game {
         shapeRenderer.dispose();
     }
 
+    private static String generateRandomName() {
+        int length = 8;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            stringBuilder.append((char) (random.nextInt(26) + 'A'));
+        }
+        return stringBuilder.toString();
+    }
 }

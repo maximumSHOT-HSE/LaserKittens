@@ -14,6 +14,7 @@ import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpListener;
+import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 public class MultiplayerScreen implements Screen, WarpListener {
 
@@ -55,14 +56,16 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
         camera.update();
 
-        System.out.println("-------------------");
-        for (String word : msg) {
-            System.out.println(word);
-        }
-        System.out.println("-------------------");
-
         parent.batch.begin();
         background.draw(parent.batch, camera);
+        float Y = RenderingSystem.getScreenSizeInPixels().y * 0.8f;
+        for (String s : msg) {
+            parent.font.draw(parent.batch, s, RenderingSystem.getScreenSizeInPixels().x / 2, Y);
+            Y -= RenderingSystem.getScreenSizeInPixels().y * 0.2f;
+        }
+        parent.font.draw(parent.batch, "NAME = " + WarpController.getInstance().getLocalUser(), RenderingSystem.getScreenSizeInPixels().x / 3, Y);
+        Y -= RenderingSystem.getScreenSizeInPixels().y * 0.2f;
+        parent.font.draw(parent.batch, "ROOM = " + WarpController.getInstance().getRoomId(), RenderingSystem.getScreenSizeInPixels().x / 3, Y);
         parent.batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
@@ -99,7 +102,8 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     @Override
     public void onWaitingStarted(String message) {
-
+        System.out.println("WAITING FOR OTHER USER STARTED: msg = " + message);
+        this.msg = waitForOtherUser;
     }
 
     @Override
@@ -119,7 +123,6 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     @Override
     public void onGameUpdateReceived(String message) {
-        this.msg = waitForOtherUser;
     }
 
     // methods from WarpListener END
