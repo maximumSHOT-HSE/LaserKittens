@@ -20,6 +20,7 @@ import ru.hse.team.game.Multiplayer.MultiplayerScreen;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 import ru.hse.team.game.levels.ChooseLevelScreen;
+import ru.hse.team.leveleditor.LevelCreateScreen;
 import ru.hse.team.mainmenu.MainMenuScreen;
 import ru.hse.team.settings.AppPreferences;
 import ru.hse.team.settings.SettingsScreen;
@@ -49,7 +50,8 @@ public class LaserKittens extends Game {
         MULTIPLAYER_SCREEN,
         SETTINGS_SCREEN,
         ABOUT_SCREEN,
-        STATISTICS_SCREEN;
+        STATISTICS_SCREEN,
+        LEVEL_CREATE_SCREEN;
     }
 
     private MainMenuScreen mainMenuScreen;
@@ -58,6 +60,7 @@ public class LaserKittens extends Game {
     private SettingsScreen settingsScreen;
     private AboutScreen aboutScreen;
     private StatisticsScreen statisticsScreen;
+    private LevelCreateScreen levelCreateScreen;
 
     public AppPreferences getPreferences() {
         return preferences;
@@ -112,6 +115,12 @@ public class LaserKittens extends Game {
                     statisticsScreen = new StatisticsScreen(this);
                 }
                 this.setScreen(statisticsScreen);
+                break;
+            case LEVEL_CREATE_SCREEN:
+                if (levelCreateScreen == null) {
+                    levelCreateScreen = new LevelCreateScreen(this);
+                }
+                this.setScreen(levelCreateScreen);
                 break;
         }
     }

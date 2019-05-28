@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
-import ru.hse.team.database.levels.LevelGenerator;
+import ru.hse.team.leveleditor.LevelGenerator;
 import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.database.levels.SavedSimpleEntity;
 import ru.hse.team.database.statistics.LevelStatistics;

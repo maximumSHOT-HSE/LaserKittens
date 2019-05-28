@@ -1,4 +1,4 @@
-package ru.hse.team.database.levels;
+package ru.hse.team.leveleditor;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
@@ -7,11 +7,11 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.database.levels.SavedLevel;
+import ru.hse.team.database.levels.SavedSimpleEntity;
 import ru.hse.team.game.BodyFactory;
-import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
