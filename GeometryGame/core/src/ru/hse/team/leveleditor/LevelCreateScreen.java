@@ -93,5 +93,5 @@ public class LevelCreateScreen implements Screen {
         stage.dispose();
         background.dispose();
     }
-    
+
 }

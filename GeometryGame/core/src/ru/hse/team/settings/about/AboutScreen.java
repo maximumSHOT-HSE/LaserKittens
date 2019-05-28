@@ -1,4 +1,4 @@
-package ru.hse.team.about;
+package ru.hse.team.settings.about;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
