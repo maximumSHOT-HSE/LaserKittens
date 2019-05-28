@@ -27,6 +27,7 @@ public class LaserKittens extends Game {
     private final GoogleServicesAction googleServices;
 
     public LaserKittens(AppDatabase database, GoogleServicesAction googleServicesAction) {
+        super();
         this.database = database;
         this.googleServices = googleServicesAction;
     }
