@@ -11,6 +11,6 @@ public class DesktopLauncher {
 		config.width = 720;
 		config.height = 1000;
 		config.forceExit = false;
-		new LwjglApplication(new LaserKittens(null, null), config);
+		new LwjglApplication(new LaserKittens(null, savedLevels, null), config);
 	}
 }

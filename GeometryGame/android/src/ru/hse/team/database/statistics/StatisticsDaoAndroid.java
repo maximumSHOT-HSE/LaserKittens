@@ -1,4 +1,4 @@
-package ru.hse.team.database;
+package ru.hse.team.database.statistics;
 
 import android.arch.persistence.db.SupportSQLiteQuery;
 import android.arch.persistence.room.Dao;

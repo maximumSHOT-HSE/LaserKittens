@@ -17,7 +17,8 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.tasks.Task;
 
-import ru.hse.team.database.AppDatabaseAndroid;
+import ru.hse.team.database.levels.LevelsDatabaseAndroid;
+import ru.hse.team.database.statistics.StatisticsDatabaseAndroid;
 
 public class AndroidLauncher extends AndroidApplication implements GoogleServicesAction {
 
@@ -38,7 +39,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 		super.onCreate(savedInstanceState);
 
 		mGoogleSignInClient = GoogleSignIn.getClient(this,
-				new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+				new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
 						.requestScopes(Games.SCOPE_GAMES)
 						.build());
 
@@ -46,7 +47,8 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         config.useAccelerometer = true;
         config.useCompass = false;
         config.useGyroscope = false;
-        initialize(new LaserKittens(Room.databaseBuilder(this, AppDatabaseAndroid.class, "database").build(),
+        initialize(new LaserKittens(Room.databaseBuilder(this, StatisticsDatabaseAndroid.class, "database").build(),
+                        Room.databaseBuilder(this, LevelsDatabaseAndroid.class, "savedLevels").build(),
                         this), config);
 	}
 

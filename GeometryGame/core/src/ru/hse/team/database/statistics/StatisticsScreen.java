@@ -8,26 +8,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
-import ru.hse.team.about.PagedScrollPane;
-import ru.hse.team.database.LevelStatistics;
+import ru.hse.team.settings.about.PagedScrollPane;
 import ru.hse.team.game.gamelogic.GameStatus;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 /**
  * Screen with general information about the game.
@@ -131,7 +125,7 @@ public class StatisticsScreen implements Screen {
         private List<LevelStatistics> getAllLevels() {
             List<List<LevelStatistics>> allLevels = new ArrayList<>(1);
             Thread queryThread = new Thread(() ->{
-                allLevels.add(laserKittens.getDatabase().statisticsDao().getAll());
+                allLevels.add(laserKittens.getStatisticsDatabase().statisticsDao().getAll());
             });
             queryThread.start();
             try {

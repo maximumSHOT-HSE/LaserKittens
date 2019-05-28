@@ -1,6 +1,8 @@
-package ru.hse.team.database;
+package ru.hse.team.database.statistics;
 
 import java.util.List;
+
+import ru.hse.team.database.statistics.LevelStatistics;
 
 public interface StatisticsDao {
 

@@ -99,6 +99,7 @@ project(":android") {
 
           implementation "com.google.android.gms:play-services-appstate:8.4.0"
             implementation "com.google.android.gms:play-services-plus:16.0.0"
+        implementation 'com.google.code.gson:gson:2.8.5'
 
 
         

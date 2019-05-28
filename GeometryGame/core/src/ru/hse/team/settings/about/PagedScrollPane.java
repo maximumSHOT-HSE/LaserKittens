@@ -1,4 +1,4 @@
-package ru.hse.team.about;
+package ru.hse.team.settings.about;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;

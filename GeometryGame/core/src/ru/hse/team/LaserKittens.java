@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import ru.hse.team.about.AboutScreen;
-import ru.hse.team.database.AppDatabase;
+import ru.hse.team.settings.about.AboutScreen;
+import ru.hse.team.database.levels.LevelsDatabase;
+import ru.hse.team.database.statistics.StatisticsDatabase;
 import ru.hse.team.database.statistics.StatisticsScreen;
 import ru.hse.team.game.Multiplayer.MultiplayerScreen;
 import ru.hse.team.game.levels.ChooseLevelScreen;
+import ru.hse.team.leveleditor.LevelCreateScreen;
 import ru.hse.team.mainmenu.MainMenuScreen;
 import ru.hse.team.settings.AppPreferences;
 import ru.hse.team.settings.SettingsScreen;
@@ -23,12 +25,14 @@ public class LaserKittens extends Game {
     private final AppPreferences preferences = new AppPreferences();
     public final KittensAssetManager assetManager = new KittensAssetManager();
 
-    private final AppDatabase database;
+    private final StatisticsDatabase statisticsDatabase;
+    private final LevelsDatabase savedLevels;
     private final GoogleServicesAction googleServices;
 
-    public LaserKittens(AppDatabase database, GoogleServicesAction googleServicesAction) {
+    public LaserKittens(StatisticsDatabase statisticsDatabase, LevelsDatabase savedLevels, GoogleServicesAction googleServicesAction) {
         super();
-        this.database = database;
+        this.statisticsDatabase = statisticsDatabase;
+        this.savedLevels = savedLevels;
         this.googleServices = googleServicesAction;
     }
 
@@ -38,7 +42,8 @@ public class LaserKittens extends Game {
         MULTIPLAYER_SCREEN,
         SETTINGS_SCREEN,
         ABOUT_SCREEN,
-        STATISTICS_SCREEN;
+        STATISTICS_SCREEN,
+        LEVEL_CREATE_SCREEN;
     }
 
     private MainMenuScreen mainMenuScreen;
@@ -47,13 +52,14 @@ public class LaserKittens extends Game {
     private SettingsScreen settingsScreen;
     private AboutScreen aboutScreen;
     private StatisticsScreen statisticsScreen;
+    private LevelCreateScreen levelCreateScreen;
 
     public AppPreferences getPreferences() {
         return preferences;
     }
 
-    public AppDatabase getDatabase() {
-        return database;
+    public StatisticsDatabase getStatisticsDatabase() {
+        return statisticsDatabase;
     }
 
     public GoogleServicesAction getGoogleServices() {
@@ -101,6 +107,12 @@ public class LaserKittens extends Game {
                     statisticsScreen = new StatisticsScreen(this);
                 }
                 this.setScreen(statisticsScreen);
+                break;
+            case LEVEL_CREATE_SCREEN:
+                if (levelCreateScreen == null) {
+                    levelCreateScreen = new LevelCreateScreen(this);
+                }
+                this.setScreen(levelCreateScreen);
                 break;
         }
     }
