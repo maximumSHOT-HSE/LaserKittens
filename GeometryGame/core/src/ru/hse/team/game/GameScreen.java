@@ -182,10 +182,16 @@ public class GameScreen implements Screen {
         for (Entity entity : engine.getEntities()) {
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
             if(bodyComponent != null) {
-                world.destroyBody(bodyComponent.body);
+                if (world != null) {
+                    if (bodyComponent.body != null) {
+                        world.destroyBody(bodyComponent.body);
+                    }
+                }
             }
         }
         engine.removeAllEntities();
-        world.dispose();
+        if (world != null) {
+            world.dispose();
+        }
     }
 }
