@@ -25,11 +25,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import ru.hse.team.database.AppDatabaseAndroid;
+import ru.hse.team.googleplayservices.ExtendedGameHelper;
 import ru.hse.team.googleplayservices.GameHelper;
 
 public class AndroidLauncher extends AndroidApplication implements GoogleServicesAction {
 
-	private GameHelper gameHelper;
 
 	private static final int RC_SIGN_IN = 9001;
     private static final int RC_CODE_UNUSED = 9002;
@@ -42,6 +42,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 	// The currently signed in account, used to check the account has changed outside of this activity when resuming.
 	GoogleSignInAccount mSignedInAccount = null;
 
+
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,7 +51,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 				new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
 						.build());
 
-
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.useAccelerometer = true;
         config.useCompass = false;
@@ -58,7 +58,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         initialize(new LaserKittens(Room.databaseBuilder(this, AppDatabaseAndroid.class, "database").build(),
                         this), config);
 	}
-
 
 	/**
 	 * Start a sign in activity.  To properly handle the result, call tryHandleSignInResult from
@@ -218,5 +217,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     @Override
 	public boolean isSignedIn() {
 		return GoogleSignIn.getLastSignedInAccount(this) != null;
-	}
+
+    
 }

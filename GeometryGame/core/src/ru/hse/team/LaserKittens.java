@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import ru.hse.team.about.AboutScreen;
 import ru.hse.team.database.AppDatabase;
 import ru.hse.team.database.statistics.StatisticsScreen;
+import ru.hse.team.game.Multiplayer.MultiplayerScreen;
 import ru.hse.team.game.levels.ChooseLevelScreen;
-import ru.hse.team.game.levels.Multiplayer.MultiplayerScreen;
 import ru.hse.team.mainmenu.MainMenuScreen;
 import ru.hse.team.settings.AppPreferences;
 import ru.hse.team.settings.SettingsScreen;
@@ -31,7 +31,6 @@ public class LaserKittens extends Game {
         this.database = database;
         this.googleServices = googleServicesAction;
     }
-
 
     public enum SCREEN_TYPE {
         MAIN_MENU_SCREEN,
@@ -135,5 +134,4 @@ public class LaserKittens extends Game {
         assetManager.manager.dispose();
         shapeRenderer.dispose();
     }
-
 }
