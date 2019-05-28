@@ -3,6 +3,7 @@ package ru.hse.team.leveleditor;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 
 import ru.hse.team.LaserKittens;
@@ -14,9 +15,14 @@ import ru.hse.team.database.levels.SimpleEntity;
 public class LevelCreateInputProcessor implements InputProcessor {
 
     private final LaserKittens laserKittens;
-    private SimpleEntity.EntityType focusedType = null;
     private final LevelCreateScreen levelCreateScreen;
     private final OrthographicCamera camera;
+
+    private SimpleEntity.EntityType focusedType;
+    private SimpleEntity currentEntity;
+
+    private boolean dragging;
+    private int draggingPointer = -1;
 
     public LevelCreateInputProcessor(LaserKittens laserKittens, LevelCreateScreen levelCreateScreen, OrthographicCamera camera) {
         this.laserKittens = laserKittens;
@@ -46,22 +52,58 @@ public class LevelCreateInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-//        if (focusedType == null) {
-//            return false;
-//        }
+
+        System.out.println("AAA");
+        if (dragging) return false;
+        dragging = true;
+        draggingPointer = pointer;
+
         Vector3 position = camera.unproject(new Vector3(screenX, screenY, 0));
-        levelCreateScreen.addSimpleEntity(new SimpleEntity(position.x, position.y, 100, 100, 0, SimpleEntity.EntityType.STAR));
+
+        System.out.println("BBB");
+        if (focusedType == null) {
+            levelCreateScreen.deleteOnPoint(position.x, position.y);
+            return false;
+        }
+
+        if (currentEntity == null) {
+
+            TextureRegion texture = levelCreateScreen.getTextureByType(focusedType);
+
+            currentEntity = new SimpleEntity(position.x, position.y, texture.getRegionX(), texture.getRegionY(), 0, focusedType);
+            levelCreateScreen.addSimpleEntity(currentEntity);
+        } else {
+            currentEntity.setPositionX(position.x);
+            currentEntity.setPositionY(position.y);
+        }
 
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+        if (!dragging || draggingPointer != pointer) return false;
+
+        dragging = false;
+        draggingPointer = -1;
+
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+        if (!dragging || draggingPointer != pointer) return false;
+
+        if (currentEntity == null) {
+            return false;
+        }
+
+        Vector3 position = camera.unproject(new Vector3(screenX, screenY, 0));
+        currentEntity.setPositionX(position.x);
+        currentEntity.setPositionY(position.y);
+
         return false;
     }
 
@@ -79,7 +121,16 @@ public class LevelCreateInputProcessor implements InputProcessor {
         return focusedType;
     }
 
-    public void setFocusedType(SimpleEntity.EntityType focusedType) {
+    public SimpleEntity getCurrentEntity() {
+        return currentEntity;
+    }
+
+    public void chooseAnotherEntity(SimpleEntity.EntityType focusedType) {
         this.focusedType = focusedType;
+        currentEntity = null;
+    }
+
+    public boolean isDragging() {
+        return dragging;
     }
 }

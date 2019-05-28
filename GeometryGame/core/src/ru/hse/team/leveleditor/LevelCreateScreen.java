@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ru.hse.team.Background;
@@ -36,6 +38,7 @@ public class LevelCreateScreen implements Screen {
 
     private InputMultiplexer inputMultiplexer;
     private LevelCreateInputProcessor inputProcessor;
+    private LevelGestureProcessor gestureProcessor;
 
     private List<SimpleEntity> entities = new ArrayList<>();
 
@@ -46,11 +49,21 @@ public class LevelCreateScreen implements Screen {
         stage = new Stage(new ScreenViewport());
 
         inputProcessor = new LevelCreateInputProcessor(this.laserKittens, this, camera);
-        inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
+        gestureProcessor = new LevelGestureProcessor(this.laserKittens, inputProcessor, camera);
+        inputMultiplexer = new InputMultiplexer(stage, inputProcessor, new GestureDetector(gestureProcessor));
     }
 
     public void addSimpleEntity(SimpleEntity entity) {
         entities.add(entity);
+    }
+
+    public void deleteOnPoint(float positionX, float positionY) {
+        Iterator<SimpleEntity> iterator = entities.iterator();
+        while (iterator.hasNext()) {
+            if (inBounds(iterator.next(), positionX, positionY)) {
+                iterator.remove();
+            }
+        }
     }
 
     @Override
@@ -64,7 +77,7 @@ public class LevelCreateScreen implements Screen {
         camera.update();
     }
 
-    private TextureRegion getTextureByType(SimpleEntity.EntityType type) {
+    public TextureRegion getTextureByType(SimpleEntity.EntityType type) {
         switch (type) {
             case STAR:
                 return new TextureRegion(laserKittens.assetManager.manager.get(KittensAssetManager.Star2, Texture.class));
@@ -95,7 +108,6 @@ public class LevelCreateScreen implements Screen {
             final float width = texture.getRegionWidth();
             final float height = texture.getRegionHeight();
 
-            System.out.println("AAA");
             laserKittens.batch.draw(texture, entity.getPositionX() - width / 2, entity.getPositionY() - width / 2,
                     width / 2, height / 2,
                     width, height,
@@ -133,6 +145,14 @@ public class LevelCreateScreen implements Screen {
     public void dispose () {
         stage.dispose();
         background.dispose();
+    }
+
+    private boolean inBounds(SimpleEntity entity, float positionX, float positionY) {
+        TextureRegion texture = getTextureByType(entity.getType());
+
+        final float width = texture.getRegionWidth();
+        final float height = texture.getRegionHeight();
+        return false;
     }
 
     private class EditorTools {
@@ -187,25 +207,35 @@ public class LevelCreateScreen implements Screen {
             playerButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    System.out.println("HERE!");
+                    inputProcessor.chooseAnotherEntity(SimpleEntity.EntityType.PLAYER);
                 }
             });
 
             wallButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    inputProcessor.chooseAnotherEntity(SimpleEntity.EntityType.WALL);
                 }
             });
 
             mirrorButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    inputProcessor.chooseAnotherEntity(SimpleEntity.EntityType.MIRROR);
                 }
             });
 
             starButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    inputProcessor.chooseAnotherEntity(SimpleEntity.EntityType.STAR);
+                }
+            });
+
+            eraserButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    inputProcessor.chooseAnotherEntity(null);
                 }
             });
 
@@ -222,12 +252,6 @@ public class LevelCreateScreen implements Screen {
             });
 
             finishButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                }
-            });
-
-            eraserButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                 }

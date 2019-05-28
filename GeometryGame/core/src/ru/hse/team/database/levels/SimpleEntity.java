@@ -9,13 +9,13 @@ public class SimpleEntity {
         PLAYER
     }
 
-    private final float positionX;
-    private final float positionY;
+    private float positionX;
+    private float positionY;
 
-    private final float sizeX;
-    private final float sizeY;
+    private float sizeX;
+    private float sizeY;
 
-    private final float rotation;
+    private float rotation;
 
     private final EntityType type;
 
@@ -50,5 +50,25 @@ public class SimpleEntity {
 
     public EntityType getType() {
         return type;
+    }
+
+    public void setPositionX(float positionX) {
+        this.positionX = positionX;
+    }
+
+    public void setPositionY(float positionY) {
+        this.positionY = positionY;
+    }
+
+    public void setSizeX(float sizeX) {
+        this.sizeX = sizeX;
+    }
+
+    public void setSizeY(float sizeY) {
+        this.sizeY = sizeY;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
     }
 }
