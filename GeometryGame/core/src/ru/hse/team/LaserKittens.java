@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import ru.hse.team.about.AboutScreen;
+import ru.hse.team.database.levels.LevelsDatabase;
 import ru.hse.team.database.statistics.StatisticsDatabase;
 import ru.hse.team.database.statistics.StatisticsScreen;
 import ru.hse.team.game.Multiplayer.MultiplayerScreen;
@@ -23,12 +24,14 @@ public class LaserKittens extends Game {
     private final AppPreferences preferences = new AppPreferences();
     public final KittensAssetManager assetManager = new KittensAssetManager();
 
-    private final StatisticsDatabase database;
+    private final StatisticsDatabase statisticsDatabase;
+    private final LevelsDatabase savedLevels;
     private final GoogleServicesAction googleServices;
 
-    public LaserKittens(StatisticsDatabase database, GoogleServicesAction googleServicesAction) {
+    public LaserKittens(StatisticsDatabase statisticsDatabase, LevelsDatabase savedLevels, GoogleServicesAction googleServicesAction) {
         super();
-        this.database = database;
+        this.statisticsDatabase = statisticsDatabase;
+        this.savedLevels = savedLevels;
         this.googleServices = googleServicesAction;
     }
 
@@ -52,8 +55,8 @@ public class LaserKittens extends Game {
         return preferences;
     }
 
-    public StatisticsDatabase getDatabase() {
-        return database;
+    public StatisticsDatabase getStatisticsDatabase() {
+        return statisticsDatabase;
     }
 
     public GoogleServicesAction getGoogleServices() {

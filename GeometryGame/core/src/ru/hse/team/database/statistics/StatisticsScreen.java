@@ -125,7 +125,7 @@ public class StatisticsScreen implements Screen {
         private List<LevelStatistics> getAllLevels() {
             List<List<LevelStatistics>> allLevels = new ArrayList<>(1);
             Thread queryThread = new Thread(() ->{
-                allLevels.add(laserKittens.getDatabase().statisticsDao().getAll());
+                allLevels.add(laserKittens.getStatisticsDatabase().statisticsDao().getAll());
             });
             queryThread.start();
             try {

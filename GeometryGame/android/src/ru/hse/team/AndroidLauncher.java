@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.tasks.Task;
 
+import ru.hse.team.database.levels.LevelsDatabaseAndroid;
 import ru.hse.team.database.statistics.StatisticsDatabaseAndroid;
 
 public class AndroidLauncher extends AndroidApplication implements GoogleServicesAction {
@@ -47,6 +48,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         config.useCompass = false;
         config.useGyroscope = false;
         initialize(new LaserKittens(Room.databaseBuilder(this, StatisticsDatabaseAndroid.class, "database").build(),
+                        Room.databaseBuilder(this, LevelsDatabaseAndroid.class, "savedLevels").build(),
                         this), config);
 	}
 

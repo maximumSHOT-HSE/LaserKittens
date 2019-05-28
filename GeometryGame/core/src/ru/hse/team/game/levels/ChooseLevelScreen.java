@@ -177,7 +177,7 @@ public class ChooseLevelScreen implements Screen {
         private long getBestTime(String levelName) {
             long[] bestTime = new long[1];
             Thread queryThread = (new Thread(() -> {
-                LevelStatistics statistics = laserKittens.getDatabase().statisticsDao().getBestByLevelName(levelName);
+                LevelStatistics statistics = laserKittens.getStatisticsDatabase().statisticsDao().getBestByLevelName(levelName);
                 if (statistics != null) {
                     bestTime[0] = TimeUnit.NANOSECONDS.toMillis(statistics.timeNano);
                 } else {
@@ -196,7 +196,7 @@ public class ChooseLevelScreen implements Screen {
         private Label getBestResult(String levelName) {
             Label[] label = new Label[1];
             Thread queryThread = (new Thread(() -> {
-                LevelStatistics statistics = laserKittens.getDatabase().statisticsDao().getBestByLevelName(levelName);
+                LevelStatistics statistics = laserKittens.getStatisticsDatabase().statisticsDao().getBestByLevelName(levelName);
                 if (statistics != null) {
                     label[0] = new Label(GameStatus.getTimeStamp(statistics.timeNano), skin);
                 }
