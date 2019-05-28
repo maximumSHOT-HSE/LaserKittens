@@ -18,7 +18,7 @@ import ru.hse.team.googleplayservices.GameHelper;
 public class AndroidLauncher extends AndroidApplication implements GoogleServicesAction {
 
 	private ExtendedGameHelper gameHelper;
-    private final static int REQUEST_CODE_UNUSED = 9002;
+    private final static int REQUEST_CODE_UNUSED = 9002; //
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
