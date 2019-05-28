@@ -1,16 +1,15 @@
 package ru.hse.team;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -19,14 +18,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.games.Games;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.games.GamesClient;
+import com.google.android.gms.games.InvitationsClient;
+import com.google.android.gms.games.RealTimeMultiplayerClient;
 import com.google.android.gms.tasks.Task;
 
 import ru.hse.team.database.AppDatabaseAndroid;
-import ru.hse.team.googleplayservices.ExtendedGameHelper;
-import ru.hse.team.googleplayservices.GameHelper;
 
 public class AndroidLauncher extends AndroidApplication implements GoogleServicesAction {
 
@@ -37,10 +34,9 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     private static final String TAG = "LaserKittens";
 
 	private GoogleSignInClient mGoogleSignInClient;
-	private ProgressDialog mLoadingDialog = null;
 
 	// The currently signed in account, used to check the account has changed outside of this activity when resuming.
-	GoogleSignInAccount mSignedInAccount = null;
+	private GoogleSignInAccount mSignedInAccount = null;
 
 
 	@Override
@@ -48,7 +44,8 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 		super.onCreate(savedInstanceState);
 
 		mGoogleSignInClient = GoogleSignIn.getClient(this,
-				new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+				new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+						.requestScopes(Games.SCOPE_GAMES)
 						.build());
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
@@ -65,22 +62,24 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 	 */
 	@Override
 	public void signIn() {
-		startActivityForResult(mGoogleSignInClient.getSignInIntent(), RC_SIGN_IN);
+		if (!isSignedIn()) {
+			startActivityForResult(mGoogleSignInClient.getSignInIntent(), RC_SIGN_IN);
+		}
 	}
 
 	@Override
 	public void signInSilently() {
 		Log.d(TAG, "signInSilently()");
 
-//		mGoogleSignInClient.silentSignIn().addOnCompleteListener(this,
-//				task -> {
-//					if (task.isSuccessful()) {
-//						Log.d(TAG, "signInSilently(): success");
-//						onConnected(task.getResult());
-//					} else {
-//						Log.d(TAG, "signInSilently(): failure", task.getException());
-//					}
-//				});
+		mGoogleSignInClient.silentSignIn().addOnCompleteListener(this,
+				task -> {
+					if (task.isSuccessful()) {
+						Log.d(TAG, "signInSilently(): success");
+						onConnected(task.getResult());
+					} else {
+						Log.d(TAG, "signInSilently(): failure", task.getException());
+					}
+				});
 	}
 
 	@Override
@@ -102,6 +101,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         super.onActivityResult(requestCode, resultCode, intent);
 
 		if (requestCode == RC_SIGN_IN) {
+
 
 			Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
 
@@ -139,10 +139,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 
     @Override
     public void onStop() {
-		if (mLoadingDialog != null) {
-			mLoadingDialog.dismiss();
-			mLoadingDialog = null;
-		}
         super.onStop();
 
     }
@@ -162,7 +158,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 			status = apiException.getStatusCode();
 		}
 
-		String message = "Error";
+		String message = "Error" + exception.getMessage();
 
 		new AlertDialog.Builder(this)
 				.setMessage(message)
@@ -179,30 +175,31 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 
 	@Override
 	public void submitScore(long score) {
-//		if (isSignedIn()) {
-//			Games.Leaderboards.submitScore(gameHelper.getApiClient(), getString(R.string.leaderboard_id), score);
-//			startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_id)), REQUEST_CODE_UNUSED);
-//		}
-//		else {
-//		}
+		if (isSignedIn()) {
+			System.out.println(score);
+			Games.getLeaderboardsClient(this, mSignedInAccount).submitScore(getString(R.string.leaderboard_id), score);
+			showScores();
+		}
+		else {
+		}
 	}
 
 	@Override
 	public void showScores() {
-//		if (isSignedIn()) {
-//            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(gameHelper.getApiClient(), getString(R.string.leaderboard_id)), REQUEST_CODE_UNUSED);
-//        }
-//		else {
-//		}
+		if (isSignedIn()) {
+            Games.getLeaderboardsClient(this, mSignedInAccount)
+					.getLeaderboardIntent((getString(R.string.leaderboard_id)))
+					.addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
+					.addOnFailureListener(e -> handleException(e, "LeaderBoard exception"));
+        }
 	}
 
     @Override
     public void unlockAchievement(String achievementId) {
-//	    if (isSignedIn()) {
-//            Games.Achievements.unlock(gameHelper.getApiClient(), achievementId);
-//            startActivityForResult(Games.Achievements.getAchievementsIntent(gameHelper.getApiClient()), REQUEST_CODE_UNUSED);
-//        } else {
-//        }
+	    if (isSignedIn()) {
+			Games.getAchievementsClient(this, mSignedInAccount).unlock(achievementId);
+			showAchievements();
+		}
     }
 
     @Override
@@ -218,5 +215,5 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 	public boolean isSignedIn() {
 		return GoogleSignIn.getLastSignedInAccount(this) != null;
 
-    
+	}
 }
