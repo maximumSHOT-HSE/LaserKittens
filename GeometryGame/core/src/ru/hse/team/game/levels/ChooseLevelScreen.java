@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.database.levels.LevelGenerator;
+import ru.hse.team.database.levels.SavedLevel;
+import ru.hse.team.database.levels.SavedSimpleEntity;
 import ru.hse.team.database.statistics.LevelStatistics;
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.Multiplayer.MultiplayerQuizLevel;
@@ -36,6 +39,7 @@ import ru.hse.team.game.levels.TestLongCorridor.TestLongCorridorLevel;
 import ru.hse.team.game.levels.TestShooting.ShootingLevel;
 import ru.hse.team.settings.SettingsScreenInputProcessor;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ChooseLevelScreen implements Screen {
@@ -60,6 +64,11 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new RandomLabyrinthLevel(5, 5, 1, 3));
         abstractLevels.add(new QuizLevel());
         abstractLevels.add(new MultiplayerQuizLevel(laserKittens, null, 2));
+
+        List<SavedSimpleEntity> list = new ArrayList<>();
+        list.add(new SavedSimpleEntity(0, 0, 10, 10, SavedSimpleEntity.EntityType.PLAYER));
+        list.add(new SavedSimpleEntity(20, 20, 1, 1, SavedSimpleEntity.EntityType.STAR));
+        abstractLevels.add(LevelGenerator.generate(new SavedLevel(list, 1, 1)));
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {

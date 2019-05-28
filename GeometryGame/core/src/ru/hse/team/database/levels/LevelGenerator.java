@@ -5,9 +5,12 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
@@ -15,12 +18,18 @@ import ru.hse.team.game.levels.AbstractLevelFactory;
 public class LevelGenerator {
 
     public static AbstractLevel generate(SavedLevel savedLevel) {
-        return new AbstractLevel("Generated" + GameStatus.getTimeStamp(System.nanoTime())) {
+        Calendar nowCalendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = (SimpleDateFormat)SimpleDateFormat.getTimeInstance();
+        dateFormat.applyPattern("yyyy/MM/dd HH:mm");
+        String levelName = "Generated " + dateFormat.format(nowCalendar.getTime());
 
-            private AbstractLevelFactory factory = createFactory(savedLevel);
+        return new AbstractLevel(levelName) {
+
+            private AbstractLevelFactory factory;
 
             @Override
             public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+                factory = createFactory(savedLevel);
                 factory.setLevelSize(savedLevel.widthInScreens, savedLevel.heightInScreens);
                 factory.createLevel(engine, assetManager);
             }
@@ -33,9 +42,12 @@ public class LevelGenerator {
     }
 
     private static AbstractLevelFactory createFactory(SavedLevel savedLevel) {
-        return new AbstractLevelFactory() {
+        class LevelFactory extends AbstractLevelFactory {
 
-            private World world = new World(new Vector2(0,0), true);
+            public LevelFactory() {
+                world = new World(new Vector2(0,0), true);
+            }
+
             private Entity player;
 
             @Override
@@ -50,6 +62,11 @@ public class LevelGenerator {
 
             @Override
             public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+                this.engine = engine;
+                this.manager = assetManager;
+                bodyFactory = BodyFactory.getBodyFactory(world);
+                createBackground();
+
                 for (SavedSimpleEntity entity : savedLevel.entities) {
                     switch (entity.getType()) {
                         case STAR:
@@ -68,5 +85,6 @@ public class LevelGenerator {
                 }
             }
         };
+        return new LevelFactory();
     }
 }

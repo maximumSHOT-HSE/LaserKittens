@@ -10,9 +10,10 @@ import java.util.List;
 @android.arch.persistence.room.Entity
 public class SavedLevel {
 
-
-    public SavedLevel(List<SavedSimpleEntity> entities) {
+    public SavedLevel(List<SavedSimpleEntity> entities, int widthInScreens, int heightInScreens) {
         this.entities = entities;
+        this.widthInScreens = widthInScreens;
+        this.heightInScreens = heightInScreens;
     }
 
     @PrimaryKey(autoGenerate = true)
