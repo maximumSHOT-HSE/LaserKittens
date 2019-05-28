@@ -21,7 +21,7 @@ public class LaserKittens extends Game {
 
     public SpriteBatch batch;
     public ShapeRenderer shapeRenderer;
-    public BitmapFont font;
+    volatile public BitmapFont font;
     private final AppPreferences preferences = new AppPreferences();
     public final KittensAssetManager assetManager = new KittensAssetManager();
 

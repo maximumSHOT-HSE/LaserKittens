@@ -1,12 +1,12 @@
 package ru.hse.team.game.Multiplayer;
 
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Vector2;
 
 import org.json.JSONObject;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
-import ru.hse.team.game.MessageCreator;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpListener;
 import ru.hse.team.game.levels.AbstractLevel;
@@ -20,7 +20,7 @@ public class MultiplayerQuizLevel extends AbstractLevel implements WarpListener 
     private MultiplayerQuizLevelFactory multiplayerQuizLevelFactory;
     private LaserKittens parent;
     private MultiplayerScreen multiplayerScreen;
-    private int role = 1;
+    private int role;
 
     public MultiplayerQuizLevel(LaserKittens parent, MultiplayerScreen multiplayerScreen, int role) {
         super("Multiplayer Quiz");
@@ -60,7 +60,23 @@ public class MultiplayerQuizLevel extends AbstractLevel implements WarpListener 
             case MessageCreator.CATCH_KEY:
                 int id = data.getInt(MessageCreator.KEY_ID);
                 System.out.println("KEY ID = " + id);
-                getFactory().removeKey(id);
+                if (getFactory() != null) {
+                    getFactory().removeKey(id);
+                }
+                break;
+            case MessageCreator.SHOOT:
+                Vector2 source = new Vector2(0, 0);
+                Vector2 direction = new Vector2(0, 0);
+                int lifetime;
+                source.x = Float.parseFloat((String) data.get(MessageCreator.SHOOT_SOURCE + "x"));
+                source.y = Float.parseFloat((String) data.get(MessageCreator.SHOOT_SOURCE + "y"));
+                direction.x = Float.parseFloat((String) data.get(MessageCreator.SHOOT_DIRECTION + "x"));
+                direction.y = Float.parseFloat((String) data.get(MessageCreator.SHOOT_DIRECTION + "y"));
+                lifetime = (int) data.get(MessageCreator.SHOOT_LIFETIME);
+                if (getFactory() != null) {
+                    getFactory().createLaser(source, direction, lifetime);
+                    getFactory().setOpponentPosition(source);
+                }
                 break;
         }
     }
