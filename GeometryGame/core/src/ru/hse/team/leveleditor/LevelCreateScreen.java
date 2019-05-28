@@ -99,6 +99,7 @@ public class LevelCreateScreen implements Screen {
 
         camera.update();
 
+        laserKittens.batch.setProjectionMatrix(camera.combined);
         laserKittens.batch.begin();
         background.draw(laserKittens.batch, camera);
 
@@ -185,13 +186,13 @@ public class LevelCreateScreen implements Screen {
             scroll.setPageSpacing(25);
             Table buttons = new Table();
 
+            buttons.add(eraserButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(playerButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(wallButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(mirrorButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(starButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(rotateLeft).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(rotateRight).width(toolButtonWidth).height(toolButtonHeight);
-            buttons.add(eraserButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(finishButton).width(toolButtonWidth).height(toolButtonHeight);
             scroll.addPage(buttons);
             scroll.setHeight(toolButtonHeight + screenHeight / 30);

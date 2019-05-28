@@ -48,7 +48,7 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         }
         x = camera.position.x;
         y = camera.position.y;
-        camera.position.set(x - deltaX / 10, y + deltaY / 10, 0);
+        camera.position.set(x - deltaX, y + deltaY, 0);
         camera.update();
         return false;
     }
@@ -61,6 +61,9 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
+        if (levelCreateInputProcessor.isDragging()) {
+            return false;
+        }
         camera.zoom = scale * initialDistance / distance;
         if (camera.zoom >= 3) {
             camera.zoom = 3;

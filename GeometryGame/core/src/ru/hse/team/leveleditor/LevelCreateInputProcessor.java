@@ -53,24 +53,24 @@ public class LevelCreateInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        System.out.println("AAA");
         if (dragging) return false;
-        dragging = true;
-        draggingPointer = pointer;
 
         Vector3 position = camera.unproject(new Vector3(screenX, screenY, 0));
 
-        System.out.println("BBB");
         if (focusedType == null) {
             levelCreateScreen.deleteOnPoint(position.x, position.y);
             return false;
         }
 
+        dragging = true;
+        draggingPointer = pointer;
+
         if (currentEntity == null) {
 
             TextureRegion texture = levelCreateScreen.getTextureByType(focusedType);
-
-            currentEntity = new SimpleEntity(position.x, position.y, texture.getRegionX(), texture.getRegionY(), 0, focusedType);
+            currentEntity = new SimpleEntity(position.x, position.y,
+                    texture.getRegionWidth(), texture.getRegionHeight(),
+                    0, focusedType);
             levelCreateScreen.addSimpleEntity(currentEntity);
         } else {
             currentEntity.setPositionX(position.x);
