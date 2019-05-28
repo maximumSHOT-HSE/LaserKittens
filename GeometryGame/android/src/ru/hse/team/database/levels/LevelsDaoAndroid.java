@@ -1,4 +1,4 @@
-package ru.hse.team.database;
+package ru.hse.team.database.levels;
 
 import android.arch.persistence.db.SupportSQLiteQuery;
 import android.arch.persistence.room.Dao;
@@ -9,35 +9,34 @@ import android.arch.persistence.room.RawQuery;
 import android.arch.persistence.room.Update;
 
 import java.util.List;
-
 @Dao
-public interface StatisticsDaoAndroid extends StatisticsDao {
+public interface LevelsDaoAndroid extends LevelsDao {
 
     @RawQuery
-    LevelStatistics getStatisticsByQuery(SupportSQLiteQuery query);
+    SavedLevel getStatisticsByQuery(SupportSQLiteQuery query);
 
     @Query("SELECT * FROM LevelStatistics")
-    List<LevelStatistics> getAll();
+    List<SavedLevel> getAll();
 
     @Query("SELECT * FROM LevelStatistics WHERE id = :id")
-    LevelStatistics getById(long id);
+    SavedLevel getById(long id);
 
     @Query("SELECT * FROM LevelStatistics WHERE levelName = :levelName AND time = (SELECT MIN(time) FROM LevelStatistics where levelName = :levelName)")
-    LevelStatistics getBestByLevelName (String levelName);
+    SavedLevel getBestByLevelName (String levelName);
 
     @Insert
-    void insert(LevelStatistics statistics);
+    void insert(SavedLevel statistics);
 
     @Insert
-    void insertAll(LevelStatistics ... statistics);
+    void insertAll(SavedLevel ... statistics);
 
     @Update
-    void update(LevelStatistics statistics);
+    void update(SavedLevel statistics);
 
     @Delete
-    void delete(LevelStatistics statistics);
+    void delete(SavedLevel statistics);
 
     @Delete
-    void deleteAll(LevelStatistics ... statistics);
+    void deleteAll(SavedLevel ... statistics);
 
 }

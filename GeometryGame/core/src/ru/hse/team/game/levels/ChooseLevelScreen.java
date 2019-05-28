@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
-import ru.hse.team.database.LevelStatistics;
+import ru.hse.team.database.statistics.LevelStatistics;
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.Multiplayer.MultiplayerQuizLevel;
 import ru.hse.team.game.gamelogic.GameStatus;

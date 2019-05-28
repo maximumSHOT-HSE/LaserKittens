@@ -17,12 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.text.ParseException;
-
 import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.KittensAssetManager;
-import ru.hse.team.database.LevelStatistics;
+import ru.hse.team.database.statistics.LevelStatistics;
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.levels.AbstractLevel;
