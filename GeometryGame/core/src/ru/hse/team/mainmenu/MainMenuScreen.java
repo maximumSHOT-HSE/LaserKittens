@@ -146,7 +146,7 @@ public class MainMenuScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
 //                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MULTIPLAYER_SCREEN);
-                    parent.getGoogleServices().quickGame(1);
+                    parent.getGoogleServices().invitePlayers();
                 }
             });
 
