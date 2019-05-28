@@ -12,11 +12,12 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.games.Games;
 
 import ru.hse.team.database.AppDatabaseAndroid;
+import ru.hse.team.googleplayservices.ExtendedGameHelper;
 import ru.hse.team.googleplayservices.GameHelper;
 
 public class AndroidLauncher extends AndroidApplication implements GoogleServicesAction {
 
-	private GameHelper gameHelper;
+	private ExtendedGameHelper gameHelper;
     private final static int REQUEST_CODE_UNUSED = 9002;
 
 	@Override
@@ -35,7 +36,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 			}
 		};
 
-		gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
+		gameHelper = new ExtendedGameHelper(this, GameHelper.CLIENT_GAMES);
 		gameHelper.enableDebugLog(true);
 		gameHelper.setup(gameHelperListener);
 
@@ -44,7 +45,8 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 		config.useCompass = false;
 		config.useGyroscope = false;
 
-		initialize(new LaserKittens(Room.databaseBuilder(this, AppDatabaseAndroid.class, "database").build(),
+		initialize(new LaserKittens(
+				Room.databaseBuilder(this, AppDatabaseAndroid.class, "database").build(),
 				this),
 				config);
 	}
@@ -109,9 +111,28 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         }
     }
 
-    @Override
-	public boolean isSignedIn()
-	{
+	@Override
+	public void quickGame(int role) {
+		try{
+			runOnUiThread(() -> gameHelper.quickGame(role));
+		}
+		catch (Exception e){
+			Gdx.app.log("CIRUS", "Google Services Logout Failed " + e.getMessage());
+		}
+	}
+
+	@Override
+	public void invitePlayers() {
+		gameHelper.invitePlayers();
+	}
+
+	@Override
+	public boolean isSignedIn() {
 		return gameHelper.isSignedIn();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		gameHelper.onActivityResult(requestCode, resultCode, data);
 	}
 }

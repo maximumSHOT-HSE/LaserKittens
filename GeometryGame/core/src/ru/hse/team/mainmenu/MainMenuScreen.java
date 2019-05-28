@@ -12,11 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import javax.xml.soap.Text;
 
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
@@ -148,7 +145,8 @@ public class MainMenuScreen implements Screen {
             multiplayer.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MULTIPLAYER_SCREEN);
+//                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MULTIPLAYER_SCREEN);
+                    parent.getGoogleServices().invitePlayers();
                 }
             });
 

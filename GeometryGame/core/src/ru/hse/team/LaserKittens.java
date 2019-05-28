@@ -31,7 +31,6 @@ public class LaserKittens extends Game {
         this.googleServices = googleServicesAction;
     }
 
-
     public enum SCREEN_TYPE {
         MAIN_MENU_SCREEN,
         CHOOSE_LEVEL_SCREEN,
