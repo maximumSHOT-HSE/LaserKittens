@@ -8,23 +8,23 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
+
 import ru.hse.team.LaserKittens;
+import ru.hse.team.game.gameending.GameEndingScreen;
 import ru.hse.team.game.gamelogic.GameScreenInputProcessor;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.GestureProcessor;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
 import ru.hse.team.game.gamelogic.systems.BulletSystem;
-import ru.hse.team.game.gamelogic.systems.StateControlSystem;
 import ru.hse.team.game.gamelogic.systems.PhysicsDebugSystem;
 import ru.hse.team.game.gamelogic.systems.PhysicsSystem;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
+import ru.hse.team.game.gamelogic.systems.StateControlSystem;
 import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
-import ru.hse.team.game.gameending.GameEndingScreen;
 
 public class GameScreen implements Screen {
 
@@ -155,7 +155,9 @@ public class GameScreen implements Screen {
         return camera;
     }
 
-    public LaserKittens getGame() { return laserKittens; }
+    public LaserKittens getGame() {
+        return laserKittens;
+    }
 
     @Override
     public void resize(int width, int height) {

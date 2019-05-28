@@ -13,6 +13,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 
+import java.util.Comparator;
+import java.util.Set;
+
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
@@ -20,9 +23,6 @@ import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
 import ru.hse.team.game.levels.AbstractLevel;
-
-import java.util.Comparator;
-import java.util.Set;
 
 public class RenderingSystem extends SortedIteratingSystem {
 
@@ -147,7 +147,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     private void drawGraph() {
-        if (abstractLevel.getAbstractGraph().isDrawGraph()) {
+        if (abstractLevel.getAbstractGraph() != null && abstractLevel.getAbstractGraph().isDrawGraph()) {
             abstractLevel.getAbstractGraph().draw(shapeRenderer);
         }
     }

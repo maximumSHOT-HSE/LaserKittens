@@ -1,4 +1,4 @@
-package ru.hse.team.game.levels.Multiplayer;
+package ru.hse.team.game.Multiplayer;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;

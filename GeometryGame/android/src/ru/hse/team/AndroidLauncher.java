@@ -38,6 +38,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 	// The currently signed in account, used to check the account has changed outside of this activity when resuming.
 	private GoogleSignInAccount mSignedInAccount = null;
 
+
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,7 +55,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         initialize(new LaserKittens(Room.databaseBuilder(this, AppDatabaseAndroid.class, "database").build(),
                         this), config);
 	}
-
 
 	/**
 	 * Start a sign in activity.  To properly handle the result, call tryHandleSignInResult from
@@ -214,5 +214,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     @Override
 	public boolean isSignedIn() {
 		return GoogleSignIn.getLastSignedInAccount(this) != null;
+
 	}
 }
