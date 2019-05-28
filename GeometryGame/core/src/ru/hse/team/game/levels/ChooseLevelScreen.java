@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -33,6 +35,8 @@ import ru.hse.team.game.levels.TestDoorsAndKeys.TestDoorsAndKeysLevel;
 import ru.hse.team.game.levels.TestLongCorridor.TestLongCorridorLevel;
 import ru.hse.team.game.levels.TestShooting.ShootingLevel;
 import ru.hse.team.settings.SettingsScreenInputProcessor;
+
+import java.util.concurrent.TimeUnit;
 
 public class ChooseLevelScreen implements Screen {
 
@@ -170,6 +174,25 @@ public class ChooseLevelScreen implements Screen {
             laserKittens.batch.end();
         }
 
+        private long getBestTime(String levelName) {
+            long[] bestTime = new long[1];
+            Thread queryThread = (new Thread(() -> {
+                LevelStatistics statistics = laserKittens.getDatabase().statisticsDao().getBestByLevelName(levelName);
+                if (statistics != null) {
+                    bestTime[0] = TimeUnit.NANOSECONDS.toMillis(statistics.timeNano);
+                } else {
+                    bestTime[0] = 1000;
+                }
+            }));
+            queryThread.start();
+            try {
+                queryThread.join();
+            } catch (InterruptedException exception) {
+                Gdx.app.log("fail", "Database query interrupted");
+            }
+            return bestTime[0];
+        }
+
         private Label getBestResult(String levelName) {
             Label[] label = new Label[1];
             Thread queryThread = (new Thread(() -> {
@@ -204,6 +227,16 @@ public class ChooseLevelScreen implements Screen {
                     laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.STATISTICS_SCREEN);
                 }
             });
+            ImageButton scoreButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+            scoreButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    currentSection = slidingPane.currentSectionId;
+                    direction = slidingPane.direction;
+                    laserKittens.getGoogleServices().submitScore(getBestTime("Quiz"));
+                }
+            });
+
             Table table = new Table();
             table.setWidth(0.6f * screenWidth);
             table.setHeight(0.6f * screenHeight);
@@ -213,7 +246,10 @@ public class ChooseLevelScreen implements Screen {
             table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
             table.add(statisticsButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
             table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-            addDumpLabels(table);
+            table.row();
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(scoreButton).width(Gdx.graphics.getWidth() * 0.2f).height(Gdx.graphics.getHeight() * 0.1f);
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
             return table;
         }
 
