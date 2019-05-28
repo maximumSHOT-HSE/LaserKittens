@@ -26,7 +26,7 @@ import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.leveleditor.LevelGenerator;
 import ru.hse.team.database.levels.SavedLevel;
-import ru.hse.team.database.levels.SavedSimpleEntity;
+import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.database.statistics.LevelStatistics;
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.Multiplayer.MultiplayerQuizLevel;
@@ -65,9 +65,9 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new QuizLevel());
         abstractLevels.add(new MultiplayerQuizLevel(laserKittens, null, 2));
 
-        List<SavedSimpleEntity> list = new ArrayList<>();
-        list.add(new SavedSimpleEntity(0, 0, 10, 10, 0, SavedSimpleEntity.EntityType.PLAYER));
-        list.add(new SavedSimpleEntity(20, 20, 1, 1, 0, SavedSimpleEntity.EntityType.STAR));
+        List<SimpleEntity> list = new ArrayList<>();
+        list.add(new SimpleEntity(0, 0, 10, 10, 0, SimpleEntity.EntityType.PLAYER));
+        list.add(new SimpleEntity(20, 20, 1, 1, 0, SimpleEntity.EntityType.STAR));
         abstractLevels.add(LevelGenerator.generate(new SavedLevel(list, 1, 1)));
     }
 

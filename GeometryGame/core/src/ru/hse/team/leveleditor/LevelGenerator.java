@@ -10,7 +10,7 @@ import java.util.Calendar;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.database.levels.SavedLevel;
-import ru.hse.team.database.levels.SavedSimpleEntity;
+import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
@@ -67,7 +67,7 @@ public class LevelGenerator {
                 bodyFactory = BodyFactory.getBodyFactory(world);
                 createBackground();
 
-                for (SavedSimpleEntity entity : savedLevel.entities) {
+                for (SimpleEntity entity : savedLevel.entities) {
                     switch (entity.getType()) {
                         case STAR:
                             createStar(entity.getPositionX(), entity.getPositionY(), entity.getSizeX());

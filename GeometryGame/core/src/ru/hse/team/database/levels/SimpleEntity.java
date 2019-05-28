@@ -1,6 +1,6 @@
 package ru.hse.team.database.levels;
 
-public class SavedSimpleEntity {
+public class SimpleEntity {
 
     public enum EntityType {
         STAR,
@@ -19,7 +19,7 @@ public class SavedSimpleEntity {
 
     private final EntityType type;
 
-    public SavedSimpleEntity(float positionX, float positionY, float sizeX, float sizeY, float rotation, EntityType type) {
+    public SimpleEntity(float positionX, float positionY, float sizeX, float sizeY, float rotation, EntityType type) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.sizeX = sizeX;

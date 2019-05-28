@@ -2,31 +2,29 @@ package ru.hse.team.leveleditor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.settings.about.PagedScrollPane;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class LevelCreateScreen implements Screen {
 
@@ -39,14 +37,20 @@ public class LevelCreateScreen implements Screen {
     private InputMultiplexer inputMultiplexer;
     private LevelCreateInputProcessor inputProcessor;
 
+    private List<SimpleEntity> entities = new ArrayList<>();
+
     public LevelCreateScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
         background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
 
-        inputProcessor = new LevelCreateInputProcessor(this.laserKittens);
+        inputProcessor = new LevelCreateInputProcessor(this.laserKittens, this, camera);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
+    }
+
+    public void addSimpleEntity(SimpleEntity entity) {
+        entities.add(entity);
     }
 
     @Override
@@ -60,6 +64,21 @@ public class LevelCreateScreen implements Screen {
         camera.update();
     }
 
+    private TextureRegion getTextureByType(SimpleEntity.EntityType type) {
+        switch (type) {
+            case STAR:
+                return new TextureRegion(laserKittens.assetManager.manager.get(KittensAssetManager.Star2, Texture.class));
+            case WALL:
+                return new TextureRegion(laserKittens.assetManager.manager.get(KittensAssetManager.ICE_WALL, Texture.class));
+            case MIRROR:
+                return new TextureRegion(laserKittens.assetManager.manager.get(KittensAssetManager.MIRROR, Texture.class));
+            case PLAYER:
+                return new TextureRegion(laserKittens.assetManager.manager.get(KittensAssetManager.Cat3, Texture.class));
+            default:
+                throw new AssertionError("Panic");
+        }
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
@@ -69,6 +88,20 @@ public class LevelCreateScreen implements Screen {
 
         laserKittens.batch.begin();
         background.draw(laserKittens.batch, camera);
+
+        for (SimpleEntity entity : entities) {
+            TextureRegion texture = getTextureByType(entity.getType());
+
+            final float width = texture.getRegionWidth();
+            final float height = texture.getRegionHeight();
+
+            System.out.println("AAA");
+            laserKittens.batch.draw(texture, entity.getPositionX() - width / 2, entity.getPositionY() - width / 2,
+                    width / 2, height / 2,
+                    width, height,
+                    entity.getSizeX() / width, entity.getSizeY() / height, entity.getRotation());
+        }
+
         laserKittens.batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
