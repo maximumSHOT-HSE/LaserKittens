@@ -8,14 +8,18 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
+import ru.hse.team.game.levels.AbstractLevel;
 
 public class ContractProcessor implements ContactListener {
 
-    public ContractProcessor() {
+    private AbstractLevel abstractLevel;
 
+    public ContractProcessor(AbstractLevel abstractLevel) {
+        this.abstractLevel = abstractLevel;
     }
 
     /*
@@ -42,6 +46,13 @@ public class ContractProcessor implements ContactListener {
     private void processBulletKey(Entity bullet, Entity key) {
         stopBullet(bullet);
         Mapper.stateComponent.get(key).finish();
+        if (abstractLevel.isMultiplayer()) {
+            WarpController.getInstance().sendGameUpdate(
+                MessageCreator.createFinishKeyMessage(
+                    Mapper.stateComponent.get(key).getId()
+                )
+            );
+        }
     }
 
     private void processPlayerStar(Entity player, Entity star) {
@@ -50,6 +61,13 @@ public class ContractProcessor implements ContactListener {
 
     private void processPlayerKey(Entity player, Entity key) {
         Mapper.stateComponent.get(key).finish();
+        if (abstractLevel.isMultiplayer()) {
+            WarpController.getInstance().sendGameUpdate(
+                MessageCreator.createFinishKeyMessage(
+                    Mapper.stateComponent.get(key).getId()
+                )
+            );
+        }
     }
 
     private void processBulletDoor(Entity bullet, Entity door) {

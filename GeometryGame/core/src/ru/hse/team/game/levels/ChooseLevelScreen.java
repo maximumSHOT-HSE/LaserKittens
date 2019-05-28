@@ -16,21 +16,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.ArrayList;
+
 import ru.hse.team.Background;
-import ru.hse.team.LaserKittens;
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.LaserKittens;
 import ru.hse.team.database.LevelStatistics;
 import ru.hse.team.game.GameScreen;
+import ru.hse.team.game.Multiplayer.MultiplayerQuizLevel;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.levels.Quiz.QuizLevel;
 import ru.hse.team.game.levels.RandomLabyrinth.RandomLabyrinthLevel;
 import ru.hse.team.game.levels.TestBigLevel.TestBigLevel;
 import ru.hse.team.game.levels.TestDoorsAndKeys.TestDoorsAndKeysLevel;
-import ru.hse.team.game.levels.TestShooting.ShootingLevel;
 import ru.hse.team.game.levels.TestLongCorridor.TestLongCorridorLevel;
+import ru.hse.team.game.levels.TestShooting.ShootingLevel;
 import ru.hse.team.settings.SettingsScreenInputProcessor;
-
-import java.util.ArrayList;
 
 public class ChooseLevelScreen implements Screen {
 
@@ -53,6 +55,7 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new TestDoorsAndKeysLevel());
         abstractLevels.add(new RandomLabyrinthLevel(5, 5, 1, 3));
         abstractLevels.add(new QuizLevel());
+        abstractLevels.add(new MultiplayerQuizLevel(laserKittens, null, 2));
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {

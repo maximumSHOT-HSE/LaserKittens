@@ -54,4 +54,10 @@ abstract public class AbstractLevel {
                 direction, 10000
         );
     }
+
+    public boolean isMultiplayer() {
+        return false;
+    }
+
+
 }

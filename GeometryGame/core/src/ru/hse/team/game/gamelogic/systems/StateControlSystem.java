@@ -6,11 +6,12 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import ru.hse.team.game.Mapper;
-import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.GameStatus;
+import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
@@ -23,9 +24,11 @@ import ru.hse.team.game.gamelogic.components.TypeComponent;
  */
 public class StateControlSystem extends IteratingSystem {
 
+    private int currentId = 0;
     private World world;
     private PooledEngine engine;
     private GameStatus gameStatus;
+    private Map<Integer, Entity> idToEntity = new HashMap<>();
 
     public StateControlSystem(World world, PooledEngine engine, GameStatus gameStatus) {
         super(Family.all(StateComponent.class).get());
@@ -77,9 +80,20 @@ public class StateControlSystem extends IteratingSystem {
         }
         if (stateComponent.get() == StateComponent.State.JUST_CREATED) {
             stateComponent.set(StateComponent.State.NORMAL);
+            stateComponent.setId(currentId);
+            idToEntity.put(currentId, entity);
+            currentId++;
             if (typeComponent != null && typeComponent.type == TypeComponent.Type.STAR) {
                 gameStatus.addStar();
             }
         }
+    }
+
+    public Map<Integer, Entity> getIdToEntity() {
+        return idToEntity;
+    }
+
+    public void setIdToEntity(Map<Integer, Entity> idToEntity) {
+        this.idToEntity = idToEntity;
     }
 }

@@ -33,107 +33,6 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         return world;
     }
 
-    private Entity placeImpenetrableWall(
-            float relativeX,
-            float relativeY,
-            float relativeWidth,
-            float relativeHeight) {
-        return createImpenetrableWall(
-            new Vector2(
-                relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                    relativeY * RenderingSystem.getScreenSizeInMeters().y
-            ),
-            relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
-                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
-        );
-    }
-
-    private Entity placeDynamicImpenetrableWall(
-            float relativeX,
-            float relativeY,
-            float relativeWidth,
-            float relativeHeight) {
-        return createImpenetrableDynamicWall(
-                new Vector2(
-                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                        relativeY * RenderingSystem.getScreenSizeInMeters().y
-                ),
-                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
-                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
-        );
-    }
-
-    private void addAngularVelocity(Entity entity, float angularVelocity) {
-        entity.getComponent(BodyComponent.class).body.setAngularVelocity(angularVelocity);
-    }
-
-    private Entity placeTransparentWall(
-            float relativeX,
-            float relativeY,
-            float relativeWidth,
-            float relativeHeight) {
-        return createTransparentWall(
-                new Vector2(
-                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                        relativeY * RenderingSystem.getScreenSizeInMeters().y
-                ),
-                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
-                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
-        );
-    }
-
-    private Entity placeDoor(
-            float relativeX,
-            float relativeY,
-            float relativeWidth,
-            float relativeHeight) {
-        return createDoor(
-                new Vector2(
-                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                        relativeY * RenderingSystem.getScreenSizeInMeters().y
-                ),
-                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
-                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
-        );
-    }
-
-    private Entity placePointer(
-            float relativeX,
-            float relativeY,
-            float rotation) {
-        return createPointer(
-            new Vector2(
-                relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                    relativeY * RenderingSystem.getScreenSizeInMeters().y
-            ),
-            rotation
-        );
-    }
-
-    private Entity placeQuestion(float relativeX, float relativeY, float scale) {
-        return createQuestion(new Vector2(
-                relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                relativeY * RenderingSystem.getScreenSizeInMeters().y),
-                scale);
-    }
-
-    private Entity placeMirror(
-            float relativeX,
-            float relativeY,
-            float relativeWidth,
-            float relativeHeight,
-            float rotation) {
-        return createMirror(
-            new Vector2(
-                    relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                    relativeY * RenderingSystem.getScreenSizeInMeters().y
-            ),
-            relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
-            relativeHeight * RenderingSystem.getScreenSizeInMeters().y,
-            rotation
-        );
-    }
-
     private void createBorders() {
         placeImpenetrableWall(0, 0.5f * CH, 0.2f, CH);
         placeImpenetrableWall(CW, 0.5f * CH, 0.2f, CH);
@@ -370,6 +269,12 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 RenderingSystem.getScreenSizeInMeters().x * 3.5f,
                 RenderingSystem.getScreenSizeInMeters().y * 0.5f,
                 3f
+        );
+
+        createStar(
+                7.5f * RenderingSystem.getScreenSizeInMeters().x,
+                2f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
         );
 
         createBorders();

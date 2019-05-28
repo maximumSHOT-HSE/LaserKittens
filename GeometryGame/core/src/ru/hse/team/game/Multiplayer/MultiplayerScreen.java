@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpListener;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
@@ -37,6 +38,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
     private final String[] tryingToConnect = {"Connecting","to AppWarp"};
     private final String[] waitForOtherUser = {"Waiting for","other user"};
     private final String[] errorInConnection = {"Error in","Connection", "Go Back"};
+    private final String[] gameStartMsg = {"Game Started!"};
     private String[] msg = tryingToConnect;
 
     @Override
@@ -116,6 +118,9 @@ public class MultiplayerScreen implements Screen, WarpListener {
     @Override
     public void onGameStarted(String message) {
         System.out.println("MultiplayerScreen.onGameStarted: msg = " + message);
+        this.msg = gameStartMsg;
+        Gdx.app.postRunnable(() -> parent.setScreen(
+                new GameScreen(parent, new MultiplayerQuizLevel(parent, MultiplayerScreen.this, Integer.parseInt(message)))));
     }
 
     @Override

@@ -13,13 +13,14 @@ public class WarpController {
 
     private static final Random random = new Random(System.currentTimeMillis());
 
-    private final String API_KEY = "73b9a6fc13b16819e033f3be473a6da0cfb460b5dc396cbeadadf945fb26736b";
-    private final String SECRET_KEY = "e6b08e9e2b7c46d20ae29f5705646791d5ee135966c80d0dd0a9f412298f16ff";
+    private final String API_KEY = "c459fdeab1cfdc5c0f6853fe34d19b166ce6513fc81160a78146422732056788";
+    private final String SECRET_KEY = "1a270f8f243c231ba0666226f1349aa1167e1fa6aacf162d0061c1abfa2c6735";
 
     private WarpClient warpClient;
 
     private String localUser;
     private String roomId;
+    private String roomOwner;
     private boolean isConnected = false;
 
     private boolean isUDPEnabled = false;
@@ -59,7 +60,7 @@ public class WarpController {
 
     private void startGame() {
         warpState = WarpState.STARTED;
-        warpListener.onGameStarted("Start the Game");
+        warpListener.onGameStarted(localUser.equals(roomOwner) ? "1" : "2");
     }
 
     private void waitForOtherUser() {
@@ -86,7 +87,16 @@ public class WarpController {
     }
 
     public void onGameUpdateReceived(UpdateEvent event) {
-        warpListener.onGameUpdateReceived("event");
+        if (event == null) {
+            return;
+        }
+        String message = new String(event.getUpdate());
+        String userName = message.substring(0, message.indexOf("#@"));
+        String data = message.substring(message.indexOf("#@") + 2);
+        System.out.println("WarpController.onGameUpdateReceived, msg = " + message + ", userName = " + userName + ", data = " + data);
+        if (!localUser.equals(userName)) {
+            warpListener.onGameUpdateReceived(data);
+        }
     }
 
     public void setWarpListener(WarpListener warpListener) {
@@ -94,6 +104,7 @@ public class WarpController {
     }
 
     public void onUserJoinedRoom(RoomData roomData, String userName) {
+        System.out.println("WarpController.onUserJoinedRoom: room = " + roomData.getId() + ", userName = " + userName);
         if (!localUser.equals(userName)) {
             startGame();
         }
@@ -141,16 +152,27 @@ public class WarpController {
         }
     }
 
+    public void sendGameUpdate(String message) {
+        if(isConnected){
+            if(isUDPEnabled){
+                warpClient.sendUDPUpdatePeers((localUser + "#@"+ message).getBytes());
+            }else{
+                warpClient.sendUpdatePeers((localUser + "#@" + message).getBytes());
+            }
+        }
+    }
+
     public void onJoinRoomDone(RoomEvent event) {
         System.out.println("WarpController.onJoinRoomDone: " + event.getResult());
         if (event.getResult() == WarpResponseResultCode.SUCCESS) {
             this.roomId = event.getData().getId();
+            this.roomOwner = event.getData().getRoomOwner();
             warpClient.subscribeRoom(roomId);
             System.out.println("ROOM ID = " + this.roomId);
         } else {
             if (event.getResult() == WarpResponseResultCode.RESOURCE_NOT_FOUND) {
-                warpClient.createRoom("Room#" + WarpController.generateRandomName(),
-                        "RoomOwner#" + WarpController.generateRandomName(),
+                roomOwner = localUser;
+                warpClient.createRoom("Room#" + WarpController.generateRandomName(), localUser,
                         2, null);
             } else {
                 warpClient.disconnect();
@@ -166,7 +188,8 @@ public class WarpController {
         disconnect();
     }
 
-    private void processLeave() {
+    public void processLeave() {
+        System.out.println("WarpController.processLeave: isConnected = " + isConnected + ", warpState = " + warpState);
         if (isConnected) {
             warpClient.unsubscribeRoom(roomId);
             warpClient.leaveRoom(roomId);

@@ -2,9 +2,6 @@ package ru.hse.team.game.levels;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -14,10 +11,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.List;
-import java.util.Map;
-
-import javax.xml.soap.Text;
-import javax.xml.stream.events.EntityDeclaration;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
@@ -33,6 +26,7 @@ import ru.hse.team.game.gamelogic.components.TransformComponent;
 import ru.hse.team.game.gamelogic.components.TumblerComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
+import ru.hse.team.game.gamelogic.systems.StateControlSystem;
 
 abstract public class AbstractLevelFactory {
 
@@ -386,4 +380,120 @@ abstract public class AbstractLevelFactory {
         }
     }
 
+    protected Entity placeImpenetrableWall(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight) {
+        return createImpenetrableWall(
+                new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
+                ),
+                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
+                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        );
+    }
+
+    protected Entity placeDynamicImpenetrableWall(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight) {
+        return createImpenetrableDynamicWall(
+                new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
+                ),
+                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
+                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        );
+    }
+
+    protected void addAngularVelocity(Entity entity, float angularVelocity) {
+        entity.getComponent(BodyComponent.class).body.setAngularVelocity(angularVelocity);
+    }
+
+    protected Entity placeTransparentWall(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight) {
+        return createTransparentWall(
+                new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
+                ),
+                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
+                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        );
+    }
+
+    protected Entity placeDoor(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight) {
+        return createDoor(
+                new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
+                ),
+                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
+                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        );
+    }
+
+    protected Entity placePointer(
+            float relativeX,
+            float relativeY,
+            float rotation) {
+        return createPointer(
+                new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
+                ),
+                rotation
+        );
+    }
+
+    protected Entity placeQuestion(float relativeX, float relativeY, float scale) {
+        return createQuestion(new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y),
+                scale);
+    }
+
+    protected Entity placeMirror(
+            float relativeX,
+            float relativeY,
+            float relativeWidth,
+            float relativeHeight,
+            float rotation) {
+        return createMirror(
+                new Vector2(
+                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                        relativeY * RenderingSystem.getScreenSizeInMeters().y
+                ),
+                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
+                relativeHeight * RenderingSystem.getScreenSizeInMeters().y,
+                rotation
+        );
+    }
+
+    public void removeKey(int keyId) {
+        System.out.println("REMOVE key with id = " + keyId);
+        StateControlSystem stateControlSystem = engine.getSystem(StateControlSystem.class);
+        Entity key = stateControlSystem.getIdToEntity().get(keyId);
+        if (key == null) {
+            return;
+        }
+        stateControlSystem.getIdToEntity().remove(keyId);
+        StateComponent stateComponent = Mapper.stateComponent.get(key);
+        if (stateComponent == null) {
+            return;
+        }
+        System.out.println("THERE IS STATE");
+        stateComponent.finish();
+    }
 }
