@@ -1,14 +1,11 @@
 package ru.hse.team;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -18,9 +15,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.games.Games;
-import com.google.android.gms.games.GamesClient;
-import com.google.android.gms.games.InvitationsClient;
-import com.google.android.gms.games.RealTimeMultiplayerClient;
 import com.google.android.gms.tasks.Task;
 
 import ru.hse.team.database.AppDatabaseAndroid;
@@ -202,8 +196,9 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 		}
     }
 
-    @Override
-    public void showAchievements() {
+
+	@Override
+	public void showAchievements() {
 		if (isSignedIn()) {
 			Games.getAchievementsClient(this, mSignedInAccount).getAchievementsIntent()
 					.addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))

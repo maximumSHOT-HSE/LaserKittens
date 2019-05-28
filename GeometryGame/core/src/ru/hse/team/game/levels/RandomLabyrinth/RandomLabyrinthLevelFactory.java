@@ -3,23 +3,17 @@ package ru.hse.team.game.levels.RandomLabyrinth;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.lang.reflect.Array;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
-import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
@@ -58,6 +52,8 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     List<Integer> permutation = Arrays.asList(0, 1, 2, 3);
 
     private Random random = new Random(System.currentTimeMillis());
+
+    private int currentKeyID = 0;
 
     private int getRandom(int bound) {
         int random = this.random.nextInt() % bound;

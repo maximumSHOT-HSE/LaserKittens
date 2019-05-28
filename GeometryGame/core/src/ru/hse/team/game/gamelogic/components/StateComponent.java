@@ -16,6 +16,7 @@ public class StateComponent implements Component, Poolable {
     }
 
     private State state = State.NORMAL;
+    private int id;
 
     public void set(StateComponent.State newState) {
         state = newState;
@@ -32,5 +33,13 @@ public class StateComponent implements Component, Poolable {
     @Override
     public void reset() {
         state = State.NORMAL;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 import ru.hse.team.LaserKittens;
+import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 
 public class MultiplayerScreenInputProcessor implements InputProcessor {
 
@@ -17,6 +18,7 @@ public class MultiplayerScreenInputProcessor implements InputProcessor {
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
             laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+            WarpController.getInstance().processLeave();
             return true;
         }
         return false;
