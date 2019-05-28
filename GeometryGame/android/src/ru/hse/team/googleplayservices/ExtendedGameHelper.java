@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesCallbackStatusCodes;
 import com.google.android.gms.games.multiplayer.Multiplayer;
@@ -158,13 +157,9 @@ public class ExtendedGameHelper extends GameHelper {
     }
 
     public void invitePlayers() {
-        GoogleSignInAccount lastSignedIn = GoogleSignIn.getLastSignedInAccount(mActivity);
-        System.out.println("IS SIGNED INT = " + isSignedIn() + ", lastSignedIn = " + lastSignedIn);
-        if (lastSignedIn != null) {
-            Games.getRealTimeMultiplayerClient(mActivity, lastSignedIn)
-                    .getSelectOpponentsIntent(1, 3, true)
-                    .addOnSuccessListener(intent -> mActivity.startActivityForResult(intent, RC_SELECT_PLAYERS));
-        }
+//        Games.getRealTimeMultiplayerClient(mActivity, GoogleSignIn.getLastSignedInAccount(mActivity))
+//                .getSelectOpponentsIntent(1, 3, true)
+//                .addOnSuccessListener(intent -> mActivity.startActivityForResult(intent, RC_SELECT_PLAYERS));
     }
 
     @Override

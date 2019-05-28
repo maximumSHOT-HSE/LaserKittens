@@ -114,7 +114,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 	@Override
 	public void quickGame(int role) {
 		try{
-			runOnUiThread(() -> gameHelper.quickGame(role));
+//			runOnUiThread(() -> gameHelper.quickGame(role));
 		}
 		catch (Exception e){
 			Gdx.app.log("CIRUS", "Google Services Logout Failed " + e.getMessage());
@@ -123,7 +123,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 
 	@Override
 	public void invitePlayers() {
-		gameHelper.invitePlayers();
+		runOnUiThread(() -> gameHelper.invitePlayers());
 	}
 
 	@Override
