@@ -4,10 +4,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
+import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TumblerComponent;
@@ -19,6 +21,22 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
     private float CW;
     private float CH;
     private int role = 1;
+
+    private Entity opponentPlayer = null;
+
+    @Override
+    public void setOpponentPosition(Vector2 position) {
+        if (opponentPlayer == null) {
+            opponentPlayer = createPlayer(position.x, position.y, 3f);
+        }
+        BodyComponent bodyComponent = Mapper.bodyComponent.get(opponentPlayer);
+        if (bodyComponent != null) {
+            Body body = bodyComponent.body;
+            if (body != null) {
+                body.setTransform(position, 0);
+            }
+        }
+    }
 
     public MultiplayerQuizLevelFactory(int role) {
         world = new World(new Vector2(0, 0), true);

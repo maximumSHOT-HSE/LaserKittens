@@ -10,7 +10,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
@@ -29,6 +31,9 @@ import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.gamelogic.systems.StateControlSystem;
 
 abstract public class AbstractLevelFactory {
+
+    private static int currentId = 0;
+    private Map<Integer, Entity> idToEntity = new HashMap<>();
 
     protected BodyFactory bodyFactory;
     protected World world;
@@ -83,7 +88,7 @@ abstract public class AbstractLevelFactory {
                 .build();
     }
 
-    protected Entity createLaser(Vector2 source, Vector2 direction, long lifeTime) {
+    public Entity createLaser(Vector2 source, Vector2 direction, int lifeTime) {
 
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newBullet(source, direction))
@@ -302,7 +307,7 @@ abstract public class AbstractLevelFactory {
             return this;
         }
 
-        public EntityBuilder addBulletComponent(long creationTime, long lifeTime, Vector2 source) {
+        public EntityBuilder addBulletComponent(long creationTime, int lifeTime, Vector2 source) {
             BulletComponent bulletComponent = engine.createComponent(BulletComponent.class);
             bulletComponent.creationTime = creationTime;
             bulletComponent.lifeTime = lifeTime;
@@ -323,6 +328,9 @@ abstract public class AbstractLevelFactory {
         public EntityBuilder addStateComponent(StateComponent.State state) {
             StateComponent stateComponent = engine.createComponent(StateComponent.class);
             stateComponent.set(state);
+            stateComponent.setId(currentId);
+            idToEntity.put(currentId, entity);
+            currentId++;
             entity.add(stateComponent);
             return this;
         }
@@ -484,16 +492,20 @@ abstract public class AbstractLevelFactory {
     public void removeKey(int keyId) {
         System.out.println("REMOVE key with id = " + keyId);
         StateControlSystem stateControlSystem = engine.getSystem(StateControlSystem.class);
-        Entity key = stateControlSystem.getIdToEntity().get(keyId);
+        Entity key = idToEntity.get(keyId);
         if (key == null) {
             return;
         }
-        stateControlSystem.getIdToEntity().remove(keyId);
+        idToEntity.remove(keyId);
         StateComponent stateComponent = Mapper.stateComponent.get(key);
         if (stateComponent == null) {
             return;
         }
         System.out.println("THERE IS STATE");
         stateComponent.finish();
+    }
+
+    public void setOpponentPosition(Vector2 position) {
+
     }
 }

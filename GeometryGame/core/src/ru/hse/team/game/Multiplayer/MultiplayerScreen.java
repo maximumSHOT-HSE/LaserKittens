@@ -1,5 +1,6 @@
 package ru.hse.team.game.Multiplayer;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -119,7 +120,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
     public void onGameStarted(String message) {
         System.out.println("MultiplayerScreen.onGameStarted: msg = " + message);
         this.msg = gameStartMsg;
-        Gdx.app.postRunnable(() -> parent.setScreen(
+        Gdx.app.postRunnable(() -> ((Game) (Gdx.app.getApplicationListener())).setScreen(
                 new GameScreen(parent, new MultiplayerQuizLevel(parent, MultiplayerScreen.this, Integer.parseInt(message)))));
     }
 

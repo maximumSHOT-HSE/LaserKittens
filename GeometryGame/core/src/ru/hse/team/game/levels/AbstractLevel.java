@@ -3,8 +3,11 @@ package ru.hse.team.game.levels;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.Mapper;
+import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
+import ru.hse.team.game.Multiplayer.MessageCreator;
 import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
 
 /**
@@ -13,6 +16,9 @@ import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
  * (creating, drawing and storing data, e.g. score, times, etc.).
  * */
 abstract public class AbstractLevel {
+
+    private static long RECHARGE_TIME = 500;
+    private long lastShootTime = (long) -1e9;
 
     /**
      * Name of the level.
@@ -42,22 +48,38 @@ abstract public class AbstractLevel {
     abstract public AbstractLevelFactory getFactory();
 
     public void shoot(float x, float y) {
+
+        long currentShootTime = System.currentTimeMillis();
+
+        if (isMultiplayer() && currentShootTime - lastShootTime < RECHARGE_TIME) {
+            return;
+        }
+
+        lastShootTime = currentShootTime;
+
         Vector3 playerPosition = Mapper.transformComponent.get(getFactory().getPlayer()).position;
 
         Vector2 direction = new Vector2(x - playerPosition.x, y - playerPosition.y);
         float length = (float) Math.sqrt(direction.x * direction.x + direction.y * direction.y);
         direction.set(direction.x / length, direction.y / length);
         float playerRadius = getFactory().getPlayerRadius();
-        getFactory().createLaser(
-                new Vector2(playerPosition.x + playerRadius * direction.x,
-                        playerPosition.y + playerRadius * direction.y),
-                direction, 10000
-        );
+
+        Vector2 source =  new Vector2(playerPosition.x + playerRadius * direction.x,
+                playerPosition.y + playerRadius * direction.y);
+        int lifeTime = 10_000;
+
+        getFactory().createLaser(source, direction, lifeTime);
+
+        if (isMultiplayer()) {
+            WarpController
+                .getInstance()
+                .sendGameUpdate(
+                        MessageCreator.createShootMessage(
+                                source, direction, lifeTime));
+        }
     }
 
     public boolean isMultiplayer() {
         return false;
     }
-
-
 }
