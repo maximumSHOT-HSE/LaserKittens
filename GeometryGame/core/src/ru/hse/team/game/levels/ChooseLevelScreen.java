@@ -66,8 +66,8 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new MultiplayerQuizLevel(laserKittens, null, 2));
 
         List<SavedSimpleEntity> list = new ArrayList<>();
-        list.add(new SavedSimpleEntity(0, 0, 10, 10, SavedSimpleEntity.EntityType.PLAYER));
-        list.add(new SavedSimpleEntity(20, 20, 1, 1, SavedSimpleEntity.EntityType.STAR));
+        list.add(new SavedSimpleEntity(0, 0, 10, 10, 0, SavedSimpleEntity.EntityType.PLAYER));
+        list.add(new SavedSimpleEntity(20, 20, 1, 1, 0, SavedSimpleEntity.EntityType.STAR));
         abstractLevels.add(LevelGenerator.generate(new SavedLevel(list, 1, 1)));
     }
 
@@ -81,7 +81,7 @@ public class ChooseLevelScreen implements Screen {
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
 
         fillLevels();
-        currentSection = abstractLevels.size() + 1;
+        currentSection = abstractLevels.size() + 2;
 
         menu = new Menu();
     }
@@ -163,7 +163,7 @@ public class ChooseLevelScreen implements Screen {
             saveState();
             laserKittens.batch.begin();
 
-            int levelsCount = abstractLevels.size() + 1;
+            int levelsCount = abstractLevels.size() + 2;
 
             float h = naviActive.getHeight();
             float w = naviActive.getWidth();
@@ -262,10 +262,35 @@ public class ChooseLevelScreen implements Screen {
             return table;
         }
 
+        private Table editorScreenTable() {
+            TextButton statisticsButton = new TextButton("Level editor", skin);
+            statisticsButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    currentSection = slidingPane.currentSectionId;
+                    direction = slidingPane.direction;
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.LEVEL_CREATE_SCREEN);
+                }
+            });
+
+            Table table = new Table();
+            table.setWidth(0.6f * screenWidth);
+            table.setHeight(0.6f * screenHeight);
+
+            addDumpLabels(table);
+            table.row();
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(statisticsButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            addDumpLabels(table);
+            return table;
+        }
+
         public void show(Stage stage) {
             // should be created here. Specific of implementation.
             slidingPane = new SlidingPane();
             slidingPane.addWidget(statisticsTable());
+
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
                 Label statusLabel = getBestResult(abstractLevel.getName());
@@ -305,7 +330,7 @@ public class ChooseLevelScreen implements Screen {
                 slidingPane.addWidget(table);
             }
 
-
+            slidingPane.addWidget(editorScreenTable());
 
             slidingPane.setCurrentSection(currentSection, direction);
             stage.addActor(slidingPane);

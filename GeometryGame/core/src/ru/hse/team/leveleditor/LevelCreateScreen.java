@@ -10,15 +10,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ru.hse.team.Background;
+import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.settings.about.PagedScrollPane;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +34,10 @@ public class LevelCreateScreen implements Screen {
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
     private Stage stage;
+    private EditorTools tools;
 
     private InputMultiplexer inputMultiplexer;
+    private LevelCreateInputProcessor inputProcessor;
 
     public LevelCreateScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
@@ -38,7 +45,7 @@ public class LevelCreateScreen implements Screen {
         background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
 
-        InputProcessor inputProcessor = new LevelCreateInputProcessor(this.laserKittens);
+        inputProcessor = new LevelCreateInputProcessor(this.laserKittens);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
     }
 
@@ -46,10 +53,11 @@ public class LevelCreateScreen implements Screen {
     public void show() {
         stage.clear();
         Gdx.input.setInputProcessor(inputMultiplexer);
+        tools = new EditorTools(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.update();
         laserKittens.batch.setProjectionMatrix(camera.combined);
+        camera.update();
     }
 
     @Override
@@ -57,7 +65,7 @@ public class LevelCreateScreen implements Screen {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update(); // good practise -- update camera one time per frame
+        camera.update();
 
         laserKittens.batch.begin();
         background.draw(laserKittens.batch, camera);
@@ -92,6 +100,108 @@ public class LevelCreateScreen implements Screen {
     public void dispose () {
         stage.dispose();
         background.dispose();
+    }
+
+    private class EditorTools {
+
+        private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        private Table table = new Table();
+        private final float screenWidth = Gdx.graphics.getWidth();
+        private final float screenHeight = Gdx.graphics.getHeight();
+
+        final float toolButtonWidth = screenWidth / 5;
+        final float toolButtonHeight = screenHeight / 10;
+
+        private ImageButton playerButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat3, Texture.class)));
+        private ImageButton wallButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.ICE_WALL, Texture.class)));
+        private ImageButton mirrorButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.MIRROR, Texture.class)));
+        private ImageButton starButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Star2, Texture.class)));
+        private ImageButton rotateLeft = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+        private ImageButton rotateRight = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+        private ImageButton finishButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+        private ImageButton eraserButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+
+        public EditorTools(Stage stage) {
+            table.setFillParent(true);
+            //table.setDebug(true);
+            stage.addActor(table);
+            table.align(Align.top);
+
+            PagedScrollPane scroll = new PagedScrollPane(skin);
+            scroll.setFlingTime(0.1f);
+            scroll.setPageSpacing(25);
+            Table buttons = new Table();
+
+            buttons.add(playerButton).width(toolButtonWidth).height(toolButtonHeight);
+            buttons.add(wallButton).width(toolButtonWidth).height(toolButtonHeight);
+            buttons.add(mirrorButton).width(toolButtonWidth).height(toolButtonHeight);
+            buttons.add(starButton).width(toolButtonWidth).height(toolButtonHeight);
+            buttons.add(rotateLeft).width(toolButtonWidth).height(toolButtonHeight);
+            buttons.add(rotateRight).width(toolButtonWidth).height(toolButtonHeight);
+            buttons.add(eraserButton).width(toolButtonWidth).height(toolButtonHeight);
+            buttons.add(finishButton).width(toolButtonWidth).height(toolButtonHeight);
+            scroll.addPage(buttons);
+            scroll.setHeight(toolButtonHeight + screenHeight / 30);
+
+            table.add(scroll);
+
+
+            setListeners();
+        }
+
+        private void setListeners() {
+
+            playerButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    System.out.println("HERE!");
+                }
+            });
+
+            wallButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                }
+            });
+
+            mirrorButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                }
+            });
+
+            starButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                }
+            });
+
+            rotateLeft.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                }
+            });
+
+            rotateRight.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                }
+            });
+
+            finishButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                }
+            });
+
+            eraserButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                }
+            });
+
+        }
+
     }
 
 }

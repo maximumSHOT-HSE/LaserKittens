@@ -15,13 +15,16 @@ public class SavedSimpleEntity {
     private final float sizeX;
     private final float sizeY;
 
+    private final float rotation;
+
     private final EntityType type;
 
-    public SavedSimpleEntity(float positionX, float positionY, float sizeX, float sizeY, EntityType type) {
+    public SavedSimpleEntity(float positionX, float positionY, float sizeX, float sizeY, float rotation, EntityType type) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
+        this.rotation = rotation;
         this.type = type;
     }
 
@@ -39,6 +42,10 @@ public class SavedSimpleEntity {
 
     public float getSizeY() {
         return sizeY;
+    }
+
+    public float getRotation() {
+        return rotation;
     }
 
     public EntityType getType() {

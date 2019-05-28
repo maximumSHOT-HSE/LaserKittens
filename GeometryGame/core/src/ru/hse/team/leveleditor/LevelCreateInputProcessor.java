@@ -5,7 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import ru.hse.team.LaserKittens;
 
 /**
- * Input processor for about screen.
+ * Input processor for levelCreate screen.
  */
 public class LevelCreateInputProcessor implements InputProcessor {
 
@@ -15,13 +15,10 @@ public class LevelCreateInputProcessor implements InputProcessor {
         this.laserKittens = laserKittens;
     }
 
-    /**
-     * Catches key back and opens MAIN_MENU_SCREEN
-     */
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
-            laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+            laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
             return true;
         }
         return false;

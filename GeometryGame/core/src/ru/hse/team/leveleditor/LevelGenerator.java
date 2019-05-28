@@ -73,7 +73,7 @@ public class LevelGenerator {
                             createStar(entity.getPositionX(), entity.getPositionY(), entity.getSizeX());
                             break;
                         case MIRROR:
-                            createMirror(new Vector2(entity.getPositionX(), entity.getPositionY()), entity.getSizeX(), entity.getSizeY());
+                            createMirror(new Vector2(entity.getPositionX(), entity.getPositionY()), entity.getSizeX(), entity.getSizeY(), entity.getRotation());
                             break;
                         case WALL:
                             createImpenetrableWall(new Vector2(entity.getPositionX(), entity.getPositionY()), entity.getSizeX(), entity.getSizeY());
