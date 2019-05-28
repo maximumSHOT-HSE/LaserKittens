@@ -7,36 +7,30 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.RawQuery;
 import android.arch.persistence.room.Update;
-
 import java.util.List;
+
 @Dao
 public interface LevelsDaoAndroid extends LevelsDao {
 
-    @RawQuery
-    SavedLevel getStatisticsByQuery(SupportSQLiteQuery query);
-
-    @Query("SELECT * FROM LevelStatistics")
+    @Query("SELECT * FROM SavedLevel")
     List<SavedLevel> getAll();
 
-    @Query("SELECT * FROM LevelStatistics WHERE id = :id")
+    @Query("SELECT * FROM SavedLevel WHERE id = :id")
     SavedLevel getById(long id);
 
-    @Query("SELECT * FROM LevelStatistics WHERE levelName = :levelName AND time = (SELECT MIN(time) FROM LevelStatistics where levelName = :levelName)")
-    SavedLevel getBestByLevelName (String levelName);
+    @Insert
+    void insert(SavedLevel level);
 
     @Insert
-    void insert(SavedLevel statistics);
-
-    @Insert
-    void insertAll(SavedLevel ... statistics);
+    void insertAll(SavedLevel ... levels);
 
     @Update
-    void update(SavedLevel statistics);
+    void update(SavedLevel level);
 
     @Delete
-    void delete(SavedLevel statistics);
+    void delete(SavedLevel level);
 
     @Delete
-    void deleteAll(SavedLevel ... statistics);
+    void deleteAll(SavedLevel ... levels);
 
 }

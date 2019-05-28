@@ -8,15 +8,13 @@ public interface LevelsDao {
 
     SavedLevel getById(long id);
 
-    SavedLevel getBestByLevelName (String levelName);
+    void insert(SavedLevel level);
 
-    void insert(SavedLevel statistics);
+    void insertAll(SavedLevel ... level);
 
-    void insertAll(SavedLevel ... statistics);
+    void update(SavedLevel level);
 
-    void update(SavedLevel statistics);
+    void delete(SavedLevel level);
 
-    void delete(SavedLevel statistics);
-
-    void deleteAll(SavedLevel ... statistics);
+    void deleteAll(SavedLevel ... levels);
 }

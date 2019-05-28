@@ -11,13 +11,13 @@ import java.util.List;
 
 public class SavedLevelsConverter {
     @TypeConverter
-    public static List<Entity> fromString(String value) {
-        Type listType = new TypeToken<List<Entity>>() {}.getType();
+    public static List<SavedSimpleEntity> fromString(String value) {
+        Type listType = new TypeToken<List<SavedSimpleEntity>>() {}.getType();
         return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String fromList(List<Entity> list) {
+    public static String fromList(List<SavedSimpleEntity> list) {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         return json;

@@ -11,7 +11,7 @@ import java.util.List;
 public class SavedLevel {
 
 
-    public SavedLevel(List<Entity> entities) {
+    public SavedLevel(List<SavedSimpleEntity> entities) {
         this.entities = entities;
     }
 
@@ -20,7 +20,13 @@ public class SavedLevel {
 
 
     @ColumnInfo
-    public List<Entity> entities;
+    public List<SavedSimpleEntity> entities;
+
+    @ColumnInfo
+    public int widthInScreens;
+
+    @ColumnInfo
+    public int heightInScreens;
 
 
 }

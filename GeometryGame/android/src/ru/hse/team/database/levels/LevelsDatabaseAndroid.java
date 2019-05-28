@@ -7,5 +7,5 @@ import android.arch.persistence.room.TypeConverters;
 @Database(entities = {SavedLevel.class}, version = 1)
 @TypeConverters({SavedLevelsConverter.class})
 public abstract class LevelsDatabaseAndroid extends RoomDatabase implements LevelsDatabase {
-    public abstract LevelsDaoAndroid statisticsDao();
+    public abstract LevelsDaoAndroid levelsDao();
 }
