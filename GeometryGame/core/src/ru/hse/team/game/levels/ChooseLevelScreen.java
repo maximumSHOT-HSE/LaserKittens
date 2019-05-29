@@ -295,7 +295,7 @@ public class ChooseLevelScreen implements Screen {
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
                 Label statusLabel = getBestResult(abstractLevel.getName());
-                levelButton.getLabel().setFontScale(1f);
+                levelButton.getLabel().setFontScale(1.1f);
                 levelButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
