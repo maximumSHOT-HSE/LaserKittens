@@ -5,9 +5,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-
-import ru.hse.team.game.gamelogic.systems.RenderingSystem;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 public class GridGraph extends AbstractGraph {
 
@@ -20,6 +26,8 @@ public class GridGraph extends AbstractGraph {
     private float cellHeight;
 
     private Vertex[][] graph;
+    private List<Pair<Vertex, Vertex>> edges = new ArrayList<>();
+    private Map<Integer, List<Pair<Vertex, Vertex>>> deletedEdges = new HashMap<>();
 
     public GridGraph(int countScreensWidth, int countScreensHeight, float cellWidth, float cellHeight) {
         this.countScreensWidth = countScreensWidth;
@@ -27,6 +35,24 @@ public class GridGraph extends AbstractGraph {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
         buildGraph();
+    }
+
+    private void addAllEdges() {
+        int n = VERTEX_COUNT_IN_CELL_WIDTH * countScreensWidth;
+        int m = VERTEX_COUNT_IN_CELL_HEIGHT * countScreensHeight;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (i + 1 < n) {
+                    addEdge(i, j, i + 1, j);
+                }
+                if (j + 1 < m) {
+                    addEdge(i, j, i, j + 1);;
+                }
+                if (i + 1 < n && j + 1 < m) {
+                    addEdge(i, j, i + 1, j + 1);
+                }
+            }
+        }
     }
 
     private void buildGraph() {
@@ -47,9 +73,10 @@ public class GridGraph extends AbstractGraph {
                 if (j % VERTEX_COUNT_IN_CELL_HEIGHT == 0) {
                     currentY += dy;
                 }
-                graph[i][j] = new Vertex(new Vector2(currentX, currentY));
+                graph[i][j] = new Vertex(new Vector2(currentX, currentY), i * m + j);
             }
         }
+        addAllEdges();
     }
 
     private Vertex getVertexByPosition(Vector2 position) {
@@ -72,38 +99,163 @@ public class GridGraph extends AbstractGraph {
         return result;
     }
 
+    public void addEdge(int i1, int j1, int i2, int j2) {
+        Vertex vu = graph[i1][j1];
+        Vertex vv = graph[i2][j2];
+        addEdge(vu, vv);
+    }
+
+    public void addEdge(Vertex vu, Vertex vv) {
+        vu.addEdge(vv);
+        edges.add(new Pair<>(vu, vv));
+    }
+
     @Override
     public void addEdge(Vector2 u, Vector2 v) {
         Vertex vu = getVertexByPosition(u);
         Vertex vv = getVertexByPosition(v);
-        Vertex.addEdge(vu, vv);
+        addEdge(vu, vv);
+    }
+
+    private void findReachable() {
+        Vertex start = null;
+        int n = VERTEX_COUNT_IN_CELL_WIDTH * countScreensWidth;
+        int m = VERTEX_COUNT_IN_CELL_HEIGHT * countScreensHeight;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (graph[i][j].isVisited) {
+                    start = graph[i][j];
+                }
+                graph[i][j].isReacheble = false;
+            }
+        }
+        start.isReacheble = true;
+        Queue<Vertex> queue = new LinkedList<>();
+        queue.offer(start);
+        while (!queue.isEmpty()) {
+            Vertex v = queue.poll();
+            for (Vertex to : v.neighbours) {
+                if (!to.isReacheble) {
+                    to.isReacheble = true;
+                    queue.offer(to);
+                }
+            }
+        }
     }
 
     @Override
     public void draw(ShapeRenderer shapeRenderer) {
         int n = graph.length;
         int m = graph[0].length;
-        shapeRenderer.setColor(Color.GOLD);
+        findReachable();
+        shapeRenderer.setColor(Color.GREEN);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 Vertex v = graph[i][j];
-                shapeRenderer.circle(v.position.x, v.position.y, 1f);
+                if (!v.isVisited) {
+                    continue;
+                }
+                shapeRenderer.circle(v.position.x, v.position.y, 1);
+            }
+        }
+        DisjointSetUnion disjointSetUnion = new DisjointSetUnion(n * m);
+        Collections.sort(edges, (p1, p2) -> {
+            float result = p1.x.position.dst(p1.y.position) - p2.x.position.dst(p2.y.position);
+            return result < 0 ? -1 : result > 0 ? 1 : 0;
+        });
+        for (Pair<Vertex, Vertex> edge : edges) {
+            Vertex u = edge.x;
+            Vertex v = edge.y;
+            if (!u.isReacheble || !v.isReacheble) {
+                continue;
+            }
+            if (disjointSetUnion.areConnected(u.id, v.id)) {
+                continue;
+            }
+            if (u.isVisited && v.isVisited) {
+                shapeRenderer.setColor(Color.GREEN);
+            } else {
+                shapeRenderer.setColor(Color.RED);
+            }
+            disjointSetUnion.addEdge(u.id, v.id);
+            shapeRenderer.line(u.position, v.position);
+        }
+    }
+
+    @Override
+    public void visit(Vector2 position) {
+        Vertex v = getVertexByPosition(position);
+        if (v != null) {
+            v.isVisited = true;
+        }
+    }
+
+    @Override
+    public void removeEdgeAgterPlacingRectangleBarrier(Vector2 center, float width, float height, int id) {
+        System.out.println("REMOVE (" + center.x + ", " + center.y + ") W = " + width + ", H = " + height + "id = " + id);
+        List<Pair<Vertex, Vertex>> deletedEs = new ArrayList<>();
+        deletedEdges.put(id, deletedEs);
+        Iterator<Pair<Vertex, Vertex>> iterator = edges.iterator();
+        while (iterator.hasNext()) {
+            Pair<Vertex, Vertex> edge = iterator.next();
+            Vertex u = edge.x;
+            Vertex v = edge.y;
+            if (Geometry.areIntersected(u.position, v.position, center, width, height)) {
+                u.removeEdge(v);
+                deletedEs.add(edge);
+                iterator.remove();
             }
         }
     }
 
-    private static class Vertex {
+    @Override
+    public void updateGraphAfterRemoveRectangleBarrier(int id) {
+        System.out.println("REMOVE id = " + id);
+        if (!deletedEdges.containsKey(id)) {
+            System.out.println("NOT FOUND");
+            return;
+        }
+        System.out.println("FOUND");
+        List<Pair<Vertex, Vertex>> deletedEs = deletedEdges.get(id);
+        for (Pair<Vertex, Vertex> edge : deletedEs) {
+            Vertex u = edge.x;
+            Vertex v = edge.y;
+            addEdge(u, v);
+        }
+        deletedEdges.remove(id);
+    }
+
+    private class Vertex {
 
         public Vector2 position;
-        public List<Vertex> neighbours = new ArrayList<>();
+        public Set<Vertex> neighbours = new HashSet<>();
+        public boolean isVisited = false;
+        public boolean isReacheble = false;
+        public int id;
 
-        public Vertex(Vector2 position) {
+        public Vertex(Vector2 position, int id) {
             this.position = position;
+            this.id = id;
         }
 
-        public static void addEdge(Vertex u, Vertex v) {
-            u.neighbours.add(v);
-            v.neighbours.add(u);
+        public void addEdge(Vertex u) {
+            u.neighbours.add(this);
+            this.neighbours.add(u);
+        }
+
+        public void removeEdge(Vertex u) {
+            u.neighbours.remove(this);
+            this.neighbours.remove(u);
+        }
+    }
+
+    private class Pair<T1, T2> {
+        T1 x;
+        T2 y;
+
+        public Pair(T1 x, T2 y) {
+            this.x = x;
+            this.y = y;
         }
     }
 }

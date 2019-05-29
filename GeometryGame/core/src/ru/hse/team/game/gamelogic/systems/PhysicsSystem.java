@@ -12,6 +12,8 @@ import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.PatrolComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
+import ru.hse.team.game.gamelogic.components.TypeComponent;
+import ru.hse.team.game.levels.AbstractLevel;
 
 
 /**
@@ -27,15 +29,17 @@ public class PhysicsSystem extends IteratingSystem {
 
     private World world;
     private Array<Entity> bodiesQueue;
+    private AbstractLevel abstractLevel;
 
     @SuppressWarnings("unchecked")
-    public PhysicsSystem(World world) {
+    public PhysicsSystem(World world, AbstractLevel abstractLevel) {
         super(Family.all(
                 BodyComponent.class,
                 TransformComponent.class
         ).get());
         this.world = world;
         this.bodiesQueue = new Array<>();
+        this.abstractLevel = abstractLevel;
     }
 
     @Override
@@ -49,7 +53,9 @@ public class PhysicsSystem extends IteratingSystem {
             for (Entity entity : bodiesQueue) {
                 TransformComponent transformComponent = Mapper.transformComponent.get(entity);
                 BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-                if (bodyComponent == null || bodyComponent.body == null) continue;
+                if (bodyComponent == null || bodyComponent.body == null) {
+                    continue;
+                }
                 Vector2 position = bodyComponent.body.getPosition();
                 transformComponent.position.x = position.x;
                 transformComponent.position.y = position.y;
@@ -57,8 +63,27 @@ public class PhysicsSystem extends IteratingSystem {
             }
             for (Entity entity : bodiesQueue) {
                 PatrolComponent patrolComponent = Mapper.patrolComponent.get(entity);
-                if (patrolComponent == null) continue;
+                if (patrolComponent == null) {
+                    continue;
+                }
                 patrolComponent.action();
+            }
+            if (abstractLevel.getAbstractGraph() != null) {
+                for (Entity entity : bodiesQueue) {
+                    TypeComponent typeComponent = Mapper.typeComponent.get(entity);
+                    if (typeComponent == null) {
+                        continue;
+                    }
+                    BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+                    if (bodyComponent == null || bodyComponent.body == null) {
+                        continue;
+                    }
+                    if (typeComponent.type.equals(TypeComponent.Type.PLAYER)) {
+                        abstractLevel
+                            .getAbstractGraph()
+                            .visit(bodyComponent.body.getPosition());
+                    }
+                }
             }
             bodiesQueue.clear();
         }

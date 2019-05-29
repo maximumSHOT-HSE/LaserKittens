@@ -120,7 +120,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placeImpenetrableWall(4.75f, 1.5f, 0.5f, 0.1f);
         placeImpenetrableWall(4.75f, 1f, 0.5f, 0.1f);
         placeImpenetrableWall(4.5f, 1.975f, 0.1f, 1.05f);
-        addAngularVelocity(placeImpenetrableWall(4.25f, 1.5f, 0.4f, 0.01f), 1);
+//        addAngularVelocity(placeImpenetrableWall(4.25f, 1.5f, 0.4f, 0.01f), 1);
         placeTransparentWall(4.25f, 1.5f, 0.4f, 0.1f);
         Entity rightDoor = placeDoor(4.9f, 1.25f, 0.1f, 0.5f);
         placeMirror(3.75f, 2.425f, 0.5f, 0.05f, 0);

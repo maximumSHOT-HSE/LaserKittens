@@ -54,7 +54,7 @@ public class AppPreferences {
     }
 
     public boolean isShowTime() {
-        return getPrefs().getBoolean(PREF_SHOW_TIME, true);
+        return getPrefs().getBoolean(PREF_SHOW_TIME, false);
     }
 
     public void setShowTime(boolean value) {

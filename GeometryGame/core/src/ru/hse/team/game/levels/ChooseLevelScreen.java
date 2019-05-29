@@ -20,16 +20,16 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
-import ru.hse.team.leveleditor.LevelGenerator;
 import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.database.statistics.LevelStatistics;
 import ru.hse.team.game.GameScreen;
-import ru.hse.team.game.Multiplayer.MultiplayerQuizLevel;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.levels.Quiz.QuizLevel;
 import ru.hse.team.game.levels.RandomLabyrinth.RandomLabyrinthLevel;
@@ -37,10 +37,8 @@ import ru.hse.team.game.levels.TestBigLevel.TestBigLevel;
 import ru.hse.team.game.levels.TestDoorsAndKeys.TestDoorsAndKeysLevel;
 import ru.hse.team.game.levels.TestLongCorridor.TestLongCorridorLevel;
 import ru.hse.team.game.levels.TestShooting.ShootingLevel;
+import ru.hse.team.leveleditor.LevelGenerator;
 import ru.hse.team.settings.SettingsScreenInputProcessor;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class ChooseLevelScreen implements Screen {
 
@@ -62,13 +60,13 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new TestLongCorridorLevel());
         abstractLevels.add(new TestDoorsAndKeysLevel());
         abstractLevels.add(new RandomLabyrinthLevel(5, 5, 1, 3));
-        abstractLevels.add(new QuizLevel());
-        abstractLevels.add(new MultiplayerQuizLevel(laserKittens, null, 2));
 
         List<SimpleEntity> list = new ArrayList<>();
         list.add(new SimpleEntity(0, 0, 10, 10, 0, SimpleEntity.EntityType.PLAYER));
         list.add(new SimpleEntity(20, 20, 1, 1, 0, SimpleEntity.EntityType.STAR));
         abstractLevels.add(LevelGenerator.generate(new SavedLevel(list, 1, 1)));
+
+        abstractLevels.add(new QuizLevel());
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {
@@ -291,6 +289,8 @@ public class ChooseLevelScreen implements Screen {
             slidingPane = new SlidingPane();
             slidingPane.addWidget(statisticsTable());
 
+            slidingPane.addWidget(editorScreenTable());
+
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
                 Label statusLabel = getBestResult(abstractLevel.getName());
@@ -329,8 +329,6 @@ public class ChooseLevelScreen implements Screen {
 
                 slidingPane.addWidget(table);
             }
-
-            slidingPane.addWidget(editorScreenTable());
 
             slidingPane.setCurrentSection(currentSection, direction);
             stage.addActor(slidingPane);

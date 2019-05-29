@@ -43,6 +43,8 @@ abstract public class AbstractLevelFactory {
     protected int widthInScreens = 1;
     protected int heightInScreens = 1;
 
+    private AbstractLevel abstractLevel;
+
     protected Entity focusedPlayer;
 
     abstract public World getWorld();
@@ -53,6 +55,10 @@ abstract public class AbstractLevelFactory {
 
     public AbstractLevelFactory() {
 
+    }
+
+    public void setAbstractLevel(AbstractLevel abstractLevel) {
+        this.abstractLevel = abstractLevel;
     }
 
     public AbstractLevelFactory(int widthInScreens, int heightInScreens) {
@@ -177,12 +183,19 @@ abstract public class AbstractLevelFactory {
                 (int) RenderingSystem.metersToPixels(width),
                 (int) RenderingSystem.metersToPixels(height)
         );
-        return (new EntityBuilder())
+        Entity wall = (new EntityBuilder())
             .addBodyComponent(bodyFactory.newRectangle(center, width, height))
             .addTransformComponent(new Vector3(center.x, center.y, 10))
             .addTextureComponent(textureRegion)
             .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
+            .addStateComponent(StateComponent.State.JUST_CREATED)
             .build();
+        if (abstractLevel != null && abstractLevel.getAbstractGraph() != null) {
+            abstractLevel.getAbstractGraph().removeEdgeAgterPlacingRectangleBarrier(center, width, height,
+                    Mapper.stateComponent.get(wall).getId());
+        }
+        return wall;
+
     }
 
     protected Entity createImpenetrableDynamicWall(Vector2 center, float width, float height) {
@@ -193,12 +206,18 @@ abstract public class AbstractLevelFactory {
                 (int) RenderingSystem.metersToPixels(width),
                 (int) RenderingSystem.metersToPixels(height)
         );
-        return (new EntityBuilder())
+        Entity wall = (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newDynamicRectangle(center, width, height, 0))
                 .addTransformComponent(new Vector3(center.x, center.y, 10))
                 .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
+                .addStateComponent(StateComponent.State.JUST_CREATED)
                 .build();
+        if (abstractLevel != null && abstractLevel.getAbstractGraph() != null) {
+            abstractLevel.getAbstractGraph().removeEdgeAgterPlacingRectangleBarrier(center, width, height,
+                    Mapper.stateComponent.get(wall).getId());
+        }
+        return wall;
     }
 
     protected Entity createDoor(Vector2 center, float width, float height) {
@@ -209,7 +228,7 @@ abstract public class AbstractLevelFactory {
                 (int) RenderingSystem.metersToPixels(width),
                 (int) RenderingSystem.metersToPixels(height)
         );
-        return (new EntityBuilder())
+        Entity door = (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height))
                 .addTransformComponent(new Vector3(center.x, center.y, 5))
                 .addTextureComponent(textureRegion)
@@ -217,6 +236,13 @@ abstract public class AbstractLevelFactory {
                 .addStateComponent(StateComponent.State.NORMAL)
                 .addDoorComponent()
                 .build();
+        System.out.println("CREATE DOOR with id = " + Mapper.stateComponent.get(door).getId());
+        System.out.flush();
+        if (abstractLevel != null && abstractLevel.getAbstractGraph() != null) {
+            abstractLevel.getAbstractGraph().removeEdgeAgterPlacingRectangleBarrier(center, width, height,
+                    Mapper.stateComponent.get(door).getId());
+        }
+        return door;
     }
 
     protected Entity createKey(Vector2 center, float width, float height, Entity door) {
