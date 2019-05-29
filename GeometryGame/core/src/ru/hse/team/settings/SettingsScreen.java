@@ -120,6 +120,9 @@ public class SettingsScreen implements Screen {
         private CheckBox showTime = new CheckBox(null, skin);
         private Label showTimeLabel = new Label("timer", new Label.LabelStyle(parent.font, Color.WHITE));
 
+        private CheckBox enableFog = new CheckBox(null, skin);
+        private Label fogLabel = new Label("enable fog", new Label.LabelStyle(parent.font, Color.WHITE));
+
         public Menu(Stage stage) {
             table.setFillParent(true);
             stage.addActor(table);
@@ -133,6 +136,9 @@ public class SettingsScreen implements Screen {
             showTime.getImage().scaleBy(1.5f);
             accelerometerLabel.setFontScale(1.5f);
             showTimeLabel.setFontScale(1.5f);
+            enableFog.getImageCell().size(20, 20);
+            enableFog.getImage().scaleBy(1.5f);
+            fogLabel.setFontScale(1.5f);
 
             about.getLabel().setFontScale(1.5f);
             backButton.getLabel().setFontScale(1.5f);
@@ -151,6 +157,9 @@ public class SettingsScreen implements Screen {
             table.row().pad(10, 10, 5, 10);
             table.add(showTimeLabel);
             table.add(showTime).width(Gdx.graphics.getWidth() * 0.5f).height(Gdx.graphics.getHeight() * 0.1f);
+            table.row().pad(10, 10, 10, 10);
+            table.add(fogLabel);
+            table.add(enableFog).width(Gdx.graphics.getWidth() * 0.5f).height(Gdx.graphics.getHeight() * 0.1f);
             table.row().pad(10, 10, 10, 10);
             table.add(about).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f);
             table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f);
@@ -207,6 +216,14 @@ public class SettingsScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     parent.getPreferences().setShowTime(showTime.isChecked());
+                }
+            });
+
+            enableFog.setChecked(parent.getPreferences().isEnabledFog());
+            enableFog.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    parent.getPreferences().setEnabledFog(enableFog.isChecked());
                 }
             });
         }

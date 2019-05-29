@@ -36,6 +36,9 @@ public class KittensAssetManager {
     // Question
     public static final String Question = "question.png";
 
+    // fog
+    public static final String FOG = "fog.png";
+
     //BackGrounds
     public static final String blueBackground = "blue-background.jpg";
     public static final String ICE_WALL = "ice-wall.png";
@@ -83,6 +86,7 @@ public class KittensAssetManager {
         manager.load(GOOGLE_SIGN_IN, Texture.class);
         manager.load(CUP, Texture.class);
         manager.load(PLAY_MARKET, Texture.class);
+        manager.load(FOG, Texture.class);
     }
 
     public void loadSounds() {

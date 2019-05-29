@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
         World world = levelFactory.getWorld();
         world.setContactListener(new ContractProcessor(abstractLevel));
 
-        renderingSystem = new RenderingSystem(this.laserKittens.batch, this.laserKittens.shapeRenderer, abstractLevel);
+        renderingSystem = new RenderingSystem(this.laserKittens.batch, this.laserKittens.shapeRenderer, abstractLevel, laserKittens);
         camera = renderingSystem.getCamera();
         camera.zoom = 1.5f;
         cameraMovingTo.set(camera.position);
