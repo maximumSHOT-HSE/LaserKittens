@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.LaserKittens;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
@@ -63,7 +63,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     private Comparator<Entity> comparator = new ZComparator();
     private OrthographicCamera camera;
     private float cameraWaiting = 0;
-    private AssetManager manager;
+    private final LaserKittens laserKittens;
 
     private AbstractLevel abstractLevel;
 
@@ -83,14 +83,14 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer, AbstractLevel abstractLevel, AssetManager manager) {
+    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer, AbstractLevel abstractLevel, LaserKittens laserKittens) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
         this.abstractLevel = abstractLevel;
 
         this.batch = batch;
         this.shapeRenderer = shapeRenderer;
-        this.manager = manager;
+        this.laserKittens = laserKittens;
 
         camera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
         camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
@@ -158,7 +158,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             float w = abstractLevel.getAbstractGraph().getVertexControlWidth() * 1.5f;
             float h = abstractLevel.getAbstractGraph().getVertexControlHeight() * 1.5f;
             for (Vector2 fogPosition : fogPositions) {
-                Texture fogTexture = manager.get(KittensAssetManager.FOG);
+                Texture fogTexture = laserKittens.assetManager.manager.get(KittensAssetManager.FOG, Texture.class);
                 batch.draw(fogTexture, fogPosition.x - w / 2, fogPosition.y - h / 2, w, h);
             }
         }
@@ -225,9 +225,11 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         shapeRenderer.end();
 
-        batch.begin();
-        drawFog();
-        batch.end();
+        if (laserKittens.getPreferences().isEnabledFog()) {
+            batch.begin();
+            drawFog();
+            batch.end();
+        }
     }
 
     @Override

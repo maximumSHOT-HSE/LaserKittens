@@ -128,7 +128,7 @@ public class GridGraph extends AbstractGraph {
         }
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                if (!graph[i][j].isVisited) {
+                if (!graph[i][j].isVisited && !graph[i][j].isReacheble) {
                     continue;
                 }
                 graph[i][j].isReacheble = true;
