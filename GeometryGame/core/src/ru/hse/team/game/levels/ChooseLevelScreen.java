@@ -81,7 +81,7 @@ public class ChooseLevelScreen implements Screen {
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
 
         fillLevels();
-        currentSection = abstractLevels.size() + 2;
+        currentSection = abstractLevels.size() + 3;
 
         menu = new Menu();
     }
@@ -163,7 +163,7 @@ public class ChooseLevelScreen implements Screen {
             saveState();
             laserKittens.batch.begin();
 
-            int levelsCount = abstractLevels.size() + 2;
+            int levelsCount = abstractLevels.size() + 3;
 
             float h = naviActive.getHeight();
             float w = naviActive.getWidth();
@@ -286,6 +286,32 @@ public class ChooseLevelScreen implements Screen {
             return table;
         }
 
+        private Table savedLevelsTable() {
+            TextButton savedLevelsButton = new TextButton("MyLevels", skin);
+            savedLevelsButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    currentSection = slidingPane.currentSectionId;
+                    direction = slidingPane.direction;
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
+                }
+            });
+            Table table = new Table();
+            table.setWidth(0.6f * screenWidth);
+            table.setHeight(0.6f * screenHeight);
+
+            addDumpLabels(table);
+            table.row();
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(savedLevelsButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.row();
+
+            addDumpLabels(table);
+
+            return table;
+        }
+
         public void show(Stage stage) {
             // should be created here. Specific of implementation.
             slidingPane = new SlidingPane();
@@ -331,6 +357,7 @@ public class ChooseLevelScreen implements Screen {
             }
 
             slidingPane.addWidget(editorScreenTable());
+            slidingPane.addWidget(savedLevelsTable());
 
             slidingPane.setCurrentSection(currentSection, direction);
             stage.addActor(slidingPane);
