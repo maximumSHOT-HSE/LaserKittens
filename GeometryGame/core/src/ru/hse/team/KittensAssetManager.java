@@ -7,10 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import javax.xml.soap.Text;
-
-import ru.hse.team.game.gamelogic.components.TextureComponent;
-
 public class KittensAssetManager {
 
     public final AssetManager manager = new AssetManager();
@@ -47,6 +43,15 @@ public class KittensAssetManager {
     public static final String MIRROR = "mirror.png";
     public static final String DOOR = "door.png";
 
+    // google sign in
+    public static final String GOOGLE_SIGN_IN = "google-sign-in.png";
+
+    // achievements
+    public static final String CUP = "cup.png";
+
+    // play market
+    public static final String PLAY_MARKET = "play-market.png";
+
     //Skin
     public static final String skin = "skin/glassy-ui.json";
 
@@ -75,6 +80,9 @@ public class KittensAssetManager {
         manager.load(KEY, Texture.class);
         manager.load(YELLOW_TUMBLER, Texture.class);
         manager.load(BLUE_TUMBLER, Texture.class);
+        manager.load(GOOGLE_SIGN_IN, Texture.class);
+        manager.load(CUP, Texture.class);
+        manager.load(PLAY_MARKET, Texture.class);
     }
 
     public void loadSounds() {
