@@ -99,12 +99,12 @@ public class GameScreen implements Screen {
         float levelHeight = screenHeight * level.getFactory().getLevelHeightInScreens();
 
         position.x = Math.max(position.x, screenWidth * camera.zoom / 2 - screenWidth / (2 * camera.zoom));
-        position.y = Math.max(position.y, screenHeight - camera.zoom * camera.zoom / 2 - screenHeight / (2 * camera.zoom));
+        position.y = Math.max(position.y, screenHeight * camera.zoom / 2 - screenHeight / (2 * camera.zoom));
         position.x = Math.min(position.x, levelWidth - screenWidth * camera.zoom / 2 + screenWidth / (2 * camera.zoom));
         position.y = Math.min(position.y, levelHeight - screenHeight * camera.zoom / 2 + screenHeight / (2 * camera.zoom));
     }
 
-    /** Moves camera with speed depended from distance exponentially */
+    /** Moves camera with speed exponentially? from distance*/
     private void moveCamera(float delta) {
 
         delta = Math.max(delta, 0.1f); // when delta is near to zero problems occur

@@ -190,7 +190,7 @@ public class ChooseLevelScreen implements Screen {
                 if (statistics != null) {
                     bestTime[0] = TimeUnit.NANOSECONDS.toMillis(statistics.timeNano);
                 } else {
-                    bestTime[0] = 1000;
+                    bestTime[0] = 1000_000_000;
                 }
             }));
             queryThread.start();
