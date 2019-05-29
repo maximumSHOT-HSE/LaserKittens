@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,13 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import ru.hse.team.Background;
-import ru.hse.team.LaserKittens;
-import ru.hse.team.settings.about.PagedScrollPane;
-import ru.hse.team.game.gamelogic.GameStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ru.hse.team.Background;
+import ru.hse.team.LaserKittens;
+import ru.hse.team.game.gamelogic.GameStatus;
+import ru.hse.team.settings.about.PagedScrollPane;
 
 /**
  * Screen with general information about the game.
@@ -109,7 +111,7 @@ public class StatisticsScreen implements Screen {
         private Table table = new Table();
 
         private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-        private Label titleLabel = new Label("Statistics", skin);
+        private Label titleLabel = new Label("Statistics", new Label.LabelStyle(laserKittens.font, Color.WHITE));
         private final TextButton backButton = new TextButton("Back", skin);
 
         List< List<Label> > listOfStatistics;
@@ -172,7 +174,7 @@ public class StatisticsScreen implements Screen {
             table.add(scroll).expand().fill();
 
             table.row().pad(30, 10, 10, 10);
-            table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).colspan(2).expand();
+            table.add(backButton).width(Gdx.graphics.getWidth() * 0.25f).height(Gdx.graphics.getHeight() * 0.1f).colspan(2).expand();
 
             setListeners();
         }

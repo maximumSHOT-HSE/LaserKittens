@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -104,9 +105,9 @@ public class SettingsScreen implements Screen {
         private Table table = new Table();
         private Skin skin = parent.assetManager.manager.get(KittensAssetManager.skin, Skin.class);
 
-        private Label titleLabel = new Label("Settings", skin);
-        private Label volumeMusicLabel = new Label("music volume", skin);
-        private Label volumeSoundLabel = new Label("sound volume", skin);
+        private Label titleLabel = new Label("Settings", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label volumeMusicLabel = new Label("music volume", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label volumeSoundLabel = new Label("sound volume", new Label.LabelStyle(parent.font, Color.WHITE));
 
         final private TextButton backButton = new TextButton("Back", skin);
         private TextButton about = new TextButton("About", skin);
@@ -114,24 +115,27 @@ public class SettingsScreen implements Screen {
         final private Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
 
         private CheckBox enableAccelerometer = new CheckBox(null, skin);
-        private Label accelerometerLabel = new Label("accelerometer", skin);
+        private Label accelerometerLabel = new Label("accelerometer", new Label.LabelStyle(parent.font, Color.WHITE));
 
         private CheckBox showTime = new CheckBox(null, skin);
-        private Label showTimeLabel = new Label("show level time", skin);
+        private Label showTimeLabel = new Label("timer", new Label.LabelStyle(parent.font, Color.WHITE));
 
         public Menu(Stage stage) {
             table.setFillParent(true);
             stage.addActor(table);
 
-            titleLabel.setFontScale(3f);
-            volumeMusicLabel.setFontScale(2);
-            volumeSoundLabel.setFontScale(2);
+            titleLabel.setFontScale(6f);
+            volumeMusicLabel.setFontScale(1.5f);
+            volumeSoundLabel.setFontScale(1.5f);
             enableAccelerometer.getImageCell().size(20, 20);
             enableAccelerometer.getImage().scaleBy(1.5f);
             showTime.getImageCell().size(20, 20);
             showTime.getImage().scaleBy(1.5f);
-            accelerometerLabel.setFontScale(2);
-            showTimeLabel.setFontScale(2);
+            accelerometerLabel.setFontScale(1.5f);
+            showTimeLabel.setFontScale(1.5f);
+
+            about.getLabel().setFontScale(1.5f);
+            backButton.getLabel().setFontScale(1.5f);
 
             table.row().pad(10, 10, 10, 10);
             table.add(titleLabel).colspan(2);
