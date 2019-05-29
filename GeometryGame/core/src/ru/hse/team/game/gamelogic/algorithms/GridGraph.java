@@ -1,6 +1,7 @@
 package ru.hse.team.game.gamelogic.algorithms;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -118,33 +119,36 @@ public class GridGraph extends AbstractGraph {
     }
 
     private void findReachable() {
-        Vertex start = null;
         int n = VERTEX_COUNT_IN_CELL_WIDTH * countScreensWidth;
         int m = VERTEX_COUNT_IN_CELL_HEIGHT * countScreensHeight;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                if (graph[i][j].isVisited) {
-                    start = graph[i][j];
-                }
                 graph[i][j].isReacheble = false;
             }
         }
-        start.isReacheble = true;
-        Queue<Vertex> queue = new LinkedList<>();
-        queue.offer(start);
-        while (!queue.isEmpty()) {
-            Vertex v = queue.poll();
-            for (Vertex to : v.neighbours) {
-                if (!to.isReacheble) {
-                    to.isReacheble = true;
-                    queue.offer(to);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (!graph[i][j].isVisited) {
+                    continue;
+                }
+                graph[i][j].isReacheble = true;
+                Queue<Vertex> queue = new LinkedList<>();
+                queue.offer(graph[i][j]);
+                while (!queue.isEmpty()) {
+                    Vertex v = queue.poll();
+                    for (Vertex to : v.neighbours) {
+                        if (!to.isReacheble) {
+                            to.isReacheble = true;
+                            queue.offer(to);
+                        }
+                    }
                 }
             }
         }
     }
 
     @Override
-    public void draw(ShapeRenderer shapeRenderer) {
+    public void draw(ShapeRenderer shapeRenderer, SpriteBatch batch) {
         int n = graph.length;
         int m = graph[0].length;
         findReachable();
@@ -186,6 +190,9 @@ public class GridGraph extends AbstractGraph {
     public void visit(Vector2 position) {
         Vertex v = getVertexByPosition(position);
         if (v != null) {
+            if (!v.isVisited) {
+                System.out.println("VISIT " + position.x + ", " + position.y);
+            }
             v.isVisited = true;
         }
     }
@@ -223,6 +230,32 @@ public class GridGraph extends AbstractGraph {
             addEdge(u, v);
         }
         deletedEdges.remove(id);
+    }
+
+    @Override
+    public List<Vector2> getFogPositions() {
+        findReachable();
+        List<Vector2> fogPositions = new ArrayList<>();
+        int n = graph.length;
+        int m = graph[0].length;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (!graph[i][j].isReacheble) {
+                    fogPositions.add(graph[i][j].position);
+                }
+            }
+        }
+        return fogPositions;
+    }
+
+    @Override
+    public float getVertexControlWidth() {
+        return 1.5f * cellWidth / (VERTEX_COUNT_IN_CELL_WIDTH + 1);
+    }
+
+    @Override
+    public float getVertexControlHeight() {
+        return 1.5f * cellHeight / (VERTEX_COUNT_IN_CELL_HEIGHT + 1);
     }
 
     private class Vertex {

@@ -5,8 +5,10 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -14,8 +16,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
+import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
@@ -59,6 +63,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     private Comparator<Entity> comparator = new ZComparator();
     private OrthographicCamera camera;
     private float cameraWaiting = 0;
+    private AssetManager manager;
 
     private AbstractLevel abstractLevel;
 
@@ -78,13 +83,14 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer, AbstractLevel abstractLevel) {
+    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer, AbstractLevel abstractLevel, AssetManager manager) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
         this.abstractLevel = abstractLevel;
 
         this.batch = batch;
         this.shapeRenderer = shapeRenderer;
+        this.manager = manager;
 
         camera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
         camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
@@ -146,9 +152,21 @@ public class RenderingSystem extends SortedIteratingSystem {
         }
     }
 
+    private void drawFog() {
+        if (abstractLevel.getAbstractGraph() != null) {
+            List<Vector2> fogPositions = abstractLevel.getAbstractGraph().getFogPositions();
+            float w = abstractLevel.getAbstractGraph().getVertexControlWidth() * 1.5f;
+            float h = abstractLevel.getAbstractGraph().getVertexControlHeight() * 1.5f;
+            for (Vector2 fogPosition : fogPositions) {
+                Texture fogTexture = manager.get(KittensAssetManager.FOG);
+                batch.draw(fogTexture, fogPosition.x - w / 2, fogPosition.y - h / 2, w, h);
+            }
+        }
+    }
+
     private void drawGraph() {
         if (abstractLevel.getAbstractGraph() != null && abstractLevel.getAbstractGraph().isDrawGraph()) {
-            abstractLevel.getAbstractGraph().draw(shapeRenderer);
+            abstractLevel.getAbstractGraph().draw(shapeRenderer, batch);
         }
     }
 
@@ -207,6 +225,9 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         shapeRenderer.end();
 
+        batch.begin();
+        drawFog();
+        batch.end();
     }
 
     @Override
