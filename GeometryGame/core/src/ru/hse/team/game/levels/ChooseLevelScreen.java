@@ -234,7 +234,8 @@ public class ChooseLevelScreen implements Screen {
                     laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.STATISTICS_SCREEN);
                 }
             });
-            ImageButton scoreButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+            ImageButton scoreButton = new ImageButton(
+                    new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.CUP, Texture.class)));
             scoreButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
