@@ -1,7 +1,5 @@
 package ru.hse.team.game;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -13,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 /**
@@ -41,7 +40,7 @@ public class BodyFactory {
         OTHER((short)2),
         TRANSPARENT((short)3);
 
-        private Category(int index) {
+        Category(int index) {
             this.mask = (short)(1 << index);
         }
 

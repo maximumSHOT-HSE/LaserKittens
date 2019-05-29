@@ -289,6 +289,8 @@ public class ChooseLevelScreen implements Screen {
             slidingPane = new SlidingPane();
             slidingPane.addWidget(statisticsTable());
 
+            slidingPane.addWidget(editorScreenTable());
+
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
                 Label statusLabel = getBestResult(abstractLevel.getName());
@@ -327,8 +329,6 @@ public class ChooseLevelScreen implements Screen {
 
                 slidingPane.addWidget(table);
             }
-
-            slidingPane.addWidget(editorScreenTable());
 
             slidingPane.setCurrentSection(currentSection, direction);
             stage.addActor(slidingPane);

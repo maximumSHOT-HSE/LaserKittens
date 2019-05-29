@@ -25,4 +25,10 @@ public abstract class AbstractGraph {
         previousDrawGraphTime = System.currentTimeMillis();
         this.drawGraph = drawGraph;
     }
+
+    abstract public void visit(Vector2 position);
+
+    abstract public void removeEdgeAgterPlacingRectangleBarrier(Vector2 center, float width, float height, int id);
+
+    abstract public void updateGraphAfterRemoveRectangleBarrier(int id);
 }
