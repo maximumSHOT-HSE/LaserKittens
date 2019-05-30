@@ -75,7 +75,7 @@ public class ChooseSavedLevelScreen implements Screen {
         camera.update();
 
         laserKittens.getBatch().begin();
-        background.draw(laserKittens.getBatch(), camera);
+        background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());

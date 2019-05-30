@@ -68,7 +68,7 @@ public class SettingsScreen implements Screen {
         camera.update();
 
         parent.getBatch().begin();
-        background.draw(parent.getBatch(), camera);
+        background.draw(parent.getBatch());
         parent.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());

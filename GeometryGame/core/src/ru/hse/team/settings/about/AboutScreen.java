@@ -67,7 +67,7 @@ public class AboutScreen implements Screen {
         camera.update(); // good practise -- update camera one time per frame
 
         laserKittens.getBatch().begin();
-        background.draw(laserKittens.getBatch(), camera);
+        background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());

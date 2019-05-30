@@ -27,14 +27,15 @@ public class MainMenuScreen implements Screen {
     private final LaserKittens parent;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-    private Stage stage;
+    private Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
 
     public MainMenuScreen(final LaserKittens laserKittens) {
         this.parent = laserKittens;
-
-        background = new Background(parent.getAssetManager().manager.get("blue-background.jpg", Texture.class));
-        stage = new Stage(new ScreenViewport());
+        background = new Background(
+                parent.getAssetManager()
+                .manager
+                .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
     }
 
     @Override
@@ -42,7 +43,6 @@ public class MainMenuScreen implements Screen {
         stage.clear();
         menu = new Menu(stage);
         Gdx.input.setInputProcessor(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         parent.getBatch().setProjectionMatrix(camera.combined);
@@ -56,7 +56,7 @@ public class MainMenuScreen implements Screen {
         camera.update();
 
         parent.getBatch().begin();
-        background.draw(parent.getBatch(), camera);
+        background.draw(parent.getBatch());
         parent.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
