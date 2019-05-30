@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 /*
 * This class is not a singleton, because of android
@@ -40,6 +41,12 @@ public class KittensAssetManager {
     public static final String SKIN = "skin/glassy-ui.json";
     public static final String LASER_SOUND = "sounds/laser-shot.wav";
     public static final String FONT = "skin/gameFont.fnt";
+    public static final String ERASER = "eraser.png";
+    public static final String DELETE = "delete.png";
+    public static final String CURSOR = "cursor.png";
+    public static final String OK = "ok.png";
+    public static final String ROTATE_LEFT = "rotate_left.png";
+    public static final String ROTATE_RIGHT = "rotate_right.png";
 
     private void loadImages() {
         manager.load(BADLOGIC, Texture.class);
@@ -64,6 +71,12 @@ public class KittensAssetManager {
         manager.load(CUP, Texture.class);
         manager.load(PLAY_MARKET, Texture.class);
         manager.load(FOG, Texture.class);
+        manager.load(ERASER, Texture.class);
+        manager.load(DELETE, Texture.class);
+        manager.load(CURSOR, Texture.class);
+        manager.load(OK, Texture.class);
+        manager.load(ROTATE_LEFT, Texture.class);
+        manager.load(ROTATE_RIGHT, Texture.class);
     }
 
     private void loadSounds() {
