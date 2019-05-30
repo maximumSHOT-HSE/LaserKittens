@@ -24,6 +24,7 @@ public class StateControlSystem extends IteratingSystem {
 
     private World world;
     private PooledEngine engine;
+
     private GameStatus gameStatus;
     private AbstractLevel abstractLevel;
 

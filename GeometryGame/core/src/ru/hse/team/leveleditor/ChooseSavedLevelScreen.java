@@ -137,7 +137,7 @@ public class ChooseSavedLevelScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager().manager.get("SKIN/glassy-ui.json", Skin.class);
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
 
         private Label titleLabel = new Label("Saved levels", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 

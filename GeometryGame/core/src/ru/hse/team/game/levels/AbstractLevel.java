@@ -18,7 +18,7 @@ import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
 abstract public class AbstractLevel {
 
     private static long RECHARGE_TIME = 500;
-    private long lastShootTime = (long) -1e9;
+    private long lastShootTime = Long.MIN_VALUE;
 
     /**
      * Name of the level.
@@ -26,14 +26,6 @@ abstract public class AbstractLevel {
      */
     private String name;
     private AbstractGraph abstractGraph;
-
-    public AbstractGraph getAbstractGraph() {
-        return abstractGraph;
-    }
-
-    public void setAbstractGraph(AbstractGraph abstractGraph) {
-        this.abstractGraph = abstractGraph;
-    }
 
     public AbstractLevel(String name) {
         this.name = name;
@@ -81,5 +73,13 @@ abstract public class AbstractLevel {
 
     public boolean isMultiplayer() {
         return false;
+    }
+
+    public AbstractGraph getAbstractGraph() {
+        return abstractGraph;
+    }
+
+    public void setAbstractGraph(AbstractGraph abstractGraph) {
+        this.abstractGraph = abstractGraph;
     }
 }
