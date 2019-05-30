@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import de.tomgrill.gdxdialogs.core.GDXDialogs;
+import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
 import ru.hse.team.leveleditor.ChooseSavedLevelScreen;
 import ru.hse.team.settings.about.AboutScreen;
 import ru.hse.team.database.levels.LevelsDatabase;
@@ -26,6 +28,7 @@ public class LaserKittens extends Game {
     private final AppPreferences preferences = new AppPreferences();
     public final KittensAssetManager assetManager = new KittensAssetManager();
 
+    private GDXDialogs dialogs;
     private final StatisticsDatabase statisticsDatabase;
     private final LevelsDatabase savedLevels;
     private final GoogleServicesAction googleServices;
@@ -133,6 +136,7 @@ public class LaserKittens extends Game {
     @Override
     public void create() {
         Gdx.input.setCatchBackKey(true);
+        dialogs = GDXDialogsSystem.install();
 
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
@@ -158,5 +162,9 @@ public class LaserKittens extends Game {
         font.dispose();
         assetManager.manager.dispose();
         shapeRenderer.dispose();
+    }
+
+    public GDXDialogs getDialogs() {
+        return dialogs;
     }
 }

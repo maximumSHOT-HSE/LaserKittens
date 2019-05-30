@@ -124,7 +124,7 @@ public class LevelSavingScreen implements Screen {
         private Table table = new Table();
         private Skin skin = laserKittens.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 
-        private Label titleLabel = new Label("Saved levels", new Label.LabelStyle(laserKittens.font, Color.WHITE));
+        private Label titleLabel = new Label("Save level", new Label.LabelStyle(laserKittens.font, Color.WHITE));
         private TextButton newLevelButton = new TextButton("New level", skin);
 
         List<TextButton> openLevelButtons = new ArrayList<>();
