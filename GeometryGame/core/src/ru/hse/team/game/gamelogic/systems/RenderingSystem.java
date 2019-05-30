@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.Comparator;
@@ -32,20 +33,22 @@ public class RenderingSystem extends SortedIteratingSystem {
     // pixels per meter
     public static final float PPM = 32.0f;
 
-    public static final float SCREEN_WIDTH = Gdx.graphics.getWidth()/PPM;
-    public static final float SCREEN_HEIGHT = Gdx.graphics.getHeight()/PPM;
+    public static final float SCREEN_WIDTH = Gdx.graphics.getWidth() / PPM;
+    public static final float SCREEN_HEIGHT = Gdx.graphics.getHeight() / PPM;
 
     public static final float PIXELS_TO_METRES = 1.0f / PPM;
 
-    private static Vector2 meterDimensions = new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
-    private static Vector2 pixelDimensions = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    private static final Vector2 METER_DIMENSIONS =
+            new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
+    private static final Vector2 PIXEL_DIMENSIONS =
+            new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
     public static Vector2 getScreenSizeInMeters() {
-        return meterDimensions;
+        return METER_DIMENSIONS;
     }
 
     public static Vector2 getScreenSizeInPixels() {
-        return pixelDimensions;
+        return PIXEL_DIMENSIONS;
     }
 
     public static float pixelsToMeters(float pixelValue){
@@ -59,10 +62,12 @@ public class RenderingSystem extends SortedIteratingSystem {
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private ImmutableArray<Entity> renderQueue;
+
     private OrthographicCamera camera;
     private float cameraWaiting = 0;
-    private final LaserKittens laserKittens;
+    private Vector3 cameraMovingTo = new Vector3();
 
+    private final LaserKittens laserKittens;
     private AbstractLevel abstractLevel;
 
     public void decreaseCameraWaitingTime(float deltaTime) {
@@ -80,18 +85,22 @@ public class RenderingSystem extends SortedIteratingSystem {
         this.cameraWaiting = cameraWaiting;
     }
 
-    @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer, AbstractLevel abstractLevel, LaserKittens laserKittens) {
+    private void createCamera() {
+        camera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
+        camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
+        camera.zoom = 1.5f;
+        cameraMovingTo.set(camera.position);
+    }
+
+    public RenderingSystem(AbstractLevel abstractLevel, LaserKittens laserKittens) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
         this.abstractLevel = abstractLevel;
-
-        this.batch = batch;
-        this.shapeRenderer = shapeRenderer;
+        this.batch = laserKittens.getBatch();
+        this.shapeRenderer = laserKittens.getShapeRenderer();
         this.laserKittens = laserKittens;
 
-        camera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-        camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
+        createCamera();
     }
 
     public void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
@@ -224,6 +233,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         if (laserKittens.getPreferences().isShowTime()) {
             abstractLevel.getGameStatus().draw(batch, laserKittens.getFont());
         }
+
+        moveCamera(deltaTime);
     }
 
     @Override
@@ -247,5 +258,54 @@ public class RenderingSystem extends SortedIteratingSystem {
             float bz = Mapper.transformComponent.get(entityB).position.z;
             return Double.compare(az, bz);
         }
+    }
+
+    private void makeBordersForCamera(Vector3 position) {
+        float levelWidth = SCREEN_WIDTH * abstractLevel.getFactory().getLevelWidthInScreens();
+        float levelHeight = SCREEN_HEIGHT * abstractLevel.getFactory().getLevelHeightInScreens();
+
+        position.x = Math.max(position.x,
+                SCREEN_WIDTH * camera.zoom / 2 - SCREEN_WIDTH / (2 * camera.zoom));
+        position.y = Math.max(position.y,
+                SCREEN_HEIGHT * camera.zoom / 2 - SCREEN_HEIGHT / (2 * camera.zoom));
+        position.x = Math.min(position.x,
+                levelWidth - SCREEN_WIDTH* camera.zoom / 2 + SCREEN_WIDTH / (2 * camera.zoom));
+        position.y = Math.min(position.y,
+                levelHeight - SCREEN_HEIGHT * camera.zoom / 2 + SCREEN_HEIGHT / (2 * camera.zoom));
+    }
+
+
+    /** Moves camera with speed exponentially? from distance*/
+    private void moveCamera(float delta) {
+
+        delta = Math.max(delta, 0.1f); // when delta is near to zero problems occur
+        final float speed = 2 * delta;
+        final float ispeed = 1.0f-speed;
+
+        Vector3 cameraPosition = new Vector3(camera.position);
+        Entity player = abstractLevel.getFactory().getPlayer();
+
+        decreaseCameraWaitingTime(delta);
+
+        if (player != null && getCameraWaiting() == 0) {
+            TransformComponent playerTransform = Mapper.transformComponent.get(player);
+
+            if (playerTransform == null) {
+                return;
+            }
+
+            cameraMovingTo.set(playerTransform.position);
+            makeBordersForCamera(cameraMovingTo);
+
+            cameraPosition.scl(ispeed);
+            cameraMovingTo.scl(speed);
+            cameraPosition.add(cameraMovingTo);
+            cameraMovingTo.scl(1f / speed);
+            camera.position.set(cameraPosition);
+        }
+
+        makeBordersForCamera(camera.position);
+
+        camera.update();
     }
 }
