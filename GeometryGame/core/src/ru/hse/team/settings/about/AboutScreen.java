@@ -108,7 +108,7 @@ public class AboutScreen implements Screen {
     private class Menu {
         private Table table = new Table();
 
-        private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        private Skin skin = new Skin(Gdx.files.internal("SKIN/glassy-ui.json"));
         private Label titleLabel = new Label("About", skin);
         private final TextButton backButton = new TextButton("Back", skin);
 
@@ -209,7 +209,7 @@ public class AboutScreen implements Screen {
             skinLink.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    Gdx.net.openURI("https://ray3k.wordpress.com/software/skin-composer-for-libgdx/");
+                    Gdx.net.openURI("https://ray3k.wordpress.com/software/SKIN-composer-for-libgdx/");
                 }
             });
 

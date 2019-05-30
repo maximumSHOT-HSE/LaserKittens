@@ -110,7 +110,7 @@ public class StatisticsScreen implements Screen {
     private class Menu {
         private Table table = new Table();
 
-        private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        private Skin skin = new Skin(Gdx.files.internal("SKIN/glassy-ui.json"));
         private Label titleLabel = new Label("Statistics", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private final TextButton backButton = new TextButton("Back", skin);
 

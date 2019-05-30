@@ -103,7 +103,7 @@ public class SettingsScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = parent.getAssetManager().manager.get(KittensAssetManager.skin, Skin.class);
+        private Skin skin = parent.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
 
         private Label titleLabel = new Label("Settings", new Label.LabelStyle(parent.getFont(), Color.WHITE));
         private Label volumeMusicLabel = new Label("music volume", new Label.LabelStyle(parent.getFont(), Color.WHITE));

@@ -81,7 +81,7 @@ abstract public class AbstractLevelFactory {
     abstract public void createLevel(PooledEngine engine, KittensAssetManager assetManager);
 
     public Entity createStar(float x, float y, float radius) {
-        Texture texture = manager.manager.get(KittensAssetManager.Star2, Texture.class);
+        Texture texture = manager.manager.get(KittensAssetManager.STAR_2, Texture.class);
         Vector2 scale = new Vector2(2 * radius / RenderingSystem.pixelsToMeters(texture.getWidth()),
                 2 * radius / RenderingSystem.pixelsToMeters(texture.getHeight()));
 
@@ -148,13 +148,13 @@ abstract public class AbstractLevelFactory {
     protected Entity createPlayer(float playerX, float playerY, float radius) {
 
         float regionCatRadius = RenderingSystem.pixelsToMeters(
-                manager.manager.get(KittensAssetManager.Cat3, Texture.class).getHeight() * 0.78f * 0.5f);
+                manager.manager.get(KittensAssetManager.CAT_3, Texture.class).getHeight() * 0.78f * 0.5f);
         Vector2 scale = new Vector2(radius / regionCatRadius, radius / regionCatRadius);
 
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newPlayerBody(new Vector2(playerX, playerY), radius))
                 .addTransformComponent(new Vector3(playerX, playerY, 100), scale, 0, false)
-                .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.Cat3, Texture.class)))
+                .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.CAT_3, Texture.class)))
                 .addStateComponent(StateComponent.State.NORMAL)
                 .addTypeComponent(TypeComponent.Type.PLAYER)
                 .build();
@@ -162,13 +162,13 @@ abstract public class AbstractLevelFactory {
 
     protected Entity createGuardian(float guardianX, float guardianY, float radius, List<Vector2> path, float velocty) {
         float regionGuardianRadius = RenderingSystem.pixelsToMeters(
-                manager.manager.get(KittensAssetManager.Cat2, Texture.class).getHeight() * 0.78f * 0.5f);
+                manager.manager.get(KittensAssetManager.CAT_2, Texture.class).getHeight() * 0.78f * 0.5f);
         Vector2 scale = new Vector2(radius / regionGuardianRadius, radius / regionGuardianRadius);
 
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newGuardianBody(new Vector2(guardianX, guardianY), radius))
                 .addTransformComponent(new Vector3(guardianX, guardianY, 100), scale, 0, false)
-                .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.Cat2, Texture.class)))
+                .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.CAT_2, Texture.class)))
                 .addStateComponent(StateComponent.State.NORMAL)
                 .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
                 .addPatrolComponent(path, velocty)
@@ -264,7 +264,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createPointer(Vector2 position, float rotation) {
-        Texture texture = manager.manager.get(KittensAssetManager.Pointer, Texture.class);
+        Texture texture = manager.manager.get(KittensAssetManager.POINTER, Texture.class);
         return (new EntityBuilder())
                 .addTransformComponent(
                         new Vector3(position, 0),
@@ -275,7 +275,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createQuestion(Vector2 position, float scale) {
-        Texture textture = manager.manager.get(KittensAssetManager.Question, Texture.class);
+        Texture textture = manager.manager.get(KittensAssetManager.QUESTION, Texture.class);
         return (new EntityBuilder())
                 .addTransformComponent(new Vector3(position, 0), new Vector2(scale, scale), 0f, false)
                 .addTextureComponent(new TextureRegion(textture))

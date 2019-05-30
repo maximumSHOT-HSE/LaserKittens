@@ -92,7 +92,7 @@ public class MainMenuScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = parent.getAssetManager().manager.get("skin/glassy-ui.json", Skin.class);
+        private Skin skin = parent.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
         private TextButton levels = new TextButton("Levels", skin);
         private TextButton multiplayer = new TextButton("Multiplayer", skin);
         private TextButton settings = new TextButton("Settings", skin);
