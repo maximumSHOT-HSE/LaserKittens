@@ -41,7 +41,7 @@ public class AboutScreen implements Screen {
     public AboutScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
-        background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
+        background = new Background(this.laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
 
         InputProcessor inputProcessor = new AboutScreenInputProcessor(this.laserKittens);
@@ -56,7 +56,7 @@ public class AboutScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        laserKittens.batch.setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -66,9 +66,9 @@ public class AboutScreen implements Screen {
 
         camera.update(); // good practise -- update camera one time per frame
 
-        laserKittens.batch.begin();
-        background.draw(laserKittens.batch, camera);
-        laserKittens.batch.end();
+        laserKittens.getBatch().begin();
+        background.draw(laserKittens.getBatch(), camera);
+        laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();

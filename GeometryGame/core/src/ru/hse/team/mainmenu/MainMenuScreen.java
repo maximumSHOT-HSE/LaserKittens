@@ -33,7 +33,7 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final LaserKittens laserKittens) {
         this.parent = laserKittens;
 
-        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
+        background = new Background(parent.getAssetManager().manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
     }
 
@@ -45,7 +45,7 @@ public class MainMenuScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        parent.batch.setProjectionMatrix(camera.combined);
+        parent.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -55,9 +55,9 @@ public class MainMenuScreen implements Screen {
 
         camera.update();
 
-        parent.batch.begin();
-        background.draw(parent.batch, camera);
-        parent.batch.end();
+        parent.getBatch().begin();
+        background.draw(parent.getBatch(), camera);
+        parent.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -92,7 +92,7 @@ public class MainMenuScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
+        private Skin skin = parent.getAssetManager().manager.get("skin/glassy-ui.json", Skin.class);
         private TextButton levels = new TextButton("Levels", skin);
         private TextButton multiplayer = new TextButton("Multiplayer", skin);
         private TextButton settings = new TextButton("Settings", skin);
@@ -100,13 +100,13 @@ public class MainMenuScreen implements Screen {
 
         private ImageButton loginButton = new ImageButton(
                 new TextureRegionDrawable(
-                        parent.assetManager.manager.get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
+                        parent.getAssetManager().manager.get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
         private ImageButton achievementsButton = new ImageButton(
                 new TextureRegionDrawable(
-                        parent.assetManager.manager.get(KittensAssetManager.CUP, Texture.class)));
+                        parent.getAssetManager().manager.get(KittensAssetManager.CUP, Texture.class)));
         private ImageButton rateButton = new ImageButton(
                 new TextureRegionDrawable(
-                        parent.assetManager.manager.get(KittensAssetManager.PLAY_MARKET, Texture.class)));
+                        parent.getAssetManager().manager.get(KittensAssetManager.PLAY_MARKET, Texture.class)));
 
         public Menu(Stage stage) {
             table.setFillParent(true);

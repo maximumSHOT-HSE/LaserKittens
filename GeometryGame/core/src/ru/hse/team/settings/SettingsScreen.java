@@ -39,7 +39,7 @@ public class SettingsScreen implements Screen {
 
     public SettingsScreen(LaserKittens laserKittens) {
         this.parent = laserKittens;
-        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
+        background = new Background(parent.getAssetManager().manager.get("blue-background.jpg", Texture.class));
 
         stage = new Stage(new ScreenViewport());
 
@@ -56,7 +56,7 @@ public class SettingsScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        parent.batch.setProjectionMatrix(camera.combined);
+        parent.getBatch().setProjectionMatrix(camera.combined);
 
     }
 
@@ -67,9 +67,9 @@ public class SettingsScreen implements Screen {
 
         camera.update();
 
-        parent.batch.begin();
-        background.draw(parent.batch, camera);
-        parent.batch.end();
+        parent.getBatch().begin();
+        background.draw(parent.getBatch(), camera);
+        parent.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -103,11 +103,11 @@ public class SettingsScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = parent.assetManager.manager.get(KittensAssetManager.skin, Skin.class);
+        private Skin skin = parent.getAssetManager().manager.get(KittensAssetManager.skin, Skin.class);
 
-        private Label titleLabel = new Label("Settings", new Label.LabelStyle(parent.font, Color.WHITE));
-        private Label volumeMusicLabel = new Label("music volume", new Label.LabelStyle(parent.font, Color.WHITE));
-        private Label volumeSoundLabel = new Label("sound volume", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label titleLabel = new Label("Settings", new Label.LabelStyle(parent.getFont(), Color.WHITE));
+        private Label volumeMusicLabel = new Label("music volume", new Label.LabelStyle(parent.getFont(), Color.WHITE));
+        private Label volumeSoundLabel = new Label("sound volume", new Label.LabelStyle(parent.getFont(), Color.WHITE));
 
         final private TextButton backButton = new TextButton("Back", skin);
         private TextButton about = new TextButton("About", skin);
@@ -115,13 +115,13 @@ public class SettingsScreen implements Screen {
         final private Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
 
         private CheckBox enableAccelerometer = new CheckBox(null, skin);
-        private Label accelerometerLabel = new Label("accelerometer", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label accelerometerLabel = new Label("accelerometer", new Label.LabelStyle(parent.getFont(), Color.WHITE));
 
         private CheckBox showTime = new CheckBox(null, skin);
-        private Label showTimeLabel = new Label("timer", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label showTimeLabel = new Label("timer", new Label.LabelStyle(parent.getFont(), Color.WHITE));
 
         private CheckBox enableFog = new CheckBox(null, skin);
-        private Label fogLabel = new Label("enable fog", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label fogLabel = new Label("enable fog", new Label.LabelStyle(parent.getFont(), Color.WHITE));
 
         public Menu(Stage stage) {
             table.setFillParent(true);

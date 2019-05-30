@@ -24,12 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
-import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
-import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.settings.about.PagedScrollPane;
 
@@ -45,7 +43,7 @@ public class ChooseSavedLevelScreen implements Screen {
     public ChooseSavedLevelScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
-        background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
+        background = new Background(this.laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
     }
 
@@ -66,7 +64,7 @@ public class ChooseSavedLevelScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        laserKittens.batch.setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -76,9 +74,9 @@ public class ChooseSavedLevelScreen implements Screen {
 
         camera.update();
 
-        laserKittens.batch.begin();
-        background.draw(laserKittens.batch, camera);
-        laserKittens.batch.end();
+        laserKittens.getBatch().begin();
+        background.draw(laserKittens.getBatch(), camera);
+        laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -139,9 +137,9 @@ public class ChooseSavedLevelScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = laserKittens.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
+        private Skin skin = laserKittens.getAssetManager().manager.get("skin/glassy-ui.json", Skin.class);
 
-        private Label titleLabel = new Label("Saved levels", new Label.LabelStyle(laserKittens.font, Color.WHITE));
+        private Label titleLabel = new Label("Saved levels", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
         List<TextButton> openLevelButtons = new ArrayList<>();
 
@@ -169,7 +167,7 @@ public class ChooseSavedLevelScreen implements Screen {
                 buttonsTable.row().pad(10, 10, 10, 10);
                 buttonsTable.add(button).width(buttonWidth).height(buttonHeight);
 
-                ImageButton binButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+                ImageButton binButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.Cat1, Texture.class)));
                 buttonsTable.add(binButton).width(0.15f * Gdx.graphics.getWidth()).height(0.15f * Gdx.graphics.getHeight());
 
                 final int ii = i;

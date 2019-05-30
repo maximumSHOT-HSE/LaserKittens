@@ -40,7 +40,7 @@ public class LevelSavingScreen implements Screen {
         this.laserKittens = laserKittens;
         this.savedLevel = savedLevel;
 
-        background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
+        background = new Background(this.laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
     }
 
@@ -61,7 +61,7 @@ public class LevelSavingScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        laserKittens.batch.setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -71,9 +71,9 @@ public class LevelSavingScreen implements Screen {
 
         camera.update();
 
-        laserKittens.batch.begin();
-        background.draw(laserKittens.batch, camera);
-        laserKittens.batch.end();
+        laserKittens.getBatch().begin();
+        background.draw(laserKittens.getBatch(), camera);
+        laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -122,9 +122,9 @@ public class LevelSavingScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = laserKittens.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
+        private Skin skin = laserKittens.getAssetManager().manager.get("skin/glassy-ui.json", Skin.class);
 
-        private Label titleLabel = new Label("Save level", new Label.LabelStyle(laserKittens.font, Color.WHITE));
+        private Label titleLabel = new Label("Save level", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private TextButton newLevelButton = new TextButton("New level", skin);
 
         List<TextButton> openLevelButtons = new ArrayList<>();

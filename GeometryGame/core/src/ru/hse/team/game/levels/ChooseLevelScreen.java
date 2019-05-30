@@ -20,14 +20,11 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
-import ru.hse.team.database.levels.SavedLevel;
-import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.database.statistics.LevelStatistics;
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.gamelogic.GameStatus;
@@ -37,7 +34,6 @@ import ru.hse.team.game.levels.TestBigLevel.TestBigLevel;
 import ru.hse.team.game.levels.TestDoorsAndKeys.TestDoorsAndKeysLevel;
 import ru.hse.team.game.levels.TestLongCorridor.TestLongCorridorLevel;
 import ru.hse.team.game.levels.TestShooting.ShootingLevel;
-import ru.hse.team.leveleditor.LevelGenerator;
 import ru.hse.team.settings.SettingsScreenInputProcessor;
 
 public class ChooseLevelScreen implements Screen {
@@ -65,7 +61,7 @@ public class ChooseLevelScreen implements Screen {
 
     public ChooseLevelScreen(LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-        background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
+        background = new Background(this.laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
 
         stage = new Stage(new ScreenViewport());
 
@@ -85,7 +81,7 @@ public class ChooseLevelScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        laserKittens.batch.setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
 
         menu = new Menu();
         menu.show(stage);
@@ -98,9 +94,9 @@ public class ChooseLevelScreen implements Screen {
 
         camera.update();
 
-        laserKittens.batch.begin();
-        background.draw(laserKittens.batch, camera);
-        laserKittens.batch.end();
+        laserKittens.getBatch().begin();
+        background.draw(laserKittens.getBatch(), camera);
+        laserKittens.getBatch().end();
 
         menu.render();
 
@@ -135,11 +131,11 @@ public class ChooseLevelScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = laserKittens.assetManager.manager.get(KittensAssetManager.skin);
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.skin);
         private SlidingPane slidingPane;
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
-        private Texture naviActive = laserKittens.assetManager.manager.get(KittensAssetManager.levelIndicatorActive);
-        private Texture naviPassive = laserKittens.assetManager.manager.get(KittensAssetManager.levelIndicatorPassive);
+        private Texture naviActive = laserKittens.getAssetManager().manager.get(KittensAssetManager.levelIndicatorActive);
+        private Texture naviPassive = laserKittens.getAssetManager().manager.get(KittensAssetManager.levelIndicatorPassive);
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
 
@@ -153,7 +149,7 @@ public class ChooseLevelScreen implements Screen {
 
         public void render() {
             saveState();
-            laserKittens.batch.begin();
+            laserKittens.getBatch().begin();
 
             int levelsCount = abstractLevels.size() + 3;
 
@@ -165,14 +161,14 @@ public class ChooseLevelScreen implements Screen {
             float y = 0.5f * (screenHeight - blockHeight);
 
             for (int i = 1; i <= levelsCount; i++) {
-                laserKittens.batch.draw(
+                laserKittens.getBatch().draw(
                     i == currentSection ? naviActive : naviPassive,
                     x,
                     y + (i - 1) * (h + delta)
                 );
             }
 
-            laserKittens.batch.end();
+            laserKittens.getBatch().end();
         }
 
         private long getBestTime(String levelName) {
@@ -229,7 +225,7 @@ public class ChooseLevelScreen implements Screen {
                 }
             });
             ImageButton scoreButton = new ImageButton(
-                    new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.CUP, Texture.class)));
+                    new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CUP, Texture.class)));
             scoreButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {

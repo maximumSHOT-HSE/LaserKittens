@@ -22,18 +22,19 @@ import ru.hse.team.settings.SettingsScreen;
 
 public class LaserKittens extends Game {
 
-    public SpriteBatch batch;
-    public ShapeRenderer shapeRenderer;
-    volatile public BitmapFont font;
-    private final AppPreferences preferences = new AppPreferences();
-    public final KittensAssetManager assetManager = new KittensAssetManager();
-
+    private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
+    private BitmapFont font;
     private GDXDialogs dialogs;
+
+    private final AppPreferences preferences = new AppPreferences();
+    private final KittensAssetManager assetManager = new KittensAssetManager();
     private final StatisticsDatabase statisticsDatabase;
     private final LevelsDatabase savedLevels;
     private final GoogleServicesAction googleServices;
 
-    public LaserKittens(StatisticsDatabase statisticsDatabase, LevelsDatabase savedLevels, GoogleServicesAction googleServicesAction) {
+    public LaserKittens(StatisticsDatabase statisticsDatabase, LevelsDatabase savedLevels,
+                        GoogleServicesAction googleServicesAction) {
         super();
         this.statisticsDatabase = statisticsDatabase;
         this.savedLevels = savedLevels;
@@ -141,10 +142,10 @@ public class LaserKittens extends Game {
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 
-        assetManager.loadEverything();
-        assetManager.manager.finishLoading();
+        getAssetManager().loadEverything();
+        getAssetManager().manager.finishLoading();
 
-        font = assetManager.manager.get(KittensAssetManager.font, BitmapFont.class);
+        font = getAssetManager().manager.get(KittensAssetManager.font, BitmapFont.class);
 
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }
@@ -158,13 +159,29 @@ public class LaserKittens extends Game {
     public void dispose() {
         super.dispose();
         googleServices.signOut();
-        batch.dispose();
-        font.dispose();
-        assetManager.manager.dispose();
-        shapeRenderer.dispose();
+        getBatch().dispose();
+        getFont().dispose();
+        getAssetManager().manager.dispose();
+        getShapeRenderer().dispose();
     }
 
     public GDXDialogs getDialogs() {
         return dialogs;
+    }
+
+    public BitmapFont getFont() {
+        return font;
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
+    public ShapeRenderer getShapeRenderer() {
+        return shapeRenderer;
+    }
+
+    public KittensAssetManager getAssetManager() {
+        return assetManager;
     }
 }

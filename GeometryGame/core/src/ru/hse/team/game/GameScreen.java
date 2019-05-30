@@ -47,17 +47,17 @@ public class GameScreen implements Screen {
 
     public GameScreen(LaserKittens laserKittens, AbstractLevel abstractLevel) {
         level = abstractLevel;
-        gameStatus = new GameStatus(this, laserKittens.font, laserKittens.batch);
+        gameStatus = new GameStatus(this, laserKittens.getFont(), laserKittens.getBatch());
 
         this.laserKittens = laserKittens;
 
         engine = new PooledEngine();
-        abstractLevel.createLevel(engine, this.laserKittens.assetManager);
+        abstractLevel.createLevel(engine, this.laserKittens.getAssetManager());
         AbstractLevelFactory levelFactory = abstractLevel.getFactory();
         World world = levelFactory.getWorld();
         world.setContactListener(new ContractProcessor(abstractLevel));
 
-        renderingSystem = new RenderingSystem(this.laserKittens.batch, this.laserKittens.shapeRenderer, abstractLevel, laserKittens);
+        renderingSystem = new RenderingSystem(this.laserKittens.getBatch(), this.laserKittens.getShapeRenderer(), abstractLevel, laserKittens);
         camera = renderingSystem.getCamera();
         camera.zoom = 1.5f;
         cameraMovingTo.set(camera.position);
@@ -87,7 +87,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        laserKittens.batch.setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 

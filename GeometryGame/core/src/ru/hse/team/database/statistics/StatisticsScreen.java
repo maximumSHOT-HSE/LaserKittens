@@ -43,7 +43,7 @@ public class StatisticsScreen implements Screen {
     public StatisticsScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
-        background = new Background(laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
+        background = new Background(laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
 
         InputProcessor inputProcessor = new StatisticsScreenInputProcessor(laserKittens);
@@ -58,7 +58,7 @@ public class StatisticsScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        laserKittens.batch.setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -68,9 +68,9 @@ public class StatisticsScreen implements Screen {
 
         camera.update(); // good practise -- update camera one time per frame
 
-        laserKittens.batch.begin();
-        background.draw(laserKittens.batch, camera);
-        laserKittens.batch.end();
+        laserKittens.getBatch().begin();
+        background.draw(laserKittens.getBatch(), camera);
+        laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -111,7 +111,7 @@ public class StatisticsScreen implements Screen {
         private Table table = new Table();
 
         private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-        private Label titleLabel = new Label("Statistics", new Label.LabelStyle(laserKittens.font, Color.WHITE));
+        private Label titleLabel = new Label("Statistics", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private final TextButton backButton = new TextButton("Back", skin);
 
         List< List<Label> > listOfStatistics;

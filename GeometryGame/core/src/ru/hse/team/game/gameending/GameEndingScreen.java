@@ -44,7 +44,7 @@ public class GameEndingScreen implements Screen {
     public GameEndingScreen(LaserKittens laserKittens, AbstractLevel level, GameStatus gameStatus) {
         this.laserKittens = laserKittens;
         this.parentLevel = level;
-        this.background = new Background(laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
+        this.background = new Background(laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
         this.stage = new Stage(new ScreenViewport());
         InputProcessor inputProcessor = new GameEndingScreenInputProcessor(laserKittens);
         this.inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
@@ -70,7 +70,7 @@ public class GameEndingScreen implements Screen {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        laserKittens.batch.setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -78,12 +78,12 @@ public class GameEndingScreen implements Screen {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        laserKittens.batch.setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
         camera.update();
 
-        laserKittens.batch.begin();
-        background.draw(laserKittens.batch, camera);
-        laserKittens.batch.end();
+        laserKittens.getBatch().begin();
+        background.draw(laserKittens.getBatch(), camera);
+        laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -115,7 +115,7 @@ public class GameEndingScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = laserKittens.assetManager.manager.get(KittensAssetManager.skin);
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.skin);
         private TextButton restartButton = new TextButton("Restart", skin);
         private TextButton quitButton = new TextButton("Quit", skin);
         private Table table = new Table();
