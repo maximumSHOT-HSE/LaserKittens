@@ -264,9 +264,9 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     private void makeBordersForCamera(Vector3 position) {
         float levelWidth = SCREEN_WIDTH *
-                abstractLevel.getFactory().getLevelWidthInScreens();
+                abstractLevel.getLevelWidthInScreens();
         float levelHeight = SCREEN_HEIGHT *
-                abstractLevel.getFactory().getLevelHeightInScreens();
+                abstractLevel.getLevelHeightInScreens();
 
         position.x = Math.max(position.x,
                 SCREEN_WIDTH * camera.zoom / 2 -
@@ -292,7 +292,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         final float ispeed = 1.0f-speed;
 
         Vector3 cameraPosition = new Vector3(camera.position);
-        Entity player = abstractLevel.getFactory().getPlayer();
+        Entity player = abstractLevel.getPlayer();
 
         decreaseCameraWaitingTime(delta);
 

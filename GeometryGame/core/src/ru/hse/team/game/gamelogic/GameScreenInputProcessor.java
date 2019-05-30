@@ -57,16 +57,16 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel abstractLevel, OrthographicCamera camera) {
         this.laserKittens = laserKittens;
-        this.focusedPlayer = abstractLevel.getFactory().getPlayer();
+        this.focusedPlayer = abstractLevel.getPlayer();
         this.abstractLevel = abstractLevel;
         this.camera = camera;
-        this.world = abstractLevel.getFactory().getWorld();
+        this.world = abstractLevel.getWorld();
 
         enabledAccelerometer = laserKittens.getPreferences().isEnabledAccelerometer();
 
         ground = BodyFactory.getBodyFactory(this.world)
         .newCircleBody(
-            new Vector2(0, abstractLevel.getFactory().getLevelHeightInScreens() *
+            new Vector2(0, abstractLevel.getLevelHeightInScreens() *
                     RenderingSystem.getScreenSizeInMeters().y * 2),
                 0.1f,
                 BodyDef.BodyType.StaticBody,
@@ -106,7 +106,7 @@ public class GameScreenInputProcessor implements InputProcessor {
         if (playerBody == null) return false;
 
 
-        float radius = abstractLevel.getFactory().getPlayerRadius();
+        float radius = abstractLevel.getPlayerRadius();
         return distance2D(playerBody.getPosition(), new Vector2(position.x, position.y)) < radius;
     }
 

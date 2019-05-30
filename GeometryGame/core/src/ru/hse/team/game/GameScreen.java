@@ -20,7 +20,6 @@ import ru.hse.team.game.gamelogic.systems.PhysicsSystem;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.gamelogic.systems.StateControlSystem;
 import ru.hse.team.game.levels.AbstractLevel;
-import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class GameScreen implements Screen {
 
@@ -45,15 +44,12 @@ public class GameScreen implements Screen {
 
         engine = new PooledEngine();
         abstractLevel.createLevel(engine, this.laserKittens.getAssetManager());
-        AbstractLevelFactory levelFactory = abstractLevel.getFactory();
-        World world = levelFactory.getWorld();
-        world.setContactListener(new ContractProcessor(abstractLevel));
 
         renderingSystem = new RenderingSystem(abstractLevel, laserKittens);
-        physicsSystem = new PhysicsSystem(world, abstractLevel);
-        physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCamera());
+        physicsSystem = new PhysicsSystem(abstractLevel.getWorld(), abstractLevel);
+        physicsDebugSystem = new PhysicsDebugSystem(abstractLevel.getWorld(), renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
-        stateControlSystem = new StateControlSystem(world, engine, abstractLevel);
+        stateControlSystem = new StateControlSystem(abstractLevel.getWorld(), engine, abstractLevel);
 
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsSystem);
@@ -115,7 +111,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        World world = level.getFactory().getWorld();
+        World world = level.getWorld();
         for (Entity entity : engine.getEntities()) {
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
             if(bodyComponent != null && world != null && bodyComponent.body != null) {
@@ -123,8 +119,6 @@ public class GameScreen implements Screen {
             }
         }
         engine.removeAllEntities();
-        if (world != null) {
-            world.dispose();
-        }
+        level.refreshGameStatus();
     }
 }

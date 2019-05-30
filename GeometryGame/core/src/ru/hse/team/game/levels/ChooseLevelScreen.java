@@ -130,7 +130,9 @@ public class ChooseLevelScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        for (AbstractLevel abstractLevel : abstractLevels) {
+            abstractLevel.dispose();
+        }
     }
 
     private class Menu {
@@ -330,14 +332,16 @@ public class ChooseLevelScreen implements Screen {
             slidingPane.addWidget(statisticsTable());
 
             for (AbstractLevel abstractLevel : abstractLevels) {
-                TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
-                Label statusLabel = getBestResult(abstractLevel.getName());
+                TextButton levelButton = new TextButton(abstractLevel.getLevelName(), skin);
+                Label statusLabel = getBestResult(abstractLevel.getLevelName());
                 levelButton.getLabel().setFontScale(1.1f);
                 levelButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         currentSection = slidingPane.getCurrentSectionId();
                         direction = slidingPane.getDirection();
+                        System.out.println("New game screen = " + abstractLevel.getLevelName());
+                        System.out.flush();
                         GameScreen gameScreen = new GameScreen(laserKittens, abstractLevel);
                         laserKittens.setScreen(gameScreen);
                     }

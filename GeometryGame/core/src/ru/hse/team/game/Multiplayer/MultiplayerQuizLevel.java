@@ -23,7 +23,7 @@ public class MultiplayerQuizLevel extends AbstractLevel implements WarpListener 
     private int role;
 
     public MultiplayerQuizLevel(LaserKittens parent, MultiplayerScreen multiplayerScreen, int role) {
-        super("Multiplayer Quiz");
+        super("Multiplayer Quiz", WIDTH_SCREENS, HEIGHT_SCREENS);
         this.parent = parent;
         this.multiplayerScreen = multiplayerScreen;
         this.role = role;
@@ -83,9 +83,9 @@ public class MultiplayerQuizLevel extends AbstractLevel implements WarpListener 
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        multiplayerQuizLevelFactory = new MultiplayerQuizLevelFactory(role);
-        multiplayerQuizLevelFactory.setLevelSize(WIDTH_SCREENS, HEIGHT_SCREENS);
-        multiplayerQuizLevelFactory.createLevel(engine, assetManager);
+        multiplayerQuizLevelFactory = new MultiplayerQuizLevelFactory(engine,
+                assetManager, getBodyFactory(), role);
+        multiplayerQuizLevelFactory.createLevel(getWidthInScreens(), getHeightInScreens(), this);
     }
 
     @Override

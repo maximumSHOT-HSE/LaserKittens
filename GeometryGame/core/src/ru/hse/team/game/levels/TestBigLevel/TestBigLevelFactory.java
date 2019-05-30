@@ -2,40 +2,33 @@ package ru.hse.team.game.levels.TestBigLevel;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
+
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
+import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class TestBigLevelFactory extends AbstractLevelFactory {
 
-    public TestBigLevelFactory() {
-        world = new World(new Vector2(0,0), true);
+    public TestBigLevelFactory(PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory) {
+        super(engine, manager, bodyFactory);
     }
 
     @Override
-    public World getWorld() {
-        return world;
-    }
-
-    @Override
-    public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+    public void createLevel(int widthInScreens, int heightInScreens, AbstractLevel abstractLevel) {
         float screenWidth = RenderingSystem.getScreenSizeInMeters().x;
         float screenHeight = RenderingSystem.getScreenSizeInMeters().y;
 
         float levelWidth = screenWidth * widthInScreens;
         float levelHeight = screenHeight * heightInScreens;
 
-        this.engine = engine;
-        this.manager = assetManager;
-        bodyFactory = BodyFactory.getBodyFactory(world);
-        createBackground();
+        createBackground(widthInScreens, heightInScreens);
 
-        focusedPlayer = createPlayer(
+        abstractLevel.setPlayer(createPlayer(
                 RenderingSystem.getScreenSizeInMeters().x / 2,
                 RenderingSystem.getScreenSizeInMeters().y * 0.1f,
-                RenderingSystem.getScreenSizeInMeters().x / 10f);
+                RenderingSystem.getScreenSizeInMeters().x / 10f));
 
         createMirror(new Vector2(0, 0.5f * levelHeight), 0.1f * screenWidth, levelHeight); // left wall
         createMirror(new Vector2(levelWidth, 0.5f * levelHeight), 0.1f * screenWidth, levelHeight); // right wall

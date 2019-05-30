@@ -10,14 +10,13 @@ public class TestBigLevel extends AbstractLevel {
     private TestBigLevelFactory testBigLevelFactory;
 
     public TestBigLevel() {
-        super("Test Big Level");
+        super("Test Big Level", 3, 3);
     }
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        testBigLevelFactory = new TestBigLevelFactory();
-        testBigLevelFactory.setLevelSize(3, 3);
-        testBigLevelFactory.createLevel(engine, assetManager);
+        testBigLevelFactory = new TestBigLevelFactory(engine, assetManager, getBodyFactory());
+        testBigLevelFactory.createLevel(getWidthInScreens(), getHeightInScreens(), this);
     }
 
     @Override

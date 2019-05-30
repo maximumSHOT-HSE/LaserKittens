@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
@@ -14,6 +13,7 @@ import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TumblerComponent;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
+import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
@@ -23,6 +23,11 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
     private int role = 1;
 
     private Entity opponentPlayer = null;
+
+    public MultiplayerQuizLevelFactory(PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory, int role) {
+        super(engine, manager, bodyFactory);
+        this.role = role;
+    }
 
     @Override
     public void setOpponentPosition(Vector2 position) {
@@ -38,11 +43,6 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
         }
     }
 
-    public MultiplayerQuizLevelFactory(int role) {
-        world = new World(new Vector2(0, 0), true);
-        this.role = role;
-    }
-
     private void createBorders() {
         placeImpenetrableWall(0, 0.5f * CH, 0.1f, CH);
         placeImpenetrableWall(CW, 0.5f * CH, 0.1f, CH);
@@ -51,32 +51,22 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
     }
 
     @Override
-    public World getWorld() {
-        return world;
-    }
+    public void createLevel(int widthInScreens, int heightInScreens, AbstractLevel abstractLevel) {
+        CH = widthInScreens;
+        CW = heightInScreens;
 
-    @Override
-    public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        CH = getLevelHeightInScreens();
-        CW = getLevelWidthInScreens();
-
-        this.engine = engine;
-        this.manager = assetManager;
-        bodyFactory = BodyFactory.getBodyFactory(world);
-        createBackground();
+        createBackground(widthInScreens, heightInScreens);
 
         if (role == 1) {
-            focusedPlayer = createPlayer(
+            abstractLevel.setPlayer(createPlayer(
                     RenderingSystem.getScreenSizeInMeters().x * 0.25f,
                     RenderingSystem.getScreenSizeInMeters().y * 0.8f,
-                    3f
-            );
+                    3f));
         } else {
-            focusedPlayer = createPlayer(
+            abstractLevel.setPlayer(createPlayer(
                     RenderingSystem.getScreenSizeInMeters().x * 0.25f,
                     RenderingSystem.getScreenSizeInMeters().y * 1.8f,
-                    3f
-            );
+                    3f));
         }
 
         createBorders();

@@ -1,10 +1,15 @@
 package ru.hse.team.game.levels;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
 
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.game.BodyFactory;
+import ru.hse.team.game.ContractProcessor;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.MessageCreator;
@@ -25,18 +30,28 @@ abstract public class AbstractLevel {
      * Name of the level.
      * User will see it in choose level screen
      */
-    private String name;
+    private String levelName;
     private AbstractGraph abstractGraph;
     private GameStatus gameStatus = new GameStatus();
+    private Entity player;
 
-    public AbstractLevel(String name) {
-        this.name = name;
+    private int widthInScreens;
+    private int heightInScreens;
+    private World world = new World(new Vector2(0, 0), true);
+    private BodyFactory bodyFactory = BodyFactory.getBodyFactory(world);
+
+    public AbstractLevel(String levelName, int widthInScreens, int heightInScreens) {
+        this.levelName = levelName;
+        this.widthInScreens = widthInScreens;
+        this.heightInScreens = heightInScreens;
+        world.setContactListener(new ContractProcessor(this));
     }
+
 
     abstract public void createLevel(PooledEngine engine, KittensAssetManager assetManager);
 
-    public String getName() {
-        return name;
+    public String getLevelName() {
+        return levelName;
     }
 
     abstract public AbstractLevelFactory getFactory();
@@ -51,12 +66,12 @@ abstract public class AbstractLevel {
 
         lastShootTime = currentShootTime;
 
-        Vector3 playerPosition = Mapper.transformComponent.get(getFactory().getPlayer()).position;
+        Vector3 playerPosition = Mapper.transformComponent.get(player).position;
 
         Vector2 direction = new Vector2(x - playerPosition.x, y - playerPosition.y);
         float length = (float) Math.sqrt(direction.x * direction.x + direction.y * direction.y);
         direction.set(direction.x / length, direction.y / length);
-        float playerRadius = getFactory().getPlayerRadius();
+        float playerRadius = getPlayerRadius();
 
         Vector2 source =  new Vector2(playerPosition.x + playerRadius * direction.x,
                 playerPosition.y + playerRadius * direction.y);
@@ -87,5 +102,50 @@ abstract public class AbstractLevel {
 
     public GameStatus getGameStatus() {
         return gameStatus;
+    }
+
+    public float getPlayerRadius() {
+        Body playerBody = Mapper.bodyComponent.get(player).body;
+        return playerBody.getFixtureList().get(0).getShape().getRadius();
+    }
+
+    public Entity getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Entity player) {
+        this.player = player;
+    }
+
+    public int getLevelWidthInScreens() {
+        return widthInScreens;
+    }
+
+    public int getLevelHeightInScreens() {
+        return heightInScreens;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public int getWidthInScreens() {
+        return widthInScreens;
+    }
+
+    public int getHeightInScreens() {
+        return heightInScreens;
+    }
+
+    public BodyFactory getBodyFactory() {
+        return bodyFactory;
+    }
+
+    public void dispose() {
+        world.dispose();
+    }
+
+    public void refreshGameStatus() {
+        gameStatus = new GameStatus();
     }
 }

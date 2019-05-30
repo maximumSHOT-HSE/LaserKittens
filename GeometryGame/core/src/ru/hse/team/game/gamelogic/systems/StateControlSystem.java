@@ -51,6 +51,7 @@ public class StateControlSystem extends IteratingSystem {
 
             if (typeComponent != null) {
                 if (typeComponent.type == TypeComponent.Type.STAR) {
+                    System.out.println("REMOVE STAR!");
                     abstractLevel.getGameStatus().removeStar();
                 }
                 if (typeComponent.type == TypeComponent.Type.KEY) {
@@ -76,6 +77,7 @@ public class StateControlSystem extends IteratingSystem {
         if (stateComponent.get() == StateComponent.State.JUST_CREATED) {
             stateComponent.set(StateComponent.State.NORMAL);
             if (typeComponent != null && typeComponent.type == TypeComponent.Type.STAR) {
+                System.out.println("ADD STAR");
                 abstractLevel.getGameStatus().addStar();
             }
         }

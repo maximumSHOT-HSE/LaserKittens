@@ -3,7 +3,6 @@ package ru.hse.team.game.levels.RandomLabyrinth;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
+import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
@@ -24,8 +24,8 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     //currently it is able to add one door only
     private int keys = 0;
 
-    public RandomLabyrinthLevelFactory() {
-        world = new World(new Vector2(0,0), true);
+    public RandomLabyrinthLevelFactory(PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory) {
+        super(engine, manager, bodyFactory);
     }
 
     public void setStars(int stars) {
@@ -200,12 +200,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     }
 
     @Override
-    public World getWorld() {
-        return world;
-    }
-
-    @Override
-    public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
+    public void createLevel(int widthInScreens, int heightInScreens, AbstractLevel abstractLevel) {
         float screenWidth = RenderingSystem.getScreenSizeInMeters().x;
         float screenHeight = RenderingSystem.getScreenSizeInMeters().y;
 
@@ -218,10 +213,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
         final float keyWidth = 3;
         final float keyHeight = 3;
 
-        this.engine = engine;
-        this.manager = assetManager;
-        bodyFactory = BodyFactory.getBodyFactory(world);
-        createBackground();
+        createBackground(widthInScreens, heightInScreens);
 
         createImpenetrableWall(new Vector2(0, 0.5f * levelHeight), wallThickness, levelHeight); // left big wall
         createImpenetrableWall(new Vector2(levelWidth, 0.5f * levelHeight), wallThickness, levelHeight); // right big wall
@@ -269,10 +261,8 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                     (starPosition.y + 0.5f) * screenHeight / cellsPerHeight, starRadius);
         }
 
-        focusedPlayer = createPlayer((playerPosition.x + 0.5f) * screenWidth / cellsPerWidth,
+        abstractLevel.setPlayer(createPlayer((playerPosition.x + 0.5f) * screenWidth / cellsPerWidth,
                 (playerPosition.y + 0.5f) * screenHeight / cellsPerHeight,
-                playerRadius);
-
-
+                playerRadius));
     }
 }

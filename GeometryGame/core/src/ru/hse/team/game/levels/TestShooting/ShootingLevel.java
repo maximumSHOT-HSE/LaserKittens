@@ -10,13 +10,13 @@ public class ShootingLevel extends AbstractLevel {
     private ShootingLevelFactory shootingLevelFactory;
 
     public ShootingLevel() {
-        super("Test Shooting");
+        super("Test Shooting", 1, 1);
     }
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        shootingLevelFactory = new ShootingLevelFactory();
-        shootingLevelFactory.createLevel(engine, assetManager);
+        shootingLevelFactory = new ShootingLevelFactory(engine, assetManager, getBodyFactory());
+        shootingLevelFactory.createLevel(getWidthInScreens(), getHeightInScreens(), this);
     }
 
     @Override
