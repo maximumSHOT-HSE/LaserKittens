@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -178,7 +179,8 @@ public class LevelCreateScreen implements Screen {
     }
 
     private boolean inBounds(SimpleEntity entity, float positionX, float positionY) {
-        return Math.abs(positionX - entity.getPositionX()) < entity.getSizeX() / 2 && Math.abs(positionY - entity.getPositionY()) < entity.getSizeY() / 2;
+        return Math.abs(positionX - entity.getPositionX()) < entity.getSizeX() / 2
+                && Math.abs(positionY - entity.getPositionY()) < entity.getSizeY() / 2;
     }
 
     private TextureRegion createBackground() {
@@ -309,7 +311,9 @@ public class LevelCreateScreen implements Screen {
             finishButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    laserKittens.setScreen(new LevelSavingScreen(laserKittens, new SavedLevel(-1, new ArrayList<>(entities), widthInScreens, heightInScreens, "Empty")));
+                    laserKittens.setScreen(new LevelSavingScreen(
+                            laserKittens, new SavedLevel(-1, new ArrayList<>(entities), widthInScreens, heightInScreens, "Empty")
+                    ));
                 }
             });
 
