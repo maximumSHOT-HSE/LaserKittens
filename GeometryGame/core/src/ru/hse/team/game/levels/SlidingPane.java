@@ -13,60 +13,110 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 public class SlidingPane extends Group {
 
     // width of one section
-    public float sectionWidth;
+    private float sectionWidth = Gdx.app.getGraphics().getWidth();
     // height of one section
-    public float sectionHeight;
+    private float sectionHeight = Gdx.app.getGraphics().getHeight();
 
     // container for sections
-    public Group sections;
+    private Group sections = new Group();
     // offset of section by y coordinate
-    public float offsetY;
+    private float offsetY;
+
+    public float getSectionWidth() {
+        return sectionWidth;
+    }
+
+    public float getSectionHeight() {
+        return sectionHeight;
+    }
+
+    public Group getSections() {
+        return sections;
+    }
+
+    public float getOffsetY() {
+        return offsetY;
+    }
+
+    public DIRECTION getDirection() {
+        return direction;
+    }
+
+    public float getStopOffset() {
+        return stopOffset;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public int getCurrentSectionId() {
+        return currentSectionId;
+    }
+
+    public float getFlingSpeed() {
+        return flingSpeed;
+    }
+
+    public float getOverscrollDistance() {
+        return overscrollDistance;
+    }
+
+    public Actor getFocusedSection() {
+        return focusedSection;
+    }
+
+    @Override
+    public Rectangle getCullingArea() {
+        return cullingArea;
+    }
+
+    public ActorGestureListener getActorGestureListener() {
+        return actorGestureListener;
+    }
+
+    public float getItemWidth() {
+        return itemWidth;
+    }
+
+    public float getItemHeight() {
+        return itemHeight;
+    }
 
     // direction
     public enum DIRECTION {UP, DOWN}
-    public DIRECTION direction = DIRECTION.UP;
+    private DIRECTION direction = DIRECTION.UP;
 
     /*
     * offset which will indicate that
     * current sections should be switched
     * */
-    public float stopOffset;
-    public float speed = 4000;
-    public int currentSectionId = 1; // 1-indexed
+    private float stopOffset;
+    private float speed = 4000;
+    private int currentSectionId = 1; // 1-indexed
 
     // speed of gesture which indicates desire to switch section
-    public float flingSpeed = 1000;
+    private float flingSpeed = 1000;
 
     // allowed distance of scrolling outside pane
-    public float overscrollDistance = 500;
+    private float overscrollDistance = 500;
 
     // section in focus
-    public Actor focusedSection;
-    public Rectangle cullingArea = new Rectangle();
+    private Actor focusedSection;
+    private Rectangle cullingArea = new Rectangle();
 
-    public ActorGestureListener actorGestureListener;
+    private ActorGestureListener actorGestureListener;
 
-    public float itemWidth;
-    public float itemHeight;
+    private float itemWidth = getSectionWidth();
+    private float itemHeight = getSectionHeight();
 
     public SlidingPane() {
-        sections = new Group();
-        this.addActor(sections);
-
-        sectionWidth = Gdx.app.getGraphics().getWidth();
-        sectionHeight = Gdx.app.getGraphics().getHeight();
-
-//        itemWidth = sectionWidth * 0.8f;
-//        itemHeight = sectionHeight * 0.6f;
-
-        itemWidth = sectionWidth;
-        itemHeight = sectionHeight;
+        this.addActor(getSections());
 
         actorGestureListener = new ActorGestureListener() {
 
             @Override
             public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                System.out.println("touch down ??");
             }
 
             @Override
@@ -76,12 +126,11 @@ public class SlidingPane extends Group {
 
             @Override
             public void fling(InputEvent event, float velocityX, float velocityY, int button) {
-//                System.out.println("FLING");
-                if (Math.abs(velocityY) > flingSpeed) {
+                if (Math.abs(velocityY) > getFlingSpeed()) {
                     if (velocityY > 0) {
-                        setStopSection(currentSectionId - 1);
+                        setStopSection(getCurrentSectionId() - 1);
                     } else {
-                        setStopSection(currentSectionId + 1);
+                        setStopSection(getCurrentSectionId() + 1);
                     }
                 }
                 cancelTouchedFocus();
@@ -89,37 +138,38 @@ public class SlidingPane extends Group {
 
             @Override
             public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
-                if (offsetY < getMinOffsetByY()) {
+                if (getOffsetY() < getMinOffsetByY()) {
                     return;
                 }
-                if (offsetY > getMaxOffsetByY()) {
+                if (getOffsetY() > getMaxOffsetByY()) {
                     return;
                 }
-                offsetY -= deltaY;
+                offsetY = getOffsetY() - deltaY;
                 cancelTouchedFocus();
             }
         };
 
-        this.addListener(actorGestureListener);
+        this.addListener(getActorGestureListener());
     }
 
     public float getMinOffsetByY() {
-        return -overscrollDistance;
+        return -getOverscrollDistance();
     }
 
     public float getMaxOffsetByY() {
-        return (sections.getChildren().size - 1) * sectionHeight + overscrollDistance;
+        return (getSections().getChildren().size - 1) * getSectionHeight()
+                + getOverscrollDistance();
     }
 
     public void setStopSection(int stopSectionId) {
         if (stopSectionId < 1) {
             stopSectionId = 1;
         }
-        if (stopSectionId > sections.getChildren().size) {
-            stopSectionId = sections.getChildren().size;
+        if (stopSectionId > getSections().getChildren().size) {
+            stopSectionId = getSections().getChildren().size;
         }
-        stopOffset = (stopSectionId - 1) * sectionHeight;
-        if (offsetY < stopOffset) {
+        stopOffset = (stopSectionId - 1) * getSectionHeight();
+        if (getOffsetY() < getStopOffset()) {
             direction = DIRECTION.UP;
         } else {
             direction = DIRECTION.DOWN;
@@ -128,25 +178,26 @@ public class SlidingPane extends Group {
 
     public void setCurrentSection(int section, DIRECTION direction) {
         this.currentSectionId = section;
-        this.offsetY = (section - 1) * sectionHeight;
-        this.stopOffset = (section - 1) * sectionHeight;
+        this.offsetY = (section - 1) * getSectionHeight();
+        this.stopOffset = (section - 1) * getSectionHeight();
         this.direction = direction;
     }
 
     public void addWidget(Actor widget) {
-        widget.setY(sections.getChildren().size * sectionHeight + (sectionHeight - itemHeight) * 0.5f);
-        widget.setX((sectionWidth - itemWidth) * 0.5f);
+        widget.setY(getSections().getChildren().size * getSectionHeight() +
+                (getSectionHeight() - getItemHeight()) * 0.5f);
+        widget.setX((getSectionWidth() - getItemWidth()) * 0.5f);
 
-        widget.setWidth(itemWidth);
-        widget.setHeight(itemHeight);
+        widget.setWidth(getItemWidth());
+        widget.setHeight(getItemHeight());
 
-        sections.addActor(widget);
+        getSections().addActor(widget);
     }
 
     public int calculateCurrentSection() {
-        int section = Math.round(offsetY / sectionHeight) + 1;
-        if (section > sections.getChildren().size) {
-            return sections.getChildren().size;
+        int section = Math.round(getOffsetY() / getSectionHeight()) + 1;
+        if (section > getSections().getChildren().size) {
+            return getSections().getChildren().size;
         }
         if (section < 1) {
             return 1;
@@ -155,58 +206,46 @@ public class SlidingPane extends Group {
     }
 
     private void move(float delta) {
-        if (offsetY < stopOffset) {
-            if (direction == DIRECTION.DOWN ) {
-                offsetY = stopOffset;
+        if (getOffsetY() < getStopOffset()) {
+            if (getDirection() == DIRECTION.DOWN ) {
+                offsetY = getStopOffset();
                 currentSectionId = calculateCurrentSection();
                 return;
             }
-            offsetY += speed * delta;
-        } else if(offsetY > stopOffset) {
-            if (direction == DIRECTION.UP ) {
-                offsetY = stopOffset;
+            offsetY = getOffsetY() + getSpeed() * delta;
+        } else if(getOffsetY() > getStopOffset()) {
+            if (getDirection() == DIRECTION.UP ) {
+                offsetY = getStopOffset();
                 currentSectionId = calculateCurrentSection();
                 return;
             }
-            offsetY -= speed * delta;
+            offsetY = getOffsetY() - getSpeed() * delta;
         }
     }
 
     @Override
     public void act(float delta) {
-        sections.setY(-offsetY);
+        getSections().setY(-getOffsetY());
 
-        cullingArea.set(
-            sections.getX(),
-            -sections.getY(),
-            sectionWidth,
-            sectionHeight
+        getCullingArea().set(
+            getSections().getX(),
+            -getSections().getY(),
+                getSectionWidth(),
+                getSectionHeight()
         );
 
-        sections.setCullingArea(cullingArea);
+        getSections().setCullingArea(getCullingArea());
 
-        if (!actorGestureListener.getGestureDetector().isPanning()) {
+        if (!getActorGestureListener().getGestureDetector().isPanning()) {
             move(delta);
         }
     }
 
-    public void cancelTouchedFocus() {
-        if (focusedSection == null) {
+    private void cancelTouchedFocus() {
+        if (getFocusedSection() == null) {
             return;
         }
-        this.getStage().cancelTouchFocusExcept(this.actorGestureListener, this);
+        this.getStage().cancelTouchFocusExcept(this.getActorGestureListener(), this);
         focusedSection = null;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
-
-    public void setFlingSpeed(float flingSpeed) {
-        this.flingSpeed = flingSpeed;
-    }
-
-    public void setOverscrollDistance(float overscrollDistance) {
-        this.overscrollDistance = overscrollDistance;
     }
 }

@@ -27,6 +27,9 @@ import ru.hse.team.LaserKittens;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.settings.about.PagedScrollPane;
 
+/**
+ * Screen for showing statistics of all levels playings best time and dates.
+ * */
 public class StatisticsScreen implements Screen {
 
     private final LaserKittens laserKittens;
@@ -107,7 +110,6 @@ public class StatisticsScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-
         private Skin skin = laserKittens.getAssetManager()
                 .manager.get(KittensAssetManager.SKIN, Skin.class);
         private Label titleLabel = new Label("Statistics",
@@ -119,7 +121,8 @@ public class StatisticsScreen implements Screen {
             List<Label> statisticsLabels = new ArrayList<>();
             statisticsLabels.add(new Label(levelStatistics.date, skin));
             statisticsLabels.add(new Label(levelStatistics.levelName, skin));
-            statisticsLabels.add(new Label(GameStatus.getTimeStamp(levelStatistics.timeNano), skin));
+            statisticsLabels.add(new Label(
+                    GameStatus.getTimeStamp(levelStatistics.timeNano), skin));
             return statisticsLabels;
         }
 
@@ -169,7 +172,9 @@ public class StatisticsScreen implements Screen {
             table.add(scroll).expand().fill();
 
             table.row().pad(30, 10, 10, 10);
-            table.add(backButton).width(Gdx.graphics.getWidth() * 0.25f).height(Gdx.graphics.getHeight() * 0.1f).colspan(2).expand();
+            table.add(backButton).
+                    width(Gdx.graphics.getWidth() * 0.25f)
+                    .height(Gdx.graphics.getHeight() * 0.1f).colspan(2).expand();
 
             setListeners();
         }

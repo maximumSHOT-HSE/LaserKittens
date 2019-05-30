@@ -89,21 +89,25 @@ public class MainMenuScreen implements Screen {
     private class Menu {
 
         private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
-        private TextButton levels = new TextButton("Levels", skin);
+        private Skin skin =
+                laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
+        private TextButton levels = new TextButton("Singleplayer", skin);
         private TextButton multiplayer = new TextButton("Multiplayer", skin);
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
         private ImageButton loginButton = new ImageButton(
                 new TextureRegionDrawable(
-                        laserKittens.getAssetManager().manager.get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
+                        laserKittens.getAssetManager().manager
+                                .get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
         private ImageButton achievementsButton = new ImageButton(
                 new TextureRegionDrawable(
-                        laserKittens.getAssetManager().manager.get(KittensAssetManager.CUP, Texture.class)));
+                        laserKittens.getAssetManager().manager
+                                .get(KittensAssetManager.CUP, Texture.class)));
         private ImageButton rateButton = new ImageButton(
                 new TextureRegionDrawable(
-                        laserKittens.getAssetManager().manager.get(KittensAssetManager.PLAY_MARKET, Texture.class)));
+                        laserKittens.getAssetManager().manager
+                                .get(KittensAssetManager.PLAY_MARKET, Texture.class)));
 
         public Menu(Stage stage) {
             table.setFillParent(true);
