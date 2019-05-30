@@ -8,7 +8,10 @@ import ru.hse.team.LaserKittens;
 
 public class LevelGestureProcessor implements GestureDetector.GestureListener {
 
+
     private float scale = 1;
+    private float entityScale = 1;
+    private float entityScaleBase = 1;
     private final LaserKittens laserKittens;
     private final LevelCreateInputProcessor levelCreateInputProcessor;
     private final OrthographicCamera camera;
@@ -48,7 +51,7 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         }
         x = camera.position.x;
         y = camera.position.y;
-        camera.position.set(x - deltaX, y + deltaY, 0);
+        camera.position.set(x - 2 * deltaX, y + 2 * deltaY, 0);
         camera.update();
         return false;
     }
@@ -56,12 +59,15 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
         scale = camera.zoom;
+        entityScale = entityScaleBase;
         return false;
     }
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
         if (levelCreateInputProcessor.isDragging()) {
+            levelCreateInputProcessor.zoomCurrentEntity(distance / initialDistance * entityScale);
+            entityScaleBase = entityScale * distance / initialDistance;
             return false;
         }
         camera.zoom = scale * initialDistance / distance;

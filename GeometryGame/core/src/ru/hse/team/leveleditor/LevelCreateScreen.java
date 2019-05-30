@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -19,12 +20,14 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.settings.about.PagedScrollPane;
 
@@ -32,7 +35,7 @@ public class LevelCreateScreen implements Screen {
 
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
-    private Background background;
+    private TextureRegion background;
     private Stage stage;
     private EditorTools tools;
 
@@ -40,12 +43,14 @@ public class LevelCreateScreen implements Screen {
     private LevelCreateInputProcessor inputProcessor;
     private LevelGestureProcessor gestureProcessor;
 
-    private List<SimpleEntity> entities = new ArrayList<>();
+    private static final int widthInScreens = 3;
+    private static final int heightInScreens = 3;
+
+    private Set<SimpleEntity> entities = new HashSet<>();
 
     public LevelCreateScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
-        background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
 
         inputProcessor = new LevelCreateInputProcessor(this.laserKittens, this, camera);
@@ -57,13 +62,17 @@ public class LevelCreateScreen implements Screen {
         entities.add(entity);
     }
 
-    public void deleteOnPoint(float positionX, float positionY) {
-        Iterator<SimpleEntity> iterator = entities.iterator();
-        while (iterator.hasNext()) {
-            if (inBounds(iterator.next(), positionX, positionY)) {
-                iterator.remove();
+    public void removeEntity(SimpleEntity entity) {
+        entities.remove(entity);
+    }
+
+    public SimpleEntity entityOnPoint(float positionX, float positionY) {
+        for (SimpleEntity entity : entities) {
+            if (inBounds(entity, positionX, positionY)) {
+                return entity;
             }
         }
+        return null;
     }
 
     @Override
@@ -71,6 +80,7 @@ public class LevelCreateScreen implements Screen {
         stage.clear();
         Gdx.input.setInputProcessor(inputMultiplexer);
         tools = new EditorTools(stage);
+        background = createBackground();
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         laserKittens.batch.setProjectionMatrix(camera.combined);
@@ -92,6 +102,19 @@ public class LevelCreateScreen implements Screen {
         }
     }
 
+    private void makeBordersForCamera(Vector3 position) {
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
+        float levelWidth = screenWidth * widthInScreens;
+        float levelHeight = screenHeight * heightInScreens;
+
+        position.x = Math.max(position.x, screenWidth * camera.zoom / 2 - screenWidth / (2 * camera.zoom));
+        position.y = Math.max(position.y, screenHeight * camera.zoom / 2 - screenHeight / (2 * camera.zoom));
+        position.x = Math.min(position.x, levelWidth - screenWidth * camera.zoom / 2 + screenWidth / (2 * camera.zoom));
+        position.y = Math.min(position.y, levelHeight - screenHeight * camera.zoom / 2 + screenHeight / (2 * camera.zoom));
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
@@ -101,13 +124,20 @@ public class LevelCreateScreen implements Screen {
 
         laserKittens.batch.setProjectionMatrix(camera.combined);
         laserKittens.batch.begin();
-        background.draw(laserKittens.batch, camera);
+        float width = background.getRegionWidth();
+        float height = background.getRegionHeight();
+        laserKittens.batch.draw(background,
+                -(float)Gdx.graphics.getWidth(), -(float)Gdx.graphics.getHeight(),
+                0, 0,
+                width, height,
+                (float)Gdx.graphics.getWidth() * (widthInScreens + 2) / width,
+                (float)Gdx.graphics.getHeight() * (heightInScreens + 2) / height , 0);
 
         for (SimpleEntity entity : entities) {
             TextureRegion texture = getTextureByType(entity.getType());
 
-            final float width = texture.getRegionWidth();
-            final float height = texture.getRegionHeight();
+            width = texture.getRegionWidth();
+            height = texture.getRegionHeight();
 
             laserKittens.batch.draw(texture, entity.getPositionX() - width / 2, entity.getPositionY() - width / 2,
                     width / 2, height / 2,
@@ -116,6 +146,7 @@ public class LevelCreateScreen implements Screen {
         }
 
         laserKittens.batch.end();
+        makeBordersForCamera(camera.position);
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -123,7 +154,6 @@ public class LevelCreateScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        background.resizeClampToEdge();
         stage.getViewport().update(width, height, true);
     }
 
@@ -145,15 +175,21 @@ public class LevelCreateScreen implements Screen {
     @Override
     public void dispose () {
         stage.dispose();
-        background.dispose();
     }
 
     private boolean inBounds(SimpleEntity entity, float positionX, float positionY) {
-        TextureRegion texture = getTextureByType(entity.getType());
+        return Math.abs(positionX - entity.getPositionX()) < entity.getSizeX() / 2 && Math.abs(positionY - entity.getPositionY()) < entity.getSizeY() / 2;
+    }
 
-        final float width = texture.getRegionWidth();
-        final float height = texture.getRegionHeight();
-        return false;
+    private TextureRegion createBackground() {
+        Texture background = laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class);
+        background.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        TextureRegion backgroundRegion = new TextureRegion(background);
+
+        backgroundRegion.setRegion(0, 0,
+                background.getWidth() * (widthInScreens + 2),
+                background.getHeight() * (heightInScreens + 2));
+        return backgroundRegion;
     }
 
     private class EditorTools {
@@ -174,6 +210,7 @@ public class LevelCreateScreen implements Screen {
         private ImageButton rotateRight = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
         private ImageButton finishButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
         private ImageButton eraserButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+        private ImageButton cursorButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
 
         public EditorTools(Stage stage) {
             table.setFillParent(true);
@@ -186,6 +223,7 @@ public class LevelCreateScreen implements Screen {
             scroll.setPageSpacing(25);
             Table buttons = new Table();
 
+            buttons.add(cursorButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(eraserButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(playerButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(wallButton).width(toolButtonWidth).height(toolButtonHeight);
@@ -205,10 +243,18 @@ public class LevelCreateScreen implements Screen {
 
         private void setListeners() {
 
+            cursorButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    inputProcessor.changeTool(LevelCreateInputProcessor.Tool.CURSOR);
+                }
+            });
+
             playerButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     inputProcessor.chooseAnotherEntity(SimpleEntity.EntityType.PLAYER);
+
                 }
             });
 
@@ -236,30 +282,38 @@ public class LevelCreateScreen implements Screen {
             eraserButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    inputProcessor.chooseAnotherEntity(null);
+                    inputProcessor.changeTool(LevelCreateInputProcessor.Tool.ERASER);
                 }
             });
 
             rotateLeft.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    SimpleEntity entity = inputProcessor.getCurrentEntity();
+                    if (entity != null) {
+                        entity.setRotation(entity.getRotation() + 10f);
+                    }
                 }
             });
 
             rotateRight.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    SimpleEntity entity = inputProcessor.getCurrentEntity();
+                    if (entity != null) {
+                        entity.setRotation(entity.getRotation() - 10f);
+                    }
                 }
             });
 
             finishButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    laserKittens.setScreen(new LevelSavingScreen(laserKittens, new SavedLevel(-1, new ArrayList<>(entities), widthInScreens, heightInScreens, "Empty")));
                 }
             });
 
         }
 
     }
-
 }

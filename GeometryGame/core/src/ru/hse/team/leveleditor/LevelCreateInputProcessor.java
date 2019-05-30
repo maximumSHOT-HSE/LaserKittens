@@ -20,6 +20,10 @@ public class LevelCreateInputProcessor implements InputProcessor {
 
     private SimpleEntity.EntityType focusedType;
     private SimpleEntity currentEntity;
+    private float currentEntityScale = 1;
+    private SimpleEntity player;
+
+    private Tool tool;
 
     private boolean dragging;
     private int draggingPointer = -1;
@@ -28,6 +32,11 @@ public class LevelCreateInputProcessor implements InputProcessor {
         this.laserKittens = laserKittens;
         this.levelCreateScreen = levelCreateScreen;
         this.camera = camera;
+    }
+
+    public enum Tool {
+        ERASER,
+        CURSOR;
     }
 
 
@@ -58,7 +67,27 @@ public class LevelCreateInputProcessor implements InputProcessor {
         Vector3 position = camera.unproject(new Vector3(screenX, screenY, 0));
 
         if (focusedType == null) {
-            levelCreateScreen.deleteOnPoint(position.x, position.y);
+            if (tool == null) {
+                return false;
+            }
+            switch (tool) {
+                case ERASER:
+                    SimpleEntity eraseEntity = levelCreateScreen.entityOnPoint(position.x, position.y);
+                    if (eraseEntity != null) {
+                        levelCreateScreen.removeEntity(eraseEntity);
+                        if (eraseEntity.getType() == SimpleEntity.EntityType.PLAYER) {
+                            player = null;
+                        }
+                    }
+                    break;
+                case CURSOR:
+                    SimpleEntity entity = levelCreateScreen.entityOnPoint(position.x, position.y);
+                    if (entity != null) {
+                        chooseAnotherEntity(entity.getType());
+                        currentEntity = entity;
+                    }
+                    break;
+            }
             return false;
         }
 
@@ -72,6 +101,11 @@ public class LevelCreateInputProcessor implements InputProcessor {
                     texture.getRegionWidth(), texture.getRegionHeight(),
                     0, focusedType);
             levelCreateScreen.addSimpleEntity(currentEntity);
+
+            if (currentEntity.getType() == SimpleEntity.EntityType.PLAYER) {
+                player = currentEntity;
+            }
+
         } else {
             currentEntity.setPositionX(position.x);
             currentEntity.setPositionY(position.y);
@@ -128,9 +162,32 @@ public class LevelCreateInputProcessor implements InputProcessor {
     public void chooseAnotherEntity(SimpleEntity.EntityType focusedType) {
         this.focusedType = focusedType;
         currentEntity = null;
+        tool = null;
+
+        if (focusedType == SimpleEntity.EntityType.PLAYER && player != null) {
+            currentEntity = player;
+        }
     }
 
     public boolean isDragging() {
         return dragging;
+    }
+
+    public Tool getTool() {
+        return tool;
+    }
+
+    public void changeTool(Tool tool) {
+        this.tool = tool;
+        focusedType = null;
+        currentEntity = null;
+    }
+
+    public void zoomCurrentEntity(float scale) {
+        if (currentEntity != null) {
+            currentEntity.setSizeX(currentEntity.getSizeX() * scale / currentEntityScale);
+            currentEntity.setSizeY(currentEntity.getSizeY() * scale / currentEntityScale);
+            currentEntityScale = scale;
+        }
     }
 }

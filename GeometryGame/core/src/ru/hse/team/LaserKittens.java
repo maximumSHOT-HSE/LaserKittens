@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import ru.hse.team.leveleditor.ChooseSavedLevelScreen;
 import ru.hse.team.settings.about.AboutScreen;
 import ru.hse.team.database.levels.LevelsDatabase;
 import ru.hse.team.database.statistics.StatisticsDatabase;
@@ -43,6 +44,7 @@ public class LaserKittens extends Game {
         SETTINGS_SCREEN,
         ABOUT_SCREEN,
         STATISTICS_SCREEN,
+        SAVED_LEVELS_SCREEN,
         LEVEL_CREATE_SCREEN;
     }
 
@@ -53,6 +55,7 @@ public class LaserKittens extends Game {
     private AboutScreen aboutScreen;
     private StatisticsScreen statisticsScreen;
     private LevelCreateScreen levelCreateScreen;
+    private ChooseSavedLevelScreen savedLevelScreen;
 
     public AppPreferences getPreferences() {
         return preferences;
@@ -64,6 +67,10 @@ public class LaserKittens extends Game {
 
     public GoogleServicesAction getGoogleServices() {
         return googleServices;
+    }
+
+    public LevelsDatabase getSavedLevels() {
+        return savedLevels;
     }
 
     /**
@@ -113,6 +120,12 @@ public class LaserKittens extends Game {
                     levelCreateScreen = new LevelCreateScreen(this);
                 }
                 this.setScreen(levelCreateScreen);
+                break;
+            case SAVED_LEVELS_SCREEN:
+                if (savedLevelScreen == null) {
+                    savedLevelScreen = new ChooseSavedLevelScreen(this);
+                }
+                this.setScreen(savedLevelScreen);
                 break;
         }
     }
