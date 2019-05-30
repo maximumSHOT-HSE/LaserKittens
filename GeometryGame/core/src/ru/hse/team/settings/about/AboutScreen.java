@@ -1,6 +1,7 @@
 package ru.hse.team.settings.about;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -36,23 +38,27 @@ public class AboutScreen implements Screen {
     private Stage stage;
     private Menu menu;
 
-    private InputMultiplexer inputMultiplexer;
-
     public AboutScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
         background = new Background(this.laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
-
-        InputProcessor inputProcessor = new AboutScreenInputProcessor(this.laserKittens);
-        inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
     }
 
     @Override
     public void show() {
         stage.clear();
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
+                }
+                return true;
+            }
+        });
         menu = new Menu(stage);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        Gdx.input.setInputProcessor(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();

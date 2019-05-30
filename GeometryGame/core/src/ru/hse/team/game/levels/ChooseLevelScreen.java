@@ -1,6 +1,7 @@
 package ru.hse.team.game.levels;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -34,7 +37,6 @@ import ru.hse.team.game.levels.TestBigLevel.TestBigLevel;
 import ru.hse.team.game.levels.TestDoorsAndKeys.TestDoorsAndKeysLevel;
 import ru.hse.team.game.levels.TestLongCorridor.TestLongCorridorLevel;
 import ru.hse.team.game.levels.TestShooting.ShootingLevel;
-import ru.hse.team.settings.SettingsScreenInputProcessor;
 
 public class ChooseLevelScreen implements Screen {
 
@@ -65,9 +67,6 @@ public class ChooseLevelScreen implements Screen {
 
         stage = new Stage(new ScreenViewport());
 
-        InputProcessor inputProcessor = new SettingsScreenInputProcessor(this.laserKittens);
-        inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
-
         fillLevels();
         currentSection = abstractLevels.size() + 3;
 
@@ -77,7 +76,16 @@ public class ChooseLevelScreen implements Screen {
     @Override
     public void show() {
         stage.clear();
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                }
+                return true;
+            }
+        });
+        Gdx.input.setInputProcessor(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();

@@ -1,13 +1,14 @@
 package ru.hse.team.game.gameending;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -18,8 +19,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import ru.hse.team.Background;
-import ru.hse.team.LaserKittens;
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.LaserKittens;
 import ru.hse.team.database.statistics.LevelStatistics;
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.gamelogic.GameStatus;
@@ -36,7 +37,6 @@ public class GameEndingScreen implements Screen {
     private AbstractLevel parentLevel;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-    private InputMultiplexer inputMultiplexer;
     private Menu menu;
     private Stage stage;
     private GameStatus gameStatus;
@@ -46,8 +46,6 @@ public class GameEndingScreen implements Screen {
         this.parentLevel = level;
         this.background = new Background(laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
         this.stage = new Stage(new ScreenViewport());
-        InputProcessor inputProcessor = new GameEndingScreenInputProcessor(laserKittens);
-        this.inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
         this.gameStatus = gameStatus;
 
         addResultToDatabase(gameStatus);
@@ -64,7 +62,16 @@ public class GameEndingScreen implements Screen {
     @Override
     public void show() {
         stage.clear();
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                }
+                return true;
+            }
+        });
+        Gdx.input.setInputProcessor(stage);
 
         menu = new Menu(stage);
 
