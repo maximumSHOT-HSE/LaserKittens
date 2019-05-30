@@ -176,6 +176,10 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createImpenetrableWall(Vector2 center, float width, float height) {
+        return createImpenetrableWall(center, width, height, 0);
+    }
+
+    protected Entity createImpenetrableWall(Vector2 center, float width, float height, float rotation) {
         Texture texture = new Texture(KittensAssetManager.ICE_WALL);
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
@@ -184,18 +188,17 @@ abstract public class AbstractLevelFactory {
                 (int) RenderingSystem.metersToPixels(height)
         );
         Entity wall = (new EntityBuilder())
-            .addBodyComponent(bodyFactory.newRectangle(center, width, height))
-            .addTransformComponent(new Vector3(center.x, center.y, 10))
-            .addTextureComponent(textureRegion)
-            .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
-            .addStateComponent(StateComponent.State.JUST_CREATED)
-            .build();
+                .addBodyComponent(bodyFactory.newRectangle(center, width, height))
+                .addTransformComponent(new Vector3(center.x, center.y, 10))
+                .addTextureComponent(textureRegion)
+                .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
+                .addStateComponent(StateComponent.State.JUST_CREATED)
+                .build();
         if (abstractLevel != null && abstractLevel.getAbstractGraph() != null) {
             abstractLevel.getAbstractGraph().removeEdgeAgterPlacingRectangleBarrier(center, width, height,
                     Mapper.stateComponent.get(wall).getId());
         }
         return wall;
-
     }
 
     protected Entity createImpenetrableDynamicWall(Vector2 center, float width, float height) {
@@ -280,6 +283,10 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createTransparentWall(Vector2 center, float width, float height) {
+        return createTransparentWall(center, width, height, 0);
+    }
+
+    protected Entity createTransparentWall(Vector2 center, float width, float height, float rotation) {
         Texture texture = new Texture(KittensAssetManager.TRANSPARENT_WALL);
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(

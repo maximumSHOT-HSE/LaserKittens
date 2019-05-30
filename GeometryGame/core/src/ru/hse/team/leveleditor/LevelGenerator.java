@@ -80,8 +80,11 @@ public class LevelGenerator {
                             break;
                         case WALL:
                             createImpenetrableWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
-                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y);
+                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y, entity.getRotation() * (float)Math.PI / 180);
                             break;
+                        case GLASS:
+                            createTransparentWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
+                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y, entity.getRotation() * (float)Math.PI / 180);
                         case PLAYER:
                             focusedPlayer = createPlayer(entity.getPositionX() * PM, entity.getPositionY() * PM, entity.getSizeX() * scale.x);
                             break;

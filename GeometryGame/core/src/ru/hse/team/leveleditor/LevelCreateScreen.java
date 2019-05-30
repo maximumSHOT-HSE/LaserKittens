@@ -291,20 +291,14 @@ public class LevelCreateScreen implements Screen {
             rotateLeft.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    SimpleEntity entity = inputProcessor.getCurrentEntity();
-                    if (entity != null) {
-                        entity.setRotation(entity.getRotation() + 10f);
-                    }
+                    inputProcessor.rotateCurrentEntity(10);
                 }
             });
 
             rotateRight.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    SimpleEntity entity = inputProcessor.getCurrentEntity();
-                    if (entity != null) {
-                        entity.setRotation(entity.getRotation() - 10f);
-                    }
+                    inputProcessor.rotateCurrentEntity(-10);
                 }
             });
 
