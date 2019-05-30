@@ -1,14 +1,15 @@
 package ru.hse.team.database.statistics;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -21,15 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.hse.team.Background;
+import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.settings.about.PagedScrollPane;
 
-/**
- * Screen with general information about the game.
- * Information list contains
- *     External libraries, sounds, sceens
- */
 public class StatisticsScreen implements Screen {
 
     private final LaserKittens laserKittens;
@@ -38,23 +35,28 @@ public class StatisticsScreen implements Screen {
     private Stage stage;
     private Menu menu;
 
-    private InputMultiplexer inputMultiplexer;
-
     public StatisticsScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
-        background = new Background(laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
+        background = new Background(laserKittens.getAssetManager().manager.get(KittensAssetManager.blueBackground, Texture.class));
         stage = new Stage(new ScreenViewport());
-
-        InputProcessor inputProcessor = new StatisticsScreenInputProcessor(laserKittens);
-        inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
     }
 
     @Override
     public void show() {
         stage.clear();
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.LEVEL_CREATE_SCREEN);
+                }
+                return true;
+            }
+        });
+
         menu = new Menu(stage);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        Gdx.input.setInputProcessor(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
@@ -66,7 +68,7 @@ public class StatisticsScreen implements Screen {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update(); // good practise -- update camera one time per frame
+        camera.update();
 
         laserKittens.getBatch().begin();
         background.draw(laserKittens.getBatch(), camera);
@@ -104,13 +106,10 @@ public class StatisticsScreen implements Screen {
     }
 
 
-    /**
-     * Menu with clickable labels and scrollable plane.
-     */
     private class Menu {
         private Table table = new Table();
 
-        private Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.skin, Skin.class);
         private Label titleLabel = new Label("Statistics", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private final TextButton backButton = new TextButton("Back", skin);
 
