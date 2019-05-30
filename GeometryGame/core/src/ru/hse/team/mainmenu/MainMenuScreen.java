@@ -51,13 +51,10 @@ public class MainMenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
         laserKittens.getBatch().begin();
         background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -90,6 +87,7 @@ public class MainMenuScreen implements Screen {
     }
 
     private class Menu {
+
         private Table table = new Table();
         private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
         private TextButton levels = new TextButton("Levels", skin);
@@ -109,7 +107,6 @@ public class MainMenuScreen implements Screen {
 
         public Menu(Stage stage) {
             table.setFillParent(true);
-            //table.setDebug(true);
             stage.addActor(table);
 
             levels.getLabel().setFontScale(2f);
