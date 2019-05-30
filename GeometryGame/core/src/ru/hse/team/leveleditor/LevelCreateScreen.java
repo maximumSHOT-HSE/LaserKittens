@@ -140,12 +140,10 @@ public class LevelCreateScreen implements Screen {
             width = texture.getRegionWidth();
             height = texture.getRegionHeight();
 
-            Vector2 scale = getCommonScale(entity);
-
             laserKittens.batch.draw(texture, entity.getPositionX() - width / 2, entity.getPositionY() - width / 2,
                     width / 2, height / 2,
                     width, height,
-                    scale.x * entity.getSizeX() / width, scale.y * entity.getSizeY() / height, entity.getRotation());
+                    entity.getSizeX() / width, entity.getSizeY() / height, entity.getRotation());
         }
 
         laserKittens.batch.end();
@@ -181,9 +179,8 @@ public class LevelCreateScreen implements Screen {
     }
 
     private boolean inBounds(SimpleEntity entity, float positionX, float positionY) {
-        Vector2 scale = getCommonScale(entity);
-        return Math.abs(positionX - entity.getPositionX()) < entity.getSizeX() / 2 * scale.x
-                && Math.abs(positionY - entity.getPositionY()) < entity.getSizeY() / 2 * scale.y;
+        return Math.abs(positionX - entity.getPositionX()) < entity.getSizeX() / 2
+                && Math.abs(positionY - entity.getPositionY()) < entity.getSizeY() / 2;
     }
 
     private TextureRegion createBackground() {
@@ -195,17 +192,6 @@ public class LevelCreateScreen implements Screen {
                 background.getWidth() * (widthInScreens + 2),
                 background.getHeight() * (heightInScreens + 2));
         return backgroundRegion;
-    }
-
-    private Vector2 getCommonScale(SimpleEntity entity) {
-        switch (entity.getType()) {
-            case STAR:
-                return new Vector2(2, 2);
-            case PLAYER:
-                return new Vector2(1 / 0.39f, 1/ 0.39f);
-            default:
-                return new Vector2(1, 1);
-        }
     }
 
     private class EditorTools {
