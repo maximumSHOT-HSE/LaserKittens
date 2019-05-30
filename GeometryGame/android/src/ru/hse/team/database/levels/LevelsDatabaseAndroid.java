@@ -4,7 +4,7 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 
-@Database(entities = {SavedLevel.class}, version = 1)
+@Database(entities = {SavedLevel.class}, version = 3)
 @TypeConverters({SavedLevelsConverter.class})
 public abstract class LevelsDatabaseAndroid extends RoomDatabase implements LevelsDatabase {
     public abstract LevelsDaoAndroid levelsDao();

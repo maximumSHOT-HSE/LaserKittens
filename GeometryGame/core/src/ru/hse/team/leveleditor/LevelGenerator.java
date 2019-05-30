@@ -83,6 +83,10 @@ public class LevelGenerator {
                             break;
                     }
                 }
+
+                if (focusedPlayer == null) {
+                    focusedPlayer = createPlayer(10, 10, 3);
+                }
             }
         };
         return new LevelFactory();

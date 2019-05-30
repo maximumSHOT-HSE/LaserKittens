@@ -64,11 +64,6 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new RandomLabyrinthLevel(5, 5, 1, 3));
         abstractLevels.add(new QuizLevel());
         abstractLevels.add(new MultiplayerQuizLevel(laserKittens, null, 2));
-
-        List<SimpleEntity> list = new ArrayList<>();
-        list.add(new SimpleEntity(0, 0, 10, 10, 0, SimpleEntity.EntityType.PLAYER));
-        list.add(new SimpleEntity(20, 20, 1, 1, 0, SimpleEntity.EntityType.STAR));
-        abstractLevels.add(LevelGenerator.generate(new SavedLevel(list, 1, 1)));
     }
 
     public ChooseLevelScreen(LaserKittens laserKittens) {

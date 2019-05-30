@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
@@ -21,9 +23,10 @@ import java.util.List;
 
 import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.settings.about.PagedScrollPane;
 
-public class ChooseSavedLevelScreen implements Screen {
+public class LevelSavingScreen implements Screen {
 
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
@@ -31,8 +34,11 @@ public class ChooseSavedLevelScreen implements Screen {
     private Stage stage;
     private Menu menu;
 
-    public ChooseSavedLevelScreen(final LaserKittens laserKittens) {
+    private final SavedLevel savedLevel;
+
+    public LevelSavingScreen(final LaserKittens laserKittens, SavedLevel savedLevel) {
         this.laserKittens = laserKittens;
+        this.savedLevel = savedLevel;
 
         background = new Background(this.laserKittens.assetManager.manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
@@ -45,7 +51,7 @@ public class ChooseSavedLevelScreen implements Screen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.BACK) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.LEVEL_CREATE_SCREEN);
                 }
                 return true;
             }
@@ -95,9 +101,23 @@ public class ChooseSavedLevelScreen implements Screen {
     }
 
     @Override
-    public void dispose () {
+    public void dispose() {
         stage.dispose();
         background.dispose();
+    }
+
+    private List<SavedLevel> allLevels() {
+        List<List<SavedLevel>> levelsList = new ArrayList<>();
+        Thread t = new Thread(() -> {
+            levelsList.add(laserKittens.getSavedLevels().levelsDao().getAll());
+        });
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return levelsList.get(0);
     }
 
     private class Menu {
@@ -105,6 +125,7 @@ public class ChooseSavedLevelScreen implements Screen {
         private Skin skin = laserKittens.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 
         private Label titleLabel = new Label("Saved levels", new Label.LabelStyle(laserKittens.font, Color.WHITE));
+        private TextButton newLevelButton = new TextButton("New level", skin);
 
         List<TextButton> openLevelButtons = new ArrayList<>();
 
@@ -130,7 +151,8 @@ public class ChooseSavedLevelScreen implements Screen {
                 buttonsTable.row().pad(10, 10, 10, 10);
                 buttonsTable.add(button).width(buttonWidth).height(buttonHeight);
             }
-
+            buttonsTable.row().pad(10, 10, 10, 10);
+            buttonsTable.add(newLevelButton).width(buttonWidth).height(buttonHeight);
             scroll.addPage(buttonsTable);
 
             table.add(scroll).expand().fill();
@@ -138,15 +160,14 @@ public class ChooseSavedLevelScreen implements Screen {
         }
 
         private void initializeButtons() {
-            for (int i = 0; i < 10; i++) {
-                String levelName = "Empty";
-                TextButton button = new TextButton(levelName, skin);
-                button.getLabel().setFontScale(2);
 
-                openLevelButtons.add(button);
-            }
+            newLevelButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+
+                }
+            });
         }
 
     }
 }
-

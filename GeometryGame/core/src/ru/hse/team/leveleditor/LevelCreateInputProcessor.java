@@ -21,6 +21,7 @@ public class LevelCreateInputProcessor implements InputProcessor {
     private SimpleEntity.EntityType focusedType;
     private SimpleEntity currentEntity;
     private float currentEntityScale = 1;
+    private SimpleEntity player;
 
     private Tool tool;
 
@@ -74,6 +75,9 @@ public class LevelCreateInputProcessor implements InputProcessor {
                     SimpleEntity eraseEntity = levelCreateScreen.entityOnPoint(position.x, position.y);
                     if (eraseEntity != null) {
                         levelCreateScreen.removeEntity(eraseEntity);
+                        if (eraseEntity.getType() == SimpleEntity.EntityType.PLAYER) {
+                            player = null;
+                        }
                     }
                     break;
                 case CURSOR:
@@ -97,6 +101,11 @@ public class LevelCreateInputProcessor implements InputProcessor {
                     texture.getRegionWidth(), texture.getRegionHeight(),
                     0, focusedType);
             levelCreateScreen.addSimpleEntity(currentEntity);
+
+            if (currentEntity.getType() == SimpleEntity.EntityType.PLAYER) {
+                player = currentEntity;
+            }
+
         } else {
             currentEntity.setPositionX(position.x);
             currentEntity.setPositionY(position.y);
@@ -154,6 +163,10 @@ public class LevelCreateInputProcessor implements InputProcessor {
         this.focusedType = focusedType;
         currentEntity = null;
         tool = null;
+
+        if (focusedType == SimpleEntity.EntityType.PLAYER && player != null) {
+            currentEntity = player;
+        }
     }
 
     public boolean isDragging() {

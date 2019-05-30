@@ -69,6 +69,10 @@ public class LaserKittens extends Game {
         return googleServices;
     }
 
+    public LevelsDatabase getSavedLevels() {
+        return savedLevels;
+    }
+
     /**
      * Change screen.
      * Creates it if it is not created
