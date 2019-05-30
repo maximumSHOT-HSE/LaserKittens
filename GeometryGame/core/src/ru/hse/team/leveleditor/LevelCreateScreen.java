@@ -195,7 +195,7 @@ public class LevelCreateScreen implements Screen {
 
     private class EditorTools {
 
-        private Skin skin = new Skin(Gdx.files.internal("SKIN/glassy-ui.json"));
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
         private Table table = new Table();
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
@@ -208,11 +208,11 @@ public class LevelCreateScreen implements Screen {
         private ImageButton mirrorButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.MIRROR, Texture.class)));
         private ImageButton glassButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.TRANSPARENT_WALL, Texture.class)));
         private ImageButton starButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.STAR_2, Texture.class)));
-        private ImageButton rotateLeft = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CAT_1, Texture.class)));
-        private ImageButton rotateRight = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CAT_1, Texture.class)));
-        private ImageButton finishButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CAT_1, Texture.class)));
-        private ImageButton eraserButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CAT_1, Texture.class)));
-        private ImageButton cursorButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CAT_1, Texture.class)));
+        private ImageButton rotateLeft = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.ROTATE_LEFT, Texture.class)));
+        private ImageButton rotateRight = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.ROTATE_RIGHT, Texture.class)));
+        private ImageButton finishButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.OK, Texture.class)));
+        private ImageButton eraserButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.ERASER, Texture.class)));
+        private ImageButton cursorButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CURSOR, Texture.class)));
 
         public EditorTools(Stage stage) {
             table.setFillParent(true);
