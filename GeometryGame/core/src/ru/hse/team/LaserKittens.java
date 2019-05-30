@@ -33,7 +33,8 @@ public class LaserKittens extends Game {
     private final LevelsDatabase savedLevels;
     private final GoogleServicesAction googleServices;
 
-    public LaserKittens(StatisticsDatabase statisticsDatabase, LevelsDatabase savedLevels, GoogleServicesAction googleServicesAction) {
+    public LaserKittens(
+            StatisticsDatabase statisticsDatabase, LevelsDatabase savedLevels, GoogleServicesAction googleServicesAction) {
         super();
         this.statisticsDatabase = statisticsDatabase;
         this.savedLevels = savedLevels;
