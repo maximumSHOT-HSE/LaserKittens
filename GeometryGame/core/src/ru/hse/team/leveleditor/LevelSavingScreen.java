@@ -120,6 +120,18 @@ public class LevelSavingScreen implements Screen {
         return levelsList.get(0);
     }
 
+    private void addLevel() {
+       Thread t =  (new Thread(() -> {
+            laserKittens.getSavedLevels().levelsDao().insert(savedLevel);
+        }));
+       t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private class Menu {
         private Table table = new Table();
         private Skin skin = laserKittens.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
@@ -128,6 +140,8 @@ public class LevelSavingScreen implements Screen {
         private TextButton newLevelButton = new TextButton("New level", skin);
 
         List<TextButton> openLevelButtons = new ArrayList<>();
+
+        List<SavedLevel> levels = allLevels();
 
         public Menu(Stage stage) {
             stage.addActor(table);
@@ -164,7 +178,11 @@ public class LevelSavingScreen implements Screen {
             newLevelButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    savedLevel.id = levels.size();
+                    savedLevel.levelName = "AArgh";
+                    addLevel();
 
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
                 }
             });
         }

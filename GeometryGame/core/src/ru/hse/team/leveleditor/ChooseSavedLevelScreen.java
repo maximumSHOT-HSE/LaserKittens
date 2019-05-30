@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
@@ -21,6 +23,9 @@ import java.util.List;
 
 import ru.hse.team.Background;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.database.levels.SavedLevel;
+import ru.hse.team.database.levels.SimpleEntity;
+import ru.hse.team.game.GameScreen;
 import ru.hse.team.settings.about.PagedScrollPane;
 
 public class ChooseSavedLevelScreen implements Screen {
@@ -100,11 +105,27 @@ public class ChooseSavedLevelScreen implements Screen {
         background.dispose();
     }
 
+    private List<SavedLevel> allLevels() {
+        List<List<SavedLevel>> levelsList = new ArrayList<>();
+        Thread t = new Thread(() -> {
+            levelsList.add(laserKittens.getSavedLevels().levelsDao().getAll());
+        });
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return levelsList.get(0);
+    }
+
     private class Menu {
         private Table table = new Table();
         private Skin skin = laserKittens.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 
         private Label titleLabel = new Label("Saved levels", new Label.LabelStyle(laserKittens.font, Color.WHITE));
+
+        List<SavedLevel> levels = allLevels();
 
         List<TextButton> openLevelButtons = new ArrayList<>();
 
@@ -138,10 +159,18 @@ public class ChooseSavedLevelScreen implements Screen {
         }
 
         private void initializeButtons() {
-            for (int i = 0; i < 10; i++) {
-                String levelName = "Empty";
+            for (int i = 0; i < levels.size(); i++) {
+                String levelName = levels.get(i).levelName;
                 TextButton button = new TextButton(levelName, skin);
                 button.getLabel().setFontScale(2);
+
+                final int ii = i;
+                button.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        laserKittens.setScreen(new GameScreen(laserKittens, LevelGenerator.generate(levels.get(ii))));
+                    }
+                });
 
                 openLevelButtons.add(button);
             }

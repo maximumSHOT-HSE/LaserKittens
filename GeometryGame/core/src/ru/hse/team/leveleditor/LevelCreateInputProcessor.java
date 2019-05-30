@@ -100,6 +100,7 @@ public class LevelCreateInputProcessor implements InputProcessor {
             currentEntity = new SimpleEntity(position.x, position.y,
                     texture.getRegionWidth(), texture.getRegionHeight(),
                     0, focusedType);
+
             levelCreateScreen.addSimpleEntity(currentEntity);
 
             if (currentEntity.getType() == SimpleEntity.EntityType.PLAYER) {
