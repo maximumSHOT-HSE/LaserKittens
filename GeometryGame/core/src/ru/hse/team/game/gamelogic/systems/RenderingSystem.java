@@ -21,6 +21,7 @@ import java.util.Set;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.game.Mapper;
+import ru.hse.team.game.gamelogic.algorithms.Geometry;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
@@ -108,17 +109,6 @@ public class RenderingSystem extends SortedIteratingSystem {
         shapeRenderer.rectLine(from, to, 0.1f);
     }
 
-    private float distanceToStrip(float a, float left, float right) {
-        float distance = 0;
-        if (a < left) {
-            distance = Math.max(distance, left - a);
-        }
-        if (a > right) {
-            distance = Math.max(distance, a - right);
-        }
-        return distance;
-    }
-
     private void drawBulletTrack() {
         for (Entity entity : renderQueue) {
             BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
@@ -169,6 +159,40 @@ public class RenderingSystem extends SortedIteratingSystem {
         }
     }
 
+    private void drawVisibleTexture(TextureComponent textureComponent,
+                                    TransformComponent transformComponent) {
+        float width = textureComponent.region.getRegionWidth();
+        float height = textureComponent.region.getRegionHeight();
+        float originX = width / 2f;
+        float originY = height / 2f;
+
+        float pixelHalfWidth = pixelsToMeters(originX) * transformComponent.scale.x;
+        float pixelHalfHeight = pixelsToMeters(originY) * transformComponent.scale.y;
+
+        if (Geometry.distanceToSegment(camera.position.x,
+                transformComponent.position.x - pixelHalfWidth,
+                transformComponent.position.x + pixelHalfWidth) >
+                getScreenSizeInMeters().x * camera.zoom / 1.8) {
+            return;
+        }
+
+        if (Geometry.distanceToSegment(camera.position.y,
+                transformComponent.position.y - pixelHalfHeight,
+                transformComponent.position.y + pixelHalfHeight) >
+                getScreenSizeInMeters().y * camera.zoom / 1.8) {
+            return;
+        }
+
+        batch.draw(textureComponent.region,
+                transformComponent.position.x - originX,
+                transformComponent.position.y - originY,
+                originX, originY,
+                width, height,
+                pixelsToMeters(transformComponent.scale.x),
+                pixelsToMeters(transformComponent.scale.y),
+                transformComponent.rotation);
+    }
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -187,30 +211,8 @@ public class RenderingSystem extends SortedIteratingSystem {
             if (texture.region == null || transformComponent.isHidden) {
                 continue;
             }
-            float width = texture.region.getRegionWidth();
-            float height = texture.region.getRegionHeight();
-            float originX = width / 2f;
-            float originY = height / 2f;
 
-            float pixelHalfWidth = pixelsToMeters(originX) * transformComponent.scale.x;
-            float pixelHalfHeight = pixelsToMeters(originY) * transformComponent.scale.y;
-
-            if (distanceToStrip(camera.position.x, transformComponent.position.x - pixelHalfWidth,
-                    transformComponent.position.x + pixelHalfWidth) > getScreenSizeInMeters().x * camera.zoom / 1.8) {
-                continue;
-            }
-
-            if (distanceToStrip(camera.position.y, transformComponent.position.y - pixelHalfHeight,
-                    transformComponent.position.y + pixelHalfHeight) > getScreenSizeInMeters().y * camera.zoom / 1.8) {
-                continue;
-            }
-
-            batch.draw(texture.region,
-                    transformComponent.position.x - originX, transformComponent.position.y - originY,
-                    originX, originY,
-                    width, height,
-                    pixelsToMeters(transformComponent.scale.x), pixelsToMeters(transformComponent.scale.y),
-                    transformComponent.rotation);
+            drawVisibleTexture(texture, transformComponent);
         }
 
         batch.end();
@@ -261,23 +263,30 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     private void makeBordersForCamera(Vector3 position) {
-        float levelWidth = SCREEN_WIDTH * abstractLevel.getFactory().getLevelWidthInScreens();
-        float levelHeight = SCREEN_HEIGHT * abstractLevel.getFactory().getLevelHeightInScreens();
+        float levelWidth = SCREEN_WIDTH *
+                abstractLevel.getFactory().getLevelWidthInScreens();
+        float levelHeight = SCREEN_HEIGHT *
+                abstractLevel.getFactory().getLevelHeightInScreens();
 
         position.x = Math.max(position.x,
-                SCREEN_WIDTH * camera.zoom / 2 - SCREEN_WIDTH / (2 * camera.zoom));
+                SCREEN_WIDTH * camera.zoom / 2 -
+                        SCREEN_WIDTH / (2 * camera.zoom));
         position.y = Math.max(position.y,
-                SCREEN_HEIGHT * camera.zoom / 2 - SCREEN_HEIGHT / (2 * camera.zoom));
+                SCREEN_HEIGHT * camera.zoom / 2 -
+                        SCREEN_HEIGHT / (2 * camera.zoom));
         position.x = Math.min(position.x,
-                levelWidth - SCREEN_WIDTH* camera.zoom / 2 + SCREEN_WIDTH / (2 * camera.zoom));
+                levelWidth - SCREEN_WIDTH* camera.zoom / 2 +
+                        SCREEN_WIDTH / (2 * camera.zoom));
         position.y = Math.min(position.y,
-                levelHeight - SCREEN_HEIGHT * camera.zoom / 2 + SCREEN_HEIGHT / (2 * camera.zoom));
+                levelHeight - SCREEN_HEIGHT * camera.zoom / 2 +
+                        SCREEN_HEIGHT / (2 * camera.zoom));
     }
 
 
-    /** Moves camera with speed exponentially? from distance*/
+    /**
+     * Moves camera with speed exponentially? from distance
+     * */
     private void moveCamera(float delta) {
-
         delta = Math.max(delta, 0.1f); // when delta is near to zero problems occur
         final float speed = 2 * delta;
         final float ispeed = 1.0f-speed;

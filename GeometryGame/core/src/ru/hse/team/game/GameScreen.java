@@ -50,7 +50,6 @@ public class GameScreen implements Screen {
         world.setContactListener(new ContractProcessor(abstractLevel));
 
         renderingSystem = new RenderingSystem(abstractLevel, laserKittens);
-
         physicsSystem = new PhysicsSystem(world, abstractLevel);
         physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
@@ -95,10 +94,6 @@ public class GameScreen implements Screen {
             level.getGameStatus().stop();
             endGame();
         }
-    }
-
-    public LaserKittens getGame() {
-        return laserKittens;
     }
 
     @Override

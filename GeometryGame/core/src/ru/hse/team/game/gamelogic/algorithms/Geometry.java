@@ -76,4 +76,18 @@ public class Geometry {
         }
         return false;
     }
+
+    /**
+     * Finds distance from point to segment in one-dimensional space.
+     * */
+    public static float distanceToSegment(float x, float leftX, float rightX) {
+        float distance = 0;
+        if (x < leftX) {
+            distance = Math.max(distance, leftX - x);
+        }
+        if (x > rightX) {
+            distance = Math.max(distance, x - rightX);
+        }
+        return distance;
+    }
 }
