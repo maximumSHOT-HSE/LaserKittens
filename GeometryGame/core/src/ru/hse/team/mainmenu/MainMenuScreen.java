@@ -98,9 +98,15 @@ public class MainMenuScreen implements Screen {
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
-        private ImageButton loginButton = new ImageButton(new TextureRegionDrawable(parent.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
-        private ImageButton achievementsButton = new ImageButton(new TextureRegionDrawable(parent.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
-        private ImageButton rateButton = new ImageButton(new TextureRegionDrawable(parent.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+        private ImageButton loginButton = new ImageButton(
+                new TextureRegionDrawable(
+                        parent.assetManager.manager.get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
+        private ImageButton achievementsButton = new ImageButton(
+                new TextureRegionDrawable(
+                        parent.assetManager.manager.get(KittensAssetManager.CUP, Texture.class)));
+        private ImageButton rateButton = new ImageButton(
+                new TextureRegionDrawable(
+                        parent.assetManager.manager.get(KittensAssetManager.PLAY_MARKET, Texture.class)));
 
         public Menu(Stage stage) {
             table.setFillParent(true);

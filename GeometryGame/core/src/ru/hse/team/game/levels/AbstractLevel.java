@@ -15,7 +15,7 @@ import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
  * data related with level
  * (creating, drawing and storing data, e.g. score, times, etc.).
  * */
-abstract public class   AbstractLevel {
+abstract public class AbstractLevel {
 
     private static long RECHARGE_TIME = 500;
     private long lastShootTime = (long) -1e9;

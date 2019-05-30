@@ -18,6 +18,7 @@ public class AppPreferences {
     private static final String PREFS_NAME = "CATS ARE NICE";
     private static final String PREF_ACCELEROMETER = "ACCELEROMETER";
     private static final String PREF_SHOW_TIME = "SHOW_TIME";
+    private static final String PREF_FOG = "FOG";
 
     protected Preferences getPrefs() {
         if (preferences == null) {
@@ -53,8 +54,17 @@ public class AppPreferences {
         getPrefs().flush();
     }
 
+    public boolean isEnabledFog() {
+        return getPrefs().getBoolean(PREF_FOG, false);
+    }
+
+    public void setEnabledFog(boolean enabled) {
+        getPrefs().putBoolean(PREF_FOG, enabled);
+        getPrefs().flush();
+    }
+
     public boolean isShowTime() {
-        return getPrefs().getBoolean(PREF_SHOW_TIME, true);
+        return getPrefs().getBoolean(PREF_SHOW_TIME, false);
     }
 
     public void setShowTime(boolean value) {

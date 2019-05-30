@@ -57,15 +57,15 @@ public class GameScreen implements Screen {
         World world = levelFactory.getWorld();
         world.setContactListener(new ContractProcessor(abstractLevel));
 
-        renderingSystem = new RenderingSystem(this.laserKittens.batch, this.laserKittens.shapeRenderer, abstractLevel);
+        renderingSystem = new RenderingSystem(this.laserKittens.batch, this.laserKittens.shapeRenderer, abstractLevel, laserKittens);
         camera = renderingSystem.getCamera();
         camera.zoom = 1.5f;
         cameraMovingTo.set(camera.position);
 
-        physicsSystem = new PhysicsSystem(world);
+        physicsSystem = new PhysicsSystem(world, abstractLevel);
         physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
-        stateControlSystem = new StateControlSystem(world, engine, gameStatus);
+        stateControlSystem = new StateControlSystem(world, engine, gameStatus, abstractLevel);
 
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsSystem);
@@ -182,10 +182,16 @@ public class GameScreen implements Screen {
         for (Entity entity : engine.getEntities()) {
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
             if(bodyComponent != null) {
-                world.destroyBody(bodyComponent.body);
+                if (world != null) {
+                    if (bodyComponent.body != null) {
+                        world.destroyBody(bodyComponent.body);
+                    }
+                }
             }
         }
         engine.removeAllEntities();
-        world.dispose();
+        if (world != null) {
+            world.dispose();
+        }
     }
 }

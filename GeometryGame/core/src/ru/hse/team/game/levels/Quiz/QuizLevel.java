@@ -11,7 +11,7 @@ import ru.hse.team.game.levels.AbstractLevelFactory;
 public class QuizLevel extends AbstractLevel {
 
     private static final int WIDTH_SCREENS = 8;
-    private static final int HEIGHT_SCREENS = 9;
+    private static final int HEIGHT_SCREENS = 3;
 
     private QuizLevelFactory quizLevelFactory;
 
@@ -26,6 +26,7 @@ public class QuizLevel extends AbstractLevel {
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         quizLevelFactory = new QuizLevelFactory();
         quizLevelFactory.setLevelSize(WIDTH_SCREENS, HEIGHT_SCREENS);
+        quizLevelFactory.setAbstractLevel(this);
         quizLevelFactory.createLevel(engine, assetManager);
     }
 

@@ -12,6 +12,7 @@ import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
+import ru.hse.team.game.levels.AbstractLevel;
 
 /**
  * Processes objects state.
@@ -24,12 +25,14 @@ public class StateControlSystem extends IteratingSystem {
     private World world;
     private PooledEngine engine;
     private GameStatus gameStatus;
+    private AbstractLevel abstractLevel;
 
-    public StateControlSystem(World world, PooledEngine engine, GameStatus gameStatus) {
+    public StateControlSystem(World world, PooledEngine engine, GameStatus gameStatus, AbstractLevel abstractLevel) {
         super(Family.all(StateComponent.class).get());
         this.world = world;
         this.engine = engine;
         this.gameStatus = gameStatus;
+        this.abstractLevel = abstractLevel;
     }
 
     @Override
@@ -64,6 +67,10 @@ public class StateControlSystem extends IteratingSystem {
                     DoorComponent doorComponent = Mapper.doorComponent.get(door);
                     doorComponent.removeKey(entity);
                     if (doorComponent.remainingKeys() == 0) {
+                        if (abstractLevel != null && abstractLevel.getAbstractGraph() != null &&
+                                bodyComponent != null && bodyComponent.body != null) {
+                            abstractLevel.getAbstractGraph().updateGraphAfterRemoveRectangleBarrier(doorState.getId());
+                        }
                         doorState.finish();
                     }
                 }
