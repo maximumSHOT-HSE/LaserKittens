@@ -19,12 +19,8 @@ import ru.hse.team.game.levels.AbstractLevelFactory;
 public class LevelGenerator {
 
     public static AbstractLevel generate(SavedLevel savedLevel) {
-        Calendar nowCalendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = (SimpleDateFormat)SimpleDateFormat.getTimeInstance();
-        dateFormat.applyPattern("yyyy/MM/dd HH:mm");
-        String levelName = "Generated " + dateFormat.format(nowCalendar.getTime());
 
-        return new AbstractLevel(levelName) {
+        return new AbstractLevel(savedLevel.levelName) {
 
             private AbstractLevelFactory factory;
 

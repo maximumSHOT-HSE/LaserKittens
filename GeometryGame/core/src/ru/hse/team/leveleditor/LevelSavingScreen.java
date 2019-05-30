@@ -120,18 +120,6 @@ public class LevelSavingScreen implements Screen {
         return levelsList.get(0);
     }
 
-    private void addLevel() {
-       Thread t =  (new Thread(() -> {
-            laserKittens.getSavedLevels().levelsDao().insert(savedLevel);
-        }));
-       t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     private class Menu {
         private Table table = new Table();
         private Skin skin = laserKittens.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
@@ -178,14 +166,51 @@ public class LevelSavingScreen implements Screen {
             newLevelButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    savedLevel.id = levels.size();
-                    savedLevel.levelName = "AArgh";
-                    addLevel();
-
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
+                    savedLevel.id = 1;
+                    for (SavedLevel level : levels) {
+                        savedLevel.id = Math.max(savedLevel.id, level.id + 1);
+                    }
+                    savedLevel.levelName = null;
+                    AskName listener = new AskName(savedLevel, laserKittens);
+                    Gdx.input.getTextInput(listener, "Add a name to your level", "", null);
                 }
             });
         }
 
+    }
+
+
+    private static class AskName implements Input.TextInputListener {
+
+        private final SavedLevel level;
+        private final LaserKittens laserKittens;
+
+        public AskName(SavedLevel level, LaserKittens laserKittens) {
+            this.level = level;
+            this.laserKittens = laserKittens;
+        }
+
+        @Override
+        public void input (String text) {
+            level.levelName = text;
+            addLevel();
+            laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
+        }
+
+        @Override
+        public void canceled () {
+        }
+
+        private void addLevel() {
+            Thread t =  (new Thread(() -> {
+                laserKittens.getSavedLevels().levelsDao().insert(level);
+            }));
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
