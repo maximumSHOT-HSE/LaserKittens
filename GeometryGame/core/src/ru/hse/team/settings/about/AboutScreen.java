@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ru.hse.team.Background;
+import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 
 import java.util.Arrays;
@@ -41,7 +42,7 @@ public class AboutScreen implements Screen {
     public AboutScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
-        background = new Background(this.laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
+        background = new Background(this.laserKittens.getAssetManager().manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
         stage = new Stage(new ScreenViewport());
     }
 

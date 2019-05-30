@@ -63,7 +63,7 @@ public class ChooseLevelScreen implements Screen {
 
     public ChooseLevelScreen(LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-        background = new Background(this.laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
+        background = new Background(this.laserKittens.getAssetManager().manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
 
         stage = new Stage(new ScreenViewport());
 
