@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.hse.team.Background;
+import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.settings.about.PagedScrollPane;
@@ -122,7 +123,7 @@ public class LevelSavingScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager().manager.get("SKIN/glassy-ui.json", Skin.class);
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
 
         private Label titleLabel = new Label("Save level", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private TextButton newLevelButton = new TextButton("New level", skin);
