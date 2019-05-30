@@ -2,8 +2,6 @@ package ru.hse.team.settings.about;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,12 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import ru.hse.team.Background;
-import ru.hse.team.KittensAssetManager;
-import ru.hse.team.LaserKittens;
 
 import java.util.Arrays;
 import java.util.List;
+
+import ru.hse.team.Background;
+import ru.hse.team.KittensAssetManager;
+import ru.hse.team.LaserKittens;
 
 /**
  * Screen with general information about the game.
@@ -36,14 +35,13 @@ public class AboutScreen implements Screen {
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-    private Stage stage;
+    private Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
 
     public AboutScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-
-        background = new Background(this.laserKittens.getAssetManager().manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
-        stage = new Stage(new ScreenViewport());
+        background = new Background(this.laserKittens.getAssetManager()
+                .manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
     }
 
     @Override
@@ -74,7 +72,7 @@ public class AboutScreen implements Screen {
         camera.update(); // good practise -- update camera one time per frame
 
         laserKittens.getBatch().begin();
-        background.draw(laserKittens.getBatch(), camera);
+        background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
@@ -115,25 +113,37 @@ public class AboutScreen implements Screen {
     private class Menu {
         private Table table = new Table();
 
-        private Skin skin = new Skin(Gdx.files.internal("SKIN/glassy-ui.json"));
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN);
         private Label titleLabel = new Label("About", skin);
         private final TextButton backButton = new TextButton("Back", skin);
 
-        private final Label libgdxLicense = new Label("This game uses libGDX framework", skin);
-        private final Label libgdxLink = new Label("https://github.com/libgdx/libgdx", skin, "black");
-        private final Label libgdxApacheLink = new Label(" Apache 2 License", skin, "black");
+        private final Label libgdxLicense =
+                new Label("This game uses libGDX framework", skin);
+        private final Label libgdxLink =
+                new Label("https://github.com/libgdx/libgdx", skin, "black");
+        private final Label libgdxApacheLink =
+                new Label(" Apache 2 License", skin, "black");
 
-        private final Label ashleyLicense = new Label("Ashley entity system", skin);
-        private final Label ashleyLink = new Label("https://github.com/libgdx/ashley", skin, "black");
-        private final Label ashleyApacheLink = new Label(" Apache 2 License", skin, "black");
+        private final Label ashleyLicense =
+                new Label("Ashley entity system", skin);
+        private final Label ashleyLink =
+                new Label("https://github.com/libgdx/ashley", skin, "black");
+        private final Label ashleyApacheLink =
+                new Label(" Apache 2 License", skin, "black");
 
-        private final Label skinLicense = new Label("Skin by", skin);
-        private final Label skinLink = new Label("Raymond \"Raeleus\" Buckley", skin, "black");
-        private final Label skinCC4Link = new Label("CC BY 4.0", skin, "black");
+        private final Label skinLicense =
+                new Label("Skin by", skin);
+        private final Label skinLink =
+                new Label("Raymond \"Raeleus\" Buckley", skin, "black");
+        private final Label skinCC4Link =
+                new Label("CC BY 4.0", skin, "black");
 
-        private final Label laserSoundLicense = new Label("Laser sound from freesound by", skin);
-        private final Label laserSoundLink = new Label("bubaproducer", skin, "black");
-        private final Label laserSoundLicenseLink = new Label("CC BY 3.0", skin, "black");
+        private final Label laserSoundLicense =
+                new Label("Laser sound from freesound by", skin);
+        private final Label laserSoundLink =
+                new Label("bubaproducer", skin, "black");
+        private final Label laserSoundLicenseLink =
+                new Label("CC BY 3.0", skin, "black");
 
         List<List<Label>> listOfLicenses = Arrays.asList(
                 Arrays.asList(libgdxLicense, libgdxLink, libgdxApacheLink),
@@ -144,7 +154,6 @@ public class AboutScreen implements Screen {
 
         public Menu(Stage stage) {
             table.setFillParent(true);
-            //table.setDebug(true);
             stage.addActor(table);
 
             titleLabel.setFontScale(3f);
@@ -171,7 +180,8 @@ public class AboutScreen implements Screen {
             table.add(scroll).expand().fill();
 
             table.row().pad(30, 10, 10, 10);
-            table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.15f).colspan(2).expand();
+            table.add(backButton).width(Gdx.graphics.getWidth() * 0.35f)
+                    .height(Gdx.graphics.getHeight() * 0.15f).colspan(2).expand();
 
             setListeners();
         }
@@ -216,7 +226,8 @@ public class AboutScreen implements Screen {
             skinLink.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    Gdx.net.openURI("https://ray3k.wordpress.com/software/SKIN-composer-for-libgdx/");
+                    Gdx.net.openURI(
+                            "https://ray3k.wordpress.com/software/SKIN-composer-for-libgdx/");
                 }
             });
 
@@ -240,8 +251,6 @@ public class AboutScreen implements Screen {
                     Gdx.net.openURI("https://creativecommons.org/licenses/by/3.0/");
                 }
             });
-
         }
-
     }
 }

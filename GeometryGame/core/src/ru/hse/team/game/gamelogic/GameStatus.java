@@ -27,7 +27,9 @@ public class GameStatus {
     private boolean started = false;
     private boolean stopped = false;
 
-    private OrthographicCamera statusCamera = new OrthographicCamera(RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
+    private OrthographicCamera statusCamera =
+            new OrthographicCamera(
+                    RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
 
     public GameStatus(GameScreen gameScreen, BitmapFont font, SpriteBatch batch) {
         this.gameScreen = gameScreen;
@@ -119,6 +121,7 @@ public class GameStatus {
         return starsInLevel;
     }
 
+    // TODO move this method to rendering system
     public void draw() {
 
         if (gameScreen.getGame().getPreferences().isShowTime()) {
@@ -127,7 +130,11 @@ public class GameStatus {
 
             batch.setProjectionMatrix(statusCamera.combined);
             batch.begin();
-            font.draw(batch, getTimeStamp(timeGone()), -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2, statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2);
+            font.draw(
+                    batch,
+                    getTimeStamp(timeGone()),
+                    -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2,
+                    statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2);
             batch.end();
         }
     }

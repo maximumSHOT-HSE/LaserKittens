@@ -2,8 +2,6 @@ package ru.hse.team.game.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -43,11 +41,8 @@ public class ChooseLevelScreen implements Screen {
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-
-    private Stage stage;
+    private Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
-
-    private InputMultiplexer inputMultiplexer;
 
     private java.util.List<AbstractLevel> abstractLevels = new ArrayList<>();
     private int currentSection;
@@ -63,11 +58,11 @@ public class ChooseLevelScreen implements Screen {
 
     public ChooseLevelScreen(LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-        background = new Background(this.laserKittens.getAssetManager().manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
-
-        stage = new Stage(new ScreenViewport());
-
+        background = new Background(this.laserKittens.getAssetManager().manager
+                .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
         fillLevels();
+
+        // +3 for statistics, level editor and saved levels TODO
         currentSection = abstractLevels.size() + 3;
 
         menu = new Menu();
@@ -103,7 +98,7 @@ public class ChooseLevelScreen implements Screen {
         camera.update();
 
         laserKittens.getBatch().begin();
-        background.draw(laserKittens.getBatch(), camera);
+        background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
 
         menu.render();
@@ -139,11 +134,14 @@ public class ChooseLevelScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN);
+        private Skin skin = laserKittens.getAssetManager()
+                .manager.get(KittensAssetManager.SKIN);
         private SlidingPane slidingPane;
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
-        private Texture naviActive = laserKittens.getAssetManager().manager.get(KittensAssetManager.LEVEL_INDICATOR_ACTIVE_PNG);
-        private Texture naviPassive = laserKittens.getAssetManager().manager.get(KittensAssetManager.LEVEL_INDICATOR_PASSIVE_PNG);
+        private Texture naviActive = laserKittens.getAssetManager().manager
+                .get(KittensAssetManager.LEVEL_INDICATOR_ACTIVE_PNG);
+        private Texture naviPassive = laserKittens.getAssetManager().manager
+                .get(KittensAssetManager.LEVEL_INDICATOR_PASSIVE_PNG);
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
 
@@ -152,14 +150,14 @@ public class ChooseLevelScreen implements Screen {
          * next time.
          * */
         public void saveState() {
-            currentSection = slidingPane.currentSectionId;
+            currentSection = slidingPane.getCurrentSectionId();
         }
 
         public void render() {
             saveState();
             laserKittens.getBatch().begin();
 
-            int levelsCount = abstractLevels.size() + 3;
+            int levelsCount = abstractLevels.size() + 3; // TODO (why + 3?)
 
             float h = naviActive.getHeight();
             float w = naviActive.getWidth();
@@ -182,11 +180,13 @@ public class ChooseLevelScreen implements Screen {
         private long getBestTime(String levelName) {
             long[] bestTime = new long[1];
             Thread queryThread = (new Thread(() -> {
-                LevelStatistics statistics = laserKittens.getStatisticsDatabase().statisticsDao().getBestByLevelName(levelName);
+                LevelStatistics statistics = laserKittens
+                        .getStatisticsDatabase().statisticsDao()
+                        .getBestByLevelName(levelName);
                 if (statistics != null) {
                     bestTime[0] = TimeUnit.NANOSECONDS.toMillis(statistics.timeNano);
                 } else {
-                    bestTime[0] = 1000_000_000;
+                    bestTime[0] = Long.MAX_VALUE;
                 }
             }));
             queryThread.start();
@@ -201,7 +201,9 @@ public class ChooseLevelScreen implements Screen {
         private Label getBestResult(String levelName) {
             Label[] label = new Label[1];
             Thread queryThread = (new Thread(() -> {
-                LevelStatistics statistics = laserKittens.getStatisticsDatabase().statisticsDao().getBestByLevelName(levelName);
+                LevelStatistics statistics =
+                        laserKittens.getStatisticsDatabase()
+                                .statisticsDao().getBestByLevelName(levelName);
                 if (statistics != null) {
                     label[0] = new Label(GameStatus.getTimeStamp(statistics.timeNano), skin);
                 }
@@ -217,9 +219,12 @@ public class ChooseLevelScreen implements Screen {
 
         private void addDumpLabels(Table table) {
             table.row();
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
         }
 
         private Table statisticsTable() {
@@ -227,19 +232,20 @@ public class ChooseLevelScreen implements Screen {
             statisticsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    currentSection = slidingPane.currentSectionId;
-                    direction = slidingPane.direction;
+                    currentSection = slidingPane.getCurrentSectionId();
+                    direction = slidingPane.getDirection();
                     laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.STATISTICS_SCREEN);
                 }
             });
             ImageButton scoreButton = new ImageButton(
-                    new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CUP, Texture.class)));
+                    new TextureRegionDrawable(laserKittens.getAssetManager().manager
+                            .get(KittensAssetManager.CUP, Texture.class)));
             scoreButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    currentSection = slidingPane.currentSectionId;
-                    direction = slidingPane.direction;
-                    laserKittens.getGoogleServices().submitScore(getBestTime("Quiz"));
+                    currentSection = slidingPane.getCurrentSectionId();
+                    direction = slidingPane.getDirection();
+                    laserKittens.getGoogleServices().submitScore(getBestTime("Quiz")); // TODO why quiz only?
                 }
             });
 
@@ -249,13 +255,18 @@ public class ChooseLevelScreen implements Screen {
 
             addDumpLabels(table);
             table.row();
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
             table.add(statisticsButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
             table.row();
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(scoreButton).width(Gdx.graphics.getWidth() * 0.2f).height(Gdx.graphics.getHeight() * 0.1f);
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(scoreButton).width(Gdx.graphics.getWidth() * 0.2f)
+                    .height(Gdx.graphics.getHeight() * 0.1f);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
             return table;
         }
 
@@ -264,8 +275,8 @@ public class ChooseLevelScreen implements Screen {
             statisticsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    currentSection = slidingPane.currentSectionId;
-                    direction = slidingPane.direction;
+                    currentSection = slidingPane.getCurrentSectionId();
+                    direction = slidingPane.getDirection();
                     laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.LEVEL_CREATE_SCREEN);
                 }
             });
@@ -276,9 +287,11 @@ public class ChooseLevelScreen implements Screen {
 
             addDumpLabels(table);
             table.row();
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
             table.add(statisticsButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
             addDumpLabels(table);
             return table;
         }
@@ -288,8 +301,8 @@ public class ChooseLevelScreen implements Screen {
             savedLevelsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    currentSection = slidingPane.currentSectionId;
-                    direction = slidingPane.direction;
+                    currentSection = slidingPane.getCurrentSectionId();
+                    direction = slidingPane.getDirection();
                     laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
                 }
             });
@@ -299,9 +312,12 @@ public class ChooseLevelScreen implements Screen {
 
             addDumpLabels(table);
             table.row();
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(savedLevelsButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(savedLevelsButton)
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(new Label("", skin))
+                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
             table.row();
 
             addDumpLabels(table);
@@ -310,7 +326,6 @@ public class ChooseLevelScreen implements Screen {
         }
 
         public void show(Stage stage) {
-            // should be created here. Specific of implementation.
             slidingPane = new SlidingPane();
             slidingPane.addWidget(statisticsTable());
 
@@ -321,8 +336,8 @@ public class ChooseLevelScreen implements Screen {
                 levelButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        currentSection = slidingPane.currentSectionId;
-                        direction = slidingPane.direction;
+                        currentSection = slidingPane.getCurrentSectionId();
+                        direction = slidingPane.getDirection();
                         GameScreen gameScreen = new GameScreen(laserKittens, abstractLevel);
                         laserKittens.setScreen(gameScreen);
                     }
@@ -337,13 +352,16 @@ public class ChooseLevelScreen implements Screen {
 
                 addDumpLabels(table);
                 table.row();
-                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                table.add(new Label("", skin))
+                        .width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.add(levelButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
-                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                table.add(new Label("", skin))
+                        .width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.row();
                 if (statusLabel != null) {
                     statusLabel.setFontScale(5f);
-                    table.add(statusLabel).width(0.6f * screenWidth).height(0.2f * screenHeight).align(Align.center).colspan(3);
+                    table.add(statusLabel).width(0.6f * screenWidth)
+                            .height(0.2f * screenHeight).align(Align.center).colspan(3);
                     statusLabel.setAlignment(Align.center);
                     table.row().pad(5, 10, 5, 10);
                 }

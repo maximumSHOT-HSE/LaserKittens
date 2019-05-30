@@ -32,10 +32,12 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private AbstractLevel level;
     private GameStatus gameStatus;
+
+    private PooledEngine engine;
+
     private GameScreenInputProcessor inputProcessor;
     private GestureProcessor gestureProcessor;
     private InputMultiplexer inputMultiplexer;
-    private PooledEngine engine;
 
     private RenderingSystem renderingSystem;
     private PhysicsSystem physicsSystem;

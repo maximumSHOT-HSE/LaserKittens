@@ -27,14 +27,14 @@ public class MainMenuScreen implements Screen {
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-    private Stage stage;
+    private Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
 
     public MainMenuScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-
-        background = new Background(this.laserKittens.getAssetManager().manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
-        stage = new Stage(new ScreenViewport());
+        background = new Background(
+                this.laserKittens.getAssetManager().manager
+                        .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
     }
 
     @Override
@@ -42,7 +42,6 @@ public class MainMenuScreen implements Screen {
         stage.clear();
         menu = new Menu(stage);
         Gdx.input.setInputProcessor(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         laserKittens.getBatch().setProjectionMatrix(camera.combined);
@@ -52,13 +51,10 @@ public class MainMenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
         laserKittens.getBatch().begin();
-        background.draw(laserKittens.getBatch(), camera);
+        background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -91,26 +87,30 @@ public class MainMenuScreen implements Screen {
     }
 
     private class Menu {
+
         private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
-        private TextButton levels = new TextButton("Levels", skin);
+        private Skin skin =
+                laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
+        private TextButton levels = new TextButton("Singleplayer", skin);
         private TextButton multiplayer = new TextButton("Multiplayer", skin);
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
         private ImageButton loginButton = new ImageButton(
                 new TextureRegionDrawable(
-                        laserKittens.getAssetManager().manager.get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
+                        laserKittens.getAssetManager().manager
+                                .get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
         private ImageButton achievementsButton = new ImageButton(
                 new TextureRegionDrawable(
-                        laserKittens.getAssetManager().manager.get(KittensAssetManager.CUP, Texture.class)));
+                        laserKittens.getAssetManager().manager
+                                .get(KittensAssetManager.CUP, Texture.class)));
         private ImageButton rateButton = new ImageButton(
                 new TextureRegionDrawable(
-                        laserKittens.getAssetManager().manager.get(KittensAssetManager.PLAY_MARKET, Texture.class)));
+                        laserKittens.getAssetManager().manager
+                                .get(KittensAssetManager.PLAY_MARKET, Texture.class)));
 
         public Menu(Stage stage) {
             table.setFillParent(true);
-            //table.setDebug(true);
             stage.addActor(table);
 
             levels.getLabel().setFontScale(2f);

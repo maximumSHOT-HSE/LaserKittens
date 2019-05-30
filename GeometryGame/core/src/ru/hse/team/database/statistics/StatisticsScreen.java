@@ -27,19 +27,21 @@ import ru.hse.team.LaserKittens;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.settings.about.PagedScrollPane;
 
+/**
+ * Screen for showing statistics of all levels playings best time and dates.
+ * */
 public class StatisticsScreen implements Screen {
 
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-    private Stage stage;
+    private Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
 
     public StatisticsScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-
-        background = new Background(laserKittens.getAssetManager().manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
-        stage = new Stage(new ScreenViewport());
+        background = new Background(laserKittens.getAssetManager().manager
+                .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
     }
 
     @Override
@@ -71,7 +73,7 @@ public class StatisticsScreen implements Screen {
         camera.update();
 
         laserKittens.getBatch().begin();
-        background.draw(laserKittens.getBatch(), camera);
+        background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
@@ -108,26 +110,27 @@ public class StatisticsScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
-        private Label titleLabel = new Label("Statistics", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+        private Skin skin = laserKittens.getAssetManager()
+                .manager.get(KittensAssetManager.SKIN, Skin.class);
+        private Label titleLabel = new Label("Statistics",
+                new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private final TextButton backButton = new TextButton("Back", skin);
-
-        List< List<Label> > listOfStatistics;
+        private List<List<Label>> listOfStatistics = new ArrayList<>();
 
         private List<Label> levelStatisticsToLabels(LevelStatistics levelStatistics) {
             List<Label> statisticsLabels = new ArrayList<>();
             statisticsLabels.add(new Label(levelStatistics.date, skin));
             statisticsLabels.add(new Label(levelStatistics.levelName, skin));
-            statisticsLabels.add(new Label(GameStatus.getTimeStamp(levelStatistics.timeNano), skin));
+            statisticsLabels.add(new Label(
+                    GameStatus.getTimeStamp(levelStatistics.timeNano), skin));
             return statisticsLabels;
         }
 
         private List<LevelStatistics> getAllLevels() {
             List<List<LevelStatistics>> allLevels = new ArrayList<>(1);
-            Thread queryThread = new Thread(() ->{
-                allLevels.add(laserKittens.getStatisticsDatabase().statisticsDao().getAll());
-            });
+            Thread queryThread = new Thread(() ->
+                    allLevels.add(laserKittens
+                            .getStatisticsDatabase().statisticsDao().getAll()));
             queryThread.start();
             try {
                 queryThread.join();
@@ -138,13 +141,9 @@ public class StatisticsScreen implements Screen {
         }
 
         public Menu(Stage stage) {
-
-            List<List<Label>> list = new ArrayList<>();
             for (LevelStatistics levelStatistics : getAllLevels()) {
-                List<Label> labels = levelStatisticsToLabels(levelStatistics);
-                list.add(labels);
+                listOfStatistics.add(levelStatisticsToLabels(levelStatistics));
             }
-            listOfStatistics = list;
 
             table.setFillParent(true);
             stage.addActor(table);
@@ -173,7 +172,9 @@ public class StatisticsScreen implements Screen {
             table.add(scroll).expand().fill();
 
             table.row().pad(30, 10, 10, 10);
-            table.add(backButton).width(Gdx.graphics.getWidth() * 0.25f).height(Gdx.graphics.getHeight() * 0.1f).colspan(2).expand();
+            table.add(backButton).
+                    width(Gdx.graphics.getWidth() * 0.25f)
+                    .height(Gdx.graphics.getHeight() * 0.1f).colspan(2).expand();
 
             setListeners();
         }

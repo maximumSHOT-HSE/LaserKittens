@@ -62,7 +62,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
         camera.update();
 
         parent.getBatch().begin();
-        background.draw(parent.getBatch(), camera);
+        background.draw(parent.getBatch());
         float Y = RenderingSystem.getScreenSizeInPixels().y * 0.8f;
         for (String s : msg) {
             parent.getFont().draw(parent.getBatch(), s, RenderingSystem.getScreenSizeInPixels().x / 2, Y);
