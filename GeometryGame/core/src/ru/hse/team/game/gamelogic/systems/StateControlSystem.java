@@ -7,7 +7,6 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.physics.box2d.World;
 
 import ru.hse.team.game.Mapper;
-import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
@@ -25,14 +24,12 @@ public class StateControlSystem extends IteratingSystem {
     private World world;
     private PooledEngine engine;
 
-    private GameStatus gameStatus;
     private AbstractLevel abstractLevel;
 
-    public StateControlSystem(World world, PooledEngine engine, GameStatus gameStatus, AbstractLevel abstractLevel) {
+    public StateControlSystem(World world, PooledEngine engine, AbstractLevel abstractLevel) {
         super(Family.all(StateComponent.class).get());
         this.world = world;
         this.engine = engine;
-        this.gameStatus = gameStatus;
         this.abstractLevel = abstractLevel;
     }
 
@@ -41,13 +38,7 @@ public class StateControlSystem extends IteratingSystem {
         for (Entity entity : getEntities()) {
             processEntity(entity, delta);
         }
-
-        gameStatus.update(delta);
-        if (gameStatus.readyToFinish()) {
-            gameStatus.stop();
-            gameStatus.getGameScreen().endGame();
-        }
-        gameStatus.draw();
+        abstractLevel.getGameStatus().update(delta);
     }
 
     @Override
@@ -60,7 +51,7 @@ public class StateControlSystem extends IteratingSystem {
 
             if (typeComponent != null) {
                 if (typeComponent.type == TypeComponent.Type.STAR) {
-                    gameStatus.removeStar();
+                    abstractLevel.getGameStatus().removeStar();
                 }
                 if (typeComponent.type == TypeComponent.Type.KEY) {
                     Entity door = Mapper.keyComponent.get(entity).door;
@@ -85,7 +76,7 @@ public class StateControlSystem extends IteratingSystem {
         if (stateComponent.get() == StateComponent.State.JUST_CREATED) {
             stateComponent.set(StateComponent.State.NORMAL);
             if (typeComponent != null && typeComponent.type == TypeComponent.Type.STAR) {
-                gameStatus.addStar();
+                abstractLevel.getGameStatus().addStar();
             }
         }
     }

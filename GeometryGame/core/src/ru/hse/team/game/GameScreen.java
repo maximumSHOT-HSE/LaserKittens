@@ -14,7 +14,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.game.gameending.GameEndingScreen;
 import ru.hse.team.game.gamelogic.GameScreenInputProcessor;
-import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.GestureProcessor;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
@@ -30,8 +29,8 @@ public class GameScreen implements Screen {
 
     private final LaserKittens laserKittens;
     private OrthographicCamera camera;
+
     private AbstractLevel level;
-    private GameStatus gameStatus;
 
     private PooledEngine engine;
 
@@ -49,7 +48,6 @@ public class GameScreen implements Screen {
 
     public GameScreen(LaserKittens laserKittens, AbstractLevel abstractLevel) {
         level = abstractLevel;
-        gameStatus = new GameStatus(this, laserKittens.getFont(), laserKittens.getBatch());
 
         this.laserKittens = laserKittens;
 
@@ -67,7 +65,7 @@ public class GameScreen implements Screen {
         physicsSystem = new PhysicsSystem(world, abstractLevel);
         physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
-        stateControlSystem = new StateControlSystem(world, engine, gameStatus, abstractLevel);
+        stateControlSystem = new StateControlSystem(world, engine, abstractLevel);
 
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsSystem);
@@ -75,7 +73,7 @@ public class GameScreen implements Screen {
         engine.addSystem(bulletSystem);
         engine.addSystem(stateControlSystem);
 
-        inputProcessor = new GameScreenInputProcessor(this.laserKittens, abstractLevel, camera, gameStatus);
+        inputProcessor = new GameScreenInputProcessor(this.laserKittens, abstractLevel, camera);
         gestureProcessor = new GestureProcessor(renderingSystem, inputProcessor, abstractLevel);
         inputMultiplexer = new InputMultiplexer(
                 new GestureDetector(gestureProcessor),
@@ -83,7 +81,7 @@ public class GameScreen implements Screen {
     }
 
     public void endGame() {
-        laserKittens.setScreen(new GameEndingScreen(laserKittens, level, gameStatus));
+        laserKittens.setScreen(new GameEndingScreen(laserKittens, level));
         dispose();
     }
 
@@ -151,6 +149,11 @@ public class GameScreen implements Screen {
         inputProcessor.moveWithAccelerometer(delta);
 
         moveCamera(delta);
+
+        if (level.getGameStatus().readyToFinish()) {
+            level.getGameStatus().stop();
+            endGame();
+        }
     }
 
     public OrthographicCamera getCamera() {

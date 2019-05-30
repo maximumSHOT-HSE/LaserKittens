@@ -249,9 +249,9 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createKey(Vector2 center, float width, float height, Entity door) {
-        if (abstractLevel.getAbstractGraph() != null) {
-            abstractLevel.getAbstractGraph().visit(center);
-        }
+//        if (abstractLevel.getAbstractGraph() != null) {
+//            abstractLevel.getAbstractGraph().visit(center);
+//        }
         Texture texture = manager.manager.get(KittensAssetManager.KEY, Texture.class);
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height))

@@ -8,6 +8,7 @@ import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.MessageCreator;
+import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
 
 /**
@@ -26,6 +27,7 @@ abstract public class AbstractLevel {
      */
     private String name;
     private AbstractGraph abstractGraph;
+    private GameStatus gameStatus = new GameStatus();
 
     public AbstractLevel(String name) {
         this.name = name;
@@ -81,5 +83,9 @@ abstract public class AbstractLevel {
 
     public void setAbstractGraph(AbstractGraph abstractGraph) {
         this.abstractGraph = abstractGraph;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
     }
 }

@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.Comparator;
@@ -60,7 +59,6 @@ public class RenderingSystem extends SortedIteratingSystem {
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private ImmutableArray<Entity> renderQueue;
-    private Comparator<Entity> comparator = new ZComparator();
     private OrthographicCamera camera;
     private float cameraWaiting = 0;
     private final LaserKittens laserKittens;
@@ -101,13 +99,6 @@ public class RenderingSystem extends SortedIteratingSystem {
         shapeRenderer.rectLine(from, to, 0.1f);
     }
 
-    private float distance2D(Vector3 positionA, Vector3 positionB) {
-        return (float)Math.sqrt((positionA.x - positionB.x) * (positionA.x - positionB.x) + (positionA.y - positionB.y) * (positionA.y - positionB.y));
-    }
-    private float length2D(Vector2 a) {
-        return (float)Math.sqrt(a.x * a.x + a.y * a.y);
-    }
-
     private float distanceToStrip(float a, float left, float right) {
         float distance = 0;
         if (a < left) {
@@ -146,7 +137,6 @@ public class RenderingSystem extends SortedIteratingSystem {
                     Body keyBody = Mapper.bodyComponent.get(keyEntity).body;
                     Vector2 keyPosition = keyBody.getPosition();
                     drawSegment(doorCenterPosition, keyPosition, shapeRenderer, Color.YELLOW);
-                    System.out.println("HINT KEY (" + keyPosition.x + ", " + keyPosition.y + ")");
                 }
             }
         }
@@ -229,6 +219,10 @@ public class RenderingSystem extends SortedIteratingSystem {
             batch.begin();
             drawFog();
             batch.end();
+        }
+
+        if (laserKittens.getPreferences().isShowTime()) {
+            abstractLevel.getGameStatus().draw(batch, laserKittens.getFont());
         }
     }
 
