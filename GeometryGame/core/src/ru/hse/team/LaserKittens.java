@@ -145,7 +145,7 @@ public class LaserKittens extends Game {
         getAssetManager().loadEverything();
         getAssetManager().manager.finishLoading();
 
-        font = getAssetManager().manager.get(KittensAssetManager.font, BitmapFont.class);
+        font = getAssetManager().manager.get(KittensAssetManager.FONT, BitmapFont.class);
 
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }

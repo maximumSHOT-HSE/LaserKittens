@@ -137,7 +137,7 @@ public class ChooseSavedLevelScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager().manager.get("skin/glassy-ui.json", Skin.class);
+        private Skin skin = laserKittens.getAssetManager().manager.get("SKIN/glassy-ui.json", Skin.class);
 
         private Label titleLabel = new Label("Saved levels", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
@@ -167,7 +167,7 @@ public class ChooseSavedLevelScreen implements Screen {
                 buttonsTable.row().pad(10, 10, 10, 10);
                 buttonsTable.add(button).width(buttonWidth).height(buttonHeight);
 
-                ImageButton binButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.Cat1, Texture.class)));
+                ImageButton binButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CAT_1, Texture.class)));
                 buttonsTable.add(binButton).width(0.15f * Gdx.graphics.getWidth()).height(0.15f * Gdx.graphics.getHeight());
 
                 final int ii = i;

@@ -11,75 +11,48 @@ public class KittensAssetManager {
 
     public final AssetManager manager = new AssetManager();
 
-    //Textures
-    public static final String badlogic = "badlogic.jpg";
-    public static final String levelIndicatorActive = "levelIndicatorActive.png";
-    public static final String levelIndicatorPassive = "levelIndicatorPassive.png";
-    //Cats
-    public static final String Cat1 = "Cat1.png";
-    public static final String Cat2 = "Cat2.png";
-    public static final String Cat3 = "Cat3.png";
-    //Stars
-    public static final String Star1 = "Star1.png";
-    public static final String Star2 = "Star2.png";
-
-    // Pointer
-    public static final String Pointer = "pointer.png";
-
-    // Key
+    public static final String BADLOGIC = "badlogic.jpg";
+    public static final String LEVEL_INDICATOR_ACTIVE_PNG = "blue-background.jpg";
+    public static final String LEVEL_INDICATOR_PASSIVE_PNG = "levelIndicatorActive.png";
+    public static final String CAT_1 = "Cat1.png";
+    public static final String CAT_2 = "Cat2.png";
+    public static final String CAT_3 = "Cat3.png";
+    public static final String STAR_1 = "Star1.png";
+    public static final String STAR_2 = "Star2.png";
+    public static final String POINTER = "pointer.png";
     public static final String KEY = "key.png";
-
-    // Tumblers
     public static final String YELLOW_TUMBLER = "yellow-tumbler.png";
     public static final String BLUE_TUMBLER = "blue-tumbler.png";
-
-    // Question
-    public static final String Question = "question.png";
-
-    // fog
+    public static final String QUESTION = "question.png";
     public static final String FOG = "fog.png";
-
-    //BackGrounds
-    public static final String blueBackground = "blue-background.jpg";
+    public static final String BLUE_BACKGROUND = "blue-background.jpg";
     public static final String ICE_WALL = "ice-wall.png";
     public static final String TRANSPARENT_WALL = "transparent-wall.png";
     public static final String MIRROR = "mirror.png";
     public static final String DOOR = "door.png";
-
-    // google sign in
     public static final String GOOGLE_SIGN_IN = "google-sign-in.png";
-
-    // achievements
     public static final String CUP = "cup.png";
-
-    // play market
     public static final String PLAY_MARKET = "play-market.png";
+    public static final String SKIN = "skin/glassy-ui.json";
+    public static final String LASER_SOUND = "sounds/laser-shot.wav";
+    public static final String FONT = "skin/gameFont.fnt";
 
-    //Skin
-    public static final String skin = "skin/glassy-ui.json";
-
-    //Sounds
-    public static final String laserSound = "sounds/laser-shot.wav";
-
-    //Font
-    public static final String font = "skin/gameFont.fnt";
-
-    public void loadImages() {
-        manager.load(badlogic, Texture.class);
-        manager.load(blueBackground, Texture.class);
+    private void loadImages() {
+        manager.load(BADLOGIC, Texture.class);
+        manager.load(BLUE_BACKGROUND, Texture.class);
         manager.load(ICE_WALL, Texture.class);
         manager.load(TRANSPARENT_WALL, Texture.class);
         manager.load(MIRROR, Texture.class);
         manager.load(DOOR, Texture.class);
-        manager.load(Cat1, Texture.class);
-        manager.load(Cat2, Texture.class);
-        manager.load(Cat3, Texture.class);
-        manager.load(levelIndicatorActive, Texture.class);
-        manager.load(levelIndicatorPassive, Texture.class);
-        manager.load(Star1, Texture.class);
-        manager.load(Star2, Texture.class);
-        manager.load(Pointer, Texture.class);
-        manager.load(Question, Texture.class);
+        manager.load(CAT_1, Texture.class);
+        manager.load(CAT_2, Texture.class);
+        manager.load(CAT_3, Texture.class);
+        manager.load(LEVEL_INDICATOR_ACTIVE_PNG, Texture.class);
+        manager.load(LEVEL_INDICATOR_PASSIVE_PNG, Texture.class);
+        manager.load(STAR_1, Texture.class);
+        manager.load(STAR_2, Texture.class);
+        manager.load(POINTER, Texture.class);
+        manager.load(QUESTION, Texture.class);
         manager.load(KEY, Texture.class);
         manager.load(YELLOW_TUMBLER, Texture.class);
         manager.load(BLUE_TUMBLER, Texture.class);
@@ -89,17 +62,17 @@ public class KittensAssetManager {
         manager.load(FOG, Texture.class);
     }
 
-    public void loadSounds() {
-        manager.load(laserSound, Sound.class);
+    private void loadSounds() {
+        manager.load(LASER_SOUND, Sound.class);
     }
 
-    public void loadSkins() {
+    private void loadSkins() {
         SkinParameter params = new SkinParameter("skin/glassy-ui.atlas");
-        manager.load(skin, Skin.class, params);
+        manager.load(SKIN, Skin.class, params);
     }
 
-    public void loadFonts() {
-        manager.load(font, BitmapFont.class);
+    private void loadFonts() {
+        manager.load(FONT, BitmapFont.class);
     }
 
     public void loadEverything() {

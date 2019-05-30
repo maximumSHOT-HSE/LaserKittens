@@ -38,7 +38,7 @@ public class StatisticsScreen implements Screen {
     public StatisticsScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
-        background = new Background(laserKittens.getAssetManager().manager.get(KittensAssetManager.blueBackground, Texture.class));
+        background = new Background(laserKittens.getAssetManager().manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
         stage = new Stage(new ScreenViewport());
     }
 
@@ -109,7 +109,7 @@ public class StatisticsScreen implements Screen {
     private class Menu {
         private Table table = new Table();
 
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.skin, Skin.class);
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
         private Label titleLabel = new Label("Statistics", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private final TextButton backButton = new TextButton("Back", skin);
 

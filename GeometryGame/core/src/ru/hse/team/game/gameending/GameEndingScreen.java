@@ -115,7 +115,7 @@ public class GameEndingScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.skin);
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN);
         private TextButton restartButton = new TextButton("Restart", skin);
         private TextButton quitButton = new TextButton("Quit", skin);
         private Table table = new Table();

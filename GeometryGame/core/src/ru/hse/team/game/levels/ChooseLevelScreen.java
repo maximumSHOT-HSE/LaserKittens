@@ -131,11 +131,11 @@ public class ChooseLevelScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.skin);
+        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN);
         private SlidingPane slidingPane;
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
-        private Texture naviActive = laserKittens.getAssetManager().manager.get(KittensAssetManager.levelIndicatorActive);
-        private Texture naviPassive = laserKittens.getAssetManager().manager.get(KittensAssetManager.levelIndicatorPassive);
+        private Texture naviActive = laserKittens.getAssetManager().manager.get(KittensAssetManager.LEVEL_INDICATOR_ACTIVE_PNG);
+        private Texture naviPassive = laserKittens.getAssetManager().manager.get(KittensAssetManager.LEVEL_INDICATOR_PASSIVE_PNG);
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
 
