@@ -19,12 +19,8 @@ import ru.hse.team.game.levels.AbstractLevelFactory;
 public class LevelGenerator {
 
     public static AbstractLevel generate(SavedLevel savedLevel) {
-        Calendar nowCalendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = (SimpleDateFormat)SimpleDateFormat.getTimeInstance();
-        dateFormat.applyPattern("yyyy/MM/dd HH:mm");
-        String levelName = "Generated " + dateFormat.format(nowCalendar.getTime());
 
-        return new AbstractLevel(levelName) {
+        return new AbstractLevel(savedLevel.levelName) {
 
             private AbstractLevelFactory factory;
 
@@ -80,7 +76,11 @@ public class LevelGenerator {
                             break;
                         case WALL:
                             createImpenetrableWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
-                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y);
+                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y, entity.getRotation() * (float)Math.PI / 180);
+                            break;
+                        case GLASS:
+                            createTransparentWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
+                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y, entity.getRotation() * (float)Math.PI / 180);
                             break;
                         case PLAYER:
                             focusedPlayer = createPlayer(entity.getPositionX() * PM, entity.getPositionY() * PM, entity.getSizeX() * scale.x);

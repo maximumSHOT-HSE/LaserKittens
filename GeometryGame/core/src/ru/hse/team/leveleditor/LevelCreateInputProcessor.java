@@ -161,6 +161,15 @@ public class LevelCreateInputProcessor implements InputProcessor {
         return currentEntity;
     }
 
+    public void rotateCurrentEntity(float delta) {
+        if (currentEntity != null) {
+            if (currentEntity.getType() != SimpleEntity.EntityType.PLAYER
+                && currentEntity.getType() != SimpleEntity.EntityType.STAR) {
+                currentEntity.setRotation(currentEntity.getRotation() + delta);
+            }
+        }
+    }
+
     public void chooseAnotherEntity(SimpleEntity.EntityType focusedType) {
         this.focusedType = focusedType;
         currentEntity = null;

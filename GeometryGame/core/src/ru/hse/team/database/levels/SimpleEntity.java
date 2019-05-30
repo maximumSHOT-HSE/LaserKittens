@@ -6,7 +6,8 @@ public class SimpleEntity {
         STAR,
         WALL,
         MIRROR,
-        PLAYER
+        PLAYER,
+        GLASS;
     }
 
     private float positionX;

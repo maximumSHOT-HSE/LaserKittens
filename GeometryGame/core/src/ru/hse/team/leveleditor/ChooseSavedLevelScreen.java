@@ -11,17 +11,22 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
+import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 import ru.hse.team.Background;
+import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.database.levels.SimpleEntity;
@@ -35,6 +40,7 @@ public class ChooseSavedLevelScreen implements Screen {
     private Background background;
     private Stage stage;
     private Menu menu;
+    private List<SavedLevel> levels;
 
     public ChooseSavedLevelScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
@@ -119,17 +125,28 @@ public class ChooseSavedLevelScreen implements Screen {
         return levelsList.get(0);
     }
 
+    private void deleteLevel(int i) {
+        Thread t = new Thread(() -> {
+            laserKittens.getSavedLevels().levelsDao().delete(levels.get(i));
+        });
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private class Menu {
         private Table table = new Table();
         private Skin skin = laserKittens.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
 
         private Label titleLabel = new Label("Saved levels", new Label.LabelStyle(laserKittens.font, Color.WHITE));
 
-        List<SavedLevel> levels = allLevels();
-
         List<TextButton> openLevelButtons = new ArrayList<>();
 
         public Menu(Stage stage) {
+            levels = allLevels();
             stage.addActor(table);
             table.setFillParent(true);
             //table.setDebug(true);
@@ -147,9 +164,37 @@ public class ChooseSavedLevelScreen implements Screen {
 
             final float buttonHeight = Gdx.graphics.getHeight() * 0.15f;
             final float buttonWidth = Gdx.graphics.getWidth() * 0.65f;
-            for (TextButton button : openLevelButtons) {
+            for (int i = 0; i < openLevelButtons.size(); i++) {
+                TextButton button = openLevelButtons.get(i);
                 buttonsTable.row().pad(10, 10, 10, 10);
                 buttonsTable.add(button).width(buttonWidth).height(buttonHeight);
+
+                ImageButton binButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
+                buttonsTable.add(binButton).width(0.15f * Gdx.graphics.getWidth()).height(0.15f * Gdx.graphics.getHeight());
+
+                final int ii = i;
+                binButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+
+                        GDXButtonDialog bDialog = laserKittens.getDialogs().newDialog(GDXButtonDialog.class);
+                        bDialog.setTitle("Are you sure?");
+                        bDialog.setMessage("It will not be possible to restore the level");
+
+                        bDialog.setClickListener(button1 -> {
+                            if (button1 == 0) {
+                                deleteLevel(ii);
+                                laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
+                            }
+                        });
+
+                        bDialog.addButton("Yes");
+                        bDialog.addButton("No");
+
+                        bDialog.build().show();
+
+                    }
+                });
             }
 
             scroll.addPage(buttonsTable);

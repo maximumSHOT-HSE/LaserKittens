@@ -98,6 +98,8 @@ public class LevelCreateScreen implements Screen {
                 return new TextureRegion(laserKittens.assetManager.manager.get(KittensAssetManager.MIRROR, Texture.class));
             case PLAYER:
                 return new TextureRegion(laserKittens.assetManager.manager.get(KittensAssetManager.Cat3, Texture.class));
+            case GLASS:
+                return new TextureRegion(laserKittens.assetManager.manager.get(KittensAssetManager.TRANSPARENT_WALL, Texture.class));
             default:
                 throw new AssertionError("Panic");
         }
@@ -207,6 +209,7 @@ public class LevelCreateScreen implements Screen {
         private ImageButton playerButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat3, Texture.class)));
         private ImageButton wallButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.ICE_WALL, Texture.class)));
         private ImageButton mirrorButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.MIRROR, Texture.class)));
+        private ImageButton glassButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.TRANSPARENT_WALL, Texture.class)));
         private ImageButton starButton = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Star2, Texture.class)));
         private ImageButton rotateLeft = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
         private ImageButton rotateRight = new ImageButton(new TextureRegionDrawable(laserKittens.assetManager.manager.get(KittensAssetManager.Cat1, Texture.class)));
@@ -230,6 +233,7 @@ public class LevelCreateScreen implements Screen {
             buttons.add(playerButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(wallButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(mirrorButton).width(toolButtonWidth).height(toolButtonHeight);
+            buttons.add(glassButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(starButton).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(rotateLeft).width(toolButtonWidth).height(toolButtonHeight);
             buttons.add(rotateRight).width(toolButtonWidth).height(toolButtonHeight);
@@ -256,6 +260,14 @@ public class LevelCreateScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     inputProcessor.chooseAnotherEntity(SimpleEntity.EntityType.PLAYER);
+
+                }
+            });
+
+            glassButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    inputProcessor.chooseAnotherEntity(SimpleEntity.EntityType.GLASS);
 
                 }
             });
@@ -291,20 +303,14 @@ public class LevelCreateScreen implements Screen {
             rotateLeft.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    SimpleEntity entity = inputProcessor.getCurrentEntity();
-                    if (entity != null) {
-                        entity.setRotation(entity.getRotation() + 10f);
-                    }
+                    inputProcessor.rotateCurrentEntity(10);
                 }
             });
 
             rotateRight.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    SimpleEntity entity = inputProcessor.getCurrentEntity();
-                    if (entity != null) {
-                        entity.setRotation(entity.getRotation() - 10f);
-                    }
+                    inputProcessor.rotateCurrentEntity(-10);
                 }
             });
 
