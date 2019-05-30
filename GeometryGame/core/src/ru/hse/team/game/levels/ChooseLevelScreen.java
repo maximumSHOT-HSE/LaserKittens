@@ -310,8 +310,6 @@ public class ChooseLevelScreen implements Screen {
             slidingPane = new SlidingPane();
             slidingPane.addWidget(statisticsTable());
 
-            slidingPane.addWidget(editorScreenTable());
-
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getName(), skin);
                 Label statusLabel = getBestResult(abstractLevel.getName());
@@ -335,7 +333,7 @@ public class ChooseLevelScreen implements Screen {
 
                 addDumpLabels(table);
                 table.row();
-                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * s List[1]creenHeight);
+                table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.add(levelButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.add(new Label("", skin)).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.row();
