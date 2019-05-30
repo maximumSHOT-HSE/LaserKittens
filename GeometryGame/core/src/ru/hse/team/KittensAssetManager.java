@@ -7,13 +7,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+/*
+* This class is not a singleton, because of android
+* special behaviour related with static variables.
+* */
 public class KittensAssetManager {
 
     public final AssetManager manager = new AssetManager();
 
     public static final String BADLOGIC = "badlogic.jpg";
-    public static final String LEVEL_INDICATOR_ACTIVE_PNG = "blue-background.jpg";
-    public static final String LEVEL_INDICATOR_PASSIVE_PNG = "levelIndicatorActive.png";
+    public static final String LEVEL_INDICATOR_ACTIVE_PNG = "levelIndicatorActive.png";
+    public static final String LEVEL_INDICATOR_PASSIVE_PNG = "levelIndicatorPassive.png";
     public static final String CAT_1 = "Cat1.png";
     public static final String CAT_2 = "Cat2.png";
     public static final String CAT_3 = "Cat3.png";
