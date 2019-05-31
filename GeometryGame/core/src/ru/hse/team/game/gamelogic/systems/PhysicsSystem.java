@@ -27,18 +27,13 @@ public class PhysicsSystem extends IteratingSystem {
     private static final float MAX_STEP_TIME = 1 / 60f;
     private static float accumulator = 0f;
 
-    private World world;
-    private Array<Entity> bodiesQueue;
     private AbstractLevel abstractLevel;
 
-    @SuppressWarnings("unchecked")
-    public PhysicsSystem(World world, AbstractLevel abstractLevel) {
+    public PhysicsSystem(AbstractLevel abstractLevel) {
         super(Family.all(
                 BodyComponent.class,
                 TransformComponent.class
         ).get());
-        this.world = world;
-        this.bodiesQueue = new Array<>();
         this.abstractLevel = abstractLevel;
     }
 
@@ -48,49 +43,60 @@ public class PhysicsSystem extends IteratingSystem {
         float frameTime = Math.min(deltaTime, 0.25f);
         accumulator += frameTime;
         if(accumulator >= MAX_STEP_TIME) {
-            world.step(MAX_STEP_TIME, 6, 2);
+            abstractLevel.getWorld().step(MAX_STEP_TIME, 6, 2);
             accumulator -= MAX_STEP_TIME;
-            for (Entity entity : bodiesQueue) {
-                TransformComponent transformComponent = Mapper.transformComponent.get(entity);
+
+            changePositions();
+            patrolTerritory();
+            updateGraph();
+        }
+    }
+
+    private void changePositions() {
+        for (Entity entity : getEntities()) {
+            TransformComponent transformComponent = Mapper.transformComponent.get(entity);
+            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+            if (bodyComponent == null || bodyComponent.body == null) {
+                continue;
+            }
+            Vector2 position = bodyComponent.body.getPosition();
+            transformComponent.position.x = position.x;
+            transformComponent.position.y = position.y;
+            transformComponent.rotation = bodyComponent.body.getAngle() * MathUtils.radiansToDegrees;
+        }
+    }
+
+    private void patrolTerritory() {
+        for (Entity entity : getEntities()) {
+            PatrolComponent patrolComponent = Mapper.patrolComponent.get(entity);
+            if (patrolComponent == null) {
+                continue;
+            }
+            patrolComponent.action();
+        }
+    }
+
+    private void updateGraph() {
+        if (abstractLevel.getAbstractGraph() != null) {
+            for (Entity entity : getEntities()) {
+                TypeComponent typeComponent = Mapper.typeComponent.get(entity);
+                if (typeComponent == null) {
+                    continue;
+                }
                 BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
                 if (bodyComponent == null || bodyComponent.body == null) {
                     continue;
                 }
-                Vector2 position = bodyComponent.body.getPosition();
-                transformComponent.position.x = position.x;
-                transformComponent.position.y = position.y;
-                transformComponent.rotation = bodyComponent.body.getAngle() * MathUtils.radiansToDegrees;
-            }
-            for (Entity entity : bodiesQueue) {
-                PatrolComponent patrolComponent = Mapper.patrolComponent.get(entity);
-                if (patrolComponent == null) {
-                    continue;
-                }
-                patrolComponent.action();
-            }
-            if (abstractLevel.getAbstractGraph() != null) {
-                for (Entity entity : bodiesQueue) {
-                    TypeComponent typeComponent = Mapper.typeComponent.get(entity);
-                    if (typeComponent == null) {
-                        continue;
-                    }
-                    BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-                    if (bodyComponent == null || bodyComponent.body == null) {
-                        continue;
-                    }
-                    if (typeComponent.type.equals(TypeComponent.Type.PLAYER)) {
-                        abstractLevel
+                if (typeComponent.type.equals(TypeComponent.Type.PLAYER)) {
+                    abstractLevel
                             .getAbstractGraph()
                             .visit(bodyComponent.body.getPosition());
-                    }
                 }
             }
-            bodiesQueue.clear();
         }
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        bodiesQueue.add(entity);
     }
 }

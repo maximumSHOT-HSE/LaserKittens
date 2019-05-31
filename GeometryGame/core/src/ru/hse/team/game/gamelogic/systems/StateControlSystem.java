@@ -21,14 +21,11 @@ import ru.hse.team.game.levels.AbstractLevel;
  */
 public class StateControlSystem extends IteratingSystem {
 
-    private World world;
     private PooledEngine engine;
-
     private AbstractLevel abstractLevel;
 
-    public StateControlSystem(World world, PooledEngine engine, AbstractLevel abstractLevel) {
+    public StateControlSystem(PooledEngine engine, AbstractLevel abstractLevel) {
         super(Family.all(StateComponent.class).get());
-        this.world = world;
         this.engine = engine;
         this.abstractLevel = abstractLevel;
     }
@@ -46,40 +43,52 @@ public class StateControlSystem extends IteratingSystem {
         StateComponent stateComponent = Mapper.stateComponent.get(entity);
         TypeComponent typeComponent = Mapper.typeComponent.get(entity); // may be null
 
-        if (stateComponent.get() == StateComponent.State.FINISHED) {
-            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+        switch (stateComponent.get()) {
+            case JUST_CREATED:
+                stateComponent.set(StateComponent.State.NORMAL);
+                if (typeComponent != null && typeComponent.type == TypeComponent.Type.STAR) {
+                    System.out.println("ADD STAR");
+                    abstractLevel.getGameStatus().addStar();
+                }
+                break;
+            case FINISHED:
+                removeEntity(entity);
+                break;
+        }
+
+    }
+
+    private void removeEntity(Entity entity) {
+            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity); // may be null
+            TypeComponent typeComponent = Mapper.typeComponent.get(entity); // may be null
 
             if (typeComponent != null) {
-                if (typeComponent.type == TypeComponent.Type.STAR) {
-                    System.out.println("REMOVE STAR!");
-                    abstractLevel.getGameStatus().removeStar();
-                }
-                if (typeComponent.type == TypeComponent.Type.KEY) {
-                    Entity door = Mapper.keyComponent.get(entity).door;
-                    StateComponent doorState = Mapper.stateComponent.get(door);
-                    DoorComponent doorComponent = Mapper.doorComponent.get(door);
-                    doorComponent.removeKey(entity);
-                    if (doorComponent.remainingKeys() == 0) {
-                        if (abstractLevel != null && abstractLevel.getAbstractGraph() != null &&
-                                bodyComponent != null && bodyComponent.body != null) {
-                            abstractLevel.getAbstractGraph().updateGraphAfterRemoveRectangleBarrier(doorState.getId());
+                switch (typeComponent.type) {
+                    case STAR:
+                        System.out.println("REMOVE STAR!");
+                        abstractLevel.getGameStatus().removeStar();
+                        break;
+                    case KEY:
+                        Entity door = Mapper.keyComponent.get(entity).door;
+                        StateComponent doorState = Mapper.stateComponent.get(door);
+                        DoorComponent doorComponent = Mapper.doorComponent.get(door);
+                        doorComponent.removeKey(entity);
+                        if (doorComponent.remainingKeys() == 0) {
+                            if (abstractLevel != null && abstractLevel.getAbstractGraph() != null &&
+                                    bodyComponent != null && bodyComponent.body != null) {
+                                abstractLevel.getAbstractGraph().updateGraphAfterRemoveRectangleBarrier(doorState.getId());
+                            }
+                            doorState.finish();
                         }
-                        doorState.finish();
-                    }
+                        break;
                 }
             }
-            if (bodyComponent != null && bodyComponent.body != null && world != null) { // null checking is the best way to avoid sigfault related with libgdx!!!
-                world.destroyBody(bodyComponent.body);
+
+            if (bodyComponent != null && bodyComponent.body != null && abstractLevel.getWorld() != null) {
+                //null checking is the best way to avoid sigfault related with libgdx!!!
+                abstractLevel.getWorld().destroyBody(bodyComponent.body);
                 bodyComponent.body = null;
             }
             engine.removeEntity(entity);
-        }
-        if (stateComponent.get() == StateComponent.State.JUST_CREATED) {
-            stateComponent.set(StateComponent.State.NORMAL);
-            if (typeComponent != null && typeComponent.type == TypeComponent.Type.STAR) {
-                System.out.println("ADD STAR");
-                abstractLevel.getGameStatus().addStar();
-            }
-        }
     }
 }

@@ -31,7 +31,6 @@ public class GameScreenInputProcessor implements InputProcessor {
     private Entity focusedPlayer;
     private AbstractLevel abstractLevel;
     private OrthographicCamera camera;
-    private World world;
 
     private boolean dragging;
     private int draggingPointer = -1;
@@ -60,11 +59,10 @@ public class GameScreenInputProcessor implements InputProcessor {
         this.focusedPlayer = abstractLevel.getPlayer();
         this.abstractLevel = abstractLevel;
         this.camera = camera;
-        this.world = abstractLevel.getWorld();
 
         enabledAccelerometer = laserKittens.getPreferences().isEnabledAccelerometer();
 
-        ground = BodyFactory.getBodyFactory(this.world)
+        ground = BodyFactory.getBodyFactory(abstractLevel.getWorld())
         .newCircleBody(
             new Vector2(0, abstractLevel.getLevelHeightInScreens() *
                     RenderingSystem.getScreenSizeInMeters().y * 2),
@@ -148,7 +146,7 @@ public class GameScreenInputProcessor implements InputProcessor {
         def.collideConnected = true;
         def.maxForce = 1000.0f * playerBody.getMass();
         def.target.set(playerX, playerY);
-        mouseJoint = (MouseJoint)world.createJoint(def);
+        mouseJoint = (MouseJoint) abstractLevel.getWorld().createJoint(def);
         playerBody.setAwake(true);
 
 
@@ -170,7 +168,7 @@ public class GameScreenInputProcessor implements InputProcessor {
         dragging = false;
         draggingPointer = -1;
         if (mouseJoint != null) {
-            world.destroyJoint(mouseJoint);
+            abstractLevel.getWorld().destroyJoint(mouseJoint);
             mouseJoint = null;
         }
 
@@ -221,7 +219,7 @@ public class GameScreenInputProcessor implements InputProcessor {
         final Body playerBody = playerBodyComponent.body;
         if (playerBody == null) return;
 
-        if (Math.abs(accelerometerX) < 0.3 && Math.abs(accelerometerY) < 0.3) {
+        if (Math.abs(accelerometerX) < 0.1 && Math.abs(accelerometerY) < 0.1) {
             playerBody.applyForce(
                     -playerBody.getLinearVelocity().x * delta * 1e3f * playerBody.getMass(),
                     -playerBody.getLinearVelocity().y * delta * 1e3f * playerBody.getMass(),
