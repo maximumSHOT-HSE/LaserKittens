@@ -3,6 +3,7 @@ package ru.hse.team.game.Multiplayer.AppWarp;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 import com.shephertz.app42.gaming.multiplayer.client.events.MatchedRoomsEvent;
+import com.shephertz.app42.gaming.multiplayer.client.events.RoomData;
 import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class WarpController {
 
     private final String API_KEY = "c459fdeab1cfdc5c0f6853fe34d19b166ce6513fc81160a78146422732056788";
     private final String SECRET_KEY = "1a270f8f243c231ba0666226f1349aa1167e1fa6aacf162d0061c1abfa2c6735";
+    private static final String LEVEL_NAME_PROPERTY = "level name";
 
     private static WarpController instance = null;
 
@@ -26,6 +28,7 @@ public class WarpController {
     private Byte connectionStatus = null;
     private String playerName;
     private String playerNameSalt;
+    private String roomId = null;
     private Set<String> joinedRooms = new HashSet<>();
     private Set<String> subscribedRooms = new HashSet<>();
 
@@ -107,8 +110,13 @@ public class WarpController {
         warpClient.disconnect();
     }
 
-    public void sendRequestGetRoomInRange(int minUserNumber, int maxUserNumber) {
-        warpClient.getRoomInRange(minUserNumber, maxUserNumber);
+    public void sendRequestGetRoomInRangeWithProperties(int minUserNumber, int maxUserNumber, String levelName) {
+        HashMap<String, Object> properties = new HashMap<>();
+        properties.put(LEVEL_NAME_PROPERTY, levelName);
+        warpClient.getRoomInRangeWithProperties(
+                minUserNumber, maxUserNumber,
+                properties
+        );
     }
 
     public void onGetMatchedRoomsDone(MatchedRoomsEvent matchedRoomsEvent) {
@@ -118,8 +126,12 @@ public class WarpController {
     }
 
     public void sendRequestCreateRoom(
-            String name, int maxUsers, HashMap<String, Object> tableProperties) {
-        warpClient.createRoom(name, playerName, maxUsers, tableProperties);
+            String roomName, int maxUsers, String levelName) {
+        System.out.println("WarpController.sendRequestCreateRoom(), room name = " + roomName + ", maxUsers = " + maxUsers
+                + ", level name = " + levelName);
+        HashMap<String, Object> tableProperties = new HashMap<>();
+        tableProperties.put(LEVEL_NAME_PROPERTY, levelName);
+        warpClient.createRoom(roomName, playerName, maxUsers, tableProperties);
     }
 
     public void onCreateRoomDone(RoomEvent roomEvent) {
@@ -136,11 +148,66 @@ public class WarpController {
     }
 
     public void onDeleteRoomDone(RoomEvent roomEvent) {
+        System.out.println("WarpController.onDeleteDone, result = " + roomEvent.getResult());
         if (roomEvent.getResult() == WarpResponseResultCode.SUCCESS) {
-            System.out.println("WarpController.onDeleteDone, result = " + roomEvent.getResult() + ", " +
-                    "data = " + roomEvent.getData() + ", owner = " + roomEvent.getData().getRoomOwner());
+            System.out.println("data = " + roomEvent.getData() + ", owner = " + roomEvent.getData().getRoomOwner());
         }
         warpListener.onDeleteRoomDone(roomEvent.getResult() == WarpResponseResultCode.SUCCESS,
                 roomEvent.getData());
+    }
+
+    public void sendJoinRoomRequest(String roomId) {
+        System.out.println("WarpController.sendJoinRoomRequest() roomID = " + roomId);
+        warpClient.joinRoom(roomId);
+    }
+
+    public void onJoinRoomDone(RoomEvent roomEvent) {
+        System.out.println("WarpController.onJoinRoomDone, result = " + roomEvent.getResult());
+        if (roomEvent.getResult() == WarpResponseResultCode.SUCCESS) {
+            System.out.println("data = " + roomEvent.getData());
+        }
+        warpListener.onJoinRoomDone(
+                roomEvent.getResult() == WarpResponseResultCode.SUCCESS,
+                roomEvent.getData()
+        );
+        roomId = roomEvent.getData().getId();
+    }
+
+    public void sendLeaveRoomRequest() {
+        warpClient.leaveRoom(roomId);
+    }
+
+    public void onLeaveRoomDone(RoomEvent roomEvent) {
+        System.out.println("WarpController.onLeaveRoomDone, result = " + roomEvent.getResult());
+        if (roomId == null) {
+            System.out.println("ALREADY LEFT");
+            return;
+        }
+        if (roomEvent.getResult() == WarpResponseResultCode.SUCCESS) {
+            System.out.println("data = " + roomEvent.getData());
+        }
+        warpListener.onLeaveRoomDone(
+                roomEvent.getResult() == WarpResponseResultCode.SUCCESS,
+                roomEvent.getData());
+        roomId = null;
+    }
+
+    public void sendSubscribeRequest(String roomId) {
+        System.out.println("WarpController.sendSubscribeRequest() room id = " + roomId);
+        warpClient.subscribeRoom(roomId);
+    }
+
+    public void onUserJoinedRoom(RoomData roomData, String userName) {
+        System.out.println("WarpController. USER JOINED! userName = " + userName + ", room id = " + roomData.getId());
+        if (roomId != null && roomData.getId().equals(roomId)) {
+            warpListener.onUserJoinedRoom(userName);
+        }
+    }
+
+    public void onUserLeftRoom(RoomData roomData, String userName) {
+        System.out.println("WarpController. USER LEFT! userName = " + userName + ", room id = " + roomData.getId());
+        if (roomId != null && roomData.getId().equals(roomId)) {
+            warpListener.onUserLeftRoom(userName);
+        }
     }
 }

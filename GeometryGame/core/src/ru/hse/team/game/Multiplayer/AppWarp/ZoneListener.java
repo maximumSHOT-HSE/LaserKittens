@@ -37,7 +37,6 @@ public class ZoneListener implements ZoneRequestListener {
 
     @Override
     public void onGetLiveUserInfoDone(LiveUserInfoEvent liveUserInfoEvent) {
-
     }
 
     @Override

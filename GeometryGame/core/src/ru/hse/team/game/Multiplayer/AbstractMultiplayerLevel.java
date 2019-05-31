@@ -7,4 +7,6 @@ abstract public class AbstractMultiplayerLevel extends AbstractLevel {
     public AbstractMultiplayerLevel(String levelName, int widthInScreens, int heightInScreens) {
         super(levelName, widthInScreens, heightInScreens);
     }
+
+    abstract public int getNumberOfPlayers();
 }

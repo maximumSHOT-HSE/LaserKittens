@@ -113,4 +113,29 @@ public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements Wa
     public void onGetMatchedRoomsDone(boolean isSuccess, RoomData[] roomDatas) {
 
     }
+
+    @Override
+    public void onJoinRoomDone(boolean isSuccess, RoomData roomData) {
+
+    }
+
+    @Override
+    public void onLeaveRoomDone(boolean isSuccess, RoomData roomData) {
+
+    }
+
+    @Override
+    public void onUserJoinedRoom(String userName) {
+
+    }
+
+    @Override
+    public void onUserLeftRoom(String userName) {
+
+    }
+
+    @Override
+    public int getNumberOfPlayers() {
+        return 2;
+    }
 }
