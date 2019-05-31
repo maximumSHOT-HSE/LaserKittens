@@ -29,8 +29,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     private static final String TAG = "LaserKittens";
 
 	private GoogleSignInClient mGoogleSignInClient;
-
-	// The currently signed in account, used to check the account has changed outside of this activity when resuming.
 	private GoogleSignInAccount mSignedInAccount = null;
 
 
@@ -47,8 +45,9 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         config.useAccelerometer = true;
         config.useCompass = false;
         config.useGyroscope = false;
-        initialize(new LaserKittens(Room.databaseBuilder(this, StatisticsDatabaseAndroid.class, "database").build(),
-                        Room.databaseBuilder(this, LevelsDatabaseAndroid.class, "savedLevels").build(),
+        initialize(new LaserKittens(
+        		Room.databaseBuilder(this, StatisticsDatabaseAndroid.class, "database").build(),
+                Room.databaseBuilder(this, LevelsDatabaseAndroid.class, "savedLevels").build(),
                         this), config);
 	}
 
@@ -97,8 +96,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         super.onActivityResult(requestCode, resultCode, intent);
 
 		if (requestCode == RC_SIGN_IN) {
-
-
 			Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
 
 			try {
@@ -173,7 +170,8 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 	public void submitScore(long score) {
 		if (isSignedIn()) {
 			System.out.println(score);
-			Games.getLeaderboardsClient(this, mSignedInAccount).submitScore(getString(R.string.leaderboard_id), score);
+			Games.getLeaderboardsClient(this, mSignedInAccount)
+                    .submitScore(getString(R.string.leaderboard_id), score);
 			showScores();
 		}
 		else {

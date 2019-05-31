@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 /**
@@ -17,27 +16,15 @@ import ru.hse.team.game.gamelogic.systems.RenderingSystem;
  */
 public class GameStatus {
 
-    private GameScreen gameScreen;
-    private BitmapFont font;
-    private SpriteBatch batch;
-
     private long startNano = 0;
     private long stopNano = 0;
 
     private boolean started = false;
     private boolean stopped = false;
 
-    private OrthographicCamera statusCamera = new OrthographicCamera(RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
-
-    public GameStatus(GameScreen gameScreen, BitmapFont font, SpriteBatch batch) {
-        this.gameScreen = gameScreen;
-        this.font = font;
-        this.batch = batch;
-    }
-
-    public GameScreen getGameScreen() {
-        return gameScreen;
-    }
+    private OrthographicCamera statusCamera =
+            new OrthographicCamera(
+                    RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
 
     public void start() {
         if (started) {
@@ -119,17 +106,18 @@ public class GameStatus {
         return starsInLevel;
     }
 
-    public void draw() {
+    public void draw(SpriteBatch batch, BitmapFont font) {
+        statusCamera.zoom = 10f;
+        statusCamera.update();
 
-        if (gameScreen.getGame().getPreferences().isShowTime()) {
-            statusCamera.zoom = 10f;
-            statusCamera.update();
-
-            batch.setProjectionMatrix(statusCamera.combined);
-            batch.begin();
-            font.draw(batch, getTimeStamp(timeGone()), -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2, statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2);
-            batch.end();
-        }
+        batch.setProjectionMatrix(statusCamera.combined);
+        batch.begin();
+        font.draw(
+                batch,
+                getTimeStamp(timeGone()),
+                -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2,
+                statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2);
+        batch.end();
     }
 
     public void dispose() {

@@ -2,14 +2,14 @@ package ru.hse.team.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -29,35 +29,37 @@ import ru.hse.team.KittensAssetManager;
  */
 public class SettingsScreen implements Screen {
 
-    private final LaserKittens parent;
+    private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-    private Stage stage;
+    private Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
 
-    private InputMultiplexer inputMultiplexer;
-
     public SettingsScreen(LaserKittens laserKittens) {
-        this.parent = laserKittens;
-        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
-
-        stage = new Stage(new ScreenViewport());
-
-        InputProcessor inputProcessor = new SettingsScreenInputProcessor(parent);
-        inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
+        this.laserKittens = laserKittens;
+        background = new Background(
+                this.laserKittens.getAssetManager().manager
+                        .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
     }
 
     @Override
     public void show() {
         stage.clear();
-        Gdx.input.setInputProcessor(inputMultiplexer);
-
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                }
+                return true;
+            }
+        });
+        Gdx.input.setInputProcessor(stage);
         menu = new Menu(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        parent.batch.setProjectionMatrix(camera.combined);
-
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -67,9 +69,9 @@ public class SettingsScreen implements Screen {
 
         camera.update();
 
-        parent.batch.begin();
-        background.draw(parent.batch, camera);
-        parent.batch.end();
+        laserKittens.getBatch().begin();
+        background.draw(laserKittens.getBatch());
+        laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -103,25 +105,37 @@ public class SettingsScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = parent.assetManager.manager.get(KittensAssetManager.skin, Skin.class);
+        private Skin skin = laserKittens.getAssetManager()
+                .manager.get(KittensAssetManager.SKIN, Skin.class);
 
-        private Label titleLabel = new Label("Settings", new Label.LabelStyle(parent.font, Color.WHITE));
-        private Label volumeMusicLabel = new Label("music volume", new Label.LabelStyle(parent.font, Color.WHITE));
-        private Label volumeSoundLabel = new Label("sound volume", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label titleLabel = new Label("Settings",
+                new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+        private Label volumeMusicLabel = new Label("music volume",
+                new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+        private Label volumeSoundLabel = new Label("sound volume",
+                new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
         final private TextButton backButton = new TextButton("Back", skin);
         private TextButton about = new TextButton("About", skin);
-        final private Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin);
-        final private Slider volumeSoundSlider = new Slider( 0f, 1f, 0.1f,false, skin );
+        final private Slider volumeMusicSlider =
+                new Slider( 0f, 1f, 0.1f,false, skin);
+        final private Slider volumeSoundSlider =
+                new Slider( 0f, 1f, 0.1f,false, skin );
 
         private CheckBox enableAccelerometer = new CheckBox(null, skin);
-        private Label accelerometerLabel = new Label("accelerometer", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label accelerometerLabel =
+                new Label("accelerometer",
+                        new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
         private CheckBox showTime = new CheckBox(null, skin);
-        private Label showTimeLabel = new Label("timer", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label showTimeLabel =
+                new Label("timer",
+                        new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
         private CheckBox enableFog = new CheckBox(null, skin);
-        private Label fogLabel = new Label("enable fog", new Label.LabelStyle(parent.font, Color.WHITE));
+        private Label fogLabel =
+                new Label("enable fog",
+                        new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
         public Menu(Stage stage) {
             table.setFillParent(true);
@@ -170,40 +184,40 @@ public class SettingsScreen implements Screen {
 
         private void setListeners() {
 
-            volumeMusicSlider.setValue(parent.getPreferences().getMusicVolume());
+            volumeMusicSlider.setValue(laserKittens.getPreferences().getMusicVolume());
             volumeMusicSlider.addListener(event -> {
-                parent.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
+                laserKittens.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
                 return false;
             });
 
             about.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.ABOUT_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.ABOUT_SCREEN);
                 }
             });
 
-            volumeSoundSlider.setValue(parent.getPreferences().getSoundVolume());
+            volumeSoundSlider.setValue(laserKittens.getPreferences().getSoundVolume());
             volumeSoundSlider.addListener(event -> {
-                parent.getPreferences().setSoundVolume(volumeSoundSlider.getValue());
+                laserKittens.getPreferences().setSoundVolume(volumeSoundSlider.getValue());
                 return false;
             });
 
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
                 }
             });
 
-            enableAccelerometer.setChecked(parent.getPreferences().isEnabledAccelerometer());
+            enableAccelerometer.setChecked(laserKittens.getPreferences().isEnabledAccelerometer());
             if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
                 enableAccelerometer.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        parent.getPreferences().setEnableAccelerometer(enableAccelerometer.isChecked());
+                        laserKittens.getPreferences().setEnableAccelerometer(enableAccelerometer.isChecked());
                         if (enableAccelerometer.isChecked()) {
-                            parent.getGoogleServices().unlockAchievement(GoogleServicesAction.accelerometerAchievement);
+                            laserKittens.getGoogleServices().unlockAchievement(GoogleServicesAction.accelerometerAchievement);
                         }
                     }
                 });
@@ -211,19 +225,19 @@ public class SettingsScreen implements Screen {
                 enableAccelerometer.setDisabled(true);
             }
 
-            showTime.setChecked(parent.getPreferences().isShowTime());
+            showTime.setChecked(laserKittens.getPreferences().isShowTime());
             showTime.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.getPreferences().setShowTime(showTime.isChecked());
+                    laserKittens.getPreferences().setShowTime(showTime.isChecked());
                 }
             });
 
-            enableFog.setChecked(parent.getPreferences().isEnabledFog());
+            enableFog.setChecked(laserKittens.getPreferences().isEnabledFog());
             enableFog.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.getPreferences().setEnabledFog(enableFog.isChecked());
+                    laserKittens.getPreferences().setEnabledFog(enableFog.isChecked());
                 }
             });
         }

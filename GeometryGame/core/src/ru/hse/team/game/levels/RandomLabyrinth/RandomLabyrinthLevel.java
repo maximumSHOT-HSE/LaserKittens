@@ -12,31 +12,25 @@ public class RandomLabyrinthLevel extends AbstractLevel {
 
     private int keys;
     private int stars;
-    private int widthInScreens;
-    private int heightInScreens;
 
     public RandomLabyrinthLevel(int widthInScreens, int heightInScreens, int keys, int stars) {
-        super("Random Labyrinth");
+        super("Random Labyrinth", widthInScreens, heightInScreens);
         if (stars <= 0) {
             throw new IllegalArgumentException("There should be at least one star");
         }
         if (widthInScreens * heightInScreens * 2 < keys + stars + 1) {
             throw new IllegalArgumentException("No enough place for keys and stars");
         }
-
-        this.widthInScreens = widthInScreens;
-        this.heightInScreens = heightInScreens;
         this.keys = keys;
         this.stars = stars;
     }
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        randomLabyrinthLevelFactory = new RandomLabyrinthLevelFactory();
-        randomLabyrinthLevelFactory.setLevelSize(widthInScreens, heightInScreens);
+        randomLabyrinthLevelFactory = new RandomLabyrinthLevelFactory(engine, assetManager, getBodyFactory());
         randomLabyrinthLevelFactory.setKeys(keys);
         randomLabyrinthLevelFactory.setStars(stars);
-        randomLabyrinthLevelFactory.createLevel(engine, assetManager);
+        randomLabyrinthLevelFactory.createLevel(getLevelWidthInScreens(), getLevelHeightInScreens(), this);
     }
 
     @Override

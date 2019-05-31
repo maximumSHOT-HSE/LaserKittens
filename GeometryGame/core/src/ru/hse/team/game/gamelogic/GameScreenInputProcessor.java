@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -14,8 +13,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
+
 import ru.hse.team.LaserKittens;
-import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
@@ -30,16 +29,15 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     private LaserKittens laserKittens;
     private Entity focusedPlayer;
-    private AbstractLevel level;
+    private AbstractLevel abstractLevel;
     private OrthographicCamera camera;
     private World world;
-    private GameStatus gameStatus;
 
     private boolean dragging;
     private int draggingPointer = -1;
     private Vector3 position = new Vector3();
 
-    /** won't change during level */
+    /** won't change during abstractLevel */
     private final boolean enabledAccelerometer;
 
     private Vector3 draggingPosition = new Vector3();
@@ -57,19 +55,18 @@ public class GameScreenInputProcessor implements InputProcessor {
         return dragging;
     }
 
-    public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel level, OrthographicCamera camera, GameStatus gameStatus) {
+    public GameScreenInputProcessor(LaserKittens laserKittens, AbstractLevel abstractLevel, OrthographicCamera camera) {
         this.laserKittens = laserKittens;
-        this.focusedPlayer = level.getFactory().getPlayer();
-        this.level = level;
+        this.focusedPlayer = abstractLevel.getPlayer();
+        this.abstractLevel = abstractLevel;
         this.camera = camera;
-        this.world = level.getFactory().getWorld();
-        this.gameStatus = gameStatus;
+        this.world = abstractLevel.getWorld();
 
         enabledAccelerometer = laserKittens.getPreferences().isEnabledAccelerometer();
 
         ground = BodyFactory.getBodyFactory(this.world)
         .newCircleBody(
-            new Vector2(0, level.getFactory().getLevelHeightInScreens() *
+            new Vector2(0, abstractLevel.getLevelHeightInScreens() *
                     RenderingSystem.getScreenSizeInMeters().y * 2),
                 0.1f,
                 BodyDef.BodyType.StaticBody,
@@ -109,7 +106,7 @@ public class GameScreenInputProcessor implements InputProcessor {
         if (playerBody == null) return false;
 
 
-        float radius = level.getFactory().getPlayerRadius();
+        float radius = abstractLevel.getPlayerRadius();
         return distance2D(playerBody.getPosition(), new Vector2(position.x, position.y)) < radius;
     }
 
@@ -117,11 +114,11 @@ public class GameScreenInputProcessor implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         
         camera.unproject(position.set(screenX, screenY, 0));
-        gameStatus.start();
+        abstractLevel.getGameStatus().start();
 
         if (!clickInPlayerRegion()) {
-            level.shoot(position.x, position.y);
-//            Sound laser = laserKittens.assetManager.manager.get(KittensAssetManager.laserSound, Sound.class);
+            abstractLevel.shoot(position.x, position.y);
+//            Sound laser = laserKittens.assetManager.manager.get(KittensAssetManager.LASER_SOUND, Sound.class);
 //            laser.play(laserKittens.getPreferences().getSoundVolume());
             return true;
         }

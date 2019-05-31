@@ -21,6 +21,7 @@ import java.util.Set;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.game.Mapper;
+import ru.hse.team.game.gamelogic.algorithms.Geometry;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
@@ -33,20 +34,22 @@ public class RenderingSystem extends SortedIteratingSystem {
     // pixels per meter
     public static final float PPM = 32.0f;
 
-    public static final float SCREEN_WIDTH = Gdx.graphics.getWidth()/PPM;
-    public static final float SCREEN_HEIGHT = Gdx.graphics.getHeight()/PPM;
+    public static final float SCREEN_WIDTH = Gdx.graphics.getWidth() / PPM;
+    public static final float SCREEN_HEIGHT = Gdx.graphics.getHeight() / PPM;
 
     public static final float PIXELS_TO_METRES = 1.0f / PPM;
 
-    private static Vector2 meterDimensions = new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
-    private static Vector2 pixelDimensions = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    private static final Vector2 METER_DIMENSIONS =
+            new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
+    private static final Vector2 PIXEL_DIMENSIONS =
+            new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
     public static Vector2 getScreenSizeInMeters() {
-        return meterDimensions;
+        return METER_DIMENSIONS;
     }
 
     public static Vector2 getScreenSizeInPixels() {
-        return pixelDimensions;
+        return PIXEL_DIMENSIONS;
     }
 
     public static float pixelsToMeters(float pixelValue){
@@ -60,11 +63,12 @@ public class RenderingSystem extends SortedIteratingSystem {
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private ImmutableArray<Entity> renderQueue;
-    private Comparator<Entity> comparator = new ZComparator();
+
     private OrthographicCamera camera;
     private float cameraWaiting = 0;
-    private final LaserKittens laserKittens;
+    private Vector3 cameraMovingTo = new Vector3();
 
+    private final LaserKittens laserKittens;
     private AbstractLevel abstractLevel;
 
     public void decreaseCameraWaitingTime(float deltaTime) {
@@ -82,41 +86,27 @@ public class RenderingSystem extends SortedIteratingSystem {
         this.cameraWaiting = cameraWaiting;
     }
 
-    @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch batch, ShapeRenderer shapeRenderer, AbstractLevel abstractLevel, LaserKittens laserKittens) {
+    private void createCamera() {
+        camera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
+        camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
+        camera.zoom = 1.5f;
+        cameraMovingTo.set(camera.position);
+    }
+
+    public RenderingSystem(AbstractLevel abstractLevel, LaserKittens laserKittens) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
         this.abstractLevel = abstractLevel;
-
-        this.batch = batch;
-        this.shapeRenderer = shapeRenderer;
+        this.batch = laserKittens.getBatch();
+        this.shapeRenderer = laserKittens.getShapeRenderer();
         this.laserKittens = laserKittens;
 
-        camera = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
-        camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
+        createCamera();
     }
 
     public void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
         shapeRenderer.setColor(color);
         shapeRenderer.rectLine(from, to, 0.1f);
-    }
-
-    private float distance2D(Vector3 positionA, Vector3 positionB) {
-        return (float)Math.sqrt((positionA.x - positionB.x) * (positionA.x - positionB.x) + (positionA.y - positionB.y) * (positionA.y - positionB.y));
-    }
-    private float length2D(Vector2 a) {
-        return (float)Math.sqrt(a.x * a.x + a.y * a.y);
-    }
-
-    private float distanceToStrip(float a, float left, float right) {
-        float distance = 0;
-        if (a < left) {
-            distance = Math.max(distance, left - a);
-        }
-        if (a > right) {
-            distance = Math.max(distance, a - right);
-        }
-        return distance;
     }
 
     private void drawBulletTrack() {
@@ -146,7 +136,6 @@ public class RenderingSystem extends SortedIteratingSystem {
                     Body keyBody = Mapper.bodyComponent.get(keyEntity).body;
                     Vector2 keyPosition = keyBody.getPosition();
                     drawSegment(doorCenterPosition, keyPosition, shapeRenderer, Color.YELLOW);
-                    System.out.println("HINT KEY (" + keyPosition.x + ", " + keyPosition.y + ")");
                 }
             }
         }
@@ -158,7 +147,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             float w = abstractLevel.getAbstractGraph().getVertexControlWidth() * 1.5f;
             float h = abstractLevel.getAbstractGraph().getVertexControlHeight() * 1.5f;
             for (Vector2 fogPosition : fogPositions) {
-                Texture fogTexture = laserKittens.assetManager.manager.get(KittensAssetManager.FOG, Texture.class);
+                Texture fogTexture = laserKittens.getAssetManager().manager.get(KittensAssetManager.FOG, Texture.class);
                 batch.draw(fogTexture, fogPosition.x - w / 2, fogPosition.y - h / 2, w, h);
             }
         }
@@ -168,6 +157,40 @@ public class RenderingSystem extends SortedIteratingSystem {
         if (abstractLevel.getAbstractGraph() != null && abstractLevel.getAbstractGraph().isDrawGraph()) {
             abstractLevel.getAbstractGraph().draw(shapeRenderer, batch);
         }
+    }
+
+    private void drawVisibleTexture(TextureComponent textureComponent,
+                                    TransformComponent transformComponent) {
+        float width = textureComponent.region.getRegionWidth();
+        float height = textureComponent.region.getRegionHeight();
+        float originX = width / 2f;
+        float originY = height / 2f;
+
+        float pixelHalfWidth = pixelsToMeters(originX) * transformComponent.scale.x;
+        float pixelHalfHeight = pixelsToMeters(originY) * transformComponent.scale.y;
+
+        if (Geometry.distanceToSegment(camera.position.x,
+                transformComponent.position.x - pixelHalfWidth,
+                transformComponent.position.x + pixelHalfWidth) >
+                getScreenSizeInMeters().x * camera.zoom / 1.8) {
+            return;
+        }
+
+        if (Geometry.distanceToSegment(camera.position.y,
+                transformComponent.position.y - pixelHalfHeight,
+                transformComponent.position.y + pixelHalfHeight) >
+                getScreenSizeInMeters().y * camera.zoom / 1.8) {
+            return;
+        }
+
+        batch.draw(textureComponent.region,
+                transformComponent.position.x - originX,
+                transformComponent.position.y - originY,
+                originX, originY,
+                width, height,
+                pixelsToMeters(transformComponent.scale.x),
+                pixelsToMeters(transformComponent.scale.y),
+                transformComponent.rotation);
     }
 
     @Override
@@ -188,30 +211,8 @@ public class RenderingSystem extends SortedIteratingSystem {
             if (texture.region == null || transformComponent.isHidden) {
                 continue;
             }
-            float width = texture.region.getRegionWidth();
-            float height = texture.region.getRegionHeight();
-            float originX = width / 2f;
-            float originY = height / 2f;
 
-            float pixelHalfWidth = pixelsToMeters(originX) * transformComponent.scale.x;
-            float pixelHalfHeight = pixelsToMeters(originY) * transformComponent.scale.y;
-
-            if (distanceToStrip(camera.position.x, transformComponent.position.x - pixelHalfWidth,
-                    transformComponent.position.x + pixelHalfWidth) > getScreenSizeInMeters().x * camera.zoom / 1.8) {
-                continue;
-            }
-
-            if (distanceToStrip(camera.position.y, transformComponent.position.y - pixelHalfHeight,
-                    transformComponent.position.y + pixelHalfHeight) > getScreenSizeInMeters().y * camera.zoom / 1.8) {
-                continue;
-            }
-
-            batch.draw(texture.region,
-                    transformComponent.position.x - originX, transformComponent.position.y - originY,
-                    originX, originY,
-                    width, height,
-                    pixelsToMeters(transformComponent.scale.x), pixelsToMeters(transformComponent.scale.y),
-                    transformComponent.rotation);
+            drawVisibleTexture(texture, transformComponent);
         }
 
         batch.end();
@@ -230,6 +231,12 @@ public class RenderingSystem extends SortedIteratingSystem {
             drawFog();
             batch.end();
         }
+
+        if (laserKittens.getPreferences().isShowTime()) {
+            abstractLevel.getGameStatus().draw(batch, laserKittens.getFont());
+        }
+
+        moveCamera(deltaTime);
     }
 
     @Override
@@ -253,5 +260,61 @@ public class RenderingSystem extends SortedIteratingSystem {
             float bz = Mapper.transformComponent.get(entityB).position.z;
             return Double.compare(az, bz);
         }
+    }
+
+    private void makeBordersForCamera(Vector3 position) {
+        float levelWidth = SCREEN_WIDTH *
+                abstractLevel.getLevelWidthInScreens();
+        float levelHeight = SCREEN_HEIGHT *
+                abstractLevel.getLevelHeightInScreens();
+
+        position.x = Math.max(position.x,
+                SCREEN_WIDTH * camera.zoom / 2 -
+                        SCREEN_WIDTH / (2 * camera.zoom));
+        position.y = Math.max(position.y,
+                SCREEN_HEIGHT * camera.zoom / 2 -
+                        SCREEN_HEIGHT / (2 * camera.zoom));
+        position.x = Math.min(position.x,
+                levelWidth - SCREEN_WIDTH* camera.zoom / 2 +
+                        SCREEN_WIDTH / (2 * camera.zoom));
+        position.y = Math.min(position.y,
+                levelHeight - SCREEN_HEIGHT * camera.zoom / 2 +
+                        SCREEN_HEIGHT / (2 * camera.zoom));
+    }
+
+
+    /**
+     * Moves camera with speed exponentially? from distance
+     * */
+    private void moveCamera(float delta) {
+        delta = Math.max(delta, 0.1f); // when delta is near to zero problems occur
+        final float speed = 2 * delta;
+        final float ispeed = 1.0f-speed;
+
+        Vector3 cameraPosition = new Vector3(camera.position);
+        Entity player = abstractLevel.getPlayer();
+
+        decreaseCameraWaitingTime(delta);
+
+        if (player != null && getCameraWaiting() == 0) {
+            TransformComponent playerTransform = Mapper.transformComponent.get(player);
+
+            if (playerTransform == null) {
+                return;
+            }
+
+            cameraMovingTo.set(playerTransform.position);
+            makeBordersForCamera(cameraMovingTo);
+
+            cameraPosition.scl(ispeed);
+            cameraMovingTo.scl(speed);
+            cameraPosition.add(cameraMovingTo);
+            cameraMovingTo.scl(1f / speed);
+            camera.position.set(cameraPosition);
+        }
+
+        makeBordersForCamera(camera.position);
+
+        camera.update();
     }
 }
