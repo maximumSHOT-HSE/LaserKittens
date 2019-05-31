@@ -76,7 +76,11 @@ public class BodyFactory {
     }
 
     public Body newTransparentRectangle(Vector2 center, float width, float height) {
-        Body body = newRectangle(center, width, height);
+        return newTransparentRectangle(center, width, height, 0);
+    }
+
+    public Body newTransparentRectangle(Vector2 center, float width, float height, float rotation) {
+        Body body = newRectangle(center, width, height, rotation);
         setFilter(body, Category.TRANSPARENT.mask, (short) (Category.all() ^ Category.BULLET.mask));
         return body;
     }

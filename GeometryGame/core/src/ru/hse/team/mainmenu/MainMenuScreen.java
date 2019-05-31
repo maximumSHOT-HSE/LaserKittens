@@ -24,17 +24,17 @@ import ru.hse.team.LaserKittens;
  */
 public class MainMenuScreen implements Screen {
 
-    private final LaserKittens parent;
+    private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-    private Stage stage;
+    private Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
 
     public MainMenuScreen(final LaserKittens laserKittens) {
-        this.parent = laserKittens;
-
-        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
-        stage = new Stage(new ScreenViewport());
+        this.laserKittens = laserKittens;
+        background = new Background(
+                this.laserKittens.getAssetManager().manager
+                        .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
     }
 
     @Override
@@ -42,23 +42,19 @@ public class MainMenuScreen implements Screen {
         stage.clear();
         menu = new Menu(stage);
         Gdx.input.setInputProcessor(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        parent.batch.setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
-        parent.batch.begin();
-        background.draw(parent.batch, camera);
-        parent.batch.end();
-
+        laserKittens.getBatch().begin();
+        background.draw(laserKittens.getBatch());
+        laserKittens.getBatch().end();
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -91,26 +87,30 @@ public class MainMenuScreen implements Screen {
     }
 
     private class Menu {
+
         private Table table = new Table();
-        private Skin skin = parent.assetManager.manager.get("skin/glassy-ui.json", Skin.class);
-        private TextButton levels = new TextButton("Levels", skin);
+        private Skin skin =
+                laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
+        private TextButton levels = new TextButton("Singleplayer", skin);
         private TextButton multiplayer = new TextButton("Multiplayer", skin);
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
         private ImageButton loginButton = new ImageButton(
                 new TextureRegionDrawable(
-                        parent.assetManager.manager.get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
+                        laserKittens.getAssetManager().manager
+                                .get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
         private ImageButton achievementsButton = new ImageButton(
                 new TextureRegionDrawable(
-                        parent.assetManager.manager.get(KittensAssetManager.CUP, Texture.class)));
+                        laserKittens.getAssetManager().manager
+                                .get(KittensAssetManager.CUP, Texture.class)));
         private ImageButton rateButton = new ImageButton(
                 new TextureRegionDrawable(
-                        parent.assetManager.manager.get(KittensAssetManager.PLAY_MARKET, Texture.class)));
+                        laserKittens.getAssetManager().manager
+                                .get(KittensAssetManager.PLAY_MARKET, Texture.class)));
 
         public Menu(Stage stage) {
             table.setFillParent(true);
-            //table.setDebug(true);
             stage.addActor(table);
 
             levels.getLabel().setFontScale(2f);
@@ -144,21 +144,21 @@ public class MainMenuScreen implements Screen {
             levels.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
                 }
             });
 
             multiplayer.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.MULTIPLAYER_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MULTIPLAYER_SCREEN);
                 }
             });
 
             settings.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
                 }
             });
 
@@ -173,21 +173,21 @@ public class MainMenuScreen implements Screen {
             loginButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.getGoogleServices().signIn();
+                    laserKittens.getGoogleServices().signIn();
                 }
             });
 
             achievementsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.getGoogleServices().showAchievements();
+                    laserKittens.getGoogleServices().showAchievements();
                 }
             });
 
             rateButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    parent.getGoogleServices().rateGame();
+                    laserKittens.getGoogleServices().rateGame();
                 }
             });
 

@@ -16,7 +16,7 @@ public class QuizLevel extends AbstractLevel {
     private QuizLevelFactory quizLevelFactory;
 
     public QuizLevel() {
-        super("Quiz");
+        super("Quiz", WIDTH_SCREENS, HEIGHT_SCREENS);
         setAbstractGraph(new GridGraph(WIDTH_SCREENS, HEIGHT_SCREENS,
                 RenderingSystem.getScreenSizeInMeters().x,
                 RenderingSystem.getScreenSizeInMeters().y));
@@ -24,10 +24,8 @@ public class QuizLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        quizLevelFactory = new QuizLevelFactory();
-        quizLevelFactory.setLevelSize(WIDTH_SCREENS, HEIGHT_SCREENS);
-        quizLevelFactory.setAbstractLevel(this);
-        quizLevelFactory.createLevel(engine, assetManager);
+        quizLevelFactory = new QuizLevelFactory(engine, assetManager, getBodyFactory());
+        quizLevelFactory.createLevel(getLevelWidthInScreens(), getLevelHeightInScreens(), this);
     }
 
     @Override

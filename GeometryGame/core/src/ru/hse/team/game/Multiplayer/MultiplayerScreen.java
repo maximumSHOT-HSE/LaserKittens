@@ -29,7 +29,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     public MultiplayerScreen(LaserKittens parent) {
         this.parent = parent;
-        background = new Background(parent.assetManager.manager.get("blue-background.jpg", Texture.class));
+        background = new Background(parent.getAssetManager().manager.get("blue-background.jpg", Texture.class));
         stage = new Stage(new ScreenViewport());
         InputProcessor inputProcessor = new MultiplayerScreenInputProcessor(parent);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
@@ -51,7 +51,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        parent.batch.setProjectionMatrix(camera.combined);
+        parent.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -61,17 +61,17 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
         camera.update();
 
-        parent.batch.begin();
-        background.draw(parent.batch, camera);
+        parent.getBatch().begin();
+        background.draw(parent.getBatch());
         float Y = RenderingSystem.getScreenSizeInPixels().y * 0.8f;
         for (String s : msg) {
-            parent.font.draw(parent.batch, s, RenderingSystem.getScreenSizeInPixels().x / 2, Y);
+            parent.getFont().draw(parent.getBatch(), s, RenderingSystem.getScreenSizeInPixels().x / 2, Y);
             Y -= RenderingSystem.getScreenSizeInPixels().y * 0.2f;
         }
-        parent.font.draw(parent.batch, "NAME = " + WarpController.getInstance().getLocalUser(), RenderingSystem.getScreenSizeInPixels().x / 3, Y);
+        parent.getFont().draw(parent.getBatch(), "NAME = " + WarpController.getInstance().getLocalUser(), RenderingSystem.getScreenSizeInPixels().x / 3, Y);
         Y -= RenderingSystem.getScreenSizeInPixels().y * 0.2f;
-        parent.font.draw(parent.batch, "ROOM = " + WarpController.getInstance().getRoomId(), RenderingSystem.getScreenSizeInPixels().x / 3, Y);
-        parent.batch.end();
+        parent.getFont().draw(parent.getBatch(), "ROOM = " + WarpController.getInstance().getRoomId(), RenderingSystem.getScreenSizeInPixels().x / 3, Y);
+        parent.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();

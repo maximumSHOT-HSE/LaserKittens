@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +16,7 @@ import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TumblerComponent;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
+import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class QuizLevelFactory extends AbstractLevelFactory {
@@ -24,13 +24,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
     private float CW;
     private float CH;
 
-    public QuizLevelFactory() {
-        world = new World(new Vector2(0, 0), true);
-    }
-
-    @Override
-    public World getWorld() {
-        return world;
+    public QuizLevelFactory(PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory) {
+        super(engine, manager, bodyFactory);
     }
 
     private void createBorders() {
@@ -256,20 +251,17 @@ public class QuizLevelFactory extends AbstractLevelFactory {
     }
 
     @Override
-    public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        CH = getLevelHeightInScreens();
-        CW = getLevelWidthInScreens();
+    public void createLevel(int widthInScreens, int heightInScreens, AbstractLevel abstractLevel) {
+        CW = widthInScreens;
+        CH = heightInScreens;
 
-        this.engine = engine;
-        this.manager = assetManager;
-        bodyFactory = BodyFactory.getBodyFactory(world);
-        createBackground();
+        createBackground(widthInScreens, heightInScreens);
 
-        focusedPlayer = createPlayer(
+        abstractLevel.setPlayer(
+                createPlayer(
                 RenderingSystem.getScreenSizeInMeters().x * 3.5f,
                 RenderingSystem.getScreenSizeInMeters().y * 0.5f,
-                3f
-        );
+                3f));
 
         createStar(
                 7.5f * RenderingSystem.getScreenSizeInMeters().x,
