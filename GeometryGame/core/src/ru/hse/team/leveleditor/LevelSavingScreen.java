@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -173,7 +172,7 @@ public class LevelSavingScreen implements Screen {
                         savedLevel.id = Math.max(savedLevel.id, level.id + 1);
                     }
                     savedLevel.levelName = null;
-                    AskName listener = new AskName(savedLevel, laserKittens);
+                    AskName listener = new AskName(savedLevel, levels, laserKittens);
                     Gdx.input.getTextInput(listener, "Add a name to your level", "", null);
                 }
             });
@@ -185,16 +184,26 @@ public class LevelSavingScreen implements Screen {
     private static class AskName implements Input.TextInputListener {
 
         private final SavedLevel level;
+        private final List<SavedLevel> levels;
         private final LaserKittens laserKittens;
 
-        public AskName(SavedLevel level, LaserKittens laserKittens) {
+        public AskName(SavedLevel level, List<SavedLevel> levels, LaserKittens laserKittens) {
             this.level = level;
+            this.levels = levels;
             this.laserKittens = laserKittens;
         }
 
         @Override
         public void input (String text) {
             level.levelName = text;
+            for (SavedLevel savedLevel : levels) {
+                if (text.equals(savedLevel.levelName)) {
+                    AskName listener = new AskName(savedLevel, levels, laserKittens);
+                    Gdx.input.getTextInput(listener, "Add a name to your level",
+                            "It should not coincide with existing level's name", null);
+                    return;
+                }
+            }
             addLevel();
             laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
         }
