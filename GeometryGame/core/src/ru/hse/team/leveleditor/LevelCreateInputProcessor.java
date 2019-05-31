@@ -29,7 +29,8 @@ public class LevelCreateInputProcessor implements InputProcessor {
     private boolean dragging;
     private int draggingPointer = -1;
 
-    public LevelCreateInputProcessor(LaserKittens laserKittens, LevelCreateScreen levelCreateScreen, OrthographicCamera camera) {
+    public LevelCreateInputProcessor(LaserKittens laserKittens, LevelCreateScreen levelCreateScreen,
+                                     OrthographicCamera camera) {
         this.laserKittens = laserKittens;
         this.levelCreateScreen = levelCreateScreen;
         this.camera = camera;
