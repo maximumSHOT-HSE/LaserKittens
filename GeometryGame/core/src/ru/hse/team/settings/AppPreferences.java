@@ -13,26 +13,26 @@ public class AppPreferences {
     // (if it is not, saved settings get cleared)
     private Preferences preferences;
 
-    private static final String PREF_MUSIC_VOLUME = "music volume";
+    private static final String PREF_PLAYER_NAME = "player name";
     private static final String PREF_SOUND_VOLUME = "sound volume";
-    private static final String PREFS_NAME = "CATS ARE NICE";
+    private static final String PREFS_SETTINGS_NAME = "CATS ARE NICE";
     private static final String PREF_ACCELEROMETER = "ACCELEROMETER";
     private static final String PREF_SHOW_TIME = "SHOW_TIME";
     private static final String PREF_FOG = "FOG";
 
     protected Preferences getPrefs() {
         if (preferences == null) {
-            preferences = Gdx.app.getPreferences(PREFS_NAME);
+            preferences = Gdx.app.getPreferences(PREFS_SETTINGS_NAME);
         }
         return preferences;
     }
 
-    public float getMusicVolume() {
-        return getPrefs().getFloat(PREF_MUSIC_VOLUME, 0.5f);
+    public String getPlayerName() {
+        return getPrefs().getString(PREF_PLAYER_NAME, "Player");
     }
 
-    public void setMusicVolume(float volume) {
-        getPrefs().putFloat(PREF_MUSIC_VOLUME, volume);
+    public void setPlayerName(String playerName) {
+        getPrefs().putString(PREF_PLAYER_NAME, playerName);
         getPrefs().flush();
     }
 

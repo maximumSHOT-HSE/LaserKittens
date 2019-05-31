@@ -47,7 +47,6 @@ abstract public class AbstractLevel {
         world.setContactListener(new ContractProcessor(this));
     }
 
-
     abstract public void createLevel(PooledEngine engine, KittensAssetManager assetManager);
 
     public String getLevelName() {

@@ -18,11 +18,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import de.tomgrill.gdxdialogs.core.dialogs.GDXTextPrompt;
+import de.tomgrill.gdxdialogs.core.listener.TextPromptListener;
 import ru.hse.team.Background;
 import ru.hse.team.GoogleServicesAction;
-import ru.hse.team.LaserKittens;
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.LaserKittens;
 
 /**
  * Settings screen provides an ability to manage application settings.
@@ -110,15 +114,20 @@ public class SettingsScreen implements Screen {
 
         private Label titleLabel = new Label("Settings",
                 new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
-        private Label volumeMusicLabel = new Label("music volume",
+
+        private Label playerNameLabel = new Label("player name: ",
                 new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+
         private Label volumeSoundLabel = new Label("sound volume",
                 new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
         final private TextButton backButton = new TextButton("Back", skin);
         private TextButton about = new TextButton("About", skin);
-        final private Slider volumeMusicSlider =
-                new Slider( 0f, 1f, 0.1f,false, skin);
+
+        final private Label playerNameTextField = new Label(
+                laserKittens.getPreferences().getPlayerName(),
+                new Label.LabelStyle(laserKittens.getFont(), Color.YELLOW));
+
         final private Slider volumeSoundSlider =
                 new Slider( 0f, 1f, 0.1f,false, skin );
 
@@ -142,17 +151,24 @@ public class SettingsScreen implements Screen {
             stage.addActor(table);
 
             titleLabel.setFontScale(6f);
-            volumeMusicLabel.setFontScale(1.5f);
+            playerNameLabel.setFontScale(1.5f);
             volumeSoundLabel.setFontScale(1.5f);
-            enableAccelerometer.getImageCell().size(20, 20);
-            enableAccelerometer.getImage().scaleBy(1.5f);
-            showTime.getImageCell().size(20, 20);
-            showTime.getImage().scaleBy(1.5f);
             accelerometerLabel.setFontScale(1.5f);
             showTimeLabel.setFontScale(1.5f);
+            fogLabel.setFontScale(1.5f);
+
+            playerNameTextField.setFontScale(1.5f);
+
+            volumeSoundSlider.setValue(laserKittens.getPreferences().getSoundVolume());
+
+            enableAccelerometer.getImageCell().size(20, 20);
+            enableAccelerometer.getImage().scaleBy(1.5f);
+
+            showTime.getImageCell().size(20, 20);
+            showTime.getImage().scaleBy(1.5f);
+
             enableFog.getImageCell().size(20, 20);
             enableFog.getImage().scaleBy(1.5f);
-            fogLabel.setFontScale(1.5f);
 
             about.getLabel().setFontScale(1.5f);
             backButton.getLabel().setFontScale(1.5f);
@@ -160,9 +176,9 @@ public class SettingsScreen implements Screen {
             table.row().pad(10, 10, 10, 10);
             table.add(titleLabel).colspan(2);
             table.row().pad(10, 10, 10, 10);
-            table.add(volumeMusicLabel);
-            table.add(volumeMusicSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
-            table.row().pad(10, 10, 5, 10);
+            table.add(playerNameLabel);
+            table.add(playerNameTextField).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.03f);
+            table.row().pad(10, 10, 10, 10);
             table.add(volumeSoundLabel);
             table.add(volumeSoundSlider).width(Gdx.graphics.getWidth() * 0.35f).height(Gdx.graphics.getHeight() * 0.1f);
             table.row().pad(10, 10, 5, 10);
@@ -184,12 +200,6 @@ public class SettingsScreen implements Screen {
 
         private void setListeners() {
 
-            volumeMusicSlider.setValue(laserKittens.getPreferences().getMusicVolume());
-            volumeMusicSlider.addListener(event -> {
-                laserKittens.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
-                return false;
-            });
-
             about.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -197,7 +207,36 @@ public class SettingsScreen implements Screen {
                 }
             });
 
-            volumeSoundSlider.setValue(laserKittens.getPreferences().getSoundVolume());
+            playerNameTextField.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    GDXTextPrompt textPrompt = laserKittens.getDialogs().newDialog(GDXTextPrompt.class);
+
+                    textPrompt.setTitle("Your name");
+                    textPrompt.setMessage("Enter your name");
+
+                    textPrompt.setCancelButtonLabel("Cancel");
+                    textPrompt.setConfirmButtonLabel("Save name");
+                    textPrompt.setValue(playerNameTextField.getText());
+
+                    textPrompt.setTextPromptListener(new TextPromptListener() {
+
+                        @Override
+                        public void confirm(String text) {
+                            playerNameTextField.setText(text);
+                            laserKittens.getPreferences().setPlayerName(text);
+                        }
+
+                        @Override
+                        public void cancel() {
+                            // handle input cancel
+                        }
+                    });
+
+                    textPrompt.build().show();
+                }
+            });
+
             volumeSoundSlider.addListener(event -> {
                 laserKittens.getPreferences().setSoundVolume(volumeSoundSlider.getValue());
                 return false;

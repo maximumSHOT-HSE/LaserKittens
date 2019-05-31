@@ -1,57 +1,62 @@
 package ru.hse.team.game.Multiplayer;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import ru.hse.team.Background;
+import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
-import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpListener;
-import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 public class MultiplayerScreen implements Screen, WarpListener {
 
-    private final LaserKittens parent;
+    private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
-    private Stage stage;
+    private Stage stage = new Stage(new ScreenViewport());
 
     private InputMultiplexer inputMultiplexer;
 
-    public MultiplayerScreen(LaserKittens parent) {
-        this.parent = parent;
-        background = new Background(parent.getAssetManager().manager.get("blue-background.jpg", Texture.class));
-        stage = new Stage(new ScreenViewport());
-        InputProcessor inputProcessor = new MultiplayerScreenInputProcessor(parent);
+    public MultiplayerScreen(LaserKittens laserKittens) {
+        this.laserKittens = laserKittens;
+        background = new Background(laserKittens.getAssetManager().manager
+                .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
+        InputProcessor inputProcessor = new MultiplayerScreenInputProcessor(laserKittens);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
-        WarpController.getInstance().setWarpListener(this);
     }
-
-    private final String[] tryingToConnect = {"Connecting","to AppWarp"};
-    private final String[] waitForOtherUser = {"Waiting for","other user"};
-    private final String[] errorInConnection = {"Error in","Connection", "Go Back"};
-    private final String[] gameStartMsg = {"Game Started!"};
-    private String[] msg = tryingToConnect;
 
     @Override
     public void show() {
-        WarpController.getInstance().start(WarpController.generateRandomName());
+//        WarpController.getInstance().setWarpListener(this);
+//        WarpController.getInstance().start(WarpController.generateRandomName());
 
         stage.clear();
+        // stage.clear() resets the stage listener
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.BACK) {
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                }
+                return true;
+            }
+        });
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-        parent.getBatch().setProjectionMatrix(camera.combined);
+        laserKittens.getBatch().setProjectionMatrix(camera.combined);
     }
 
     @Override
@@ -61,17 +66,9 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
         camera.update();
 
-        parent.getBatch().begin();
-        background.draw(parent.getBatch());
-        float Y = RenderingSystem.getScreenSizeInPixels().y * 0.8f;
-        for (String s : msg) {
-            parent.getFont().draw(parent.getBatch(), s, RenderingSystem.getScreenSizeInPixels().x / 2, Y);
-            Y -= RenderingSystem.getScreenSizeInPixels().y * 0.2f;
-        }
-        parent.getFont().draw(parent.getBatch(), "NAME = " + WarpController.getInstance().getLocalUser(), RenderingSystem.getScreenSizeInPixels().x / 3, Y);
-        Y -= RenderingSystem.getScreenSizeInPixels().y * 0.2f;
-        parent.getFont().draw(parent.getBatch(), "ROOM = " + WarpController.getInstance().getRoomId(), RenderingSystem.getScreenSizeInPixels().x / 3, Y);
-        parent.getBatch().end();
+        laserKittens.getBatch().begin();
+        background.draw(laserKittens.getBatch());
+        laserKittens.getBatch().end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -107,21 +104,17 @@ public class MultiplayerScreen implements Screen, WarpListener {
     @Override
     public void onWaitingStarted(String message) {
         System.out.println("MultiplayerScreen.onWaitingStarted: msg = " + message);
-        this.msg = waitForOtherUser;
     }
 
     @Override
     public void onError(String message) {
         System.out.println("MultiplayerScreen.onError: msg = " + message);
-        this.msg = errorInConnection;
+//        this.msg = errorInConnection;
     }
 
     @Override
     public void onGameStarted(String message) {
         System.out.println("MultiplayerScreen.onGameStarted: msg = " + message);
-        this.msg = gameStartMsg;
-        Gdx.app.postRunnable(() -> ((Game) (Gdx.app.getApplicationListener())).setScreen(
-                new GameScreen(parent, new MultiplayerQuizLevel(parent, MultiplayerScreen.this, Integer.parseInt(message)))));
     }
 
     @Override
@@ -133,6 +126,4 @@ public class MultiplayerScreen implements Screen, WarpListener {
     public void onGameUpdateReceived(String message) {
         System.out.println("MultiplayerScreen.onGameUpdateReceived: msg = " + message);
     }
-
-    // methods from WarpListener END
 }
