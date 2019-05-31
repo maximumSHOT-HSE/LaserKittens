@@ -30,7 +30,7 @@ import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 abstract public class AbstractLevelFactory {
 
-    private static int currentEntityId = 0;
+    private int currentEntityId = 0;
     private Map<Integer, Entity> idToEntity = new HashMap<>();
 
     private PooledEngine engine;

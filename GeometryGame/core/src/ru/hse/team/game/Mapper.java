@@ -31,7 +31,8 @@ public class Mapper {
             ComponentMapper.getFor(BulletComponent.class);
     public static ComponentMapper<KeyComponent> keyComponent =
             ComponentMapper.getFor(KeyComponent.class);
-    public static ComponentMapper<DoorComponent> doorComponent = ComponentMapper.getFor(DoorComponent.class);
+    public static ComponentMapper<DoorComponent> doorComponent =
+            ComponentMapper.getFor(DoorComponent.class);
     public static ComponentMapper<TumblerComponent> tumblerComponent =
             ComponentMapper.getFor(TumblerComponent.class);
     public static ComponentMapper<PatrolComponent> patrolComponent =

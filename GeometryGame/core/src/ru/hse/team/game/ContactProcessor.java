@@ -15,11 +15,11 @@ import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 import ru.hse.team.game.levels.AbstractLevel;
 
-public class ContractProcessor implements ContactListener {
+public class ContactProcessor implements ContactListener {
 
     private AbstractLevel abstractLevel;
 
-    public ContractProcessor(AbstractLevel abstractLevel) {
+    public ContactProcessor(AbstractLevel abstractLevel) {
         this.abstractLevel = abstractLevel;
     }
 

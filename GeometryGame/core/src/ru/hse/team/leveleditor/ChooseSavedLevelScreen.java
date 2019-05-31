@@ -43,7 +43,7 @@ public class ChooseSavedLevelScreen implements Screen {
     public ChooseSavedLevelScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
-        background = new Background(this.laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
+        background = new Background(this.laserKittens.getAssetManager().manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
         stage = new Stage(new ScreenViewport());
     }
 
@@ -167,7 +167,8 @@ public class ChooseSavedLevelScreen implements Screen {
                 buttonsTable.row().pad(10, 10, 10, 10);
                 buttonsTable.add(button).width(buttonWidth).height(buttonHeight);
 
-                ImageButton binButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.DELETE, Texture.class)));
+                ImageButton binButton = new ImageButton(new TextureRegionDrawable(
+                        laserKittens.getAssetManager().manager.get(KittensAssetManager.DELETE, Texture.class)));
                 buttonsTable.add(binButton).width(0.15f * Gdx.graphics.getWidth()).height(0.15f * Gdx.graphics.getHeight());
 
                 final int ii = i;

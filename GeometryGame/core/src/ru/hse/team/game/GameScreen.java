@@ -46,10 +46,10 @@ public class GameScreen implements Screen {
         abstractLevel.createLevel(engine, this.laserKittens.getAssetManager());
 
         renderingSystem = new RenderingSystem(abstractLevel, laserKittens);
-        physicsSystem = new PhysicsSystem(abstractLevel.getWorld(), abstractLevel);
+        physicsSystem = new PhysicsSystem(abstractLevel);
         physicsDebugSystem = new PhysicsDebugSystem(abstractLevel.getWorld(), renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
-        stateControlSystem = new StateControlSystem(abstractLevel.getWorld(), engine, abstractLevel);
+        stateControlSystem = new StateControlSystem(engine, abstractLevel);
 
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsSystem);

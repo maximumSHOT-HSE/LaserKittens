@@ -132,7 +132,7 @@ public class AboutScreen implements Screen {
                 new Label(" Apache 2 License", skin, "black");
 
         private final Label skinLicense =
-                new Label("Skin by", skin);
+                new Label("SkinName by", skin);
         private final Label skinLink =
                 new Label("Raymond \"Raeleus\" Buckley", skin, "black");
         private final Label skinCC4Link =

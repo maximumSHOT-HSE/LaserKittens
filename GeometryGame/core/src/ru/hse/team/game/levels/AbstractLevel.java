@@ -2,7 +2,6 @@ package ru.hse.team.game.levels;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -10,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
-import ru.hse.team.game.ContractProcessor;
+import ru.hse.team.game.ContactProcessor;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.MessageCreator;
@@ -45,7 +44,7 @@ abstract public class AbstractLevel {
         this.levelName = levelName;
         this.widthInScreens = widthInScreens;
         this.heightInScreens = heightInScreens;
-        world.setContactListener(new ContractProcessor(this));
+        world.setContactListener(new ContactProcessor(this));
     }
 
 
