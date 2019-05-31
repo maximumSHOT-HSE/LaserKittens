@@ -41,8 +41,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
 //        WarpController.getInstance().setWarpListener(this);
 //        WarpController.getInstance().start(WarpController.generateRandomName());
 
-        stage.clear();
-        // stage.clear() resets the stage listener
+        stage.clear(); // resets the stage listener
         stage.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
