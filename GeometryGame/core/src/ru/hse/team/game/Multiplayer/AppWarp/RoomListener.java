@@ -1,6 +1,5 @@
 package ru.hse.team.game.Multiplayer.AppWarp;
 
-import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 import com.shephertz.app42.gaming.multiplayer.client.events.LiveRoomInfoEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 import com.shephertz.app42.gaming.multiplayer.client.listener.RoomRequestListener;
@@ -15,11 +14,7 @@ public class RoomListener implements RoomRequestListener {
 
     @Override
     public void onSubscribeRoomDone(RoomEvent roomEvent) {
-        if (roomEvent.getResult() == WarpResponseResultCode.SUCCESS) {
-            warpController.onRoomSubscribed(roomEvent);
-        } else {
-            warpController.onRoomSubscribed(null);
-        }
+
     }
 
     @Override
@@ -30,7 +25,6 @@ public class RoomListener implements RoomRequestListener {
     @Override
     public void onJoinRoomDone(RoomEvent roomEvent) {
         System.out.println("RoomListener.onJoinRoomDone " + roomEvent.getResult());
-        warpController.onJoinRoomDone(roomEvent);
     }
 
     @Override
@@ -40,11 +34,6 @@ public class RoomListener implements RoomRequestListener {
 
     @Override
     public void onGetLiveRoomInfoDone(LiveRoomInfoEvent liveRoomInfoEvent) {
-        if (liveRoomInfoEvent.getResult() == WarpResponseResultCode.SUCCESS) {
-            warpController.onGetLiveRoomInfoDone(liveRoomInfoEvent);
-        } else {
-            warpController.onGetLiveRoomInfoDone(null);
-        }
     }
 
     @Override

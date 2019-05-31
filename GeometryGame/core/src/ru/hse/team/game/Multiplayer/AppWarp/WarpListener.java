@@ -1,14 +1,16 @@
 package ru.hse.team.game.Multiplayer.AppWarp;
 
+import com.shephertz.app42.gaming.multiplayer.client.events.RoomData;
+
 public interface WarpListener {
 
-    void onWaitingStarted(String message);
+    void onConnectDone();
 
-    void onError(String message);
+    void onConnectError(String message);
 
-    void onGameStarted(String message);
+    void onCreateRoomDone(boolean isSuccess, RoomData roomData);
 
-    void onGameFinished(WarpController.EndType endType, boolean isRemote);
+    void onDeleteRoomDone(boolean isSuccess, RoomData roomData);
 
-    void onGameUpdateReceived(String message);
+    void onGetMatchedRoomsDone(boolean isSuccess, RoomData[] roomDatas);
 }

@@ -29,12 +29,10 @@ public class NotificationListener implements NotifyListener {
 
     @Override
     public void onUserLeftRoom(RoomData roomData, String s) {
-        warpController.onUserLeftRoom(roomData, s);
     }
 
     @Override
     public void onUserJoinedRoom(RoomData roomData, String s) {
-        warpController.onUserJoinedRoom(roomData, s);
     }
 
     @Override
@@ -65,7 +63,6 @@ public class NotificationListener implements NotifyListener {
     @Override
     public void onUpdatePeersReceived(UpdateEvent updateEvent) {
         System.out.println("NotificationListener.onUpdatePeersReveived: " + (new String(updateEvent.getUpdate())));
-        warpController.onGameUpdateReceived(updateEvent);
     }
 
     @Override
