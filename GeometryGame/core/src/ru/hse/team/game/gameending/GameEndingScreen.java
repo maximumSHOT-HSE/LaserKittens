@@ -43,7 +43,7 @@ public class GameEndingScreen implements Screen {
     public GameEndingScreen(LaserKittens laserKittens, AbstractLevel level) {
         this.laserKittens = laserKittens;
         this.parentLevel = level;
-        this.background = new Background(laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
+        this.background = new Background(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         this.stage = new Stage(new ScreenViewport());
         addResultToDatabase(parentLevel.getGameStatus());
     }
@@ -119,7 +119,7 @@ public class GameEndingScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN);
+        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
         private TextButton restartButton = new TextButton("Restart", skin);
         private TextButton quitButton = new TextButton("Quit", skin);
         private Table table = new Table();

@@ -41,7 +41,7 @@ public class LevelSavingScreen implements Screen {
         this.laserKittens = laserKittens;
         this.savedLevel = savedLevel;
 
-        background = new Background(this.laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class));
+        background = new Background(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         stage = new Stage(new ScreenViewport());
     }
 
@@ -123,7 +123,7 @@ public class LevelSavingScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
+        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
 
         private Label titleLabel = new Label("Save level", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private TextButton newLevelButton = new TextButton("New level", skin);

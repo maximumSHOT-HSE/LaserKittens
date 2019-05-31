@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -88,15 +89,15 @@ public class LevelCreateScreen implements Screen {
     public TextureRegion getTextureByType(SimpleEntity.EntityType type) {
         switch (type) {
             case STAR:
-                return new TextureRegion(laserKittens.getAssetManager().manager.get(KittensAssetManager.STAR_2, Texture.class));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.STAR_2));
             case WALL:
-                return new TextureRegion(laserKittens.getAssetManager().manager.get(KittensAssetManager.ICE_WALL, Texture.class));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ICE_WALL));
             case MIRROR:
-                return new TextureRegion(laserKittens.getAssetManager().manager.get(KittensAssetManager.MIRROR, Texture.class));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.MIRROR));
             case PLAYER:
-                return new TextureRegion(laserKittens.getAssetManager().manager.get(KittensAssetManager.CAT_3, Texture.class));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.CAT_3));
             case GLASS:
-                return new TextureRegion(laserKittens.getAssetManager().manager.get(KittensAssetManager.TRANSPARENT_WALL, Texture.class));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.TRANSPARENT_WALL));
             default:
                 throw new AssertionError("Panic");
         }
@@ -183,7 +184,7 @@ public class LevelCreateScreen implements Screen {
     }
 
     private TextureRegion createBackground() {
-        Texture background = laserKittens.getAssetManager().manager.get("blue-background.jpg", Texture.class);
+        Texture background = laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND);
         background.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion backgroundRegion = new TextureRegion(background);
 
@@ -195,7 +196,7 @@ public class LevelCreateScreen implements Screen {
 
     private class EditorTools {
 
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
+        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
         private Table table = new Table();
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
@@ -203,16 +204,26 @@ public class LevelCreateScreen implements Screen {
         final float toolButtonWidth = screenWidth / 5;
         final float toolButtonHeight = screenHeight / 10;
 
-        private ImageButton playerButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CAT_3, Texture.class)));
-        private ImageButton wallButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.ICE_WALL, Texture.class)));
-        private ImageButton mirrorButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.MIRROR, Texture.class)));
-        private ImageButton glassButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.TRANSPARENT_WALL, Texture.class)));
-        private ImageButton starButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.STAR_2, Texture.class)));
-        private ImageButton rotateLeft = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.ROTATE_LEFT, Texture.class)));
-        private ImageButton rotateRight = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.ROTATE_RIGHT, Texture.class)));
-        private ImageButton finishButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.OK, Texture.class)));
-        private ImageButton eraserButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.ERASER, Texture.class)));
-        private ImageButton cursorButton = new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().manager.get(KittensAssetManager.CURSOR, Texture.class)));
+        private ImageButton playerButton = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.CAT_3)));
+        private ImageButton wallButton = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ICE_WALL)));
+        private ImageButton mirrorButton = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.MIRROR)));
+        private ImageButton glassButton = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.TRANSPARENT_WALL)));
+        private ImageButton starButton = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.STAR_2)));
+        private ImageButton rotateLeft = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ROTATE_LEFT)));
+        private ImageButton rotateRight = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ROTATE_RIGHT)));
+        private ImageButton finishButton = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.OK)));
+        private ImageButton eraserButton = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ERASER)));
+        private ImageButton cursorButton = new ImageButton(new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.CURSOR)));
 
         public EditorTools(Stage stage) {
             table.setFillParent(true);

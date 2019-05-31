@@ -32,9 +32,8 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-        background = new Background(
-                this.laserKittens.getAssetManager().manager
-                        .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
+        background = new Background(laserKittens.getAssetManager()
+                        .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
     }
 
     @Override
@@ -90,24 +89,21 @@ public class MainMenuScreen implements Screen {
 
         private Table table = new Table();
         private Skin skin =
-                laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN, Skin.class);
+                laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
         private TextButton levels = new TextButton("Singleplayer", skin);
         private TextButton multiplayer = new TextButton("Multiplayer", skin);
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton exit = new TextButton("Exit", skin);
 
         private ImageButton loginButton = new ImageButton(
-                new TextureRegionDrawable(
-                        laserKittens.getAssetManager().manager
-                                .get(KittensAssetManager.GOOGLE_SIGN_IN, Texture.class)));
+                new TextureRegionDrawable(laserKittens.getAssetManager()
+                                .getImage(KittensAssetManager.Images.GOOGLE_SIGN_IN)));
         private ImageButton achievementsButton = new ImageButton(
-                new TextureRegionDrawable(
-                        laserKittens.getAssetManager().manager
-                                .get(KittensAssetManager.CUP, Texture.class)));
+                new TextureRegionDrawable(laserKittens.getAssetManager()
+                                .getImage(KittensAssetManager.Images.CUP)));
         private ImageButton rateButton = new ImageButton(
-                new TextureRegionDrawable(
-                        laserKittens.getAssetManager().manager
-                                .get(KittensAssetManager.PLAY_MARKET, Texture.class)));
+                new TextureRegionDrawable(laserKittens.getAssetManager()
+                                .getImage(KittensAssetManager.Images.PLAY_MARKET)));
 
         public Menu(Stage stage) {
             table.setFillParent(true);

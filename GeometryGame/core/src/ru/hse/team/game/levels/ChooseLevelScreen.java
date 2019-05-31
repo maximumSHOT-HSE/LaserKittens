@@ -58,8 +58,8 @@ public class ChooseLevelScreen implements Screen {
 
     public ChooseLevelScreen(LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-        background = new Background(this.laserKittens.getAssetManager().manager
-                .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
+        background = new Background(this.laserKittens.getAssetManager()
+                .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         fillLevels();
 
         // +3 for statistics, level editor and saved levels TODO
@@ -136,14 +136,13 @@ public class ChooseLevelScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = laserKittens.getAssetManager()
-                .manager.get(KittensAssetManager.SKIN);
+        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
         private SlidingPane slidingPane;
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
-        private Texture naviActive = laserKittens.getAssetManager().manager
-                .get(KittensAssetManager.LEVEL_INDICATOR_ACTIVE_PNG);
-        private Texture naviPassive = laserKittens.getAssetManager().manager
-                .get(KittensAssetManager.LEVEL_INDICATOR_PASSIVE_PNG);
+        private Texture naviActive = laserKittens.getAssetManager()
+                .getImage(KittensAssetManager.Images.LEVEL_INDICATOR_ACTIVE_PNG);
+        private Texture naviPassive = laserKittens.getAssetManager()
+                .getImage(KittensAssetManager.Images.LEVEL_INDICATOR_PASSIVE_PNG);
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
 
@@ -240,8 +239,8 @@ public class ChooseLevelScreen implements Screen {
                 }
             });
             ImageButton scoreButton = new ImageButton(
-                    new TextureRegionDrawable(laserKittens.getAssetManager().manager
-                            .get(KittensAssetManager.CUP, Texture.class)));
+                    new TextureRegionDrawable(laserKittens.getAssetManager()
+                            .getImage(KittensAssetManager.Images.CUP)));
             scoreButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {

@@ -143,9 +143,9 @@ public class LaserKittens extends Game {
         shapeRenderer = new ShapeRenderer();
 
         getAssetManager().loadEverything();
-        getAssetManager().manager.finishLoading();
+        getAssetManager().finishLoading();
 
-        font = getAssetManager().manager.get(KittensAssetManager.FONT, BitmapFont.class);
+        font = getAssetManager().getFont(KittensAssetManager.Fonts.FONT);
 
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }
@@ -161,7 +161,7 @@ public class LaserKittens extends Game {
         googleServices.signOut();
         getBatch().dispose();
         getFont().dispose();
-        getAssetManager().manager.dispose();
+        getAssetManager().dispose();
         getShapeRenderer().dispose();
     }
 

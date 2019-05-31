@@ -147,7 +147,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             float w = abstractLevel.getAbstractGraph().getVertexControlWidth() * 1.5f;
             float h = abstractLevel.getAbstractGraph().getVertexControlHeight() * 1.5f;
             for (Vector2 fogPosition : fogPositions) {
-                Texture fogTexture = laserKittens.getAssetManager().manager.get(KittensAssetManager.FOG, Texture.class);
+                Texture fogTexture = laserKittens.getAssetManager().getImage(KittensAssetManager.Images.FOG);
                 batch.draw(fogTexture, fogPosition.x - w / 2, fogPosition.y - h / 2, w, h);
             }
         }

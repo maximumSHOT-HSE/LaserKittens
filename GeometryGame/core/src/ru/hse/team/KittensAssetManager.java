@@ -153,4 +153,12 @@ public class KittensAssetManager {
         loadSounds();
         loadFonts();
     }
+
+    public void finishLoading() {
+        manager.finishLoading();
+    }
+
+    public void dispose() {
+        manager.dispose();
+    }
 }

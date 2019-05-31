@@ -41,7 +41,7 @@ public class AboutScreen implements Screen {
     public AboutScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
         background = new Background(this.laserKittens.getAssetManager()
-                .manager.get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
+                .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
     }
 
     @Override
@@ -113,7 +113,7 @@ public class AboutScreen implements Screen {
     private class Menu {
         private Table table = new Table();
 
-        private Skin skin = laserKittens.getAssetManager().manager.get(KittensAssetManager.SKIN);
+        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
         private Label titleLabel = new Label("About", skin);
         private final TextButton backButton = new TextButton("Back", skin);
 

@@ -30,8 +30,8 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     public MultiplayerScreen(LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-        background = new Background(laserKittens.getAssetManager().manager
-                .get(KittensAssetManager.BLUE_BACKGROUND, Texture.class));
+        background = new Background(laserKittens.getAssetManager()
+                .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         InputProcessor inputProcessor = new MultiplayerScreenInputProcessor(laserKittens);
         inputMultiplexer = new InputMultiplexer(stage, inputProcessor);
     }

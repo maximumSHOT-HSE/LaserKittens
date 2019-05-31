@@ -112,10 +112,10 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
             public void run() {
                 if (state == 0) {
                     barrier.getComponent(BodyComponent.class).body.setLinearVelocity(0, 5);
-                    tumbler.getComponent(TextureComponent.class).region.setTexture(new Texture(KittensAssetManager.BLUE_TUMBLER));
+                    tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.BLUE_TUMBLER));
                 } else {
                     barrier.getComponent(BodyComponent.class).body.setLinearVelocity(0, -5);
-                    tumbler.getComponent(TextureComponent.class).region.setTexture(new Texture(KittensAssetManager.YELLOW_TUMBLER));
+                    tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.YELLOW_TUMBLER));
                 }
                 state ^= 1;
             }

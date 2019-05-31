@@ -48,7 +48,7 @@ abstract public class AbstractLevelFactory {
                                      AbstractLevel abstractLevel);
 
     public Entity createStar(float x, float y, float radius) {
-        Texture texture = manager.manager.get(KittensAssetManager.STAR_2, Texture.class);
+        Texture texture = manager.getImage(KittensAssetManager.Images.STAR_2);
         Vector2 scale = new Vector2(2 * radius / RenderingSystem.pixelsToMeters(texture.getWidth()),
                 2 * radius / RenderingSystem.pixelsToMeters(texture.getHeight()));
 
@@ -74,7 +74,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createBackground(int widthInScreens, int heightInScreens) {
-        Texture background = manager.manager.get("blue-background.jpg", Texture.class);
+        Texture background = manager.getImage(KittensAssetManager.Images.BLUE_BACKGROUND);
         background.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion backgroundRegion = new TextureRegion(background);
 
@@ -93,7 +93,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createMirror(Vector2 center, float width, float height, float rotation) {
-        Texture texture = new Texture(KittensAssetManager.MIRROR);
+        Texture texture = manager.getImage(KittensAssetManager.Images.MIRROR);
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
@@ -115,13 +115,13 @@ abstract public class AbstractLevelFactory {
     protected Entity createPlayer(float playerX, float playerY, float radius) {
 
         float regionCatRadius = RenderingSystem.pixelsToMeters(
-                manager.manager.get(KittensAssetManager.CAT_3, Texture.class).getHeight() * 0.78f * 0.5f);
+                manager.getImage(KittensAssetManager.Images.CAT_3).getHeight() * 0.78f * 0.5f);
         Vector2 scale = new Vector2(radius / regionCatRadius, radius / regionCatRadius);
 
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newPlayerBody(new Vector2(playerX, playerY), radius))
                 .addTransformComponent(new Vector3(playerX, playerY, 100), scale, 0, false)
-                .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.CAT_3, Texture.class)))
+                .addTextureComponent(new TextureRegion(manager.getImage(KittensAssetManager.Images.CAT_3)))
                 .addStateComponent(StateComponent.State.NORMAL)
                 .addTypeComponent(TypeComponent.Type.PLAYER)
                 .build();
@@ -129,13 +129,13 @@ abstract public class AbstractLevelFactory {
 
     protected Entity createGuardian(float guardianX, float guardianY, float radius, List<Vector2> path, float velocty) {
         float regionGuardianRadius = RenderingSystem.pixelsToMeters(
-                manager.manager.get(KittensAssetManager.CAT_2, Texture.class).getHeight() * 0.78f * 0.5f);
+                manager.getImage(KittensAssetManager.Images.CAT_2).getHeight() * 0.78f * 0.5f);
         Vector2 scale = new Vector2(radius / regionGuardianRadius, radius / regionGuardianRadius);
 
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newGuardianBody(new Vector2(guardianX, guardianY), radius))
                 .addTransformComponent(new Vector3(guardianX, guardianY, 100), scale, 0, false)
-                .addTextureComponent(new TextureRegion(manager.manager.get(KittensAssetManager.CAT_2, Texture.class)))
+                .addTextureComponent(new TextureRegion(manager.getImage(KittensAssetManager.Images.CAT_2)))
                 .addStateComponent(StateComponent.State.NORMAL)
                 .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
                 .addPatrolComponent(path, velocty)
@@ -147,7 +147,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createImpenetrableWall(Vector2 center, float width, float height, float rotation) {
-        Texture texture = new Texture(KittensAssetManager.ICE_WALL);
+        Texture texture = manager.getImage(KittensAssetManager.Images.ICE_WALL);
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
@@ -165,7 +165,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createImpenetrableDynamicWall(Vector2 center, float width, float height) {
-        Texture texture = new Texture(KittensAssetManager.ICE_WALL);
+        Texture texture = manager.getImage(KittensAssetManager.Images.ICE_WALL);
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
@@ -183,7 +183,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createDoor(Vector2 center, float width, float height) {
-        Texture texture = new Texture(KittensAssetManager.DOOR);
+        Texture texture = manager.getImage(KittensAssetManager.Images.DOOR);
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
@@ -207,7 +207,7 @@ abstract public class AbstractLevelFactory {
 //        if (abstractLevel.getAbstractGraph() != null) {
 //            abstractLevel.getAbstractGraph().visit(center);
 //        }
-        Texture texture = manager.manager.get(KittensAssetManager.KEY, Texture.class);
+        Texture texture = manager.getImage(KittensAssetManager.Images.KEY);
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height))
                 .addTransformComponent(new Vector3(center.x, center.y, 10))
@@ -219,7 +219,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createPointer(Vector2 position, float rotation) {
-        Texture texture = manager.manager.get(KittensAssetManager.POINTER, Texture.class);
+        Texture texture = manager.getImage(KittensAssetManager.Images.POINTER);
         return (new EntityBuilder())
                 .addTransformComponent(
                         new Vector3(position, 0),
@@ -230,10 +230,10 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createQuestion(Vector2 position, float scale) {
-        Texture textture = manager.manager.get(KittensAssetManager.QUESTION, Texture.class);
+        Texture texture = manager.getImage(KittensAssetManager.Images.QUESTION);
         return (new EntityBuilder())
                 .addTransformComponent(new Vector3(position, 0), new Vector2(scale, scale), 0f, false)
-                .addTextureComponent(new TextureRegion(textture))
+                .addTextureComponent(new TextureRegion(texture))
                 .build();
     }
 
@@ -242,7 +242,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createTransparentWall(Vector2 center, float width, float height, float rotation) {
-        Texture texture = new Texture(KittensAssetManager.TRANSPARENT_WALL);
+        Texture texture = manager.getImage(KittensAssetManager.Images.TRANSPARENT_WALL);
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
@@ -262,7 +262,7 @@ abstract public class AbstractLevelFactory {
             float width,
             float height,
             Runnable task) {
-        Texture texture = new Texture(KittensAssetManager.YELLOW_TUMBLER);
+        Texture texture = manager.getImage(KittensAssetManager.Images.YELLOW_TUMBLER);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
                 (int) RenderingSystem.metersToPixels(width),
