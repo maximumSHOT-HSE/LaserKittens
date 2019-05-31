@@ -24,7 +24,7 @@ import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
 abstract public class AbstractLevel {
 
     private static long RECHARGE_TIME = 500;
-    private long lastShootTime = Long.MIN_VALUE;
+    private long lastShootTime = 0;
 
     /**
      * Name of the level.
