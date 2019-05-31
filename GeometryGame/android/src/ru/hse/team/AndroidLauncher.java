@@ -104,6 +104,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 			try {
 				GoogleSignInAccount account = task.getResult(ApiException.class);
 				onConnected(account);
+                runOnUiThread(() -> Toast.makeText(this, "Google Services sign in: successful", Toast.LENGTH_SHORT).show());
 			} catch (ApiException apiException) {
 				String message = apiException.getMessage();
 				if (message == null || message.isEmpty()) {
@@ -141,7 +142,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 
 	private void onConnected(GoogleSignInAccount googleSignInAccount) {
 		Log.d(TAG, "onConnected(): connected to Google APIs");
-		runOnUiThread(() -> Toast.makeText(this, "Google Services sign in: successful", Toast.LENGTH_SHORT).show());
 
 		if (mSignedInAccount != googleSignInAccount) {
 			mSignedInAccount = googleSignInAccount;
