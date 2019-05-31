@@ -17,7 +17,8 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
     private final OrthographicCamera camera;
 
 
-    public LevelGestureProcessor(LaserKittens laserKittens, LevelCreateInputProcessor levelCreateInputProcessor, OrthographicCamera camera) {
+    public LevelGestureProcessor(LaserKittens laserKittens, LevelCreateInputProcessor levelCreateInputProcessor,
+                                 OrthographicCamera camera) {
         this.laserKittens = laserKittens;
         this.levelCreateInputProcessor = levelCreateInputProcessor;
         this.camera = camera;

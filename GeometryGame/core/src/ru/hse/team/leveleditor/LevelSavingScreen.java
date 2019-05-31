@@ -41,7 +41,8 @@ public class LevelSavingScreen implements Screen {
         this.laserKittens = laserKittens;
         this.savedLevel = savedLevel;
 
-        background = new Background(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
+        background = new Background(laserKittens.getAssetManager()
+                .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         stage = new Stage(new ScreenViewport());
     }
 
