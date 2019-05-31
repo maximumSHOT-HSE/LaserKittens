@@ -10,8 +10,8 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
 
 
     private float scale = 1;
-    private float entityScale = 1;
-    private float entityScaleBase = 1;
+    private Vector2 entityScale = new Vector2(1, 1);
+    private Vector2 entityScaleBase = new Vector2(1, 1);
     private final LaserKittens laserKittens;
     private final LevelCreateInputProcessor levelCreateInputProcessor;
     private final OrthographicCamera camera;
@@ -60,15 +60,13 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
         scale = camera.zoom;
-        entityScale = entityScaleBase;
+        entityScale.set(entityScaleBase);
         return false;
     }
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
         if (levelCreateInputProcessor.isDragging()) {
-            levelCreateInputProcessor.zoomCurrentEntity(distance / initialDistance * entityScale);
-            entityScaleBase = entityScale * distance / initialDistance;
             return false;
         }
         camera.zoom = scale * initialDistance / distance;
@@ -81,15 +79,35 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         return false;
     }
 
+    private Vector2 distanceModule(Vector2 pointer1, Vector2 pointer2) {
+        return new Vector2(Math.abs(pointer1.x - pointer2.x), Math.abs(pointer1.y - pointer2.y));
+    }
+
     @Override
     public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+        if (levelCreateInputProcessor.isDragging()) {
+            Vector2 initialDistance = distanceModule(initialPointer1, initialPointer2);
+            Vector2 distance = distanceModule(pointer1, pointer2);
+
+            levelCreateInputProcessor.zoomCurrentEntity(
+                    distance.x / initialDistance.x * entityScale.x,
+                    distance.y / initialDistance.y * entityScale.y);
+            entityScaleBase.set(
+                    entityScale.x * distance.x / initialDistance.x,
+                    entityScale.y * distance.y / initialDistance.y);
+        }
         return false;
     }
 
 
     @Override
     public void pinchStop() {
+        entityScale.set(entityScaleBase);
+    }
 
+    public void resetCurrentEntityScales() {
+        entityScale.set(1, 1);
+        entityScaleBase.set(1, 1);
     }
 }
 

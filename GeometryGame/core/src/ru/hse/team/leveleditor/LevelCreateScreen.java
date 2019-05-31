@@ -174,6 +174,14 @@ public class LevelCreateScreen implements Screen {
 
     }
 
+    public LevelCreateInputProcessor getInputProcessor() {
+        return inputProcessor;
+    }
+
+    public LevelGestureProcessor getGestureProcessor() {
+        return gestureProcessor;
+    }
+
     @Override
     public void dispose () {
         stage.dispose();

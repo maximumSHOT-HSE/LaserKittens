@@ -21,7 +21,7 @@ public class LevelCreateInputProcessor implements InputProcessor {
 
     private SimpleEntity.EntityType focusedType;
     private SimpleEntity currentEntity;
-    private float currentEntityScale = 1;
+    private Vector2 currentEntityScale = new Vector2(1, 1);
     private SimpleEntity player;
 
     private Tool tool;
@@ -179,6 +179,9 @@ public class LevelCreateInputProcessor implements InputProcessor {
         if (focusedType == SimpleEntity.EntityType.PLAYER && player != null) {
             currentEntity = player;
         }
+
+        currentEntityScale.set(1, 1);
+        levelCreateScreen.getGestureProcessor().resetCurrentEntityScales();
     }
 
     public boolean isDragging() {
@@ -195,11 +198,21 @@ public class LevelCreateInputProcessor implements InputProcessor {
         currentEntity = null;
     }
 
-    public void zoomCurrentEntity(float scale) {
+    public void zoomCurrentEntity(float scaleX, float scaleY) {
+        scaleX = Math.max(scaleX, 0.01f);
+        scaleY = Math.max(scaleY, 0.01f);
+
         if (currentEntity != null) {
-            currentEntity.setSizeX(currentEntity.getSizeX() * scale / currentEntityScale);
-            currentEntity.setSizeY(currentEntity.getSizeY() * scale / currentEntityScale);
-            currentEntityScale = scale;
+
+            if (currentEntity.getType() == SimpleEntity.EntityType.PLAYER ||
+            currentEntity.getType() == SimpleEntity.EntityType.STAR) {
+                float scale = (float) Math.sqrt(scaleX * scaleX + scaleY * scaleY);
+                scaleX = scaleY = scale;
+            }
+
+            currentEntity.setSizeX(currentEntity.getSizeX() * scaleX / currentEntityScale.x);
+            currentEntity.setSizeY(currentEntity.getSizeY() * scaleY / currentEntityScale.y);
+            currentEntityScale.set(scaleX, scaleY);
         }
     }
 }
