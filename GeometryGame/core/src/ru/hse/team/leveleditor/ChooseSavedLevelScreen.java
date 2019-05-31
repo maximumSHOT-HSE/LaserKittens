@@ -43,7 +43,8 @@ public class ChooseSavedLevelScreen implements Screen {
     public ChooseSavedLevelScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
 
-        background = new Background(this.laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
+        background = new Background(this.laserKittens.getAssetManager()
+                .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         stage = new Stage(new ScreenViewport());
     }
 
@@ -137,9 +138,11 @@ public class ChooseSavedLevelScreen implements Screen {
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
+        private Skin skin = laserKittens.getAssetManager()
+                .getSkin(KittensAssetManager.Skins.BLUE_SKIN);
 
-        private Label titleLabel = new Label("Saved levels", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+        private Label titleLabel = new Label("Saved levels",
+                new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
         List<TextButton> openLevelButtons = new ArrayList<>();
 
@@ -206,7 +209,7 @@ public class ChooseSavedLevelScreen implements Screen {
             for (int i = 0; i < levels.size(); i++) {
                 String levelName = levels.get(i).levelName;
                 TextButton button = new TextButton(levelName, skin);
-                button.getLabel().setFontScale(2);
+                button.getLabel().setFontScale(1.5f);
 
                 final int ii = i;
                 button.addListener(new ChangeListener() {

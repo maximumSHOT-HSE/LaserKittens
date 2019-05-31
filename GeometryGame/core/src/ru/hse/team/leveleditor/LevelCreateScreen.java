@@ -20,7 +20,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +28,8 @@ import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.settings.about.PagedScrollPane;
+
+import static ru.hse.team.KittensAssetManager.Images;
 
 public class LevelCreateScreen implements Screen {
 
@@ -89,15 +90,15 @@ public class LevelCreateScreen implements Screen {
     public TextureRegion getTextureByType(SimpleEntity.EntityType type) {
         switch (type) {
             case STAR:
-                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.STAR_2));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(Images.STAR_2));
             case WALL:
-                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ICE_WALL));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(Images.ICE_WALL));
             case MIRROR:
-                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.MIRROR));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(Images.MIRROR));
             case PLAYER:
-                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.CAT_3));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(Images.CAT_3));
             case GLASS:
-                return new TextureRegion(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.TRANSPARENT_WALL));
+                return new TextureRegion(laserKittens.getAssetManager().getImage(Images.TRANSPARENT_WALL));
             default:
                 throw new AssertionError("Panic");
         }
@@ -173,6 +174,14 @@ public class LevelCreateScreen implements Screen {
 
     }
 
+    public LevelCreateInputProcessor getInputProcessor() {
+        return inputProcessor;
+    }
+
+    public LevelGestureProcessor getGestureProcessor() {
+        return gestureProcessor;
+    }
+
     @Override
     public void dispose () {
         stage.dispose();
@@ -204,30 +213,24 @@ public class LevelCreateScreen implements Screen {
         final float toolButtonWidth = screenWidth / 5;
         final float toolButtonHeight = screenHeight / 10;
 
-        private ImageButton playerButton = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.CAT_3)));
-        private ImageButton wallButton = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ICE_WALL)));
-        private ImageButton mirrorButton = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.MIRROR)));
-        private ImageButton glassButton = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.TRANSPARENT_WALL)));
-        private ImageButton starButton = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.STAR_2)));
-        private ImageButton rotateLeft = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ROTATE_LEFT)));
-        private ImageButton rotateRight = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ROTATE_RIGHT)));
-        private ImageButton finishButton = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.OK)));
-        private ImageButton eraserButton = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.ERASER)));
-        private ImageButton cursorButton = new ImageButton(new TextureRegionDrawable(
-                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.CURSOR)));
+
+        private ImageButton playerButton = createImageButton(Images.CAT_3);
+        private ImageButton wallButton = createImageButton(Images.ICE_WALL);
+        private ImageButton mirrorButton = createImageButton(Images.MIRROR);
+        private ImageButton glassButton = createImageButton(Images.TRANSPARENT_WALL);
+        private ImageButton starButton = createImageButton(Images.STAR_2);
+        private ImageButton rotateLeft = createImageButton(Images.ROTATE_LEFT);
+        private ImageButton rotateRight = createImageButton(Images.ROTATE_RIGHT);
+        private ImageButton finishButton = createImageButton(Images.OK);
+        private ImageButton eraserButton = createImageButton(Images.ERASER);
+        private ImageButton cursorButton = createImageButton(Images.CURSOR);
+
+        private ImageButton createImageButton(Images image) {
+            return new ImageButton(new TextureRegionDrawable(laserKittens.getAssetManager().getImage(image)));
+        }
 
         public EditorTools(Stage stage) {
             table.setFillParent(true);
-            //table.setDebug(true);
             stage.addActor(table);
             table.align(Align.top);
 

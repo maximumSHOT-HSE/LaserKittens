@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -59,7 +60,9 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 	public void signIn() {
 		if (!isSignedIn()) {
 			startActivityForResult(mGoogleSignInClient.getSignInIntent(), RC_SIGN_IN);
-		}
+		} else {
+            runOnUiThread(() -> Toast.makeText(this, "You are already signed in", Toast.LENGTH_SHORT).show());
+        }
 	}
 
 	@Override
@@ -101,6 +104,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 			try {
 				GoogleSignInAccount account = task.getResult(ApiException.class);
 				onConnected(account);
+                runOnUiThread(() -> Toast.makeText(this, "Google Services sign in: successful", Toast.LENGTH_SHORT).show());
 			} catch (ApiException apiException) {
 				String message = apiException.getMessage();
 				if (message == null || message.isEmpty()) {
@@ -138,6 +142,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 
 	private void onConnected(GoogleSignInAccount googleSignInAccount) {
 		Log.d(TAG, "onConnected(): connected to Google APIs");
+
 		if (mSignedInAccount != googleSignInAccount) {
 			mSignedInAccount = googleSignInAccount;
 		}
@@ -175,6 +180,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 			showScores();
 		}
 		else {
+            runOnUiThread(() -> Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show());
 		}
 	}
 
@@ -185,6 +191,8 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 					.getLeaderboardIntent((getString(R.string.leaderboard_id)))
 					.addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
 					.addOnFailureListener(e -> handleException(e, "LeaderBoard exception"));
+        } else {
+            runOnUiThread(() -> Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show());
         }
 	}
 
@@ -203,7 +211,9 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 			Games.getAchievementsClient(this, mSignedInAccount).getAchievementsIntent()
 					.addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
 					.addOnFailureListener(e -> handleException(e, "Achievements exception"));
-		}
+		} else {
+            runOnUiThread(() -> Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show());
+        }
 	}
 
     @Override

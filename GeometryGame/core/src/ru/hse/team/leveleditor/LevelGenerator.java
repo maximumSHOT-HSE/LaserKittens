@@ -33,7 +33,8 @@ public class LevelGenerator {
         };
     }
 
-    private static AbstractLevelFactory createFactory(SavedLevel savedLevel, PooledEngine engine, KittensAssetManager kittensAssetManager, BodyFactory bodyFactory) {
+    private static AbstractLevelFactory createFactory(SavedLevel savedLevel, PooledEngine engine,
+                                                      KittensAssetManager kittensAssetManager, BodyFactory bodyFactory) {
         class LevelFactory extends AbstractLevelFactory {
 
             public LevelFactory(PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory) {
@@ -52,22 +53,27 @@ public class LevelGenerator {
                     Vector2 scale = getCommonScale(entity);
                     switch (entity.getType()) {
                         case STAR:
-                            createStar(entity.getPositionX() * PM, entity.getPositionY() * PM, entity.getSizeX() * scale.x);
+                            createStar(entity.getPositionX() * PM, entity.getPositionY() * PM,
+                                    entity.getSizeX() * scale.x);
                             break;
                         case MIRROR:
                             createMirror(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
-                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y, entity.getRotation() * (float)Math.PI / 180);
+                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y,
+                                    entity.getRotation() * (float)Math.PI / 180);
                             break;
                         case WALL:
                             createImpenetrableWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
-                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y, entity.getRotation() * (float)Math.PI / 180);
+                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y,
+                                    entity.getRotation() * (float)Math.PI / 180);
                             break;
                         case GLASS:
                             createTransparentWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
-                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y, entity.getRotation() * (float)Math.PI / 180);
+                                    entity.getSizeX() * scale.x, entity.getSizeY() * scale.y,
+                                    entity.getRotation() * (float)Math.PI / 180);
                             break;
                         case PLAYER:
-                            focusedPlayer = createPlayer(entity.getPositionX() * PM, entity.getPositionY() * PM, entity.getSizeX() * scale.x);
+                            focusedPlayer = createPlayer(entity.getPositionX() * PM, entity.getPositionY() * PM,
+                                    entity.getSizeX() * scale.x);
                             break;
                     }
                 }

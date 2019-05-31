@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -25,6 +24,7 @@ import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
+import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.settings.about.PagedScrollPane;
 
 public class LevelSavingScreen implements Screen {
@@ -41,7 +41,8 @@ public class LevelSavingScreen implements Screen {
         this.laserKittens = laserKittens;
         this.savedLevel = savedLevel;
 
-        background = new Background(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
+        background = new Background(laserKittens.getAssetManager()
+                .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         stage = new Stage(new ScreenViewport());
     }
 
@@ -172,7 +173,7 @@ public class LevelSavingScreen implements Screen {
                         savedLevel.id = Math.max(savedLevel.id, level.id + 1);
                     }
                     savedLevel.levelName = null;
-                    AskName listener = new AskName(savedLevel, laserKittens);
+                    AskName listener = new AskName(savedLevel, levels, laserKittens);
                     Gdx.input.getTextInput(listener, "Add a name to your level", "", null);
                 }
             });
@@ -184,16 +185,35 @@ public class LevelSavingScreen implements Screen {
     private static class AskName implements Input.TextInputListener {
 
         private final SavedLevel level;
+        private final List<SavedLevel> levels;
         private final LaserKittens laserKittens;
 
-        public AskName(SavedLevel level, LaserKittens laserKittens) {
+        public AskName(SavedLevel level, List<SavedLevel> levels, LaserKittens laserKittens) {
             this.level = level;
+            this.levels = levels;
             this.laserKittens = laserKittens;
         }
 
         @Override
         public void input (String text) {
-            level.levelName = text;
+            level.levelName = " " + text + " ";
+
+            if (text.length() > 10) {
+                AskName listener = new AskName(level, levels, laserKittens);
+                Gdx.input.getTextInput(listener, "Add a name to your level",
+                        "", "Max length is 10 symbols");
+                return;
+            }
+
+            for (SavedLevel savedLevel : levels) {
+                if (level.levelName.equals(savedLevel.levelName)) {
+                    AskName listener = new AskName(level, levels, laserKittens);
+                    Gdx.input.getTextInput(listener, "Add a name to your level",
+                            "", "Name already exist");
+                    return;
+                }
+            }
+
             addLevel();
             laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
         }
