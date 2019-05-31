@@ -209,7 +209,7 @@ public class ChooseSavedLevelScreen implements Screen {
             for (int i = 0; i < levels.size(); i++) {
                 String levelName = levels.get(i).levelName;
                 TextButton button = new TextButton(levelName, skin);
-                button.getLabel().setFontScale(2);
+                button.getLabel().setFontScale(1.5f);
 
                 final int ii = i;
                 button.addListener(new ChangeListener() {

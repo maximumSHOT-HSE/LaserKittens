@@ -24,6 +24,7 @@ import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
+import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.settings.about.PagedScrollPane;
 
 public class LevelSavingScreen implements Screen {
@@ -195,15 +196,24 @@ public class LevelSavingScreen implements Screen {
 
         @Override
         public void input (String text) {
-            level.levelName = text;
+            level.levelName = " " + text + " ";
+
+            if (text.length() > 10) {
+                AskName listener = new AskName(level, levels, laserKittens);
+                Gdx.input.getTextInput(listener, "Add a name to your level",
+                        "", "Max length is 10 symbols");
+                return;
+            }
+
             for (SavedLevel savedLevel : levels) {
-                if (text.equals(savedLevel.levelName)) {
-                    AskName listener = new AskName(savedLevel, levels, laserKittens);
+                if (level.levelName.equals(savedLevel.levelName)) {
+                    AskName listener = new AskName(level, levels, laserKittens);
                     Gdx.input.getTextInput(listener, "Add a name to your level",
-                            "It should not coincide with existing level's name", null);
+                            "", "Name already exist");
                     return;
                 }
             }
+
             addLevel();
             laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
         }
