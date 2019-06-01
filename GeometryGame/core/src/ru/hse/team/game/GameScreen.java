@@ -80,6 +80,7 @@ public class GameScreen implements Screen {
         if (level instanceof AbstractMultiplayerLevel) {
             warpController = WarpController.getInstance();
             if (warpController != null) {
+                System.out.println("SET WARP LISTENER ! level = " + level.getLevelName());
                 warpController.setWarpListener((WarpListener) level);
             }
         }

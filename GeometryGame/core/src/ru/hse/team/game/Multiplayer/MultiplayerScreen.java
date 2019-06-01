@@ -119,7 +119,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     private synchronized void updateStage() {
         stage.clear();
-        menu = new Menu(stage);
+        Gdx.app.postRunnable(() -> menu = new Menu(stage));
         stage.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
@@ -153,9 +153,6 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     @Override
     public void hide() {
-        if (warpController != null) {
-            warpController.stop();
-        }
     }
 
     @Override

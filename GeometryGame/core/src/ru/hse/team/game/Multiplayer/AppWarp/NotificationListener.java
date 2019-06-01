@@ -49,7 +49,7 @@ public class NotificationListener implements NotifyListener {
 
     @Override
     public void onChatReceived(ChatEvent chatEvent) {
-
+        System.out.println("NotificationListener.onChatReceived " + chatEvent.getMessage());
     }
 
     @Override

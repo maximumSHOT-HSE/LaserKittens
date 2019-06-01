@@ -135,11 +135,10 @@ public class WarpController {
     }
 
     public void start(String playerName) {
+        free();
+        playerNameSalt = RandomGenerator.generateRandomString(SALT_SIZE);
         System.out.println("WarpController.start(): FULL NAME = " + playerNameSalt + "|" + playerName);
 
-        free();
-
-        playerNameSalt = RandomGenerator.generateRandomString(SALT_SIZE);
         this.playerName = playerName;
 
         warpClient.connectWithUserName(playerNameSalt + playerName);
@@ -298,18 +297,20 @@ public class WarpController {
     }
 
     public void sendGameUpdate(String message) {
-        warpClient.sendUpdatePeers((playerName + "#@" + message).getBytes());
+        System.out.println("WarpController.sendGameUpdate, msg = " + message);
+        warpClient.sendUpdatePeers((playerNameSalt + playerName + "#@" + message).getBytes());
     }
 
     public void onGameUpdateReceived(UpdateEvent event) {
         if (event == null) {
+            System.out.println("WarpController.update, null :(");
             return;
         }
         String message = new String(event.getUpdate());
         String userName = message.substring(0, message.indexOf("#@"));
         String data = message.substring(message.indexOf("#@") + 2);
-        System.out.println("WarpController.update, msg = " + message + ", userName = " + userName + ", data = " + data);
-        if (!playerName.equals(userName)) {
+        System.out.println("WarpController.onGameUpdateReceived, msg = " + message + ", userName = " + userName + ", data = " + data);
+        if (!(playerNameSalt + playerName).equals(userName)) {
             warpListener.update(data);
         }
     }
@@ -328,11 +329,19 @@ public class WarpController {
 
     public int getRole() {
         int role = 1;
+        System.out.println("WarpController.getRole() : ");
         for (String user : joinedUsers) {
-            if (user.equals(playerName)) {
+            System.out.print(user + " ");
+        }
+        for (String user : joinedUsers) {
+            if (user.equals(playerNameSalt + playerName)) {
+                System.out.println(", role = " + role);
                 return role;
+            } else {
+                role++;
             }
         }
+        System.out.println("NOT FOUND!!!");
         return role;
     }
 }
