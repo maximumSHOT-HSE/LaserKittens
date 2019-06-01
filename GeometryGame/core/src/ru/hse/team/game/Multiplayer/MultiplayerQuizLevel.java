@@ -7,12 +7,10 @@ import org.json.JSONObject;
 
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
-import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpListener;
-import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
-public class MultiplayerQuizLevel extends AbstractLevel implements WarpListener {
+public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements WarpListener {
 
     private static final int WIDTH_SCREENS = 2;
     private static final int HEIGHT_SCREENS = 2;
@@ -20,39 +18,16 @@ public class MultiplayerQuizLevel extends AbstractLevel implements WarpListener 
     private MultiplayerQuizLevelFactory multiplayerQuizLevelFactory;
     private LaserKittens parent;
     private MultiplayerScreen multiplayerScreen;
-    private int role;
 
-    public MultiplayerQuizLevel(LaserKittens parent, MultiplayerScreen multiplayerScreen, int role) {
+    public MultiplayerQuizLevel(LaserKittens parent, MultiplayerScreen multiplayerScreen) {
         super("Multiplayer Quiz", WIDTH_SCREENS, HEIGHT_SCREENS);
         this.parent = parent;
         this.multiplayerScreen = multiplayerScreen;
-        this.role = role;
-        WarpController.getInstance().setWarpListener(this);
     }
 
     @Override
-    public void onWaitingStarted(String message) {
-
-    }
-
-    @Override
-    public void onError(String message) {
-
-    }
-
-    @Override
-    public void onGameStarted(String message) {
-
-    }
-
-    @Override
-    public void onGameFinished(WarpController.EndType endType, boolean isRemote) {
-
-    }
-
-    @Override
-    public void onGameUpdateReceived(String message) {
-        System.out.println("MultiplayerQuizLevel.onGameUpdateReceived: " + message);
+    public void update(String message) {
+        System.out.println("MultiplayerQuizLevel.update: " + message);
         JSONObject data = new JSONObject(message);
         String type = data.getString(MessageCreator.TYPE);
         System.out.println("type = " + type);
@@ -82,9 +57,14 @@ public class MultiplayerQuizLevel extends AbstractLevel implements WarpListener 
     }
 
     @Override
+    public void start() {
+
+    }
+
+    @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         multiplayerQuizLevelFactory = new MultiplayerQuizLevelFactory(engine,
-                assetManager, getBodyFactory(), role);
+                assetManager, getBodyFactory(), getRole());
         multiplayerQuizLevelFactory.createLevel(getWidthInScreens(), getHeightInScreens(), this);
     }
 
@@ -94,7 +74,7 @@ public class MultiplayerQuizLevel extends AbstractLevel implements WarpListener 
     }
 
     @Override
-    public boolean isMultiplayer() {
-        return true;
+    public int getNumberOfPlayers() {
+        return 2;
     }
 }

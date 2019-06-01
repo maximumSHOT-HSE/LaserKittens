@@ -1,6 +1,5 @@
 package ru.hse.team.game.Multiplayer.AppWarp;
 
-import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 import com.shephertz.app42.gaming.multiplayer.client.events.AllRoomsEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.AllUsersEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.LiveUserInfoEvent;
@@ -18,7 +17,7 @@ public class ZoneListener implements ZoneRequestListener {
 
     @Override
     public void onDeleteRoomDone(RoomEvent roomEvent) {
-
+        warpController.onDeleteRoomDone(roomEvent);
     }
 
     @Override
@@ -28,11 +27,7 @@ public class ZoneListener implements ZoneRequestListener {
 
     @Override
     public void onCreateRoomDone(RoomEvent roomEvent) {
-        if (roomEvent.getResult() == WarpResponseResultCode.SUCCESS) {
-            warpController.onRoomCreated(roomEvent);
-        } else {
-            warpController.onRoomCreated(null);
-        }
+        warpController.onCreateRoomDone(roomEvent);
     }
 
     @Override
@@ -42,7 +37,6 @@ public class ZoneListener implements ZoneRequestListener {
 
     @Override
     public void onGetLiveUserInfoDone(LiveUserInfoEvent liveUserInfoEvent) {
-
     }
 
     @Override
@@ -52,7 +46,7 @@ public class ZoneListener implements ZoneRequestListener {
 
     @Override
     public void onGetMatchedRoomsDone(MatchedRoomsEvent matchedRoomsEvent) {
-
+        warpController.onGetMatchedRoomsDone(matchedRoomsEvent);
     }
 
     @Override
