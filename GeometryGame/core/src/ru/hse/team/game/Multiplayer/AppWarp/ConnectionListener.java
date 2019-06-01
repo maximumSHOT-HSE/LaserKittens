@@ -20,6 +20,7 @@ public class ConnectionListener implements ConnectionRequestListener {
     @Override
     public void onDisconnectDone(ConnectEvent connectEvent) {
         System.out.println("ConnectionListener.onDisconnectDone: result " + connectEvent.getResult());
+        warpController.onDisconnectDone(connectEvent.getResult());
     }
 
     @Override

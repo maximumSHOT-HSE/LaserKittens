@@ -11,6 +11,9 @@ import ru.hse.team.KittensAssetManager;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.ContactProcessor;
 import ru.hse.team.game.Mapper;
+import ru.hse.team.game.Multiplayer.AbstractMultiplayerLevel;
+import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
+import ru.hse.team.game.Multiplayer.MessageCreator;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
 
@@ -75,6 +78,15 @@ abstract public class AbstractLevel {
         int lifeTime = 10_000;
 
         getFactory().createLaser(source, direction, lifeTime);
+
+        if (this instanceof AbstractMultiplayerLevel) {
+            System.out.println("SHOOT!!");
+            WarpController
+                    .getInstance()
+                    .sendGameUpdate(
+                            MessageCreator.createShootMessage(
+                                    source, direction, lifeTime));
+        }
     }
 
     public AbstractGraph getAbstractGraph() {

@@ -10,6 +10,9 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.physics.box2d.World;
 
 import ru.hse.team.LaserKittens;
+import ru.hse.team.game.Multiplayer.AbstractMultiplayerLevel;
+import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
+import ru.hse.team.game.Multiplayer.AppWarp.WarpListener;
 import ru.hse.team.game.gameending.GameEndingScreen;
 import ru.hse.team.game.gamelogic.GameScreenInputProcessor;
 import ru.hse.team.game.gamelogic.GestureProcessor;
@@ -36,6 +39,8 @@ public class GameScreen implements Screen {
     private PhysicsDebugSystem physicsDebugSystem;
     private BulletSystem bulletSystem;
     private StateControlSystem stateControlSystem;
+
+    private WarpController warpController;
 
     public GameScreen(LaserKittens laserKittens, AbstractLevel abstractLevel) {
         level = abstractLevel;
@@ -72,6 +77,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        if (level instanceof AbstractMultiplayerLevel) {
+            warpController = WarpController.getInstance();
+            if (warpController != null) {
+                warpController.setWarpListener((WarpListener) level);
+            }
+        }
         laserKittens.getBatch().setProjectionMatrix(renderingSystem.getCamera().combined);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }

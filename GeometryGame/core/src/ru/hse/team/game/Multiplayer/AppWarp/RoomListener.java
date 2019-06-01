@@ -14,7 +14,7 @@ public class RoomListener implements RoomRequestListener {
 
     @Override
     public void onSubscribeRoomDone(RoomEvent roomEvent) {
-
+        warpController.onSubscribeRoomDone(roomEvent);
     }
 
     @Override
@@ -24,14 +24,10 @@ public class RoomListener implements RoomRequestListener {
 
     @Override
     public void onJoinRoomDone(RoomEvent roomEvent) {
-        System.out.println("RoomListener.onJoinRoomDone " + roomEvent.getResult());
-        warpController.onJoinRoomDone(roomEvent);
     }
 
     @Override
     public void onLeaveRoomDone(RoomEvent roomEvent) {
-        System.out.println("RoomListener.onJoinRoomDone " + roomEvent.getResult());
-        warpController.onLeaveRoomDone(roomEvent);
     }
 
     @Override
@@ -41,6 +37,7 @@ public class RoomListener implements RoomRequestListener {
             System.out.print(userName + " ");
         }
         System.out.println();
+        warpController.onGetLiveRoomInfoDone(liveRoomInfoEvent);
     }
 
     @Override
@@ -65,13 +62,13 @@ public class RoomListener implements RoomRequestListener {
 
     @Override
     public void onJoinAndSubscribeRoomDone(RoomEvent roomEvent) {
-
+        System.out.println("RoomListener.onJoinAndSubscribeRoomDone " + roomEvent.getResult());
+        warpController.onJoinAndSubscribeRoomDone(roomEvent);
     }
 
     @Override
     public void onLeaveAndUnsubscribeRoomDone(RoomEvent roomEvent) {
-
+        System.out.println("RoomListener.onLeaveRoomDone " + roomEvent.getResult());
+        warpController.onLeaveAndUnsubscribeRoomDone(roomEvent);
     }
-
-
 }
