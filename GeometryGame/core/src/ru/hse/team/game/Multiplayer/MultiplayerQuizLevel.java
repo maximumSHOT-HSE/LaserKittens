@@ -57,6 +57,11 @@ public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements Wa
     }
 
     @Override
+    public void start() {
+
+    }
+
+    @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
         multiplayerQuizLevelFactory = new MultiplayerQuizLevelFactory(engine,
                 assetManager, getBodyFactory(), getRole());

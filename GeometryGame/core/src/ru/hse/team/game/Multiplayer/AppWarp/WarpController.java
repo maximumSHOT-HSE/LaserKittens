@@ -115,6 +115,12 @@ public class WarpController {
         }
     }
 
+    private void processGameStart(int maxUsers) {
+        if (joinedUsers.size() == maxUsers) {
+            warpListener.start();
+        }
+    }
+
     private void free() {
         subscribedRooms.clear();
         joinedRooms.clear();
@@ -260,6 +266,7 @@ public class WarpController {
             joinedUsers.add(userName);
             warpListener.update(userName + " join room");
             setWaitingOthersNumber(roomData.getMaxUsers());
+            processGameStart(roomData.getMaxUsers());
         }
     }
 
@@ -287,6 +294,7 @@ public class WarpController {
         joinedUsers.addAll(Arrays.asList(liveRoomInfoEvent.getJoinedUsers()));
         warpListener.update("Room updated");
         setWaitingOthersNumber(liveRoomInfoEvent.getData().getMaxUsers());
+        processGameStart(liveRoomInfoEvent.getData().getMaxUsers());
     }
 
     public void sendGameUpdate(String message) {
@@ -316,6 +324,16 @@ public class WarpController {
 
     public State getState() {
         return state;
+    }
+
+    public int getRole() {
+        int role = 1;
+        for (String user : joinedUsers) {
+            if (user.equals(playerName)) {
+                return role;
+            }
+        }
+        return role;
     }
 }
 

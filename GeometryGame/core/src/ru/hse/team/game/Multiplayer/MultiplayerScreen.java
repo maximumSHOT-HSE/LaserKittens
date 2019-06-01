@@ -28,6 +28,7 @@ import de.tomgrill.gdxdialogs.core.dialogs.GDXButtonDialog;
 import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
+import ru.hse.team.game.GameScreen;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpListener;
 import ru.hse.team.game.gamelogic.algorithms.RandomGenerator;
@@ -164,6 +165,13 @@ public class MultiplayerScreen implements Screen, WarpListener {
     @Override
     public void update(String message) {
         updateStage();
+    }
+
+    @Override
+    public void start() {
+        AbstractMultiplayerLevel level = abstractMultiplayerLevels.get(choosedLevelId);
+        level.setRole(warpController.getRole());
+        Gdx.app.postRunnable(() -> laserKittens.setScreen(new GameScreen(laserKittens, level)));
     }
 
     private class Menu {
