@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
+import com.sun.media.sound.ModelOscillator;
 
 import ru.hse.team.LaserKittens;
 import ru.hse.team.game.BodyFactory;
@@ -42,7 +43,7 @@ public class GameScreenInputProcessor implements InputProcessor {
     private Vector3 draggingPosition = new Vector3();
     private Vector2 draggingStartedDiff = new Vector2();
 
-    private MouseJoint mouseJoint = null;
+    private volatile MouseJoint mouseJoint = null;
     /** special dummy body for mousejoint */
     private final Body ground;
 
@@ -115,7 +116,9 @@ public class GameScreenInputProcessor implements InputProcessor {
         abstractLevel.getGameStatus().start();
 
         if (!clickInPlayerRegion()) {
-            abstractLevel.shoot(position.x, position.y);
+            Gdx.app.postRunnable(() -> abstractLevel.shoot(position.x, position.y));
+
+            //before uncommenting think about posRunnable
 //            Sound laser = laserKittens.assetManager.manager.get(KittensAssetManager.LASER_SOUND, Sound.class);
 //            laser.play(laserKittens.getPreferences().getSoundVolume());
             return true;
@@ -146,7 +149,8 @@ public class GameScreenInputProcessor implements InputProcessor {
         def.collideConnected = true;
         def.maxForce = 1000.0f * playerBody.getMass();
         def.target.set(playerX, playerY);
-        mouseJoint = (MouseJoint) abstractLevel.getWorld().createJoint(def);
+
+        Gdx.app.postRunnable(() -> mouseJoint = (MouseJoint) abstractLevel.getWorld().createJoint(def));
         playerBody.setAwake(true);
 
 
@@ -167,17 +171,21 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         dragging = false;
         draggingPointer = -1;
-        if (mouseJoint != null) {
-            abstractLevel.getWorld().destroyJoint(mouseJoint);
+
+        final MouseJoint joint = mouseJoint;
+        if (joint != null) {
+            final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
+            if (playerBodyComponent == null) return false;
+            final Body playerBody = playerBodyComponent.body;
+            if (playerBody == null) return false;
+
+            Gdx.app.postRunnable(() -> {
+                abstractLevel.getWorld().destroyJoint(joint);
+                playerBody.setLinearVelocity(0, 0);
+            });
             mouseJoint = null;
         }
-
-        final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
-        if (playerBodyComponent == null) return false;
-        final Body playerBody = playerBodyComponent.body;
-        if (playerBody == null) return false;
-
-        playerBody.setLinearVelocity(0, 0);
+        mouseJoint = null;
 
         return true;
     }
@@ -203,7 +211,11 @@ public class GameScreenInputProcessor implements InputProcessor {
         camera.unproject(draggingPosition.set(screenX, screenY, 0));
         draggingPosition.x -= draggingStartedDiff.x;
         draggingPosition.y -= draggingStartedDiff.y;
-        mouseJoint.setTarget(target.set(draggingPosition.x, draggingPosition.y));
+
+        final MouseJoint joint = mouseJoint;
+        if (joint != null) {
+            joint.setTarget(target.set(draggingPosition.x, draggingPosition.y));
+        }
 
         return true;
     }

@@ -1,6 +1,7 @@
 package ru.hse.team.game.Multiplayer;
 
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import org.json.JSONObject;
@@ -49,7 +50,7 @@ public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements Wa
                 direction.y = Float.parseFloat((String) data.get(MessageCreator.SHOOT_DIRECTION + "y"));
                 lifetime = (int) data.get(MessageCreator.SHOOT_LIFETIME);
                 if (getFactory() != null) {
-                    getFactory().createLaser(source, direction, lifetime);
+                    Gdx.app.postRunnable(() -> getFactory().createLaser(source, direction, lifetime));
                     getFactory().setOpponentPosition(source);
                 }
                 break;
