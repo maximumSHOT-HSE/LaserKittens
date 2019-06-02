@@ -206,13 +206,15 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                         while (now.distance != initialDistance / 2) {
                             now = now.parent;
                         }
+                        if (now.parent == null) continue;
                         placeBetween(now, now.parent, EdgeType.DOOR);
                         clearUsed();
                         Cell keyPosition = placeKey(cells[startX][startY]);
                         if (keyPosition != null) {
-                            doorToKey.put(new EdgePosition(x, y, getDirection(now, now.parent)), keyPosition);
+                            doorToKey.put(new EdgePosition(now.x, now.y, getDirection(now, now.parent)), keyPosition);
                             doorToKey.put(new EdgePosition(now.parent.x, now.parent.y, getDirection(now.parent, now)), keyPosition);
-
+                            x = n;
+                            break;
                         } else {
                             placeBetween(now, now.parent, EdgeType.EMPTY);
                         }
@@ -300,6 +302,10 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
 
         generateLabyrinth(widthInScreens * cellsPerWidth, heightInScreens * cellsPerHeight);
 
+        for (EdgePosition position : doorToKey.keySet()) {
+            System.out.println(position.x + " " + position.y + " " + position.direction);
+        }
+
         for (int i = 0; i < cellsPerWidth * widthInScreens; i++) {
             for (int j = 0; j < cellsPerHeight * heightInScreens; j++) {
                 switch (cells[i][j].edges[0]) {
@@ -308,6 +314,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                                 wallThickness,screenHeight / cellsPerHeight);
                         break;
                     case DOOR:
+                        System.out.println("Door " + i + " " + j + " " + 0);
                         final Entity door = createDoor(new Vector2(i * screenWidth / cellsPerWidth, (j + 0.5f) * screenHeight / cellsPerHeight),
                             wallThickness,screenHeight / cellsPerHeight);
                         createKey(doorToKey.get(new EdgePosition(i, j, 0)).getPosition().add(new Vector2(0.5f, 0.5f))
@@ -322,6 +329,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                                 screenWidth / cellsPerWidth, wallThickness);
                         break;
                     case DOOR:
+                        System.out.println("Door " + i + " " + j + " " + 1);
                         final Entity door = createDoor(new Vector2((i + 0.5f) * screenWidth / cellsPerWidth, j * screenHeight / cellsPerHeight),
                             screenWidth / cellsPerWidth, wallThickness);
                     createKey(doorToKey.get(new EdgePosition(i, j, 1)).getPosition().add(new Vector2(0.5f, 0.5f))
