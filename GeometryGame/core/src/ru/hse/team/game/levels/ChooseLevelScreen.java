@@ -53,7 +53,7 @@ public class ChooseLevelScreen implements Screen {
         abstractLevels.add(new TestBigLevel());
         abstractLevels.add(new TestLongCorridorLevel());
         abstractLevels.add(new TestDoorsAndKeysLevel());
-        abstractLevels.add(new RandomLabyrinthLevel(10, 10, 1, 3));
+        abstractLevels.add(new RandomLabyrinthLevel(7, 7, 2, 5));
         abstractLevels.add(new QuizLevel());
     }
 
