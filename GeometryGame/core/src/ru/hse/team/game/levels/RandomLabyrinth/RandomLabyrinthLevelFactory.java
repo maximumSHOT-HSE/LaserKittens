@@ -95,7 +95,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
             }
 
             Collections.shuffle(permutation, ThreadLocalRandom.current());
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 4; i++) {
                 int toX = vertex.x + directions[permutation.get(i)][0];
                 int toY = vertex.y + directions[permutation.get(i)][1];
 
@@ -166,7 +166,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                     if (iterations % 2 == 1) {
                         dfsGenerate(cell, iterations * 5);
                     } else {
-                        bfsGenerate(cell, 3);
+                        bfsGenerate(cell, 2);
                     }
                 }
             }
@@ -341,6 +341,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                                     (i + 0.5f) * screenWidth / cellsPerWidth,
                                     (j + 0.5f) * screenHeight / cellsPerHeight,
                                     playerRadius));
+                            break;
                     }
                 }
             }

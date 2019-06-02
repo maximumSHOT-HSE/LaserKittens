@@ -183,7 +183,6 @@ public class GameScreenInputProcessor implements InputProcessor {
                 abstractLevel.getWorld().destroyJoint(joint);
                 playerBody.setLinearVelocity(0, 0);
             });
-            mouseJoint = null;
         }
         mouseJoint = null;
 
