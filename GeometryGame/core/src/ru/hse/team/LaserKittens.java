@@ -8,10 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import de.tomgrill.gdxdialogs.core.GDXDialogs;
 import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
+import ru.hse.team.database.GameDatabase;
 import ru.hse.team.leveleditor.ChooseSavedLevelScreen;
 import ru.hse.team.settings.about.AboutScreen;
-import ru.hse.team.database.levels.LevelsDatabase;
-import ru.hse.team.database.statistics.StatisticsDatabase;
 import ru.hse.team.database.statistics.StatisticsScreen;
 import ru.hse.team.game.Multiplayer.MultiplayerScreen;
 import ru.hse.team.game.levels.ChooseLevelScreen;
@@ -29,15 +28,12 @@ public class LaserKittens extends Game {
 
     private final AppPreferences preferences = new AppPreferences();
     private final KittensAssetManager assetManager = new KittensAssetManager();
-    private final StatisticsDatabase statisticsDatabase;
-    private final LevelsDatabase savedLevels;
+    private final GameDatabase database;
     private final GoogleServicesAction googleServices;
 
-    public LaserKittens(StatisticsDatabase statisticsDatabase, LevelsDatabase savedLevels,
-                        GoogleServicesAction googleServicesAction) {
+    public LaserKittens(GameDatabase database, GoogleServicesAction googleServicesAction) {
         super();
-        this.statisticsDatabase = statisticsDatabase;
-        this.savedLevels = savedLevels;
+        this.database = database;
         this.googleServices = googleServicesAction;
     }
 
@@ -65,16 +61,12 @@ public class LaserKittens extends Game {
         return preferences;
     }
 
-    public StatisticsDatabase getStatisticsDatabase() {
-        return statisticsDatabase;
-    }
-
     public GoogleServicesAction getGoogleServices() {
         return googleServices;
     }
 
-    public LevelsDatabase getSavedLevels() {
-        return savedLevels;
+    public GameDatabase getDatabase() {
+        return database;
     }
 
     /**

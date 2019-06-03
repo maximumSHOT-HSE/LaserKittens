@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -130,7 +129,7 @@ public class StatisticsScreen implements Screen {
             List<List<LevelStatistics>> allLevels = new ArrayList<>(1);
             Thread queryThread = new Thread(() ->
                     allLevels.add(laserKittens
-                            .getStatisticsDatabase().statisticsDao().getAll()));
+                            .getDatabase().statisticsDao().getAll()));
             queryThread.start();
             try {
                 queryThread.join();
@@ -184,7 +183,7 @@ public class StatisticsScreen implements Screen {
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
                 }
             });
 
