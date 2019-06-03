@@ -84,9 +84,18 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         return new Vector2(Math.abs(pointer1.x - pointer2.x), Math.abs(pointer1.y - pointer2.y));
     }
 
-    private void makeAtLeastOneByBothCoordinates(Vector2 v) {
-        v.x = Math.max(1, v.x);
-        v.y = Math.max(1, v.y);
+    private void makeAtLeastTenByBothCoordinates(Vector2 v) {
+        v.x = Math.max(10, v.x);
+        v.y = Math.max(10, v.y);
+    }
+
+    private void positiveRotation(Vector2 distance, float rotation) {
+        Vector2 wasDistance = new Vector2(distance);
+
+        distance.x = (float)Math.abs(wasDistance.x * Math.abs(Math.cos(rotation))
+                 - wasDistance.y * Math.abs(Math.sin(rotation)));
+        distance.y = (float)Math.abs(wasDistance.x * Math.abs(Math.sin(rotation) )
+                + wasDistance.y * Math.abs(Math.cos(rotation)));
     }
 
     @Override
@@ -97,12 +106,13 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
 
             SimpleEntity entity = levelCreateInputProcessor.getCurrentEntity();
             if (entity != null) {
-                distance.x = Math.abs(distance.x * (float)Math.cos(entity.getRotation()));
-                distance.y = Math.abs(distance.y * (float)Math.sin(entity.getRotation()));
+                float rotation = (float)Math.toRadians(entity.getRotation());
+                positiveRotation(distance, rotation);
+                positiveRotation(initialDistance, rotation);
             }
 
-            makeAtLeastOneByBothCoordinates(distance);
-            makeAtLeastOneByBothCoordinates(initialDistance);
+            makeAtLeastTenByBothCoordinates(distance);
+            makeAtLeastTenByBothCoordinates(initialDistance);
 
             levelCreateInputProcessor.zoomCurrentEntity(
                     distance.x / initialDistance.x * entityScale.x,
