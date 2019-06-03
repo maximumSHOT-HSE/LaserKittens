@@ -5,6 +5,12 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.util.List;
 
+/**
+ * Representation of a simple level.
+ * Created for serialising/deserialising level and saving it in database
+ * Contains List of {@code SimpleEntity}, which are level objects
+ *  and some level characteristics
+ */
 @android.arch.persistence.room.Entity
 public class SavedLevel {
 

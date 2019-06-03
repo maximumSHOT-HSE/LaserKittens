@@ -12,6 +12,11 @@ import ru.hse.team.database.levels.SimpleEntity;
 
 /**
  * Input processor for levelCreate screen.
+ * Keeps currently chosen tool,
+ *  {@code ERASER} for deleting objects on click
+ *  {@code CURSOR} for focusing on objects on click
+ * and currently focused entity.
+ * Puts focused entity on position of touch.
  */
 public class LevelCreateInputProcessor implements InputProcessor {
 
@@ -36,12 +41,19 @@ public class LevelCreateInputProcessor implements InputProcessor {
         this.camera = camera;
     }
 
+    /**
+     * Tools for level creating.
+     * {@code ERASER} for deleting objects on click
+     * {@code CURSOR} for focusing on objects on click
+     */
     public enum Tool {
         ERASER,
         CURSOR;
     }
 
-
+    /**
+     * Returns to choose level screen on pressing {@code BACK} key event
+     */
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
@@ -61,6 +73,15 @@ public class LevelCreateInputProcessor implements InputProcessor {
         return false;
     }
 
+    /**
+     * Deals with touch event.
+     * Ignores it if dragging focused entity now.
+     * If there is no chosen entity type, uses current tool.
+     *  if there is current entity, puts it on position of touch,
+     *   otherwise creates new entity on position of touch, unless
+     *    current type is player and we already have player on map, then
+     *    player will only gets in focus and moves to the touch position
+     */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
@@ -162,6 +183,11 @@ public class LevelCreateInputProcessor implements InputProcessor {
         return currentEntity;
     }
 
+    /**
+     * Rotates current angle by delta degrees.
+     * Ignores call if current entity does not exist or
+     *  it is a player or a star.
+     */
     public void rotateCurrentEntity(float delta) {
         if (currentEntity != null) {
             if (currentEntity.getType() != SimpleEntity.EntityType.PLAYER
@@ -171,6 +197,10 @@ public class LevelCreateInputProcessor implements InputProcessor {
         }
     }
 
+    /**
+     * Changes current entity type.
+     * Forgets entity and tool chosen previously
+     */
     public void chooseAnotherEntity(SimpleEntity.EntityType focusedType) {
         this.focusedType = focusedType;
         currentEntity = null;
@@ -192,12 +222,22 @@ public class LevelCreateInputProcessor implements InputProcessor {
         return tool;
     }
 
+    /**
+     * Changes current tool.
+     * Forgets entity and tool chosen previously
+     */
     public void changeTool(Tool tool) {
         this.tool = tool;
         focusedType = null;
         currentEntity = null;
     }
 
+    /**
+     * Zooms current entity.
+     * If it is a player or a star, both coordinates are zoomed by
+     *  argument vector length,
+     *  otherwise coordinated zoomed independently
+     */
     public void zoomCurrentEntity(float scaleX, float scaleY) {
         scaleX = Math.max(scaleX, 0.01f);
         scaleY = Math.max(scaleY, 0.01f);

@@ -27,7 +27,7 @@ import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.settings.about.PagedScrollPane;
 
 /**
- * Screen for showing statistics of all levels playings best time and dates.
+ * Screen for showing statistics of all ever finished levels.
  * */
 public class StatisticsScreen implements Screen {
 

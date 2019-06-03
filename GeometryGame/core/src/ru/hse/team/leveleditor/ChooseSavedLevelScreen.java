@@ -30,6 +30,10 @@ import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.game.GameScreen;
 import ru.hse.team.settings.about.PagedScrollPane;
 
+/**
+ * Screen that shows all levels made with levelEditor tool.
+ * Allows to launch and delete these levels.
+ */
 public class ChooseSavedLevelScreen implements Screen {
 
     private final LaserKittens laserKittens;
@@ -109,6 +113,9 @@ public class ChooseSavedLevelScreen implements Screen {
         background.dispose();
     }
 
+    /**
+     * Get's all saved levels from database.
+     */
     private List<SavedLevel> allLevels() {
         List<List<SavedLevel>> levelsList = new ArrayList<>();
         Thread t = new Thread(() -> {
@@ -123,9 +130,12 @@ public class ChooseSavedLevelScreen implements Screen {
         return levelsList.get(0);
     }
 
-    private void deleteLevel(int i) {
+    /**
+     * Deletes savedLevel from database by it's id.
+     */
+    private void deleteLevel(int id) {
         Thread t = new Thread(() -> {
-            laserKittens.getDatabase().levelsDao().delete(levels.get(i));
+            laserKittens.getDatabase().levelsDao().delete(levels.get(id));
         });
         t.start();
         try {
@@ -149,7 +159,6 @@ public class ChooseSavedLevelScreen implements Screen {
             levels = allLevels();
             stage.addActor(table);
             table.setFillParent(true);
-            //table.setDebug(true);
 
             titleLabel.setFontScale(4f);
             table.add(titleLabel);

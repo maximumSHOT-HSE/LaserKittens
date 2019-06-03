@@ -1,5 +1,10 @@
 package ru.hse.team.database.levels;
 
+/**
+ * Replacement for common game Entity for purpises of serialisation.
+ * Represents common object by its position, size, rotation and type
+ * Type should be one of {@code STAR, WALL, MIRROR, PLAYER, GLASS} only.
+ */
 public class SimpleEntity {
 
     public enum EntityType {
