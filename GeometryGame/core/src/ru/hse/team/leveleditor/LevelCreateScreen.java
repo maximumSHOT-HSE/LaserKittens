@@ -31,6 +31,9 @@ import ru.hse.team.settings.about.PagedScrollPane;
 
 import static ru.hse.team.KittensAssetManager.Images;
 
+/**
+ * Screen for making levels and saving them.
+ */
 public class LevelCreateScreen implements Screen {
 
     private final LaserKittens laserKittens;
@@ -66,6 +69,10 @@ public class LevelCreateScreen implements Screen {
         entities.remove(entity);
     }
 
+    /**
+     * Returns any entity which contains given point
+     *  or null if there is no such entity.
+     */
     public SimpleEntity entityOnPoint(float positionX, float positionY) {
         for (SimpleEntity entity : entities) {
             if (inBounds(entity, positionX, positionY)) {
@@ -87,6 +94,9 @@ public class LevelCreateScreen implements Screen {
         camera.update();
     }
 
+    /**
+     * Returns {@code Texture} corresponding to given entity type.
+     */
     public TextureRegion getTextureByType(SimpleEntity.EntityType type) {
         switch (type) {
             case STAR:
@@ -104,6 +114,9 @@ public class LevelCreateScreen implements Screen {
         }
     }
 
+    /**
+     * Prevents camera from moving out of level borders.
+     */
     private void makeBordersForCamera(Vector3 position) {
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -203,6 +216,12 @@ public class LevelCreateScreen implements Screen {
         return backgroundRegion;
     }
 
+    /**
+     * Toolbar that allows to
+     *  choose current entity type or tool,
+     *  rotate current entity
+     *  and saving level.
+     */
     private class EditorTools {
 
         private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);

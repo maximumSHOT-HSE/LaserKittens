@@ -7,6 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SimpleEntity;
 
+/**
+ * Gesture processor for level creating screen.
+ */
 public class LevelGestureProcessor implements GestureDetector.GestureListener {
 
 
@@ -46,6 +49,10 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         return false;
     }
 
+    /**
+     * Moves camera n direction of touch movement,
+     *  unless now user is dragging focused entity.
+     */
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
         if (levelCreateInputProcessor.isDragging()) {
@@ -65,6 +72,10 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         return false;
     }
 
+    /**
+     * Zooms camera.
+     * Don't allows to make zoom too big or small.
+     */
     @Override
     public boolean zoom(float initialDistance, float distance) {
         if (levelCreateInputProcessor.isDragging()) {
@@ -84,7 +95,7 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         return new Vector2(Math.abs(pointer1.x - pointer2.x), Math.abs(pointer1.y - pointer2.y));
     }
 
-    private void makeAtLeastTenByBothCoordinates(Vector2 v) {
+    private void makeAtLeastTenBothCoordinates(Vector2 v) {
         v.x = Math.max(10, v.x);
         v.y = Math.max(10, v.y);
     }
@@ -98,6 +109,9 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
                 + wasDistance.y * Math.abs(Math.cos(rotation)));
     }
 
+    /**
+     * If now some entity is in focus, zooms it's sizes.
+     */
     @Override
     public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
         if (levelCreateInputProcessor.isDragging()) {
@@ -111,8 +125,8 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
                 positiveRotation(initialDistance, rotation);
             }
 
-            makeAtLeastTenByBothCoordinates(distance);
-            makeAtLeastTenByBothCoordinates(initialDistance);
+            makeAtLeastTenBothCoordinates(distance);
+            makeAtLeastTenBothCoordinates(initialDistance);
 
             levelCreateInputProcessor.zoomCurrentEntity(
                     distance.x / initialDistance.x * entityScale.x,
