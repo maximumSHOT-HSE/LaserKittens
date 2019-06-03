@@ -5,6 +5,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.hse.team.LaserKittens;
+import ru.hse.team.database.levels.SimpleEntity;
 
 public class LevelGestureProcessor implements GestureDetector.GestureListener {
 
@@ -83,11 +84,25 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         return new Vector2(Math.abs(pointer1.x - pointer2.x), Math.abs(pointer1.y - pointer2.y));
     }
 
+    private void makeAtLeastOneByBothCoordinates(Vector2 v) {
+        v.x = Math.max(1, v.x);
+        v.y = Math.max(1, v.y);
+    }
+
     @Override
     public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
         if (levelCreateInputProcessor.isDragging()) {
             Vector2 initialDistance = distanceModule(initialPointer1, initialPointer2);
             Vector2 distance = distanceModule(pointer1, pointer2);
+
+            SimpleEntity entity = levelCreateInputProcessor.getCurrentEntity();
+            if (entity != null) {
+                distance.x = Math.abs(distance.x * (float)Math.cos(entity.getRotation()));
+                distance.y = Math.abs(distance.y * (float)Math.sin(entity.getRotation()));
+            }
+
+            makeAtLeastOneByBothCoordinates(distance);
+            makeAtLeastOneByBothCoordinates(initialDistance);
 
             levelCreateInputProcessor.zoomCurrentEntity(
                     distance.x / initialDistance.x * entityScale.x,
