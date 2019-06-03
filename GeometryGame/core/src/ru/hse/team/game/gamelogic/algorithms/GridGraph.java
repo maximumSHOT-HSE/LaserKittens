@@ -197,8 +197,12 @@ public class GridGraph extends AbstractGraph {
         }
     }
 
+    /**
+     * Removes all edges which intersects with placed barrier.
+     * @param id is door id
+     */
     @Override
-    public void removeEdgeAgterPlacingRectangleBarrier(Vector2 center, float width, float height, int id) {
+    public void removeEdgeAfterPlacingRectangleBarrier(Vector2 center, float width, float height, int id) {
         System.out.println("REMOVE (" + center.x + ", " + center.y + ") W = " + width + ", H = " + height + "id = " + id);
         List<Pair<Vertex, Vertex>> deletedEs = new ArrayList<>();
         deletedEdges.put(id, deletedEs);

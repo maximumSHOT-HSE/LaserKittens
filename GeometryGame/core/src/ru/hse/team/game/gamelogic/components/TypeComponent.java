@@ -13,6 +13,7 @@ public class TypeComponent implements Component, Poolable {
         PLAYER,
         BULLET,
         IMPENETRABLE_WALL,
+        GUARDIAN,
         TRANSPARENT_WALL,
         DOOR,
         MIRROR,

@@ -18,6 +18,7 @@ public class GameStatus {
 
     private long startNano = 0;
     private long stopNano = 0;
+    private long penaltyNano = 0;
 
     private boolean started = false;
     private boolean stopped = false;
@@ -53,7 +54,7 @@ public class GameStatus {
                 end = stopNano;
             }
         }
-        return end - start;
+        return end - start + penaltyNano;
     }
 
     public static String getTimeStamp(long timeNano) {
@@ -104,6 +105,10 @@ public class GameStatus {
 
     public int getStarsInLevel() {
         return starsInLevel;
+    }
+
+    public void addPenaltyNanoTime(long timeNano) {
+        penaltyNano += timeNano;
     }
 
     public void draw(SpriteBatch batch, BitmapFont font) {

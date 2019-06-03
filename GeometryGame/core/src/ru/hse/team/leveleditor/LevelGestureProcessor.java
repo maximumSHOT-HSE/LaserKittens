@@ -5,6 +5,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.hse.team.LaserKittens;
+import ru.hse.team.database.levels.SimpleEntity;
 
 public class LevelGestureProcessor implements GestureDetector.GestureListener {
 
@@ -83,11 +84,35 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         return new Vector2(Math.abs(pointer1.x - pointer2.x), Math.abs(pointer1.y - pointer2.y));
     }
 
+    private void makeAtLeastTenByBothCoordinates(Vector2 v) {
+        v.x = Math.max(10, v.x);
+        v.y = Math.max(10, v.y);
+    }
+
+    private void positiveRotation(Vector2 distance, float rotation) {
+        Vector2 wasDistance = new Vector2(distance);
+
+        distance.x = (float)Math.abs(wasDistance.x * Math.abs(Math.cos(rotation))
+                 - wasDistance.y * Math.abs(Math.sin(rotation)));
+        distance.y = (float)Math.abs(wasDistance.x * Math.abs(Math.sin(rotation) )
+                + wasDistance.y * Math.abs(Math.cos(rotation)));
+    }
+
     @Override
     public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
         if (levelCreateInputProcessor.isDragging()) {
             Vector2 initialDistance = distanceModule(initialPointer1, initialPointer2);
             Vector2 distance = distanceModule(pointer1, pointer2);
+
+            SimpleEntity entity = levelCreateInputProcessor.getCurrentEntity();
+            if (entity != null) {
+                float rotation = (float)Math.toRadians(entity.getRotation());
+                positiveRotation(distance, rotation);
+                positiveRotation(initialDistance, rotation);
+            }
+
+            makeAtLeastTenByBothCoordinates(distance);
+            makeAtLeastTenByBothCoordinates(initialDistance);
 
             levelCreateInputProcessor.zoomCurrentEntity(
                     distance.x / initialDistance.x * entityScale.x,

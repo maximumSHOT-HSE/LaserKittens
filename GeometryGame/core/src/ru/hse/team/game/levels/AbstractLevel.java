@@ -16,6 +16,8 @@ import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.MessageCreator;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
+import ru.hse.team.game.gamelogic.algorithms.GridGraph;
+import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 /**
  * Class for encapsulating logic and

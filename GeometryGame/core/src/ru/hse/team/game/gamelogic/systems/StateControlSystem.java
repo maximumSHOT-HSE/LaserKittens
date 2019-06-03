@@ -6,6 +6,8 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.concurrent.TimeUnit;
+
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
@@ -80,6 +82,9 @@ public class StateControlSystem extends IteratingSystem {
                             }
                             doorState.finish();
                         }
+                        break;
+                    case GUARDIAN:
+                        abstractLevel.getGameStatus().addPenaltyNanoTime(TimeUnit.MINUTES.toNanos(1));
                         break;
                 }
             }
