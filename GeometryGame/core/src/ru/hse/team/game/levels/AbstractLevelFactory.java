@@ -47,6 +47,7 @@ abstract public class AbstractLevelFactory {
     abstract public void createLevel(int widthInScreens, int heightInScreens,
                                      AbstractLevel abstractLevel);
 
+
     public Entity createStar(float x, float y, float radius) {
         Texture texture = manager.getImage(KittensAssetManager.Images.STAR_2);
         Vector2 scale = new Vector2(2 * radius / RenderingSystem.pixelsToMeters(texture.getWidth()),
@@ -68,7 +69,7 @@ abstract public class AbstractLevelFactory {
                 .addTransformComponent(new Vector3(source.x, source.y, 50))
                 .addTextureComponent(null)
                 .addTypeComponent(TypeComponent.Type.BULLET)
-                .addStateComponent(StateComponent.State.NORMAL)
+                .addStateComponent(StateComponent.State.JUST_CREATED)
                 .addBulletComponent(System.currentTimeMillis(), lifeTime, source)
                 .build();
     }
@@ -122,7 +123,7 @@ abstract public class AbstractLevelFactory {
                 .addBodyComponent(bodyFactory.newPlayerBody(new Vector2(playerX, playerY), radius))
                 .addTransformComponent(new Vector3(playerX, playerY, 100), scale, 0, false)
                 .addTextureComponent(new TextureRegion(manager.getImage(KittensAssetManager.Images.CAT_3)))
-                .addStateComponent(StateComponent.State.NORMAL)
+                .addStateComponent(StateComponent.State.JUST_CREATED)
                 .addTypeComponent(TypeComponent.Type.PLAYER)
                 .build();
     }
@@ -136,8 +137,8 @@ abstract public class AbstractLevelFactory {
                 .addBodyComponent(bodyFactory.newGuardianBody(new Vector2(guardianX, guardianY), radius))
                 .addTransformComponent(new Vector3(guardianX, guardianY, 100), scale, 0, false)
                 .addTextureComponent(new TextureRegion(manager.getImage(KittensAssetManager.Images.CAT_2)))
-                .addStateComponent(StateComponent.State.NORMAL)
-                .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
+                .addStateComponent(StateComponent.State.JUST_CREATED)
+                .addTypeComponent(TypeComponent.Type.GUARDIAN)
                 .addPatrolComponent(path, velocty)
                 .build();
     }
@@ -195,7 +196,7 @@ abstract public class AbstractLevelFactory {
                 .addTransformComponent(new Vector3(center.x, center.y, 5))
                 .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.DOOR)
-                .addStateComponent(StateComponent.State.NORMAL)
+                .addStateComponent(StateComponent.State.JUST_CREATED)
                 .addDoorComponent()
                 .build();
         System.out.println("CREATE DOOR with id = " + Mapper.stateComponent.get(door).getId());
@@ -213,7 +214,7 @@ abstract public class AbstractLevelFactory {
                 .addTransformComponent(new Vector3(center.x, center.y, 10))
                 .addTextureComponent(new TextureRegion(texture))
                 .addTypeComponent(TypeComponent.Type.KEY)
-                .addStateComponent(StateComponent.State.NORMAL)
+                .addStateComponent(StateComponent.State.JUST_CREATED)
                 .addKeyComponent(door)
                 .build();
     }

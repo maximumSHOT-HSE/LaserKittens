@@ -31,7 +31,7 @@ public abstract class AbstractGraph {
 
     abstract public void visit(Vector2 position);
 
-    abstract public void removeEdgeAgterPlacingRectangleBarrier(Vector2 center, float width, float height, int id);
+    abstract public void removeEdgeAfterPlacingRectangleBarrier(Vector2 center, float width, float height, int id);
 
     abstract public void updateGraphAfterRemoveRectangleBarrier(int id);
 

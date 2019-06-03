@@ -29,13 +29,6 @@ public class GestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-//        if (count == 2 && renderingSystem.getCameraWaiting() <= 0) {
-//            renderingSystem.getCamera().position.set(
-//                    renderingSystem.getCamera().unproject(new Vector3(x, y, 0))
-//            );
-//            renderingSystem.getCamera().update();
-//            renderingSystem.setCameraWaiting(10f);
-//        }
         return false;
     }
 
@@ -49,9 +42,6 @@ public class GestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public boolean fling(float velocityX, float velocityY, int button) {
-//        renderingSystem.getCamera().position.set(
-//                renderingSystem.getCamera().unproject(new Vector3(x, y, 0))
-//        );
         return false;
     }
 

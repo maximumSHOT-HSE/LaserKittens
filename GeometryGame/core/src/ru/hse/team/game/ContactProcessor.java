@@ -62,6 +62,10 @@ public class ContactProcessor implements ContactListener {
         Mapper.stateComponent.get(star).finish();
     }
 
+    private void processPlayerGuardian(Entity player, Entity guardian) {
+        Mapper.stateComponent.get(guardian).finish();
+    }
+
     private void processPlayerKey(Entity player, Entity key) {
         Mapper.stateComponent.get(key).finish();
         if (abstractLevel instanceof AbstractMultiplayerLevel) {
@@ -134,6 +138,10 @@ public class ContactProcessor implements ContactListener {
         if (checkType(entityA, TypeComponent.Type.BULLET) &&
             checkType(entityB, TypeComponent.Type.TUMBLER)) {
             processBulletTumbler(entityA, entityB);
+        }
+        if (checkType(entityA, TypeComponent.Type.PLAYER) &&
+        checkType(entityB, TypeComponent.Type.GUARDIAN)) {
+            processPlayerGuardian(entityA, entityB);
         }
     }
 
