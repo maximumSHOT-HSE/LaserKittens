@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -113,7 +112,7 @@ public class ChooseSavedLevelScreen implements Screen {
     private List<SavedLevel> allLevels() {
         List<List<SavedLevel>> levelsList = new ArrayList<>();
         Thread t = new Thread(() -> {
-            levelsList.add(laserKittens.getSavedLevels().levelsDao().getAll());
+            levelsList.add(laserKittens.getDatabase().levelsDao().getAll());
         });
         t.start();
         try {
@@ -126,7 +125,7 @@ public class ChooseSavedLevelScreen implements Screen {
 
     private void deleteLevel(int i) {
         Thread t = new Thread(() -> {
-            laserKittens.getSavedLevels().levelsDao().delete(levels.get(i));
+            laserKittens.getDatabase().levelsDao().delete(levels.get(i));
         });
         t.start();
         try {

@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -51,7 +50,7 @@ public class GameEndingScreen implements Screen {
 
     private void addResultToDatabase(GameStatus gameStatus) {
         new Thread(() -> {
-            laserKittens.getStatisticsDatabase().statisticsDao().insert(
+            laserKittens.getDatabase().statisticsDao().insert(
                         new LevelStatistics(parentLevel.getLevelName(),gameStatus.timeGone(),
                                 gameStatus.getStarsInLevel(), gameStatus.getCalendarDate()));
         }).start();

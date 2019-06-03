@@ -8,7 +8,7 @@ public interface StatisticsDao {
 
     LevelStatistics getById(long id);
 
-    LevelStatistics getBestByLevelName(String levelName);
+    LevelStatistics getBestByLevelName (String levelName);
 
     void insert(LevelStatistics statistics);
 
@@ -19,5 +19,5 @@ public interface StatisticsDao {
     void delete(LevelStatistics statistics);
 
     void deleteAll(LevelStatistics ... statistics);
-}
 
+}

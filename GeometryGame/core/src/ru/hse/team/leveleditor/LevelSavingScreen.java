@@ -24,7 +24,6 @@ import ru.hse.team.Background;
 import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
-import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.settings.about.PagedScrollPane;
 
 public class LevelSavingScreen implements Screen {
@@ -111,7 +110,7 @@ public class LevelSavingScreen implements Screen {
     private List<SavedLevel> allLevels() {
         List<List<SavedLevel>> levelsList = new ArrayList<>();
         Thread t = new Thread(() -> {
-            levelsList.add(laserKittens.getSavedLevels().levelsDao().getAll());
+            levelsList.add(laserKittens.getDatabase().levelsDao().getAll());
         });
         t.start();
         try {
@@ -224,7 +223,7 @@ public class LevelSavingScreen implements Screen {
 
         private void addLevel() {
             Thread t =  (new Thread(() -> {
-                laserKittens.getSavedLevels().levelsDao().insert(level);
+                laserKittens.getDatabase().levelsDao().insert(level);
             }));
             t.start();
             try {

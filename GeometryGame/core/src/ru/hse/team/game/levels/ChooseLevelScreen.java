@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import ru.hse.team.Background;
@@ -183,7 +182,7 @@ public class ChooseLevelScreen implements Screen {
             long[] bestTime = new long[1];
             Thread queryThread = (new Thread(() -> {
                 LevelStatistics statistics = laserKittens
-                        .getStatisticsDatabase().statisticsDao()
+                        .getDatabase().statisticsDao()
                         .getBestByLevelName(levelName);
                 if (statistics != null) {
                     bestTime[0] = TimeUnit.NANOSECONDS.toMillis(statistics.timeNano);
@@ -204,7 +203,7 @@ public class ChooseLevelScreen implements Screen {
             Label[] label = new Label[1];
             Thread queryThread = (new Thread(() -> {
                 LevelStatistics statistics =
-                        laserKittens.getStatisticsDatabase()
+                        laserKittens.getDatabase()
                                 .statisticsDao().getBestByLevelName(levelName);
                 if (statistics != null) {
                     label[0] = new Label(GameStatus.getTimeStamp(statistics.timeNano), skin);
