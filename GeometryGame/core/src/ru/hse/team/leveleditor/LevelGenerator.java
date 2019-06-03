@@ -12,8 +12,17 @@ import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
+/**
+ * Class for generating levels from {@code SavedLevel} instances.
+ */
 public class LevelGenerator {
 
+    /**
+     * Creates new level with characteristics from given SavedLevel instance.
+     * Creates all entities from it.
+     * Only one of player instances will be created and
+     *  if there is no player, new one will be created
+     */
     public static AbstractLevel generate(SavedLevel savedLevel) {
 
         return new AbstractLevel(savedLevel.levelName, savedLevel.widthInScreens, savedLevel.heightInScreens) {
@@ -59,21 +68,23 @@ public class LevelGenerator {
                         case MIRROR:
                             createMirror(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
                                     entity.getSizeX() * scale.x, entity.getSizeY() * scale.y,
-                                    entity.getRotation() * (float)Math.PI / 180);
+                                    entity.getRotation() * (float) Math.PI / 180);
                             break;
                         case WALL:
                             createImpenetrableWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
                                     entity.getSizeX() * scale.x, entity.getSizeY() * scale.y,
-                                    entity.getRotation() * (float)Math.PI / 180);
+                                    entity.getRotation() * (float) Math.PI / 180);
                             break;
                         case GLASS:
                             createTransparentWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
                                     entity.getSizeX() * scale.x, entity.getSizeY() * scale.y,
-                                    entity.getRotation() * (float)Math.PI / 180);
+                                    entity.getRotation() * (float) Math.PI / 180);
                             break;
                         case PLAYER:
-                            focusedPlayer = createPlayer(entity.getPositionX() * PM, entity.getPositionY() * PM,
-                                    entity.getSizeX() * scale.x);
+                            if (focusedPlayer == null) {
+                                focusedPlayer = createPlayer(entity.getPositionX() * PM, entity.getPositionY() * PM,
+                                        entity.getSizeX() * scale.x);
+                            }
                             break;
                     }
                 }
@@ -89,7 +100,9 @@ public class LevelGenerator {
     }
 
 
-
+    /**
+     * Makes entities in level look exactly like in editor.
+     */
     private static Vector2 getCommonScale(SimpleEntity entity) {
         float PM = RenderingSystem.PIXELS_TO_METRES;
         switch (entity.getType()) {

@@ -111,6 +111,9 @@ public class LevelCreateInputProcessor implements InputProcessor {
                     }
                     break;
             }
+        }
+
+        if (focusedType == null) {
             return false;
         }
 

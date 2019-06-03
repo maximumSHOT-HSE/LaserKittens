@@ -26,6 +26,11 @@ import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.settings.about.PagedScrollPane;
 
+/**
+ * Screen for saving levels.
+ * Prompts user to name new level.
+ * Won't accept a name if it is too long or already used.
+ */
 public class LevelSavingScreen implements Screen {
 
     private final LaserKittens laserKittens;
@@ -107,6 +112,9 @@ public class LevelSavingScreen implements Screen {
         background.dispose();
     }
 
+    /**
+     * Get's all {@code SavedLevel} instances from database.
+     */
     private List<SavedLevel> allLevels() {
         List<List<SavedLevel>> levelsList = new ArrayList<>();
         Thread t = new Thread(() -> {
@@ -221,6 +229,9 @@ public class LevelSavingScreen implements Screen {
         public void canceled () {
         }
 
+        /**
+         * Add new {@code SavedLevel} to database.
+         */
         private void addLevel() {
             Thread t =  (new Thread(() -> {
                 laserKittens.getDatabase().levelsDao().insert(level);
