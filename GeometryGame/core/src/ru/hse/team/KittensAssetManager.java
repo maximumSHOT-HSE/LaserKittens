@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-/*
-* This class is not a singleton, because of android
-* special behaviour related with static variables.
-* */
+
+/**
+ * Class for simplification of assets loading.
+ */
 public class KittensAssetManager {
 
     private final AssetManager manager = new AssetManager();

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 
+import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.Mapper;
@@ -115,10 +117,8 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         if (!clickInPlayerRegion()) {
             Gdx.app.postRunnable(() -> abstractLevel.shoot(position.x, position.y));
-
-            //before uncommenting think about posRunnable
-//            Sound laser = laserKittens.assetManager.manager.get(KittensAssetManager.LASER_SOUND, Sound.class);
-//            laser.play(laserKittens.getPreferences().getSoundVolume());
+            Sound laser = laserKittens.getAssetManager().getSound(KittensAssetManager.Sounds.LASER_SOUND);
+            laser.play(laserKittens.getPreferences().getSoundVolume());
             return true;
         }
 

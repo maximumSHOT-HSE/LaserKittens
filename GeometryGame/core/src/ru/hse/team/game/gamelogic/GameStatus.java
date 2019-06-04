@@ -4,11 +4,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import ru.hse.team.KittensAssetManager;
+import ru.hse.team.LaserKittens;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 /**
@@ -23,9 +26,8 @@ public class GameStatus {
     private boolean started = false;
     private boolean stopped = false;
 
-    private OrthographicCamera statusCamera =
-            new OrthographicCamera(
-                    RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
+    private OrthographicCamera statusCamera = new OrthographicCamera(
+            RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
 
     public void start() {
         if (started) {
@@ -84,7 +86,7 @@ public class GameStatus {
     private int starsInLevel = 0;
 
     private float currentTimeToEnd = 0f;
-    private float minEndTime = 1f;
+    private float minEndTime = TimeUnit.MILLISECONDS.toNanos(1);
 
     public void addStar() {
         starCounter++;
@@ -111,17 +113,16 @@ public class GameStatus {
         penaltyNano += timeNano;
     }
 
-    public void draw(SpriteBatch batch, BitmapFont font) {
+    public void draw(SpriteBatch batch, BitmapFont font, KittensAssetManager manager) {
         statusCamera.zoom = 10f;
         statusCamera.update();
 
         batch.setProjectionMatrix(statusCamera.combined);
         batch.begin();
-        font.draw(
-                batch,
-                getTimeStamp(timeGone()),
+        font.draw(batch, getTimeStamp(timeGone()),
                 -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2,
                 statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2);
+
         batch.end();
     }
 

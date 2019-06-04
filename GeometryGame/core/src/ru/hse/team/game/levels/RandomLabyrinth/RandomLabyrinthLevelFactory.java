@@ -166,7 +166,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                     if (iterations % 2 == 1) {
                         dfsGenerate(cell, iterations * 5);
                     } else {
-                        bfsGenerate(cell, 2);
+                        bfsGenerate(cell, 1);
                     }
                 }
             }

@@ -19,6 +19,10 @@ import ru.hse.team.mainmenu.MainMenuScreen;
 import ru.hse.team.settings.AppPreferences;
 import ru.hse.team.settings.SettingsScreen;
 
+/**
+ * Main game class.
+ * Used for changing screens and accessing common resources
+ */
 public class LaserKittens extends Game {
 
     private SpriteBatch batch;

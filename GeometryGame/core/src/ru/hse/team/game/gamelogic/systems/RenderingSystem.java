@@ -233,7 +233,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         }
 
         if (laserKittens.getPreferences().isShowTime()) {
-            abstractLevel.getGameStatus().draw(batch, laserKittens.getFont());
+            abstractLevel.getGameStatus().draw(batch, laserKittens.getFont(), laserKittens.getAssetManager());
         }
 
         moveCamera(deltaTime);
