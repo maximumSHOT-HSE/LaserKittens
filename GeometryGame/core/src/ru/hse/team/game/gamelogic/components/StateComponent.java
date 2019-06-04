@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
  * Contains information about current entity state.
- * StateControlSystem uses it
  */
 public class StateComponent implements Component, Poolable {
 

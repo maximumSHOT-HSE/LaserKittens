@@ -29,6 +29,17 @@ import ru.hse.team.game.gamelogic.components.TextureComponent;
 import ru.hse.team.game.gamelogic.components.TransformComponent;
 import ru.hse.team.game.levels.AbstractLevel;
 
+/**
+ * Draws game objects.
+ * Draws all entities with Transform and Texture components.
+ * Draws game status
+ * Draws hints
+ * Draws bullet trace
+ *
+ * Keeps camera object.
+ * Makes camera following player and
+ * doesn't allow it to move out of game borders
+ */
 public class RenderingSystem extends SortedIteratingSystem {
 
     // pixels per meter
@@ -233,7 +244,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         }
 
         if (laserKittens.getPreferences().isShowTime()) {
-            abstractLevel.getGameStatus().draw(batch, laserKittens.getFont(), laserKittens.getAssetManager());
+            abstractLevel.getGameStatus().draw(batch, laserKittens.getFont());
         }
 
         moveCamera(deltaTime);
@@ -249,10 +260,6 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     private static class ZComparator implements Comparator<Entity> {
-
-        private ZComparator() {
-
-        }
 
         @Override
         public int compare(Entity entityA, Entity entityB) {
@@ -284,7 +291,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
 
     /**
-     * Moves camera with speed exponentially? from distance
+     * Moves camera with speed depended exponentially from distance
      * */
     private void moveCamera(float delta) {
         delta = Math.max(delta, 0.1f); // when delta is near to zero problems occur

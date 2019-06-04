@@ -16,6 +16,9 @@ import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 import ru.hse.team.game.levels.AbstractLevel;
 
+/**
+ * Class that processes contacts between bodies in game.
+ */
 public class ContactProcessor implements ContactListener {
 
     private AbstractLevel abstractLevel;
@@ -104,6 +107,9 @@ public class ContactProcessor implements ContactListener {
         return typeComponent.type.equals(type);
     }
 
+    /**
+     * Processes entities collision.
+     */
     private void process(Entity entityA, Entity entityB, boolean areSwapped) {
         if (!areSwapped) {
             process(entityB, entityA, true);

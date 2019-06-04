@@ -10,6 +10,10 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+
+/**
+ * Class which allows to access {@code LevelStatistics} objects in database.
+ */
 @Dao
 public interface StatisticsDaoAndroid extends StatisticsDao {
 

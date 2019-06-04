@@ -8,6 +8,9 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+/**
+ * Class which allows to access {@code SavedLevel} objects in database.
+ */
 @Dao
 public interface LevelsDaoAndroid extends LevelsDao {
 

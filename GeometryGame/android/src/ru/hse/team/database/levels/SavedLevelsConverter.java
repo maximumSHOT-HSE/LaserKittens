@@ -8,6 +8,10 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+/**
+ * Converts List of simple entities to and from json format.
+ * Allows android room database to save {@code SavedLevel} instances
+ */
 public class SavedLevelsConverter {
     @TypeConverter
     public static List<SimpleEntity> fromString(String value) {

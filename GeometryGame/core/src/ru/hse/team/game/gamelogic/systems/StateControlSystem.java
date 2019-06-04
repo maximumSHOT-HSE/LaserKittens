@@ -19,7 +19,8 @@ import ru.hse.team.game.levels.AbstractLevel;
  * Processes objects state.
  * Destroys objects in FINISHED state
  * NORMAL state is neutral
- * Processes other states specifically
+ * Processes JUST_CREATED objects according to their type and changes
+ *  their state to NORMAL
  */
 public class StateControlSystem extends IteratingSystem {
 

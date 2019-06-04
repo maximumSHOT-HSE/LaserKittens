@@ -15,7 +15,8 @@ import ru.hse.team.LaserKittens;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 /**
- * Maintains current game status
+ * Maintains current game status.
+ * Which is number of collected stars and time from level start
  */
 public class GameStatus {
 
@@ -46,6 +47,10 @@ public class GameStatus {
         putEndTime();
     }
 
+    /**
+     * Time in nanoseconds from level start with
+     *  added penalty time.
+     */
     public long timeGone() {
         long start = 0;
         long end = 0;
@@ -59,6 +64,10 @@ public class GameStatus {
         return end - start + penaltyNano;
     }
 
+    /**
+     * Translate given time in nanos to string in pattern "mm:ss:SS".
+     * m - for minutes, s - for seconds and S - for milliseconds.
+     */
     public static String getTimeStamp(long timeNano) {
         SimpleDateFormat dateFormat = (SimpleDateFormat)SimpleDateFormat.getTimeInstance();
         dateFormat.applyPattern("mm:ss:SS");
@@ -101,6 +110,10 @@ public class GameStatus {
         currentTimeToEnd += delta;
     }
 
+    /**
+     * Returns whether level is finished.
+     * Level is finished if all stars are collected
+     */
     public boolean readyToFinish() {
         return currentTimeToEnd > minEndTime && starCounter == 0;
     }
@@ -113,7 +126,10 @@ public class GameStatus {
         penaltyNano += timeNano;
     }
 
-    public void draw(SpriteBatch batch, BitmapFont font, KittensAssetManager manager) {
+    /**
+     *  Draws in top-left corner time gone from level start .
+     */
+    public void draw(SpriteBatch batch, BitmapFont font) {
         statusCamera.zoom = 10f;
         statusCamera.update();
 

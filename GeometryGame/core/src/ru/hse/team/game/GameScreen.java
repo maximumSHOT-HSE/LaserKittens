@@ -24,6 +24,11 @@ import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.gamelogic.systems.StateControlSystem;
 import ru.hse.team.game.levels.AbstractLevel;
 
+/**
+ * Screen which shows current game states and game objects.
+ * Objects related to game logic created when this screen
+ *  is initialised and disposed when it is closed.
+ */
 public class GameScreen implements Screen {
 
     private final LaserKittens laserKittens;

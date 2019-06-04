@@ -20,6 +20,11 @@ import com.google.android.gms.tasks.Task;
 
 import ru.hse.team.database.DatabaseAndroid;
 
+/**
+ * Activity which initialises database and
+ * 	starts game class.
+ * Provides interface to access google services API
+ */
 public class AndroidLauncher extends AndroidApplication implements GoogleServicesAction {
 
 
@@ -125,18 +130,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 		signInSilently();
 	}
 
-
-	@Override
-    public void onStart() {
-	    super.onStart();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
 
 	private void onConnected(GoogleSignInAccount googleSignInAccount) {
 		Log.d(TAG, "onConnected(): connected to Google APIs");

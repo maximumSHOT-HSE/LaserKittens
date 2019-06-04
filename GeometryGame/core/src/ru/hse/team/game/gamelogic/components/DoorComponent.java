@@ -8,6 +8,9 @@ import com.badlogic.gdx.utils.Pool;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Contains keys associated with door.
+ */
 public class DoorComponent implements Component, Pool.Poolable {
 
     private static final int MAX_HITS_TO_HINT_NUMBER = 5;
@@ -52,5 +55,6 @@ public class DoorComponent implements Component, Pool.Poolable {
     public void reset() {
         keys.clear();
         doorHits = MAX_HITS_TO_HINT_NUMBER;
+        lastHintsShowTime = (long) -1e9;
     }
 }
