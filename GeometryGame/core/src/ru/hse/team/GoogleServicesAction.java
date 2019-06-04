@@ -1,5 +1,8 @@
 package ru.hse.team;
 
+/**
+ * Class for working with google services.
+ */
 public interface GoogleServicesAction {
 
     void signIn();

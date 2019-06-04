@@ -20,7 +20,7 @@ import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 
 /**
- * Main menu screen providing an user interface to move between screens.
+ * Main menu screen providing user interface to move between screens.
  */
 public class MainMenuScreen implements Screen {
 

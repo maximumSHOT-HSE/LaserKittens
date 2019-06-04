@@ -14,7 +14,8 @@ import ru.hse.team.game.gamelogic.components.TumblerComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 
 /**
- * Simple class used for getting entity components.
+ * Class for getting entity components in constant time.
+ *  Which is better that entities {@code get} method
  */
 public class Mapper {
     public static ComponentMapper<BodyComponent> bodyComponent =

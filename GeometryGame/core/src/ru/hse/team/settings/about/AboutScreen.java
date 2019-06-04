@@ -28,7 +28,7 @@ import ru.hse.team.LaserKittens;
 /**
  * Screen with general information about the game.
  * Information list contains
- *     External libraries, sounds, sceens
+ *     External libraries, sounds, skins
  */
 public class AboutScreen implements Screen {
 
@@ -69,7 +69,7 @@ public class AboutScreen implements Screen {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update(); // good practise -- update camera one time per frame
+        camera.update();
 
         laserKittens.getBatch().begin();
         background.draw(laserKittens.getBatch());

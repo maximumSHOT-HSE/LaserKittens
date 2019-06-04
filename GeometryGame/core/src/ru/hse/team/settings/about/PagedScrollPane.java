@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 /**
- * Scrollable pane for about screen.
+ * Scrollable pane.
  */
 public class PagedScrollPane extends ScrollPane {
 
