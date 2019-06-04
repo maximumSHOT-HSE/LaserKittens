@@ -5,8 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
- * Contains information about current entity body
- * if such component there exists.
+ * Contains information about current entity body.
  */
 public class BodyComponent implements Component, Poolable {
 

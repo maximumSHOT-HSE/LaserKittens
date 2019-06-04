@@ -21,6 +21,8 @@ import ru.hse.team.game.levels.AbstractLevel;
  *  Once in MAX_STEP_TIME
  *  Controls Transform position be equal to body position
  *  for entities with bodies.
+ *  Updates level graph.
+ *  Controls territory patrol.
  */
 public class PhysicsSystem extends IteratingSystem {
 

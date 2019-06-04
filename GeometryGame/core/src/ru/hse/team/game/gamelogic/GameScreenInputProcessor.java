@@ -24,7 +24,12 @@ import ru.hse.team.game.levels.AbstractLevel;
 
 /**
  * Input processor for game screen.
- * Dragging player and shooting implemented here
+ * By touch on player user can drag it.
+ * Touching not on a player image leads to shoot(by a player cat)
+ *  in direction of touch
+ * If accelerometer enabled player won't be dragged and it's position
+ *  will change according to phone tilt
+ * Game status timer starts on first touch or movement with accelerometer
  */
 public class GameScreenInputProcessor implements InputProcessor {
 
@@ -219,6 +224,8 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     public void moveWithAccelerometer(float delta) {
         if (!enabledAccelerometer) return;
+
+        abstractLevel.getGameStatus().start();
 
         final float accelerometerX = Gdx.input.getAccelerometerX();
         final float accelerometerY = Gdx.input.getAccelerometerY();

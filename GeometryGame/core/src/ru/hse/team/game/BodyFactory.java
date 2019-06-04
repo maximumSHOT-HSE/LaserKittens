@@ -226,6 +226,7 @@ public class BodyFactory {
     }
 
 
+    //adds bodies to world on build
     private class BodyBuilder {
         private BodyDef bodyDef = new BodyDef();
 

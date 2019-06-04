@@ -29,6 +29,7 @@ import ru.hse.team.game.levels.AbstractLevel;
 /**
  * Screen with general information about passed level
  *  and screens navigating buttons.
+ *  Adds finished level result to LevelStatistics database
  */
 public class GameEndingScreen implements Screen {
 
@@ -46,7 +47,6 @@ public class GameEndingScreen implements Screen {
         this.stage = new Stage(new ScreenViewport());
         addResultToDatabase(parentLevel.getGameStatus());
     }
-
 
     private void addResultToDatabase(GameStatus gameStatus) {
         new Thread(() -> {

@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Keeps path which entity patrols.
+ */
 public class PatrolComponent implements Component, Pool.Poolable {
 
     private static final float EPS = (float) 1;
@@ -19,7 +22,7 @@ public class PatrolComponent implements Component, Pool.Poolable {
     private List<Vector2> path = new ArrayList<>();
     private int currentVertex;
     private Entity character;
-    private float velocity;
+    private float velocity = 0;
 
     public void setPath(List<Vector2> path) {
         this.path = path;
@@ -48,6 +51,9 @@ public class PatrolComponent implements Component, Pool.Poolable {
 
     @Override
     public void reset() {
-
+        path = new ArrayList<>();
+        character = null;
+        velocity = 0;
+        currentVertex = 0;
     }
 }

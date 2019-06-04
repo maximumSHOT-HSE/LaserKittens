@@ -6,6 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.levels.AbstractLevel;
 
+/**
+ * Class which processes gestures on game screen.
+ */
 public class GestureProcessor implements GestureDetector.GestureListener {
 
     private float scale = 1;
@@ -32,6 +35,9 @@ public class GestureProcessor implements GestureDetector.GestureListener {
         return false;
     }
 
+    /**
+     * Shows level graph.
+     */
     @Override
     public boolean longPress(float x, float y) {
         if (abstractLevel.getAbstractGraph() != null) {
@@ -45,6 +51,10 @@ public class GestureProcessor implements GestureDetector.GestureListener {
         return false;
     }
 
+    /**
+     * Moves camera if user currently not dragging a player.
+     * Movement made in opposite direction of pointer movement
+     */
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
         if (gameScreenInputProcessor.isDragging()) {
@@ -67,6 +77,11 @@ public class GestureProcessor implements GestureDetector.GestureListener {
         return false;
     }
 
+    /**
+     * Zooms camera.
+     * Zoom is bounded and if it get's too small it is increased to minimal value
+     * and if it get't too big it is decreased to maximum value
+     */
     @Override
     public boolean zoom(float initialDistance, float distance) {
         renderingSystem.getCamera().zoom = scale * initialDistance / distance;
