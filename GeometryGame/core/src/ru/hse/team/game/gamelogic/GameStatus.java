@@ -4,14 +4,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import ru.hse.team.KittensAssetManager;
-import ru.hse.team.LaserKittens;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 /**

@@ -16,8 +16,6 @@ import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.MessageCreator;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
-import ru.hse.team.game.gamelogic.algorithms.GridGraph;
-import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 
 /**
  * Class for encapsulating logic and
@@ -97,6 +95,17 @@ abstract public class AbstractLevel {
 
     public void setAbstractGraph(AbstractGraph abstractGraph) {
         this.abstractGraph = abstractGraph;
+        if (abstractGraph == null) {
+            return;
+        }
+        for (AbstractLevelFactory.Barrier barrier : getFactory().getBarriers()) {
+            abstractGraph.removeEdgeAfterPlacingRectangleBarrier(
+                barrier.getCenter(),
+                barrier.getWidth(),
+                barrier.getHeight(),
+                barrier.getId()
+            );
+        }
     }
 
     public GameStatus getGameStatus() {

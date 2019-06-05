@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ abstract public class AbstractLevelFactory {
     private PooledEngine engine;
     private KittensAssetManager manager;
     private BodyFactory bodyFactory;
+    private List<Barrier> barriers = new ArrayList<>();
 
     public AbstractLevelFactory(
             PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory) {
@@ -155,14 +157,13 @@ abstract public class AbstractLevelFactory {
                 (int) RenderingSystem.metersToPixels(width),
                 (int) RenderingSystem.metersToPixels(height)
         );
-        Entity wall = (new EntityBuilder())
+        return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height, rotation))
                 .addTransformComponent(new Vector3(center.x, center.y, 10))
                 .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
                 .addStateComponent(StateComponent.State.JUST_CREATED)
                 .build();
-        return wall;
     }
 
     protected Entity createImpenetrableDynamicWall(Vector2 center, float width, float height) {
@@ -379,19 +380,24 @@ abstract public class AbstractLevelFactory {
         }
     }
 
+    /*
+    * Places the impenetrable wall to the given part of screen
+    * and stores that wall in the level's barrier storage
+    */
     protected Entity placeImpenetrableWall(
             float relativeX,
             float relativeY,
             float relativeWidth,
             float relativeHeight) {
-        return createImpenetrableWall(
-                new Vector2(
-                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                        relativeY * RenderingSystem.getScreenSizeInMeters().y
-                ),
-                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
-                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        Vector2 center = new Vector2(
+                relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                relativeY * RenderingSystem.getScreenSizeInMeters().y
         );
+        float width = relativeWidth * RenderingSystem.getScreenSizeInMeters().x;
+        float height = relativeHeight * RenderingSystem.getScreenSizeInMeters().y;
+        Entity wall = createImpenetrableWall(center, width, height);
+        addBarrier(center, width, height, Mapper.stateComponent.get(wall).getId());
+        return wall;
     }
 
     protected Entity placeDynamicImpenetrableWall(
@@ -428,19 +434,24 @@ abstract public class AbstractLevelFactory {
         );
     }
 
+    /*
+     * Places the door to the given part of screen
+     * and stores that door in the level's barrier storage
+     */
     protected Entity placeDoor(
             float relativeX,
             float relativeY,
             float relativeWidth,
             float relativeHeight) {
-        return createDoor(
-                new Vector2(
-                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                        relativeY * RenderingSystem.getScreenSizeInMeters().y
-                ),
-                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
-                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        Vector2 center = new Vector2(
+                relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                relativeY * RenderingSystem.getScreenSizeInMeters().y
         );
+        float width = relativeWidth * RenderingSystem.getScreenSizeInMeters().x;
+        float height = relativeHeight * RenderingSystem.getScreenSizeInMeters().y;
+        Entity door = createDoor(center, width, height);
+        addBarrier(center, width, height, Mapper.stateComponent.get(door).getId());
+        return door;
     }
 
     protected Entity placePointer(
@@ -505,5 +516,48 @@ abstract public class AbstractLevelFactory {
 
     public BodyFactory getBodyFactory() {
         return bodyFactory;
+    }
+
+    public void addBarrier(Vector2 center, float width, float height, int id) {
+        barriers.add(new Barrier(center, width, height, id));
+    }
+
+    public List<Barrier> getBarriers() {
+        return barriers;
+    }
+
+    /**
+     * Barrier is the entity through which player can not pass.
+     * It has center, width and height
+     */
+    public class Barrier {
+
+        private Vector2 center;
+        private float width;
+        private float height;
+        private int id;
+
+        public Barrier(Vector2 center, float width, float height, int id) {
+            this.center = center;
+            this.width = width;
+            this.height = height;
+            this.id = id;
+        }
+
+        public Vector2 getCenter() {
+            return center;
+        }
+
+        public float getWidth() {
+            return width;
+        }
+
+        public float getHeight() {
+            return height;
+        }
+
+        public int getId() {
+            return id;
+        }
     }
 }

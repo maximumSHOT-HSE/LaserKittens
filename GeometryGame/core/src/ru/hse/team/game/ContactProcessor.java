@@ -32,7 +32,7 @@ public class ContactProcessor implements ContactListener {
      * or not and
      * if yes then current body position will be added
      * to path of bullet
-     * */
+     */
     private void processBullet(Entity entity) {
         BulletComponent bulletComponent = Mapper.bulletComponent.get(entity);
         BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);

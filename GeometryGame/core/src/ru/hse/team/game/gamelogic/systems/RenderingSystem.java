@@ -146,7 +146,10 @@ public class RenderingSystem extends SortedIteratingSystem {
                 for (Entity keyEntity : keyEntities) {
                     Body keyBody = Mapper.bodyComponent.get(keyEntity).body;
                     Vector2 keyPosition = keyBody.getPosition();
-                    drawSegment(doorCenterPosition, keyPosition, shapeRenderer, Color.YELLOW);
+                    drawSegment(doorCenterPosition, keyPosition, shapeRenderer, Color.YELLOW); // DRAW HINT
+                    if (abstractLevel.getAbstractGraph() != null) {
+                        abstractLevel.getAbstractGraph().visit(keyPosition);
+                    }
                 }
             }
         }

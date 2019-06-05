@@ -6,8 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
+
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.PatrolComponent;
@@ -79,16 +78,13 @@ public class PhysicsSystem extends IteratingSystem {
     }
 
     private void updateGraph() {
-        if (abstractLevel.getAbstractGraph() != null) {
-            for (Entity entity : getEntities()) {
-                TypeComponent typeComponent = Mapper.typeComponent.get(entity);
-                if (typeComponent == null) {
-                    continue;
-                }
-                BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-                if (bodyComponent == null || bodyComponent.body == null) {
-                    continue;
-                }
+        if (abstractLevel.getAbstractGraph() == null) {
+            return;
+        }
+        for (Entity entity : getEntities()) {
+            TypeComponent typeComponent = Mapper.typeComponent.get(entity);
+            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
+            if (typeComponent != null && bodyComponent != null && bodyComponent.body != null) {
                 if (typeComponent.type.equals(TypeComponent.Type.PLAYER)) {
                     abstractLevel
                             .getAbstractGraph()
