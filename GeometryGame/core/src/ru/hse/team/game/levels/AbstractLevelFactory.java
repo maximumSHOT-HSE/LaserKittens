@@ -426,7 +426,7 @@ abstract public class AbstractLevelFactory {
         );
         float width = relativeWidth * RenderingSystem.getScreenSizeInMeters().x;
         float height = relativeHeight * RenderingSystem.getScreenSizeInMeters().y;
-        Entity wall = createImpenetrableDynamicWall(center, width, height);g
+        Entity wall = createImpenetrableDynamicWall(center, width, height);
         return wall;
     }
 
