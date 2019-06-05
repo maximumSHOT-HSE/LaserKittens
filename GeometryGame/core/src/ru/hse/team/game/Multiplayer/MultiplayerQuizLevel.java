@@ -56,9 +56,16 @@ public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements Wa
                 direction.x = Float.parseFloat((String) data.get(MessageCreator.SHOOT_DIRECTION + "x"));
                 direction.y = Float.parseFloat((String) data.get(MessageCreator.SHOOT_DIRECTION + "y"));
                 lifetime = (int) data.get(MessageCreator.SHOOT_LIFETIME);
+
+                float length = (float) Math.sqrt(direction.x * direction.x + direction.y * direction.y);
+                direction.set(direction.x / length, direction.y / length);
+                float playerRadius = getPlayerRadius();
+
+                Vector2 catPosition =  new Vector2(source.x - playerRadius * direction.x,
+                        source.y - playerRadius * direction.y);
                 if (getFactory() != null) {
                     Gdx.app.postRunnable(() -> getFactory().createLaser(source, direction, lifetime));
-                    getFactory().setOpponentPosition(source);
+                    getFactory().setOpponentPosition(catPosition);
                 }
                 break;
         }
