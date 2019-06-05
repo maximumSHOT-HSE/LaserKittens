@@ -136,6 +136,7 @@ public class BodyFactory {
                 .setPosition(center)
                 .setRotation(rotation)
                 .setGravityScale(10)
+                .setLinearDamping(1f)
                 .build();
 
         PolygonShape polygonShape = new PolygonShape();
@@ -309,8 +310,8 @@ public class BodyFactory {
         private static FixtureDef ignoringWallFixture(Shape shape) {
             return (new FixtureBuilder())
                     .setShape(shape)
-                    .setDensiity(10)
-                    .setFriction(0)
+                    .setDensiity(200)
+                    .setFriction(0.5f)
                     .setRestitution(0)
                     .build();
         }
