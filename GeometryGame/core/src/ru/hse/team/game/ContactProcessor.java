@@ -1,14 +1,13 @@
 package ru.hse.team.game;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-
-import java.lang.reflect.AnnotatedType;
 
 import ru.hse.team.game.Multiplayer.AbstractMultiplayerLevel;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
@@ -55,16 +54,22 @@ public class ContactProcessor implements ContactListener {
         stopBullet(bullet);
         Mapper.stateComponent.get(key).finish();
         if (abstractLevel instanceof AbstractMultiplayerLevel) {
-            WarpController warpController = WarpController.getInstance();
-            warpController.sendGameUpdate(
+            Gdx.app.postRunnable(() -> WarpController.getInstance().sendGameUpdate(
                     MessageCreator.createFinishKeyMessage(
                             Mapper.stateComponent.get(key).getId()
                     )
-            );
+            ));
         }
     }
 
     private void processPlayerStar(Entity player, Entity star) {
+        if (abstractLevel instanceof AbstractMultiplayerLevel) {
+            WarpController.getInstance().sendGameUpdate(
+                    MessageCreator.createFinishStarMessage(
+                            Mapper.stateComponent.get(star).getId()
+                    )
+            );
+        }
         Mapper.stateComponent.get(star).finish();
     }
 
@@ -75,11 +80,11 @@ public class ContactProcessor implements ContactListener {
     private void processPlayerKey(Entity player, Entity key) {
         Mapper.stateComponent.get(key).finish();
         if (abstractLevel instanceof AbstractMultiplayerLevel) {
-            WarpController.getInstance().sendGameUpdate(
+            Gdx.app.postRunnable(() -> WarpController.getInstance().sendGameUpdate(
                     MessageCreator.createFinishKeyMessage(
                             Mapper.stateComponent.get(key).getId()
                     )
-            );
+            ));
         }
     }
 
