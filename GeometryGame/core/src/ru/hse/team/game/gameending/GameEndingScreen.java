@@ -22,6 +22,7 @@ import ru.hse.team.KittensAssetManager;
 import ru.hse.team.LaserKittens;
 import ru.hse.team.database.statistics.LevelStatistics;
 import ru.hse.team.game.GameScreen;
+import ru.hse.team.game.Multiplayer.AbstractMultiplayerLevel;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.levels.AbstractLevel;
 
@@ -157,7 +158,11 @@ public class GameEndingScreen implements Screen {
             quitButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                    if (parentLevel instanceof AbstractMultiplayerLevel) {
+                        laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    } else {
+                        laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                    }
                 }
             });
 
