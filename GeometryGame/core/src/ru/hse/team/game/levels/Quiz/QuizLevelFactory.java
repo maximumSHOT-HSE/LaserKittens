@@ -75,8 +75,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
 
         placePointer(3.5f, 0.5f, 0f);
 
-        placeQuestion(3.15f, 0.9f, 2f);
-        placeQuestion(2.15f, 1.6f, 2f);
+        placeQuestion(3.15f, 0.9f, 2f, "A");
+        placeQuestion(2.15f, 1.6f, 2f, "B");
 
         placeImpenetrableWall(1f, 1.5f, 2.1f, 0.05f);
         placeImpenetrableWall(2f, 1.2f, 0.1f, 1.7f);
@@ -85,7 +85,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placeImpenetrableWall(1f, 1.25f, 1, 0.05f);
         placeTransparentWall(1f, 0.175f, 0.1f, 0.35f);
 
-        placeQuestion(2f, 0.15f, 2);
+        placeQuestion(2f, 0.15f, 2, "C");
 
         placePointer(2.5f, 1f, 180);
         placePointer(2.5f, 0.4f, 135);
@@ -148,7 +148,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 0.05f * RenderingSystem.getScreenSizeInMeters().x,
                 0.03f * RenderingSystem.getScreenSizeInMeters().y,
                 rightDoor);
-        placeQuestion(4.8f, 1.4f, 2);
+        placeQuestion(4.8f, 1.4f, 2, "D");
         placePointer(4.5f, 1.25f, -90);
     }
 
@@ -196,7 +196,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         tumbler.getComponent(TumblerComponent.class).setAction(task);
         placeMirror(4.8f, 0.1f, 0.05f, 0.3f, -70);
 
-        placeQuestion(4.6f, 0.9f, 2);
+        placeQuestion(4.6f, 0.9f, 2, "E");
         placePointer(5.25f, 1.25f, 180);
     }
 
@@ -242,7 +242,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
                 RenderingSystem.getScreenSizeInMeters().x * 4.75f,
                 RenderingSystem.getScreenSizeInMeters().y * 2.35f,
                 3f, path, 50);
-        placeQuestion(5.4f, 1.425f, 2);
+        placeQuestion(5.4f, 1.425f, 2, "F");
         createStar(
                 7.5f * RenderingSystem.getScreenSizeInMeters().x,
                 2f * RenderingSystem.getScreenSizeInMeters().y,
