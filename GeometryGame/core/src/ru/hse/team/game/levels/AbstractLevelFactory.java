@@ -265,6 +265,7 @@ abstract public class AbstractLevelFactory {
                 .addTransformComponent(new Vector3(center.x, center.y, 8))
                 .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.TRANSPARENT_WALL)
+                .addStateComponent(StateComponent.State.JUST_CREATED)
                 .build();
     }
 
@@ -426,7 +427,7 @@ abstract public class AbstractLevelFactory {
         );
         float width = relativeWidth * RenderingSystem.getScreenSizeInMeters().x;
         float height = relativeHeight * RenderingSystem.getScreenSizeInMeters().y;
-        Entity wall = createImpenetrableDynamicWall(center, width, height);g
+        Entity wall = createImpenetrableDynamicWall(center, width, height);
         return wall;
     }
 
