@@ -121,7 +121,11 @@ public class GameScreenInputProcessor implements InputProcessor {
         abstractLevel.getGameStatus().start();
 
         if (!clickInPlayerRegion()) {
-            Gdx.app.postRunnable(() -> abstractLevel.shoot(position.x, position.y));
+            if (abstractLevel.isMultiplayer()) {
+                Gdx.app.postRunnable(() -> abstractLevel.shoot(position.x, position.y));
+            } else {
+                abstractLevel.shoot(position.x, position.y);
+            }
             Sound laser = laserKittens.getAssetManager().getSound(KittensAssetManager.Sounds.LASER_SOUND);
             laser.play(laserKittens.getPreferences().getSoundVolume());
             return true;

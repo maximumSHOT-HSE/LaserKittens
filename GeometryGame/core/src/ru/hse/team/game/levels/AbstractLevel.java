@@ -79,7 +79,7 @@ abstract public class AbstractLevel {
 
         getFactory().createLaser(source, direction, lifeTime);
 
-        if (this instanceof AbstractMultiplayerLevel) {
+        if (isMultiplayer()) {
             System.out.println("SHOOT!!");
             WarpController
                     .getInstance()
@@ -87,6 +87,10 @@ abstract public class AbstractLevel {
                             MessageCreator.createShootMessage(
                                     source, direction, lifeTime));
         }
+    }
+    
+    public boolean isMultiplayer() {
+        return this instanceof AbstractMultiplayerLevel;
     }
 
     public AbstractGraph getAbstractGraph() {
