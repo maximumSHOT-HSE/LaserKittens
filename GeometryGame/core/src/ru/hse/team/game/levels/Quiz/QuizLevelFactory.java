@@ -2,7 +2,6 @@ package ru.hse.team.game.levels.Quiz;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -183,10 +182,10 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             @Override
             public void run() {
                 if (state == 0) {
-                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, 5);
+                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, 50);
                     tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.BLUE_TUMBLER));
                 } else {
-                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, -5);
+                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, -50);
                     tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.YELLOW_TUMBLER));
                 }
                 state ^= 1;
@@ -250,6 +249,90 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         );
     }
 
+    private void createSection5() {
+        createStar(
+                6.5f * RenderingSystem.getScreenSizeInMeters().x,
+                2.75f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
+        );
+        createStar(
+                5.5f * RenderingSystem.getScreenSizeInMeters().x,
+                2.75f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
+        );
+        createStar(
+                4.5f * RenderingSystem.getScreenSizeInMeters().x,
+                2.75f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
+        );
+        createStar(
+                3.5f * RenderingSystem.getScreenSizeInMeters().x,
+                2.75f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
+        );
+        final Entity dynamicWall = placeDynamicImpenetrableWall(1f, 2f, 0.015f, 0.4f);
+        final Entity gate = placeDynamicImpenetrableWall(0.55f, 1.875f, 0.01f, 0.25f);
+        placeImpenetrableWall(1f, 1.625f, 0.05f, 0.25f);
+        placeImpenetrableWall(1f, 1.75f, 1f, 0.015f);
+        final Entity barrierForKey = placeDynamicImpenetrableWall(0.35f, 1.72f, 0.5f, 0.01f);
+        placeDynamicImpenetrableWall(2.5f, 2.75f, 0.5f, 0.395f);
+        placeTransparentWall(1.25f, 2.4f, 0.5f, 0.01f);
+        placeTransparentWall(1.5f, 1.75f, 0.05f, 0.5f);
+        createStar(
+                1.15f * RenderingSystem.getScreenSizeInMeters().x,
+                1.625f * RenderingSystem.getScreenSizeInMeters().y,
+                2f
+        );
+        placeImpenetrableWall(1.5f, 2.2f, 0.05f, 0.5f);
+        placeImpenetrableWall(0.25f, 2f, 0.55f, 0.05f);
+        placeImpenetrableWall(0.5f, 2.125f, 0.05f, 0.25f);
+        placeMirror(0.5f, 2.4f, 1f, 0.05f, 0);
+        placeMirror(0.12f, 1.9f, 0.4f, 0.01f, 70f);
+        final Entity rotateTumbler = createTumbler(new Vector2(
+                        1.4f * RenderingSystem.getScreenSizeInMeters().x,
+                        1.55f * RenderingSystem.getScreenSizeInMeters().y),
+                0.07f * RenderingSystem.getScreenSizeInMeters().x,
+                0.04f * RenderingSystem.getScreenSizeInMeters().y, () -> {});
+        Runnable rotateTask = new Runnable() {
+            private int state = 1;
+
+            @Override
+            public void run() {
+                if (state == 0) {
+                    addAngularVelocity(dynamicWall, 0f);
+                    gate.getComponent(BodyComponent.class).body.setLinearVelocity(0f, -100f);
+                    rotateTumbler.getComponent(TextureComponent.class)
+                            .region.setTexture(getManager()
+                            .getImage(KittensAssetManager.Images.BLUE_TUMBLER));
+                } else {
+                    addAngularVelocity(dynamicWall, 2f);
+                    gate.getComponent(BodyComponent.class).body.setLinearVelocity(0f, +100f);
+                    rotateTumbler.getComponent(TextureComponent.class)
+                            .region.setTexture(getManager()
+                            .getImage(KittensAssetManager.Images.YELLOW_TUMBLER));
+                }
+                state ^= 1;
+            }
+        };
+        rotateTumbler.getComponent(TumblerComponent.class).setAction(rotateTask);
+        final Entity moveTumbler = createTumbler(new Vector2(
+                        0.25f * RenderingSystem.getScreenSizeInMeters().x,
+                        2.1f * RenderingSystem.getScreenSizeInMeters().y),
+                0.07f * RenderingSystem.getScreenSizeInMeters().x,
+                0.04f * RenderingSystem.getScreenSizeInMeters().y, () -> {});
+        Runnable moveTask = () -> {
+            barrierForKey.getComponent(BodyComponent.class).body.setLinearVelocity(+50f, 0);
+            moveTumbler.getComponent(TextureComponent.class)
+                    .region.setTexture(getManager().getImage(KittensAssetManager.Images.BLUE_TUMBLER));
+        };
+        moveTumbler.getComponent(TumblerComponent.class).setAction(moveTask);
+        createStar(
+                0.14f * RenderingSystem.getScreenSizeInMeters().x,
+                1.55f * RenderingSystem.getScreenSizeInMeters().y,
+                1f
+        );
+    }
+
     @Override
     public void createLevel(int widthInScreens, int heightInScreens, AbstractLevel abstractLevel) {
         CW = widthInScreens;
@@ -259,8 +342,8 @@ public class QuizLevelFactory extends AbstractLevelFactory {
 
         abstractLevel.setPlayer(
                 createPlayer(
-                RenderingSystem.getScreenSizeInMeters().x * 3.5f,
-                RenderingSystem.getScreenSizeInMeters().y * 0.5f,
+                RenderingSystem.getScreenSizeInMeters().x * 1f,
+                RenderingSystem.getScreenSizeInMeters().y * 2.5f,
                 3f));
 
         createStar(
@@ -274,5 +357,15 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         createSection2();
         createSection3();
         createSection4();
+
+        Entity doorBetweenSections = placeDoor(7.5f, 1.6f, 1f, 0.05f);
+        createKey(new Vector2(
+                        0.5f * RenderingSystem.getScreenSizeInMeters().x,
+                        1.6f * RenderingSystem.getScreenSizeInMeters().y),
+                0.05f * RenderingSystem.getScreenSizeInMeters().x,
+                0.03f * RenderingSystem.getScreenSizeInMeters().y,
+                doorBetweenSections);
+
+        createSection5();
     }
 }

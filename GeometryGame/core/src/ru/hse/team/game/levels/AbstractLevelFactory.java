@@ -175,14 +175,13 @@ abstract public class AbstractLevelFactory {
                 (int) RenderingSystem.metersToPixels(width),
                 (int) RenderingSystem.metersToPixels(height)
         );
-        Entity wall = (new EntityBuilder())
+        return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newDynamicRectangle(center, width, height, 0))
                 .addTransformComponent(new Vector3(center.x, center.y, 10))
                 .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
                 .addStateComponent(StateComponent.State.JUST_CREATED)
                 .build();
-        return wall;
     }
 
     protected Entity createDoor(Vector2 center, float width, float height) {
@@ -416,14 +415,15 @@ abstract public class AbstractLevelFactory {
             float relativeY,
             float relativeWidth,
             float relativeHeight) {
-        return createImpenetrableDynamicWall(
-                new Vector2(
-                        relativeX * RenderingSystem.getScreenSizeInMeters().x,
-                        relativeY * RenderingSystem.getScreenSizeInMeters().y
-                ),
-                relativeWidth * RenderingSystem.getScreenSizeInMeters().x,
-                relativeHeight * RenderingSystem.getScreenSizeInMeters().y
+        Vector2 center = new Vector2(
+                relativeX * RenderingSystem.getScreenSizeInMeters().x,
+                relativeY * RenderingSystem.getScreenSizeInMeters().y
         );
+        float width = relativeWidth * RenderingSystem.getScreenSizeInMeters().x;
+        float height = relativeHeight * RenderingSystem.getScreenSizeInMeters().y;
+        Entity wall = createImpenetrableDynamicWall(center, width, height);
+        addBarrier(center, width, height, Mapper.stateComponent.get(wall).getId());
+        return wall;
     }
 
     protected void addAngularVelocity(Entity entity, float angularVelocity) {
