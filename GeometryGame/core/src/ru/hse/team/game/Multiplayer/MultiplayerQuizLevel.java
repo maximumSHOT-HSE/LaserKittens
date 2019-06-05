@@ -34,10 +34,17 @@ public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements Wa
         System.out.println("type = " + type);
         switch (type) {
             case MessageCreator.CATCH_KEY:
-                int id = data.getInt(MessageCreator.KEY_ID);
-                System.out.println("KEY ID = " + id);
+                int keyID = data.getInt(MessageCreator.KEY_ID);
+                System.out.println("KEY ID = " + keyID);
                 if (getFactory() != null) {
-                    getFactory().removeKey(id);
+                    Gdx.app.postRunnable(() -> getFactory().removeKey(keyID));
+                }
+                break;
+            case MessageCreator.CATCH_STAR:
+                int starID = data.getInt(MessageCreator.STAR_ID);
+                System.out.println("STAR ID = " + starID);
+                if (getFactory() != null) {
+                    Gdx.app.postRunnable(() -> getFactory().removeStar(starID));
                 }
                 break;
             case MessageCreator.SHOOT:

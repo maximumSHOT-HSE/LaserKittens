@@ -505,6 +505,20 @@ abstract public class AbstractLevelFactory {
         );
     }
 
+    public void removeStar(int starId) {
+        System.out.println("REMOVE star with id = " + starId);
+        Entity star = idToEntity.get(starId);
+        if (star == null) {
+            return;
+        }
+        idToEntity.remove(starId);
+        StateComponent stateComponent = Mapper.stateComponent.get(star);
+        if (stateComponent == null) {
+            return;
+        }
+        stateComponent.finish();
+    }
+
     public void removeKey(int keyId) {
         System.out.println("REMOVE key with id = " + keyId);
         Entity key = idToEntity.get(keyId);
@@ -516,7 +530,6 @@ abstract public class AbstractLevelFactory {
         if (stateComponent == null) {
             return;
         }
-        System.out.println("THERE IS STATE");
         stateComponent.finish();
     }
 
