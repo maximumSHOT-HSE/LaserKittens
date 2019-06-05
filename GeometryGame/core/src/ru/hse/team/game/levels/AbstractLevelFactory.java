@@ -131,6 +131,21 @@ abstract public class AbstractLevelFactory {
                 .build();
     }
 
+    protected Entity createOpponent(float playerX, float playerY, float radius) {
+
+        float regionCatRadius = RenderingSystem.pixelsToMeters(
+                manager.getImage(KittensAssetManager.Images.CAT_4).getHeight() * 0.78f * 0.5f);
+        Vector2 scale = new Vector2(radius / regionCatRadius, radius / regionCatRadius);
+
+        return (new EntityBuilder())
+                .addBodyComponent(bodyFactory.newPlayerBody(new Vector2(playerX, playerY), radius))
+                .addTransformComponent(new Vector3(playerX, playerY, 100), scale, 0, false)
+                .addTextureComponent(new TextureRegion(manager.getImage(KittensAssetManager.Images.CAT_4)))
+                .addStateComponent(StateComponent.State.JUST_CREATED)
+                .addTypeComponent(TypeComponent.Type.PLAYER)
+                .build();
+    }
+
     protected Entity createGuardian(float guardianX, float guardianY, float radius, List<Vector2> path, float velocty) {
         float regionGuardianRadius = RenderingSystem.pixelsToMeters(
                 manager.getImage(KittensAssetManager.Images.CAT_2).getHeight() * 0.78f * 0.5f);

@@ -31,7 +31,7 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
     @Override
     public void setOpponentPosition(Vector2 position) {
         if (opponentPlayer == null) {
-            opponentPlayer = createPlayer(position.x, position.y, 3f);
+            opponentPlayer = createOpponent(position.x, position.y, 3f);
         }
         BodyComponent bodyComponent = Mapper.bodyComponent.get(opponentPlayer);
         if (bodyComponent != null) {

@@ -22,6 +22,7 @@ public class KittensAssetManager {
         CAT_1("Cat1.png"),
         CAT_2("Cat2.png"),
         CAT_3("Cat3.png"),
+        CAT_4("Cat4.png"),
         STAR_1("Star1.png"),
         STAR_2("Star2.png"),
         POINTER("pointer.png"),

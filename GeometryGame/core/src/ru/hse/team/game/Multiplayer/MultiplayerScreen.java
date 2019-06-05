@@ -231,7 +231,6 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
         public Menu(Stage stage) {
 
-            table.setDebug(true);
             table.setFillParent(true);
             stage.addActor(table);
 
