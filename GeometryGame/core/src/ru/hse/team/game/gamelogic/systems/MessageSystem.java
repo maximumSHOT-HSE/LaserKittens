@@ -10,7 +10,14 @@ import ru.hse.team.AndroidActions;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.MessageComponent;
 
+/**
+ * Displays messages.
+ * Interval between any message showing is at least {@code SHOWING_INTERVAL}
+ */
 public class MessageSystem extends IteratingSystem {
+
+    //seconds
+    public static final long SHOWING_INTERVAL = 3;
 
     private final AndroidActions androidActions;
 
@@ -25,7 +32,7 @@ public class MessageSystem extends IteratingSystem {
 
         long currentTimeMillis = System.currentTimeMillis();
         if (message.likeToShow &&
-                currentTimeMillis - message.lastTimeShown > TimeUnit.SECONDS.toMillis(MessageComponent.SHOWING_INTERVAL)) {
+                currentTimeMillis - message.lastTimeShown > TimeUnit.SECONDS.toMillis(SHOWING_INTERVAL)) {
             androidActions.showToast(message.message, false);
             message.lastTimeShown = currentTimeMillis;
             message.likeToShow = false;
