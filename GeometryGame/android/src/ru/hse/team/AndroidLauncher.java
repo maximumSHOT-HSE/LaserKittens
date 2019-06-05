@@ -52,7 +52,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         config.useGyroscope = false;
         initialize(new LaserKittens(
         		Room.databaseBuilder(this, DatabaseAndroid.class, "database").build(),
-                        this), config);
+                        this, new Actions(this)), config);
 	}
 
 	/**

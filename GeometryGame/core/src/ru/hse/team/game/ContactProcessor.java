@@ -8,11 +8,14 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import java.lang.reflect.AnnotatedType;
+
 import ru.hse.team.game.Multiplayer.AbstractMultiplayerLevel;
 import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.MessageCreator;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
+import ru.hse.team.game.gamelogic.components.MessageComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 import ru.hse.team.game.levels.AbstractLevel;
 
@@ -90,6 +93,13 @@ public class ContactProcessor implements ContactListener {
         stopBullet(bullet);
     }
 
+    private void processPlayerQuestion(Entity player, Entity question) {
+        MessageComponent message = Mapper.messageComponent.get(question);
+        if (message != null) {
+            message.likeToShow = true;
+        }
+    }
+
     private void stopBullet(Entity bullet) {
         BodyComponent bodyComponent = Mapper.bodyComponent.get(bullet);
         bodyComponent.body.setLinearVelocity(0, 0);
@@ -148,6 +158,10 @@ public class ContactProcessor implements ContactListener {
         if (checkType(entityA, TypeComponent.Type.PLAYER) &&
         checkType(entityB, TypeComponent.Type.GUARDIAN)) {
             processPlayerGuardian(entityA, entityB);
+        }
+        if (checkType(entityA, TypeComponent.Type.PLAYER) &&
+                checkType(entityB, TypeComponent.Type.QUESTION)) {
+            processPlayerQuestion(entityA, entityB);
         }
     }
 

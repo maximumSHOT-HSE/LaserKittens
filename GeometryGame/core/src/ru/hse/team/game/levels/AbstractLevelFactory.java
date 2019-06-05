@@ -21,6 +21,7 @@ import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.KeyComponent;
+import ru.hse.team.game.gamelogic.components.MessageComponent;
 import ru.hse.team.game.gamelogic.components.PatrolComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
@@ -232,10 +233,13 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createQuestion(Vector2 position, float scale) {
-        Texture texture = manager.getImage(KittensAssetManager.Images.QUESTION);
+        TextureRegion texture = new TextureRegion(manager.getImage(KittensAssetManager.Images.QUESTION));
         return (new EntityBuilder())
                 .addTransformComponent(new Vector3(position, 0), new Vector2(scale, scale), 0f, false)
-                .addTextureComponent(new TextureRegion(texture))
+                .addTextureComponent(texture)
+                .addTypeComponent(TypeComponent.Type.QUESTION)
+                .addBodyComponent(bodyFactory.newSensorRectangle(position, texture.getRegionWidth(), texture.getRegionHeight(), 0))
+                .addMessageComponent("Ough")
                 .build();
     }
 
@@ -296,6 +300,13 @@ abstract public class AbstractLevelFactory {
             bodyComponent.body = body;
             bodyComponent.body.setUserData(entity);
             entity.add(bodyComponent);
+            return this;
+        }
+
+        public EntityBuilder addMessageComponent(String message) {
+            MessageComponent messageComponent = engine.createComponent(MessageComponent.class);
+            messageComponent.message = message;
+            entity.add(messageComponent);
             return this;
         }
 

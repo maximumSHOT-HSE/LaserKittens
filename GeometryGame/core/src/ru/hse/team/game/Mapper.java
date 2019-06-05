@@ -6,6 +6,7 @@ import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.components.BulletComponent;
 import ru.hse.team.game.gamelogic.components.DoorComponent;
 import ru.hse.team.game.gamelogic.components.KeyComponent;
+import ru.hse.team.game.gamelogic.components.MessageComponent;
 import ru.hse.team.game.gamelogic.components.PatrolComponent;
 import ru.hse.team.game.gamelogic.components.StateComponent;
 import ru.hse.team.game.gamelogic.components.TextureComponent;
@@ -38,4 +39,6 @@ public class Mapper {
             ComponentMapper.getFor(TumblerComponent.class);
     public static ComponentMapper<PatrolComponent> patrolComponent =
             ComponentMapper.getFor(PatrolComponent.class);
+    public static ComponentMapper<MessageComponent> messageComponent =
+            ComponentMapper.getFor(MessageComponent.class);
 }
