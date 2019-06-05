@@ -166,6 +166,22 @@ public class BodyFactory {
         return newRectangle(center, width, height, 0);
     }
 
+    public Body newSensorRectangle(Vector2 center, float width, float height, float rotation) {
+        Body body = (new BodyBuilder())
+                .setType(BodyDef.BodyType.StaticBody)
+                .setPosition(center)
+                .setRotation(rotation)
+                .build();
+
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.setAsBox(width / 2, height / 2);
+        body.createFixture(FixtureFactory.sensorFixture(polygonShape));
+        polygonShape.dispose();
+
+        setFilter(body, Category.OTHER.mask, Category.PLAYER.mask);
+        return body;
+    }
+
     public Body newPolygonBody(Vector2[] polygonVertices, Vector2 leftDownCorner, BodyDef.BodyType bodyType, boolean fixedRotation) {
 
         Body body = (new BodyBuilder()).setType(bodyType).setPosition(leftDownCorner)

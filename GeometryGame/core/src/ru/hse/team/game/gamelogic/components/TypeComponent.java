@@ -20,6 +20,7 @@ public class TypeComponent implements Component, Poolable {
         TUMBLER,
         STAR,
         KEY,
+        QUESTION,
         OTHER
     }
 

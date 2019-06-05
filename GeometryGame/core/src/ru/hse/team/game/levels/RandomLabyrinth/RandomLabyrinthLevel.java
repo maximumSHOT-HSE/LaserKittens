@@ -25,10 +25,6 @@ public class RandomLabyrinthLevel extends AbstractLevel {
         }
         this.keys = keys;
         this.stars = stars;
-
-        setAbstractGraph(new GridGraph(widthInScreens, heightInScreens,
-                RenderingSystem.getScreenSizeInMeters().x,
-                RenderingSystem.getScreenSizeInMeters().y));
     }
 
     @Override
@@ -37,6 +33,10 @@ public class RandomLabyrinthLevel extends AbstractLevel {
         randomLabyrinthLevelFactory.setKeys(keys);
         randomLabyrinthLevelFactory.setStars(stars);
         randomLabyrinthLevelFactory.createLevel(getLevelWidthInScreens(), getLevelHeightInScreens(), this);
+
+        setAbstractGraph(new GridGraph(getLevelWidthInScreens(), getLevelHeightInScreens(),
+                RenderingSystem.getScreenSizeInMeters().x,
+                RenderingSystem.getScreenSizeInMeters().y));
     }
 
     @Override

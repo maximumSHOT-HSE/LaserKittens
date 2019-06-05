@@ -18,6 +18,7 @@ import ru.hse.team.game.gamelogic.GameScreenInputProcessor;
 import ru.hse.team.game.gamelogic.GestureProcessor;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
 import ru.hse.team.game.gamelogic.systems.BulletSystem;
+import ru.hse.team.game.gamelogic.systems.MessageSystem;
 import ru.hse.team.game.gamelogic.systems.PhysicsDebugSystem;
 import ru.hse.team.game.gamelogic.systems.PhysicsSystem;
 import ru.hse.team.game.gamelogic.systems.RenderingSystem;
@@ -44,6 +45,7 @@ public class GameScreen implements Screen {
     private PhysicsDebugSystem physicsDebugSystem;
     private BulletSystem bulletSystem;
     private StateControlSystem stateControlSystem;
+    private MessageSystem messageSystem;
 
     private WarpController warpController;
 
@@ -60,12 +62,14 @@ public class GameScreen implements Screen {
         physicsDebugSystem = new PhysicsDebugSystem(abstractLevel.getWorld(), renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
         stateControlSystem = new StateControlSystem(engine, abstractLevel);
+        messageSystem = new MessageSystem(laserKittens.getAndroidActions());
 
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(bulletSystem);
         engine.addSystem(stateControlSystem);
+        engine.addSystem(messageSystem);
 
         inputProcessor = new GameScreenInputProcessor(
                 this.laserKittens, abstractLevel, renderingSystem.getCamera());

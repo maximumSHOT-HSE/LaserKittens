@@ -80,7 +80,6 @@ public class LaserKittens extends Game {
      * Creates it if it is not created
      */
     public void changeScreen(SCREEN_TYPE screen) {
-        Gdx.app.postRunnable(() -> getAndroidActions().showToast("anotherScreen", false));
         switch (screen) {
             case MAIN_MENU_SCREEN:
                 if (mainMenuScreen == null) {
