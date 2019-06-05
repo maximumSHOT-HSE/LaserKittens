@@ -182,10 +182,10 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             @Override
             public void run() {
                 if (state == 0) {
-                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, 5);
+                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, 50);
                     tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.BLUE_TUMBLER));
                 } else {
-                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, -5);
+                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, -50);
                     tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.YELLOW_TUMBLER));
                 }
                 state ^= 1;
