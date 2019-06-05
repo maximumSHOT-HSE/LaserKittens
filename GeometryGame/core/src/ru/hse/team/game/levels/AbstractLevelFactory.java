@@ -158,13 +158,17 @@ abstract public class AbstractLevelFactory {
                 (int) RenderingSystem.metersToPixels(width),
                 (int) RenderingSystem.metersToPixels(height)
         );
-        return (new EntityBuilder())
+        Entity wall = (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height, rotation))
                 .addTransformComponent(new Vector3(center.x, center.y, 10))
                 .addTextureComponent(textureRegion)
                 .addTypeComponent(TypeComponent.Type.IMPENETRABLE_WALL)
                 .addStateComponent(StateComponent.State.JUST_CREATED)
                 .build();
+
+        addBarrier(center, width, height, Mapper.stateComponent.get(wall).getId());
+
+        return wall;
     }
 
     protected Entity createImpenetrableDynamicWall(Vector2 center, float width, float height) {
@@ -200,15 +204,14 @@ abstract public class AbstractLevelFactory {
                 .addStateComponent(StateComponent.State.JUST_CREATED)
                 .addDoorComponent()
                 .build();
+
+        addBarrier(center, width, height, Mapper.stateComponent.get(door).getId());
         System.out.println("CREATE DOOR with id = " + Mapper.stateComponent.get(door).getId());
         System.out.flush();
         return door;
     }
 
     protected Entity createKey(Vector2 center, float width, float height, Entity door) {
-//        if (abstractLevel.getAbstractGraph() != null) {
-//            abstractLevel.getAbstractGraph().visit(center);
-//        }
         Texture texture = manager.getImage(KittensAssetManager.Images.KEY);
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height))
@@ -231,14 +234,17 @@ abstract public class AbstractLevelFactory {
                 .build();
     }
 
-    protected Entity createQuestion(Vector2 position, float scale) {
+    protected Entity createQuestion(Vector2 position, float scale, String message) {
         TextureRegion texture = new TextureRegion(manager.getImage(KittensAssetManager.Images.QUESTION));
+        float width = RenderingSystem.pixelsToMeters(texture.getRegionWidth()) * scale;
+        float height = RenderingSystem.pixelsToMeters(texture.getRegionHeight()) * scale;
+
         return (new EntityBuilder())
                 .addTransformComponent(new Vector3(position, 0), new Vector2(scale, scale), 0f, false)
                 .addTextureComponent(texture)
                 .addTypeComponent(TypeComponent.Type.QUESTION)
-                .addBodyComponent(bodyFactory.newSensorRectangle(position, texture.getRegionWidth(), texture.getRegionHeight(), 0))
-                .addMessageComponent("Ough")
+                .addBodyComponent(bodyFactory.newSensorRectangle(position, width, height, 0))
+                .addMessageComponent(message)
                 .build();
     }
 
@@ -406,7 +412,6 @@ abstract public class AbstractLevelFactory {
         float width = relativeWidth * RenderingSystem.getScreenSizeInMeters().x;
         float height = relativeHeight * RenderingSystem.getScreenSizeInMeters().y;
         Entity wall = createImpenetrableWall(center, width, height);
-        addBarrier(center, width, height, Mapper.stateComponent.get(wall).getId());
         return wall;
     }
 
@@ -460,9 +465,7 @@ abstract public class AbstractLevelFactory {
         );
         float width = relativeWidth * RenderingSystem.getScreenSizeInMeters().x;
         float height = relativeHeight * RenderingSystem.getScreenSizeInMeters().y;
-        Entity door = createDoor(center, width, height);
-        addBarrier(center, width, height, Mapper.stateComponent.get(door).getId());
-        return door;
+        return createDoor(center, width, height);
     }
 
     protected Entity placePointer(
@@ -478,11 +481,11 @@ abstract public class AbstractLevelFactory {
         );
     }
 
-    protected Entity placeQuestion(float relativeX, float relativeY, float scale) {
+    protected Entity placeQuestion(float relativeX, float relativeY, float scale, String message) {
         return createQuestion(new Vector2(
                         relativeX * RenderingSystem.getScreenSizeInMeters().x,
                         relativeY * RenderingSystem.getScreenSizeInMeters().y),
-                scale);
+                scale, message);
     }
 
     protected Entity placeMirror(

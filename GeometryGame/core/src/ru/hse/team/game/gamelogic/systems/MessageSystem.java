@@ -25,7 +25,7 @@ public class MessageSystem extends IteratingSystem {
 
         long currentTimeMillis = System.currentTimeMillis();
         if (message.likeToShow &&
-                currentTimeMillis - message.lastTimeShown < TimeUnit.SECONDS.toMillis(MessageComponent.SHOWING_INTERVAL)) {
+                currentTimeMillis - message.lastTimeShown > TimeUnit.SECONDS.toMillis(MessageComponent.SHOWING_INTERVAL)) {
             androidActions.showToast(message.message, false);
             message.lastTimeShown = currentTimeMillis;
             message.likeToShow = false;
