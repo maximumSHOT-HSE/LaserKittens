@@ -3,6 +3,8 @@ package ru.hse.team.game.levels.RandomLabyrinth;
 import com.badlogic.ashley.core.PooledEngine;
 
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.game.gamelogic.algorithms.GridGraph;
+import ru.hse.team.game.gamelogic.systems.RenderingSystem;
 import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
@@ -23,6 +25,10 @@ public class RandomLabyrinthLevel extends AbstractLevel {
         }
         this.keys = keys;
         this.stars = stars;
+
+        setAbstractGraph(new GridGraph(widthInScreens, heightInScreens,
+                RenderingSystem.getScreenSizeInMeters().x,
+                RenderingSystem.getScreenSizeInMeters().y));
     }
 
     @Override

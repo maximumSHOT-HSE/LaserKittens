@@ -34,11 +34,13 @@ public class LaserKittens extends Game {
     private final KittensAssetManager assetManager = new KittensAssetManager();
     private final GameDatabase database;
     private final GoogleServicesAction googleServices;
+    private final AndroidActions androidActions;
 
-    public LaserKittens(GameDatabase database, GoogleServicesAction googleServicesAction) {
+    public LaserKittens(GameDatabase database, GoogleServicesAction googleServicesAction, AndroidActions androidActions) {
         super();
         this.database = database;
         this.googleServices = googleServicesAction;
+        this.androidActions = androidActions;
     }
 
     public enum SCREEN_TYPE {
@@ -78,6 +80,7 @@ public class LaserKittens extends Game {
      * Creates it if it is not created
      */
     public void changeScreen(SCREEN_TYPE screen) {
+        Gdx.app.postRunnable(() -> getAndroidActions().showToast("anotherScreen", false));
         switch (screen) {
             case MAIN_MENU_SCREEN:
                 if (mainMenuScreen == null) {
@@ -179,5 +182,9 @@ public class LaserKittens extends Game {
 
     public KittensAssetManager getAssetManager() {
         return assetManager;
+    }
+
+    public AndroidActions getAndroidActions() {
+        return androidActions;
     }
 }
