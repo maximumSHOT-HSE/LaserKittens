@@ -3,11 +3,15 @@ package ru.hse.team;
 import android.app.Activity;
 import android.widget.Toast;
 
-public class Actions implements AndroidActions {
+/**
+ * Class which contains general android specific actions interface,
+ *  to make later use of them outside of android module
+ */
+public class AndroidSpecificActions implements AndroidActions {
 
     private final Activity activity;
 
-    public Actions(Activity activity) {
+    public AndroidSpecificActions(Activity activity) {
         this.activity = activity;
     }
 
