@@ -191,7 +191,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     public void unlockAchievement(String achievementId) {
 	    if (isSignedIn()) {
 			Games.getAchievementsClient(this, mSignedInAccount).unlock(achievementId);
-			showAchievements();
 		}
     }
 

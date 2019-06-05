@@ -92,7 +92,7 @@ public class GameStatus {
     private int starsInLevel = 0;
 
     private float currentTimeToEnd = 0f;
-    private float minEndTime = TimeUnit.MILLISECONDS.toNanos(1);
+    private float minEndTime = TimeUnit.MILLISECONDS.toSeconds(1);
 
     public void addStar() {
         starCounter++;
