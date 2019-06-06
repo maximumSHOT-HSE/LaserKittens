@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 import ru.hse.team.KittensAssetManager;
-import ru.hse.team.LaserKittens;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
@@ -288,7 +287,7 @@ abstract public class AbstractLevelFactory {
     protected Entity createTumbler(Vector2 center, float width, float height, Runnable task) {
         Texture texture = manager.getImage(KittensAssetManager.Images.YELLOW_TUMBLER);
         TextureRegion textureRegion = new TextureRegion(
-                texture, 0, 0
+                texture, 0, 0, texture.getWidth(), texture.getHeight()
         );
         Vector2 scale = new Vector2(1, 1);
         return (new EntityBuilder())
