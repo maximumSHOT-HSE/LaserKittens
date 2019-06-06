@@ -124,7 +124,8 @@ public class LevelCreateInputProcessor implements InputProcessor {
 
             TextureRegion texture = levelCreateScreen.getTextureByType(focusedType);
             currentEntity = new SimpleEntity(position.x, position.y,
-                    texture.getRegionWidth(), texture.getRegionHeight(),
+                    texture.getRegionWidth() * LaserKittens.scaleToPreferredWidth(),
+                    texture.getRegionHeight() * LaserKittens.scaleToPreferredHeight(),
                     0, focusedType);
 
             levelCreateScreen.addSimpleEntity(currentEntity);

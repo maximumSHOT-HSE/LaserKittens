@@ -78,7 +78,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placeQuestion(3.15f, 0.9f, 2f,
                 "Tap to shoot, try to move and zoom camera");
         placeQuestion(2.15f, 1.6f, 2f,
-                "Transparent wall can misses the laser, but not the cat");
+                "Transparent wall can pass the laser through itself");
 
         placeImpenetrableWall(1f, 1.5f, 2.1f, 0.05f);
         placeImpenetrableWall(2f, 1.2f, 0.1f, 1.7f);

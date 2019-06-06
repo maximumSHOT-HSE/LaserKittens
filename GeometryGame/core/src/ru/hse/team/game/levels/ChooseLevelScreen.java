@@ -230,6 +230,7 @@ public class ChooseLevelScreen implements Screen {
 
         private Table statisticsTable() {
             TextButton statisticsButton = new TextButton("Statistics", skin);
+            statisticsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             statisticsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -273,6 +274,7 @@ public class ChooseLevelScreen implements Screen {
 
         private Table editorScreenTable() {
             TextButton statisticsButton = new TextButton("Level editor", skin);
+            statisticsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             statisticsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -299,6 +301,7 @@ public class ChooseLevelScreen implements Screen {
 
         private Table savedLevelsTable() {
             TextButton savedLevelsButton = new TextButton("MyLevels", skin);
+            savedLevelsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             savedLevelsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -333,7 +336,7 @@ public class ChooseLevelScreen implements Screen {
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getLevelName(), skin);
                 Label statusLabel = getBestResult(abstractLevel.getLevelName());
-                levelButton.getLabel().setFontScale(1.1f);
+                levelButton.getLabel().setFontScale(1.1f * LaserKittens.scaleToPreferredWidth());
                 levelButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
@@ -362,7 +365,7 @@ public class ChooseLevelScreen implements Screen {
                         .width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.row();
                 if (statusLabel != null) {
-                    statusLabel.setFontScale(5f);
+                    statusLabel.setFontScale(5f * LaserKittens.scaleToPreferredWidth());
                     table.add(statusLabel).width(0.6f * screenWidth)
                             .height(0.2f * screenHeight).align(Align.center).colspan(3);
                     statusLabel.setAlignment(Align.center);

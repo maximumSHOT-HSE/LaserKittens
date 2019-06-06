@@ -36,6 +36,9 @@ public class LaserKittens extends Game {
     private final GoogleServicesAction googleServices;
     private final AndroidActions androidActions;
 
+    public static final int PREFERRED_WIDTH = 1080;
+    public static final int PREFERRED_HEIGHT = 1920;
+
     public LaserKittens(GameDatabase database, GoogleServicesAction googleServicesAction, AndroidActions androidActions) {
         super();
         this.database = database;
@@ -135,6 +138,7 @@ public class LaserKittens extends Game {
     @Override
     public void create() {
         Gdx.input.setCatchBackKey(true);
+        System.out.println(Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
         dialogs = GDXDialogsSystem.install();
 
         batch = new SpriteBatch();
@@ -185,5 +189,13 @@ public class LaserKittens extends Game {
 
     public AndroidActions getAndroidActions() {
         return androidActions;
+    }
+
+    public static float scaleToPreferredWidth() {
+        return (float)Gdx.graphics.getWidth() / PREFERRED_WIDTH;
+    }
+
+    public static float scaleToPreferredHeight() {
+        return (float)Gdx.graphics.getHeight() / PREFERRED_HEIGHT;
     }
 }

@@ -234,8 +234,10 @@ public class MultiplayerScreen implements Screen, WarpListener {
             table.setFillParent(true);
             stage.addActor(table);
 
-            connectionStatusLabel.setFontScale(1f);
-            levelNameFilterLabel.setFontScale(1f);
+            connectionStatusLabel.setFontScale(1f * LaserKittens.scaleToPreferredWidth());
+            levelNameFilterLabel.setFontScale(1f * LaserKittens.scaleToPreferredWidth());
+            createRoomButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
+            refreshRoomsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             if (choosedLevelId != -1) {
                 levelNameFilterLabel
                         .setText(abstractMultiplayerLevels.get(choosedLevelId).getLevelName());

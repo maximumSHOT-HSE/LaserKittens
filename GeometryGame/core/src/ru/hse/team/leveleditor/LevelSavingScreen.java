@@ -143,9 +143,10 @@ public class LevelSavingScreen implements Screen {
         public Menu(Stage stage) {
             stage.addActor(table);
             table.setFillParent(true);
-            //table.setDebug(true);
 
-            titleLabel.setFontScale(4f);
+            titleLabel.setFontScale(4f * LaserKittens.scaleToPreferredWidth());
+            newLevelButton.getLabel().setFontScale(1 * LaserKittens.scaleToPreferredWidth());
+
             table.add(titleLabel);
             table.row().pad(10, 10, 10, 10);
 

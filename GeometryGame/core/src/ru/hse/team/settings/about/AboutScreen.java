@@ -156,7 +156,7 @@ public class AboutScreen implements Screen {
             table.setFillParent(true);
             stage.addActor(table);
 
-            titleLabel.setFontScale(3f);
+            titleLabel.setFontScale(3f * LaserKittens.scaleToPreferredWidth());
 
             table.row().pad(10, 10, 30, 10);
             table.add(titleLabel).colspan(2).expand();

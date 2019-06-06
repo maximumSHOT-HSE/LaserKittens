@@ -136,10 +136,10 @@ public class GameEndingScreen implements Screen {
             table.setHeight(0.6f * screenHeight);
             table.center();
 
-            restartButton.getLabel().setFontScale(1f);
-            quitButton.getLabel().setFontScale(1f);
+            restartButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
+            quitButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             statusLabel = new Label(GameStatus.getTimeStamp(parentLevel.getGameStatus().timeGone()), skin);
-            statusLabel.setFontScale(5f);
+            statusLabel.setFontScale(5f * LaserKittens.scaleToPreferredWidth());
 
             table.setFillParent(true);
             table.add(restartButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
