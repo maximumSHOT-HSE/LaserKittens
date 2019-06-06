@@ -333,7 +333,7 @@ public class ChooseLevelScreen implements Screen {
             for (AbstractLevel abstractLevel : abstractLevels) {
                 TextButton levelButton = new TextButton(abstractLevel.getLevelName(), skin);
                 Label statusLabel = getBestResult(abstractLevel.getLevelName());
-                levelButton.getLabel().setFontScale(1.1f);
+                levelButton.getLabel().setFontScale(1.1f * LaserKittens.scaleToPreferredWidth());
                 levelButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
@@ -362,7 +362,7 @@ public class ChooseLevelScreen implements Screen {
                         .width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.row();
                 if (statusLabel != null) {
-                    statusLabel.setFontScale(5f);
+                    statusLabel.setFontScale(5f * LaserKittens.scaleToPreferredWidth());
                     table.add(statusLabel).width(0.6f * screenWidth)
                             .height(0.2f * screenHeight).align(Align.center).colspan(3);
                     statusLabel.setAlignment(Align.center);

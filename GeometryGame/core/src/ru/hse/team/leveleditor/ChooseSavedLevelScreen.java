@@ -160,7 +160,7 @@ public class ChooseSavedLevelScreen implements Screen {
             stage.addActor(table);
             table.setFillParent(true);
 
-            titleLabel.setFontScale(4f);
+            titleLabel.setFontScale(4f * LaserKittens.scaleToPreferredWidth());
             table.add(titleLabel);
             table.row().pad(10, 10, 10, 10);
 
@@ -217,7 +217,7 @@ public class ChooseSavedLevelScreen implements Screen {
             for (int i = 0; i < levels.size(); i++) {
                 String levelName = levels.get(i).levelName;
                 TextButton button = new TextButton(levelName, skin);
-                button.getLabel().setFontScale(1.5f);
+                button.getLabel().setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
 
                 final int ii = i;
                 button.addListener(new ChangeListener() {

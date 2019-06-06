@@ -147,7 +147,7 @@ public class StatisticsScreen implements Screen {
             table.setFillParent(true);
             stage.addActor(table);
 
-            titleLabel.setFontScale(5f);
+            titleLabel.setFontScale(5f * LaserKittens.scaleToPreferredWidth());
 
             table.row().pad(10, 10, 30, 10);
             table.add(titleLabel).colspan(2).expand();
@@ -162,7 +162,7 @@ public class StatisticsScreen implements Screen {
             for (List<Label> statisticsGroup : listOfStatistics) {
                 information.row();
                 for (Label statistics : statisticsGroup) {
-                    statistics.setFontScale(2);
+                    statistics.setFontScale(2 * LaserKittens.scaleToPreferredWidth());
                     information.add(statistics);
                 }
             }

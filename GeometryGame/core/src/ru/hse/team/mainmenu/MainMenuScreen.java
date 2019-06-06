@@ -109,10 +109,10 @@ public class MainMenuScreen implements Screen {
             table.setFillParent(true);
             stage.addActor(table);
 
-            levels.getLabel().setFontScale(2f);
-            multiplayer.getLabel().setFontScale(2f);
-            settings.getLabel().setFontScale(2f);
-            exit.getLabel().setFontScale(2f);
+            levels.getLabel().setFontScale(2f * LaserKittens.scaleToPreferredWidth());
+            multiplayer.getLabel().setFontScale(2f * LaserKittens.scaleToPreferredWidth());
+            settings.getLabel().setFontScale(2f * LaserKittens.scaleToPreferredWidth());
+            exit.getLabel().setFontScale(2f * LaserKittens.scaleToPreferredWidth());
 
             setListeners();
 

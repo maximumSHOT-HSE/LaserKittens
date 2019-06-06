@@ -149,28 +149,27 @@ public class SettingsScreen implements Screen {
             table.setFillParent(true);
             stage.addActor(table);
 
-            titleLabel.setFontScale(6f);
-            playerNameLabel.setFontScale(1.5f);
-            volumeSoundLabel.setFontScale(1.5f);
-            accelerometerLabel.setFontScale(1.5f);
-            showTimeLabel.setFontScale(1.5f);
-            fogLabel.setFontScale(1.5f);
-
-            playerNameTextField.setFontScale(1.5f);
+            titleLabel.setFontScale(6f * LaserKittens.scaleToPreferredWidth());
+            playerNameLabel.setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
+            volumeSoundLabel.setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
+            accelerometerLabel.setFontScale(1.5f* LaserKittens.scaleToPreferredWidth());
+            showTimeLabel.setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
+            fogLabel.setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
+            playerNameTextField.setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
 
             volumeSoundSlider.setValue(laserKittens.getPreferences().getSoundVolume());
 
             enableAccelerometer.getImageCell().size(20, 20);
-            enableAccelerometer.getImage().scaleBy(1.5f);
+            enableAccelerometer.getImage().scaleBy(1.5f * LaserKittens.scaleToPreferredWidth());
 
             showTime.getImageCell().size(20, 20);
-            showTime.getImage().scaleBy(1.5f);
+            showTime.getImage().scaleBy(1.5f * LaserKittens.scaleToPreferredWidth());
 
             enableFog.getImageCell().size(20, 20);
-            enableFog.getImage().scaleBy(1.5f);
+            enableFog.getImage().scaleBy(1.5f * LaserKittens.scaleToPreferredWidth());
 
-            about.getLabel().setFontScale(1.5f);
-            backButton.getLabel().setFontScale(1.5f);
+            about.getLabel().setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
+            backButton.getLabel().setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
 
             table.row().pad(10, 10, 10, 10);
             table.add(titleLabel).colspan(2);
