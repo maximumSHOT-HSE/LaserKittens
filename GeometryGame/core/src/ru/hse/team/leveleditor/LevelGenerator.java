@@ -58,31 +58,35 @@ public class LevelGenerator {
 
                 for (SimpleEntity entity : savedLevel.entities) {
 
-                    float PM = RenderingSystem.PIXELS_TO_METRES;
                     Vector2 scale = getCommonScale(entity);
                     switch (entity.getType()) {
                         case STAR:
-                            createStar(entity.getPositionX() * PM, entity.getPositionY() * PM,
+                            createStar(entity.getPositionX() * RenderingSystem.WIDTH_TO_METERS,
+                                    entity.getPositionY() * RenderingSystem.HEIGHT_TO_METERS,
                                     entity.getSizeX() * scale.x);
                             break;
                         case MIRROR:
-                            createMirror(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
+                            createMirror(new Vector2(entity.getPositionX() * RenderingSystem.WIDTH_TO_METERS,
+                                            entity.getPositionY() * RenderingSystem.HEIGHT_TO_METERS),
                                     entity.getSizeX() * scale.x, entity.getSizeY() * scale.y,
                                     entity.getRotation() * (float) Math.PI / 180);
                             break;
                         case WALL:
-                            createImpenetrableWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
+                            createImpenetrableWall(new Vector2(entity.getPositionX() * RenderingSystem.WIDTH_TO_METERS,
+                                            entity.getPositionY() * RenderingSystem.HEIGHT_TO_METERS),
                                     entity.getSizeX() * scale.x, entity.getSizeY() * scale.y,
                                     entity.getRotation() * (float) Math.PI / 180);
                             break;
                         case GLASS:
-                            createTransparentWall(new Vector2(entity.getPositionX() * PM, entity.getPositionY() * PM),
+                            createTransparentWall(new Vector2(entity.getPositionX() * RenderingSystem.WIDTH_TO_METERS,
+                                            entity.getPositionY() * RenderingSystem.HEIGHT_TO_METERS),
                                     entity.getSizeX() * scale.x, entity.getSizeY() * scale.y,
                                     entity.getRotation() * (float) Math.PI / 180);
                             break;
                         case PLAYER:
                             if (focusedPlayer == null) {
-                                focusedPlayer = createPlayer(entity.getPositionX() * PM, entity.getPositionY() * PM,
+                                focusedPlayer = createPlayer(entity.getPositionX() * RenderingSystem.WIDTH_TO_METERS,
+                                        entity.getPositionY() * RenderingSystem.HEIGHT_TO_METERS,
                                         entity.getSizeX() * scale.x);
                             }
                             break;
@@ -104,14 +108,16 @@ public class LevelGenerator {
      * Makes entities in level look exactly like in editor.
      */
     private static Vector2 getCommonScale(SimpleEntity entity) {
-        float PM = RenderingSystem.PIXELS_TO_METRES;
         switch (entity.getType()) {
             case STAR:
-                return new Vector2(PM / 2, PM / 2);
+                return new Vector2(RenderingSystem.WIDTH_TO_METERS / 2,
+                        RenderingSystem.HEIGHT_TO_METERS / 2);
             case PLAYER:
-                return new Vector2(0.39f * PM, 0.39f * PM);
+                return new Vector2(0.39f * RenderingSystem.WIDTH_TO_METERS,
+                        0.39f * RenderingSystem.HEIGHT_TO_METERS);
             default:
-                return new Vector2(1 * PM, 1 * PM);
+                return new Vector2(1 * RenderingSystem.WIDTH_TO_METERS,
+                        1 * RenderingSystem.HEIGHT_TO_METERS);
         }
     }
 

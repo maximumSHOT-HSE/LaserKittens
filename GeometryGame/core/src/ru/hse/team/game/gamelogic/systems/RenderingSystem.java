@@ -45,15 +45,15 @@ public class RenderingSystem extends SortedIteratingSystem {
     // pixels per meter
     public static final float PPM = 32.0f;
 
-    public static final float SCREEN_WIDTH = Gdx.graphics.getWidth() / PPM;
-    public static final float SCREEN_HEIGHT = Gdx.graphics.getHeight() / PPM;
+    public static final float SCREEN_WIDTH = LaserKittens.PREFERRED_WIDTH / PPM;
+    public static final float SCREEN_HEIGHT = LaserKittens.PREFERRED_HEIGHT / PPM;
 
-    public static final float PIXELS_TO_METRES = 1.0f / PPM;
-
-    private static final Vector2 METER_DIMENSIONS =
-            new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
+    private static final Vector2 METER_DIMENSIONS = new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
     private static final Vector2 PIXEL_DIMENSIONS =
             new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+    public static final float WIDTH_TO_METERS = METER_DIMENSIONS.x / PIXEL_DIMENSIONS.x;
+    public static final float HEIGHT_TO_METERS = METER_DIMENSIONS.y / PIXEL_DIMENSIONS.y;
 
     public static Vector2 getScreenSizeInMeters() {
         return METER_DIMENSIONS;
@@ -63,12 +63,21 @@ public class RenderingSystem extends SortedIteratingSystem {
         return PIXEL_DIMENSIONS;
     }
 
-    public static float pixelsToMeters(float pixelValue){
-        return pixelValue * PIXELS_TO_METRES;
+    public static float pixelsToMetersWidth(float pixelValue){
+        return pixelValue * SCREEN_WIDTH / Gdx.graphics.getWidth();
     }
 
-    public static float metersToPixels(float meterValue) {
-        return meterValue / PIXELS_TO_METRES;
+    public static float pixelsToMetersHeight(float pixelValue){
+        return pixelValue * SCREEN_HEIGHT / Gdx.graphics.getHeight();
+    }
+
+
+    public static float metersToPixelsWidth(float meterValue) {
+        return meterValue * Gdx.graphics.getWidth() / SCREEN_WIDTH;
+    }
+
+    public static float metersToPixelsHeight(float meterValue) {
+        return meterValue * Gdx.graphics.getHeight() / SCREEN_HEIGHT;
     }
 
     private SpriteBatch batch;
@@ -180,8 +189,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         float originX = width / 2f;
         float originY = height / 2f;
 
-        float pixelHalfWidth = pixelsToMeters(originX) * transformComponent.scale.x;
-        float pixelHalfHeight = pixelsToMeters(originY) * transformComponent.scale.y;
+        float pixelHalfWidth = pixelsToMetersWidth(originX) * transformComponent.scale.x;
+        float pixelHalfHeight = pixelsToMetersHeight(originY) * transformComponent.scale.y;
 
         if (Geometry.distanceToSegment(camera.position.x,
                 transformComponent.position.x - pixelHalfWidth,
@@ -202,8 +211,8 @@ public class RenderingSystem extends SortedIteratingSystem {
                 transformComponent.position.y - originY,
                 originX, originY,
                 width, height,
-                pixelsToMeters(transformComponent.scale.x),
-                pixelsToMeters(transformComponent.scale.y),
+                pixelsToMetersWidth(transformComponent.scale.x),
+                pixelsToMetersHeight(transformComponent.scale.y),
                 transformComponent.rotation);
     }
 

@@ -53,8 +53,8 @@ abstract public class AbstractLevelFactory {
 
     public Entity createStar(float x, float y, float radius) {
         Texture texture = manager.getImage(KittensAssetManager.Images.STAR_2);
-        Vector2 scale = new Vector2(2 * radius / RenderingSystem.pixelsToMeters(texture.getWidth()),
-                2 * radius / RenderingSystem.pixelsToMeters(texture.getHeight()));
+        Vector2 scale = new Vector2(2 * radius / RenderingSystem.pixelsToMetersWidth(texture.getWidth()),
+                2 * radius / RenderingSystem.pixelsToMetersHeight(texture.getHeight()));
 
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newStar(new Vector2(x, y), radius, BodyDef.BodyType.DynamicBody, false))
@@ -101,8 +101,8 @@ abstract public class AbstractLevelFactory {
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
-                (int) RenderingSystem.metersToPixels(width),
-                (int) RenderingSystem.metersToPixels(height)
+                (int) RenderingSystem.metersToPixelsWidth(width),
+                (int) RenderingSystem.metersToPixelsHeight(height)
         );
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height, rotation))
@@ -118,7 +118,7 @@ abstract public class AbstractLevelFactory {
 
     protected Entity createPlayer(float playerX, float playerY, float radius) {
 
-        float regionCatRadius = RenderingSystem.pixelsToMeters(
+        float regionCatRadius = RenderingSystem.pixelsToMetersHeight(
                 manager.getImage(KittensAssetManager.Images.CAT_3).getHeight() * 0.78f * 0.5f);
         Vector2 scale = new Vector2(radius / regionCatRadius, radius / regionCatRadius);
 
@@ -133,7 +133,7 @@ abstract public class AbstractLevelFactory {
 
     protected Entity createOpponent(float playerX, float playerY, float radius) {
 
-        float regionCatRadius = RenderingSystem.pixelsToMeters(
+        float regionCatRadius = RenderingSystem.pixelsToMetersHeight(
                 manager.getImage(KittensAssetManager.Images.CAT_4).getHeight() * 0.78f * 0.5f);
         Vector2 scale = new Vector2(radius / regionCatRadius, radius / regionCatRadius);
 
@@ -147,7 +147,7 @@ abstract public class AbstractLevelFactory {
     }
 
     protected Entity createGuardian(float guardianX, float guardianY, float radius, List<Vector2> path, float velocty) {
-        float regionGuardianRadius = RenderingSystem.pixelsToMeters(
+        float regionGuardianRadius = RenderingSystem.pixelsToMetersHeight(
                 manager.getImage(KittensAssetManager.Images.CAT_2).getHeight() * 0.78f * 0.5f);
         Vector2 scale = new Vector2(radius / regionGuardianRadius, radius / regionGuardianRadius);
 
@@ -170,8 +170,8 @@ abstract public class AbstractLevelFactory {
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
-                (int) RenderingSystem.metersToPixels(width),
-                (int) RenderingSystem.metersToPixels(height)
+                (int) RenderingSystem.metersToPixelsWidth(width),
+                (int) RenderingSystem.metersToPixelsHeight(height)
         );
         Entity wall = (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height, rotation))
@@ -191,8 +191,8 @@ abstract public class AbstractLevelFactory {
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
-                (int) RenderingSystem.metersToPixels(width),
-                (int) RenderingSystem.metersToPixels(height)
+                (int) RenderingSystem.metersToPixelsWidth(width),
+                (int) RenderingSystem.metersToPixelsHeight(height)
         );
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newDynamicRectangle(center, width, height, 0))
@@ -208,8 +208,8 @@ abstract public class AbstractLevelFactory {
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
-                (int) RenderingSystem.metersToPixels(width),
-                (int) RenderingSystem.metersToPixels(height)
+                (int) RenderingSystem.metersToPixelsWidth(width),
+                (int) RenderingSystem.metersToPixelsHeight(height)
         );
         Entity door = (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height))
@@ -251,8 +251,8 @@ abstract public class AbstractLevelFactory {
 
     protected Entity createQuestion(Vector2 position, float scale, String message) {
         TextureRegion texture = new TextureRegion(manager.getImage(KittensAssetManager.Images.QUESTION));
-        float width = RenderingSystem.pixelsToMeters(texture.getRegionWidth()) * scale;
-        float height = RenderingSystem.pixelsToMeters(texture.getRegionHeight()) * scale;
+        float width = RenderingSystem.pixelsToMetersWidth(texture.getRegionWidth()) * scale;
+        float height = RenderingSystem.pixelsToMetersHeight(texture.getRegionHeight()) * scale;
 
         return (new EntityBuilder())
                 .addTransformComponent(new Vector3(position, 0), new Vector2(scale, scale), 0f, false)
@@ -272,8 +272,8 @@ abstract public class AbstractLevelFactory {
         texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
-                (int) RenderingSystem.metersToPixels(width),
-                (int) RenderingSystem.metersToPixels(height)
+                (int) RenderingSystem.metersToPixelsWidth(width),
+                (int) RenderingSystem.metersToPixelsHeight(height)
         );
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newTransparentRectangle(center, width, height, rotation))
@@ -292,8 +292,8 @@ abstract public class AbstractLevelFactory {
         Texture texture = manager.getImage(KittensAssetManager.Images.YELLOW_TUMBLER);
         TextureRegion textureRegion = new TextureRegion(
                 texture, 0, 0,
-                (int) RenderingSystem.metersToPixels(width),
-                (int) RenderingSystem.metersToPixels(height)
+                (int) RenderingSystem.metersToPixelsWidth(width),
+                (int) RenderingSystem.metersToPixelsHeight(height)
         );
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height, 0))
