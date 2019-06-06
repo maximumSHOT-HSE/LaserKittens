@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.LaserKittens;
 import ru.hse.team.game.BodyFactory;
 import ru.hse.team.game.Mapper;
 import ru.hse.team.game.gamelogic.components.BodyComponent;
@@ -228,9 +229,10 @@ abstract public class AbstractLevelFactory {
 
     protected Entity createKey(Vector2 center, float width, float height, Entity door) {
         Texture texture = manager.getImage(KittensAssetManager.Images.KEY);
+        Vector2 scale = new Vector2(1, 1);
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height))
-                .addTransformComponent(new Vector3(center.x, center.y, 10))
+                .addTransformComponent(new Vector3(center.x, center.y, 10), scale, 0, false)
                 .addTextureComponent(new TextureRegion(texture))
                 .addTypeComponent(TypeComponent.Type.KEY)
                 .addStateComponent(StateComponent.State.JUST_CREATED)
@@ -240,11 +242,9 @@ abstract public class AbstractLevelFactory {
 
     protected Entity createPointer(Vector2 position, float rotation) {
         Texture texture = manager.getImage(KittensAssetManager.Images.POINTER);
+        Vector2 scale = new Vector2(1, 1);
         return (new EntityBuilder())
-                .addTransformComponent(
-                        new Vector3(position, 0),
-                        new Vector2(1,1),
-                        rotation, false)
+                .addTransformComponent(new Vector3(position, 0), scale, rotation, false)
                 .addTextureComponent(new TextureRegion(texture))
                 .build();
     }
@@ -254,8 +254,9 @@ abstract public class AbstractLevelFactory {
         float width = RenderingSystem.pixelsToMetersWidth(texture.getRegionWidth()) * scale;
         float height = RenderingSystem.pixelsToMetersHeight(texture.getRegionHeight()) * scale;
 
+        Vector2 scaleTexture = new Vector2(scale, scale);
         return (new EntityBuilder())
-                .addTransformComponent(new Vector3(position, 0), new Vector2(scale, scale), 0f, false)
+                .addTransformComponent(new Vector3(position, 0), scaleTexture, 0f, false)
                 .addTextureComponent(texture)
                 .addTypeComponent(TypeComponent.Type.QUESTION)
                 .addBodyComponent(bodyFactory.newSensorRectangle(position, width, height, 0))
@@ -284,20 +285,15 @@ abstract public class AbstractLevelFactory {
                 .build();
     }
 
-    protected Entity createTumbler(
-            Vector2 center,
-            float width,
-            float height,
-            Runnable task) {
+    protected Entity createTumbler(Vector2 center, float width, float height, Runnable task) {
         Texture texture = manager.getImage(KittensAssetManager.Images.YELLOW_TUMBLER);
         TextureRegion textureRegion = new TextureRegion(
-                texture, 0, 0,
-                (int) RenderingSystem.metersToPixelsWidth(width),
-                (int) RenderingSystem.metersToPixelsHeight(height)
+                texture, 0, 0
         );
+        Vector2 scale = new Vector2(1, 1);
         return (new EntityBuilder())
                 .addBodyComponent(bodyFactory.newRectangle(center, width, height, 0))
-                .addTransformComponent(new Vector3(center, 0))
+                .addTransformComponent(new Vector3(center, 0), scale, 0, false)
                 .addTextureComponent(textureRegion)
                 .addTumblerComponent(task)
                 .addTypeComponent(TypeComponent.Type.TUMBLER)

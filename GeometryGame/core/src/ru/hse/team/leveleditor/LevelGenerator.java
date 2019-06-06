@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.hse.team.KittensAssetManager;
+import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.game.BodyFactory;
@@ -108,17 +109,23 @@ public class LevelGenerator {
      * Makes entities in level look exactly like in editor.
      */
     private static Vector2 getCommonScale(SimpleEntity entity) {
+        Vector2 scale;
         switch (entity.getType()) {
             case STAR:
-                return new Vector2(RenderingSystem.WIDTH_TO_METERS / 2,
+                scale = new Vector2(RenderingSystem.WIDTH_TO_METERS / 2,
                         RenderingSystem.HEIGHT_TO_METERS / 2);
+                break;
             case PLAYER:
-                return new Vector2(0.39f * RenderingSystem.WIDTH_TO_METERS,
+                scale = new Vector2(0.39f * RenderingSystem.WIDTH_TO_METERS,
                         0.39f * RenderingSystem.HEIGHT_TO_METERS);
+                break;
             default:
-                return new Vector2(1 * RenderingSystem.WIDTH_TO_METERS,
+                scale = new Vector2(1 * RenderingSystem.WIDTH_TO_METERS,
                         1 * RenderingSystem.HEIGHT_TO_METERS);
         }
+        scale.x /= LaserKittens.scaleToPreferredWidth();
+        scale.y /= LaserKittens.scaleToPreferredHeight();
+        return scale;
     }
 
 }
