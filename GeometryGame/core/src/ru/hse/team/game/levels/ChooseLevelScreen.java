@@ -230,6 +230,7 @@ public class ChooseLevelScreen implements Screen {
 
         private Table statisticsTable() {
             TextButton statisticsButton = new TextButton("Statistics", skin);
+            statisticsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             statisticsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -273,6 +274,7 @@ public class ChooseLevelScreen implements Screen {
 
         private Table editorScreenTable() {
             TextButton statisticsButton = new TextButton("Level editor", skin);
+            statisticsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             statisticsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -299,6 +301,7 @@ public class ChooseLevelScreen implements Screen {
 
         private Table savedLevelsTable() {
             TextButton savedLevelsButton = new TextButton("MyLevels", skin);
+            savedLevelsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             savedLevelsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
