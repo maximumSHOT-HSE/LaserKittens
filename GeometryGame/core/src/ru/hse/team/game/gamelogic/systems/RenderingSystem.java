@@ -126,7 +126,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     public void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
         shapeRenderer.setColor(color);
-        shapeRenderer.rectLine(from, to, 0.1f);
+        shapeRenderer.rectLine(from, to, 0.2f);
     }
 
     private void drawBulletTrack() {
