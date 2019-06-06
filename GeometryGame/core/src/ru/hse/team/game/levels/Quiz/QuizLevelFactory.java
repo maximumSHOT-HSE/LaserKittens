@@ -399,9 +399,9 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         placeImpenetrableWall(6f, 0.875f, 0.05f, 0.9f);
         placeImpenetrableWall(5.75f, 0.75f, 0.5f, 0.05f);
 
-        placeTransparentWall(5.5f, 0.6f, 0.5f, 0.05f);
-        placeTransparentWall(5.5f, 0.5f, 0.5f, 0.05f);
-        placeTransparentWall(5.5f, 0.4f, 0.5f, 0.05f);
+        placeTransparentWall(5.5f, 0.6f, 0.5f, 0.049f);
+        placeTransparentWall(5.5f, 0.5f, 0.5f, 0.049f);
+        placeTransparentWall(5.5f, 0.4f, 0.5f, 0.049f);
 
         createStar(
                 5.75f * RenderingSystem.getScreenSizeInMeters().x,
