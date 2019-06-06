@@ -123,8 +123,6 @@ public class LevelGenerator {
                 scale = new Vector2(1 * RenderingSystem.WIDTH_TO_METERS,
                         1 * RenderingSystem.HEIGHT_TO_METERS);
         }
-        scale.x /= LaserKittens.scaleToPreferredWidth();
-        scale.y /= LaserKittens.scaleToPreferredHeight();
         return scale;
     }
 
