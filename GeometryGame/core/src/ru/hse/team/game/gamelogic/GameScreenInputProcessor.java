@@ -122,6 +122,7 @@ public class GameScreenInputProcessor implements InputProcessor {
 
         if (!clickInPlayerRegion()) {
             if (abstractLevel.isMultiplayer()) {
+                System.out.println("Multiplayer");
                 Gdx.app.postRunnable(() -> abstractLevel.shoot(position.x, position.y));
             } else {
                 abstractLevel.shoot(position.x, position.y);
@@ -157,7 +158,9 @@ public class GameScreenInputProcessor implements InputProcessor {
         def.maxForce = 1000.0f * playerBody.getMass();
         def.target.set(playerX, playerY);
 
-        Gdx.app.postRunnable(() -> mouseJoint = (MouseJoint) abstractLevel.getWorld().createJoint(def));
+        Gdx.app.postRunnable(() -> {
+            mouseJoint = (MouseJoint) abstractLevel.getWorld().createJoint(def);
+        });
         playerBody.setAwake(true);
 
 
