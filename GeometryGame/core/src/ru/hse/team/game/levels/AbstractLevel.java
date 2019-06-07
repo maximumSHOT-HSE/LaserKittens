@@ -16,6 +16,7 @@ import ru.hse.team.game.Multiplayer.AppWarp.WarpController;
 import ru.hse.team.game.Multiplayer.MessageCreator;
 import ru.hse.team.game.gamelogic.GameStatus;
 import ru.hse.team.game.gamelogic.algorithms.AbstractGraph;
+import ru.hse.team.game.gamelogic.components.BodyComponent;
 
 /**
  * Class for encapsulating logic and
@@ -117,7 +118,12 @@ abstract public class AbstractLevel {
     }
 
     public float getPlayerRadius() {
-        Body playerBody = Mapper.bodyComponent.get(player).body;
+        if (player == null) return 1;
+        final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(player);
+        if (playerBodyComponent == null) return 1;
+        final Body playerBody = playerBodyComponent.body;
+        if (playerBody == null) return 1;
+
         return playerBody.getFixtureList().get(0).getShape().getRadius();
     }
 
