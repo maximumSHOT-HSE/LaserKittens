@@ -62,7 +62,6 @@ public class ChooseLevelScreen implements Screen {
                 .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         fillLevels();
 
-        // +3 for statistics, level editor and saved levels TODO
         currentSection = abstractLevels.size() + 3;
 
         menu = new Menu();
@@ -158,7 +157,7 @@ public class ChooseLevelScreen implements Screen {
             saveState();
             laserKittens.getBatch().begin();
 
-            int levelsCount = abstractLevels.size() + 3; // TODO (why + 3?)
+            int levelsCount = abstractLevels.size() + 3;
 
             float h = naviActive.getHeight();
             float w = naviActive.getWidth();
@@ -247,7 +246,7 @@ public class ChooseLevelScreen implements Screen {
                 public void changed(ChangeEvent event, Actor actor) {
                     currentSection = slidingPane.getCurrentSectionId();
                     direction = slidingPane.getDirection();
-                    laserKittens.getGoogleServices().submitScore(getBestTime("Quiz")); // TODO why quiz only?
+                    laserKittens.getGoogleServices().submitScore(getBestTime("Quiz"));
                 }
             });
 
