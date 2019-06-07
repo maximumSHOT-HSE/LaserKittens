@@ -64,7 +64,7 @@ public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements Wa
                         source.y - playerRadius * direction.y * 0.96f);
                 if (getFactory() != null) {
                     Gdx.app.postRunnable(() -> {
-                        getFactory().createLaser(source, direction, lifetime)
+                        getFactory().createLaser(source, direction, lifetime);
                         getFactory().setOpponentPosition(catPosition);
                     });
                 }
