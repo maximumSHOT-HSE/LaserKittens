@@ -149,15 +149,11 @@ public class LaserKittens extends Game {
         Gdx.input.setCatchBackKey(true);
         System.out.println(Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
         dialogs = GDXDialogsSystem.install();
-
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-
         getAssetManager().loadEverything();
         getAssetManager().finishLoading();
-
         font = getAssetManager().getFont(KittensAssetManager.Fonts.FONT);
-
         changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
     }
 
@@ -201,10 +197,10 @@ public class LaserKittens extends Game {
     }
 
     public static float scaleToPreferredWidth() {
-        return (float)Gdx.graphics.getWidth() / getPreferredWidth();
+        return (float) Gdx.graphics.getWidth() / getPreferredWidth();
     }
 
     public static float scaleToPreferredHeight() {
-        return (float)Gdx.graphics.getHeight() / getPreferredHeight();
+        return (float) Gdx.graphics.getHeight() / getPreferredHeight();
     }
 }

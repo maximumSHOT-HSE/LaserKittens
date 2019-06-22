@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  * Class for simplification of assets loading.
  */
 public class KittensAssetManager {
-
     private final AssetManager manager = new AssetManager();
 
     public enum Images {
@@ -104,8 +103,6 @@ public class KittensAssetManager {
             return fontName;
         }
     }
-
-
 
     private void loadImages() {
         for (Images image : Images.values()) {

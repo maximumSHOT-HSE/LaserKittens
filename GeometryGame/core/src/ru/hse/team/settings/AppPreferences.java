@@ -8,7 +8,6 @@ import com.badlogic.gdx.Preferences;
  * Preferences class based on libgdx preferences
  */
 public class AppPreferences {
-
     // that pointer needs to be saved due to some strange behavior on android
     // (if it is not, saved settings get cleared)
     private Preferences preferences;
