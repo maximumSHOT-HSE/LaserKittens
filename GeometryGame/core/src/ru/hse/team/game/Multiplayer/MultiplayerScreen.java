@@ -49,17 +49,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
     private int choosedLevelId = -1;
 
     private void fillLevels() {
-        abstractMultiplayerLevels.add(
-                new MultiplayerQuizLevel(laserKittens, this));
-    }
-
-    private AbstractMultiplayerLevel getLevelByName(String levelName) {
-        for (AbstractMultiplayerLevel level : abstractMultiplayerLevels) {
-            if (level.getLevelName().equals(levelName)) {
-                return level;
-            }
-        }
-        return null;
+        abstractMultiplayerLevels.add(new MultiplayerQuizLevel());
     }
 
     public MultiplayerScreen(LaserKittens laserKittens) {
