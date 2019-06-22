@@ -22,7 +22,6 @@ import ru.hse.team.game.levels.AbstractLevel;
  * Class that processes contacts between bodies in game.
  */
 public class ContactProcessor implements ContactListener {
-
     private AbstractLevel abstractLevel;
 
     public ContactProcessor(AbstractLevel abstractLevel) {
@@ -46,7 +45,7 @@ public class ContactProcessor implements ContactListener {
         Mapper.stateComponent.get(star).finish();
     }
 
-    private void processBulletImpenetrableWall(Entity bullet, Entity impenetrableWall) {
+    private void processBulletImpenetrableWall(Entity bullet) {
         stopBullet(bullet);
     }
 
@@ -142,7 +141,7 @@ public class ContactProcessor implements ContactListener {
         }
         if (checkType(entityA, TypeComponent.Type.BULLET) &&
             checkType(entityB, TypeComponent.Type.IMPENETRABLE_WALL)) {
-            processBulletImpenetrableWall(entityA, entityB);
+            processBulletImpenetrableWall(entityA);
         }
         if (checkType(entityA, TypeComponent.Type.PLAYER) &&
             checkType(entityB, TypeComponent.Type.STAR)) {
@@ -174,17 +173,13 @@ public class ContactProcessor implements ContactListener {
     public void beginContact(Contact contact) {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-
         Object aUserData = fixtureA.getBody().getUserData();
         Object bUserData = fixtureB.getBody().getUserData();
-
         if (!(aUserData instanceof Entity) || !(bUserData instanceof Entity)) {
             return;
         }
-
         Entity entityA = (Entity) aUserData;
         Entity entityB = (Entity) bUserData;
-
         process(entityA, entityB, false);
     }
 

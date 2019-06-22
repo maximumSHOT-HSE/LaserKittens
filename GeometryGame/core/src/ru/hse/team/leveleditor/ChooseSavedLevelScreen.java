@@ -35,7 +35,6 @@ import ru.hse.team.settings.about.PagedScrollPane;
  * Allows to launch and delete these levels.
  */
 public class ChooseSavedLevelScreen implements Screen {
-
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
@@ -45,7 +44,6 @@ public class ChooseSavedLevelScreen implements Screen {
 
     public ChooseSavedLevelScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-
         background = new Background(this.laserKittens.getAssetManager()
                 .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         stage = new Stage(new ScreenViewport());
@@ -65,7 +63,6 @@ public class ChooseSavedLevelScreen implements Screen {
         });
         menu = new Menu(stage);
         Gdx.input.setInputProcessor(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         laserKittens.getBatch().setProjectionMatrix(camera.combined);
@@ -75,13 +72,10 @@ public class ChooseSavedLevelScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
         laserKittens.getBatch().begin();
         background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -118,9 +112,8 @@ public class ChooseSavedLevelScreen implements Screen {
      */
     private List<SavedLevel> allLevels() {
         List<List<SavedLevel>> levelsList = new ArrayList<>();
-        Thread t = new Thread(() -> {
-            levelsList.add(laserKittens.getDatabase().levelsDao().getAll());
-        });
+        Thread t = new Thread(() ->
+                levelsList.add(laserKittens.getDatabase().levelsDao().getAll()));
         t.start();
         try {
             t.join();
@@ -134,9 +127,8 @@ public class ChooseSavedLevelScreen implements Screen {
      * Deletes savedLevel from database by it's id.
      */
     private void deleteLevel(int id) {
-        Thread t = new Thread(() -> {
-            laserKittens.getDatabase().levelsDao().delete(levels.get(id));
-        });
+        Thread t = new Thread(() ->
+                laserKittens.getDatabase().levelsDao().delete(levels.get(id)));
         t.start();
         try {
             t.join();
@@ -149,68 +141,52 @@ public class ChooseSavedLevelScreen implements Screen {
         private Table table = new Table();
         private Skin skin = laserKittens.getAssetManager()
                 .getSkin(KittensAssetManager.Skins.BLUE_SKIN);
-
         private Label titleLabel = new Label("Saved levels",
                 new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
-
-        List<TextButton> openLevelButtons = new ArrayList<>();
+        private List<TextButton> openLevelButtons = new ArrayList<>();
 
         public Menu(Stage stage) {
             levels = allLevels();
             stage.addActor(table);
             table.setFillParent(true);
-
             titleLabel.setFontScale(4f * LaserKittens.scaleToPreferredWidth());
             table.add(titleLabel);
             table.row().pad(10, 10, 10, 10);
-
             initializeButtons();
-
             PagedScrollPane scroll = new PagedScrollPane(skin);
             scroll.setFlingTime(0.1f);
             scroll.setPageSpacing(25);
             Table buttonsTable = new Table();
-
             final float buttonHeight = Gdx.graphics.getHeight() * 0.15f;
             final float buttonWidth = Gdx.graphics.getWidth() * 0.65f;
             for (int i = 0; i < openLevelButtons.size(); i++) {
                 TextButton button = openLevelButtons.get(i);
                 buttonsTable.row().pad(10, 10, 10, 10);
                 buttonsTable.add(button).width(buttonWidth).height(buttonHeight);
-
                 ImageButton binButton = new ImageButton(new TextureRegionDrawable(
                         laserKittens.getAssetManager().getImage(KittensAssetManager.Images.DELETE)));
                 buttonsTable.add(binButton).width(0.15f * Gdx.graphics.getWidth()).height(0.15f * Gdx.graphics.getHeight());
-
-                final int ii = i;
+                final int finalI = i;
                 binButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-
                         GDXButtonDialog bDialog = laserKittens.getDialogs().newDialog(GDXButtonDialog.class);
                         bDialog.setTitle("Are you sure?");
                         bDialog.setMessage("It will not be possible to restore the level");
-
                         bDialog.setClickListener(button1 -> {
                             if (button1 == 0) {
-                                deleteLevel(ii);
+                                deleteLevel(finalI);
                                 laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
                             }
                         });
-
                         bDialog.addButton("Yes");
                         bDialog.addButton("No");
-
                         bDialog.build().show();
-
                     }
                 });
             }
-
             scroll.addPage(buttonsTable);
-
             table.add(scroll).expand().fill();
-
         }
 
         private void initializeButtons() {
@@ -218,7 +194,6 @@ public class ChooseSavedLevelScreen implements Screen {
                 String levelName = levels.get(i).levelName;
                 TextButton button = new TextButton(levelName, skin);
                 button.getLabel().setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
-
                 final int ii = i;
                 button.addListener(new ChangeListener() {
                     @Override
@@ -226,11 +201,9 @@ public class ChooseSavedLevelScreen implements Screen {
                         laserKittens.setScreen(new GameScreen(laserKittens, LevelGenerator.generate(levels.get(ii))));
                     }
                 });
-
                 openLevelButtons.add(button);
             }
         }
-
     }
 }
 

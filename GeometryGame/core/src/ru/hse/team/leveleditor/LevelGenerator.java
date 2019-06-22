@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.hse.team.KittensAssetManager;
-import ru.hse.team.LaserKittens;
 import ru.hse.team.database.levels.SavedLevel;
 import ru.hse.team.database.levels.SimpleEntity;
 import ru.hse.team.game.BodyFactory;
@@ -25,9 +24,8 @@ public class LevelGenerator {
      *  if there is no player, new one will be created
      */
     public static AbstractLevel generate(SavedLevel savedLevel) {
-
-        return new AbstractLevel(savedLevel.levelName, savedLevel.widthInScreens, savedLevel.heightInScreens) {
-
+        return new AbstractLevel(savedLevel.levelName,
+                savedLevel.widthInScreens, savedLevel.heightInScreens) {
             private AbstractLevelFactory factory;
 
             @Override
@@ -43,22 +41,25 @@ public class LevelGenerator {
         };
     }
 
-    private static AbstractLevelFactory createFactory(SavedLevel savedLevel, PooledEngine engine,
-                                                      KittensAssetManager kittensAssetManager, BodyFactory bodyFactory) {
+    private static AbstractLevelFactory createFactory(SavedLevel savedLevel,
+                                                      PooledEngine engine,
+                                                      KittensAssetManager kittensAssetManager,
+                                                      BodyFactory bodyFactory) {
         class LevelFactory extends AbstractLevelFactory {
 
-            public LevelFactory(PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory) {
+            public LevelFactory(PooledEngine engine,
+                                KittensAssetManager manager,
+                                BodyFactory bodyFactory) {
                 super(engine, manager, bodyFactory);
             }
 
             @Override
-            public void createLevel(int widthInScreens, int heightInScreens, AbstractLevel abstractLevel) {
+            public void createLevel(int widthInScreens,
+                                    int heightInScreens,
+                                    AbstractLevel abstractLevel) {
                 createBackground(widthInScreens, heightInScreens);
-
                 Entity focusedPlayer = null;
-
                 for (SimpleEntity entity : savedLevel.entities) {
-
                     Vector2 scale = getCommonScale(entity);
                     switch (entity.getType()) {
                         case STAR:
@@ -93,11 +94,9 @@ public class LevelGenerator {
                             break;
                     }
                 }
-
                 if (focusedPlayer == null) {
                     focusedPlayer = createPlayer(10, 10, 3);
                 }
-
                 abstractLevel.setPlayer(focusedPlayer);
             }
         };
