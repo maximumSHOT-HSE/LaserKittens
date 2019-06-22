@@ -12,7 +12,7 @@ public class SimpleEntity {
         WALL,
         MIRROR,
         PLAYER,
-        GLASS;
+        GLASS
     }
 
     private float positionX;

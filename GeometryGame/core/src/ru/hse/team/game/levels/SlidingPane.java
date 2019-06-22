@@ -92,14 +92,14 @@ public class SlidingPane extends Group {
     * current sections should be switched
     * */
     private float stopOffset;
-    private float speed = 4000;
+    private static final float speed = 4000;
     private int currentSectionId = 1; // 1-indexed
 
     // speed of gesture which indicates desire to switch section
-    private float flingSpeed = 1000;
+    private static final float flingSpeed = 1000;
 
     // allowed distance of scrolling outside pane
-    private float overscrollDistance = 500;
+    private static final float overscrollDistance = 500;
 
     // section in focus
     private Actor focusedSection;

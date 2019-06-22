@@ -124,7 +124,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         createCamera();
     }
 
-    public void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
+    private void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
         shapeRenderer.setColor(color);
         shapeRenderer.rectLine(from, to, 0.2f);
     }

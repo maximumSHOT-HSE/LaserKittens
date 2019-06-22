@@ -27,23 +27,20 @@ public class WarpController {
         FAILURE,
         JOINING_ROOM,
         LEAVING_ROOM,
-        WAITING_OTHER_PLAYERS,
-        PLAYING
+        WAITING_OTHER_PLAYERS
     }
 
     // the size of string which will be added to the left of user name
     private static final int SALT_SIZE = 10;
 
-    private final String API_KEY = "c459fdeab1cfdc5c0f6853fe34d19b166ce6513fc81160a78146422732056788";
-    private final String SECRET_KEY = "1a270f8f243c231ba0666226f1349aa1167e1fa6aacf162d0061c1abfa2c6735";
+    private static final String API_KEY = "c459fdeab1cfdc5c0f6853fe34d19b166ce6513fc81160a78146422732056788";
+    private static final String SECRET_KEY = "1a270f8f243c231ba0666226f1349aa1167e1fa6aacf162d0061c1abfa2c6735";
     private static final String LEVEL_NAME_PROPERTY = "level name";
 
     private static WarpController instance = null;
 
     private WarpClient warpClient;
     private WarpListener warpListener;
-
-    private Byte connectionStatus = null;
 
     private String playerName;
     private String playerNameSalt;
@@ -129,7 +126,6 @@ public class WarpController {
 
         playerName = null;
         playerNameSalt = null;
-        connectionStatus = null;
 
         setConnectionStatusText(State.WAITING_FOR_CONNECTION,"Waiting...", Color.GRAY);
     }

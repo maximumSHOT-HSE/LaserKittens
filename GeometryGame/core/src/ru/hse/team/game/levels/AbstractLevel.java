@@ -25,7 +25,6 @@ import ru.hse.team.game.gamelogic.components.BodyComponent;
  * */
 abstract public class AbstractLevel {
 
-    private long rechargeTime = 0;
     private long lastShootTime = 0;
 
     /**
@@ -61,6 +60,7 @@ abstract public class AbstractLevel {
 
         long currentShootTime = System.currentTimeMillis();
 
+        long rechargeTime = 0;
         if (currentShootTime - lastShootTime < rechargeTime) {
             return;
         }

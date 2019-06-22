@@ -50,11 +50,9 @@ public class GameEndingScreen implements Screen {
     }
 
     private void addResultToDatabase(GameStatus gameStatus) {
-        new Thread(() -> {
-            laserKittens.getDatabase().statisticsDao().insert(
-                        new LevelStatistics(parentLevel.getLevelName(),gameStatus.timeGone(),
-                                gameStatus.getStarsInLevel(), gameStatus.getCalendarDate()));
-        }).start();
+        laserKittens.getDatabase().statisticsDao().insert(
+                new LevelStatistics(parentLevel.getLevelName(),gameStatus.timeGone(),
+                        gameStatus.getStarsInLevel(), gameStatus.getCalendarDate()));
     }
 
     @Override
@@ -130,7 +128,7 @@ public class GameEndingScreen implements Screen {
 
         private final Label statusLabel;
 
-        public Menu(Stage stage) {
+        private Menu(Stage stage) {
             stage.addActor(table);
             table.setWidth(0.6f * screenWidth);
             table.setHeight(0.6f * screenHeight);

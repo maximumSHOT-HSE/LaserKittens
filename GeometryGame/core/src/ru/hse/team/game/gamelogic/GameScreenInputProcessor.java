@@ -52,8 +52,6 @@ public class GameScreenInputProcessor implements InputProcessor {
     /** special dummy body for mousejoint */
     private final Body ground;
 
-    public static final int MAXIMUM_NUMBER_OF_TOUCHES = 20;
-
     private Vector2 target = new Vector2();
 
     public boolean isDragging() {
@@ -151,16 +149,14 @@ public class GameScreenInputProcessor implements InputProcessor {
         float playerY = playerBody.getPosition().y;
         draggingStartedDiff.set(position.x - playerX, position.y - playerY);
 
-        MouseJointDef def = new MouseJointDef();
+        final MouseJointDef def = new MouseJointDef();
         def.bodyA = ground;
         def.bodyB = playerBody;
         def.collideConnected = true;
         def.maxForce = 1000.0f * playerBody.getMass();
         def.target.set(playerX, playerY);
 
-        Gdx.app.postRunnable(() -> {
-            mouseJoint = (MouseJoint) abstractLevel.getWorld().createJoint(def);
-        });
+        Gdx.app.postRunnable(() -> mouseJoint = (MouseJoint) abstractLevel.getWorld().createJoint(def));
         playerBody.setAwake(true);
 
 

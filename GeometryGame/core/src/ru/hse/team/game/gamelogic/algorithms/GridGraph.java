@@ -47,7 +47,7 @@ public class GridGraph extends AbstractGraph {
                     addEdge(i, j, i + 1, j);
                 }
                 if (j + 1 < m) {
-                    addEdge(i, j, i, j + 1);;
+                    addEdge(i, j, i, j + 1);
                 }
                 if (i + 1 < n && j + 1 < m) {
                     addEdge(i, j, i + 1, j + 1);
@@ -82,31 +82,29 @@ public class GridGraph extends AbstractGraph {
 
     private Vertex getVertexByPosition(Vector2 position) {
         Vertex result = null;
-        int n = graph.length;
-        int m = graph[0].length;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
+        for (Vertex[] aGraph : graph) {
+            for (Vertex anAGraph : aGraph) {
                 if (result == null) {
-                    result = graph[i][j];
+                    result = anAGraph;
                     continue;
                 }
                 float currentDist = position.cpy().sub(result.position).len();
-                float candidateDist = position.cpy().sub(graph[i][j].position).len();
+                float candidateDist = position.cpy().sub(anAGraph.position).len();
                 if (candidateDist < currentDist) {
-                    result = graph[i][j];
+                    result = anAGraph;
                 }
             }
         }
         return result;
     }
 
-    public void addEdge(int i1, int j1, int i2, int j2) {
+    private void addEdge(int i1, int j1, int i2, int j2) {
         Vertex vu = graph[i1][j1];
         Vertex vv = graph[i2][j2];
         addEdge(vu, vv);
     }
 
-    public void addEdge(Vertex vu, Vertex vv) {
+    private void addEdge(Vertex vu, Vertex vv) {
         vu.addEdge(vv);
         edges.add(new Pair<>(vu, vv));
     }
@@ -153,9 +151,9 @@ public class GridGraph extends AbstractGraph {
         int m = graph[0].length;
         findReachable();
         shapeRenderer.setColor(Color.GREEN);
-        for (int i = 0; i < n; i++) {
+        for (Vertex[] aGraph : graph) {
             for (int j = 0; j < m; j++) {
-                Vertex v = graph[i][j];
+                Vertex v = aGraph[j];
                 if (!v.isVisited) {
                     continue;
                 }
@@ -240,12 +238,10 @@ public class GridGraph extends AbstractGraph {
     public List<Vector2> getFogPositions() {
         findReachable();
         List<Vector2> fogPositions = new ArrayList<>();
-        int n = graph.length;
-        int m = graph[0].length;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (!graph[i][j].isReacheble) {
-                    fogPositions.add(graph[i][j].position);
+        for (Vertex[] aGraph : graph) {
+            for (Vertex anAGraph : aGraph) {
+                if (!anAGraph.isReacheble) {
+                    fogPositions.add(anAGraph.position);
                 }
             }
         }
@@ -264,33 +260,33 @@ public class GridGraph extends AbstractGraph {
 
     private class Vertex {
 
-        public Vector2 position;
-        public Set<Vertex> neighbours = new HashSet<>();
-        public boolean isVisited = false;
-        public boolean isReacheble = false;
-        public int id;
+        private Vector2 position;
+        private Set<Vertex> neighbours = new HashSet<>();
+        private boolean isVisited = false;
+        private boolean isReacheble = false;
+        private int id;
 
-        public Vertex(Vector2 position, int id) {
+        private Vertex(Vector2 position, int id) {
             this.position = position;
             this.id = id;
         }
 
-        public void addEdge(Vertex u) {
+        private void addEdge(Vertex u) {
             u.neighbours.add(this);
             this.neighbours.add(u);
         }
 
-        public void removeEdge(Vertex u) {
+        private void removeEdge(Vertex u) {
             u.neighbours.remove(this);
             this.neighbours.remove(u);
         }
     }
 
     private class Pair<T1, T2> {
-        T1 x;
-        T2 y;
+        private T1 x;
+        private T2 y;
 
-        public Pair(T1 x, T2 y) {
+        private Pair(T1 x, T2 y) {
             this.x = x;
             this.y = y;
         }

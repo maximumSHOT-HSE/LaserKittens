@@ -303,15 +303,15 @@ abstract public class AbstractLevelFactory {
 
     }
 
-    public class EntityBuilder {
+    private class EntityBuilder {
         private Entity entity = engine.createEntity();
 
-        public Entity build() {
+        private Entity build() {
             engine.addEntity(entity);
             return entity;
         }
 
-        public EntityBuilder addBodyComponent(Body body) {
+        private  EntityBuilder addBodyComponent(Body body) {
             BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
             bodyComponent.body = body;
             bodyComponent.body.setUserData(entity);
@@ -319,14 +319,14 @@ abstract public class AbstractLevelFactory {
             return this;
         }
 
-        public EntityBuilder addMessageComponent(String message) {
+        private EntityBuilder addMessageComponent(String message) {
             MessageComponent messageComponent = engine.createComponent(MessageComponent.class);
             messageComponent.message = message;
             entity.add(messageComponent);
             return this;
         }
 
-        public EntityBuilder addBulletComponent(long creationTime, int lifeTime, Vector2 source) {
+        private EntityBuilder addBulletComponent(long creationTime, int lifeTime, Vector2 source) {
             BulletComponent bulletComponent = engine.createComponent(BulletComponent.class);
             bulletComponent.creationTime = creationTime;
             bulletComponent.lifeTime = lifeTime;
@@ -335,7 +335,7 @@ abstract public class AbstractLevelFactory {
             return this;
         }
 
-        public EntityBuilder addPatrolComponent(List<Vector2> path, float velocity) {
+        private EntityBuilder addPatrolComponent(List<Vector2> path, float velocity) {
             PatrolComponent patrolComponent = engine.createComponent(PatrolComponent.class);
             patrolComponent.setPath(path);
             patrolComponent.setEntity(entity);
@@ -344,7 +344,7 @@ abstract public class AbstractLevelFactory {
             return this;
         }
 
-        public EntityBuilder addStateComponent(StateComponent.State state) {
+        private EntityBuilder addStateComponent(StateComponent.State state) {
             StateComponent stateComponent = engine.createComponent(StateComponent.class);
             stateComponent.set(state);
             stateComponent.setId(currentEntityId);
@@ -354,21 +354,21 @@ abstract public class AbstractLevelFactory {
             return this;
         }
 
-        public EntityBuilder addTextureComponent(TextureRegion textureRegion) {
+        private EntityBuilder addTextureComponent(TextureRegion textureRegion) {
             TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
             textureComponent.region = textureRegion;
             entity.add(textureComponent);
             return this;
         }
 
-        public EntityBuilder addTransformComponent(Vector3 position) {
+        private EntityBuilder addTransformComponent(Vector3 position) {
             TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
             transformComponent.position.set(position);
             entity.add(transformComponent);
             return this;
         }
 
-        public EntityBuilder addTransformComponent(Vector3 position, Vector2 scale, float rotation, boolean isHidden) {
+        private EntityBuilder addTransformComponent(Vector3 position, Vector2 scale, float rotation, boolean isHidden) {
             TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
             transformComponent.position.set(position);
             transformComponent.scale.set(scale);
@@ -378,14 +378,14 @@ abstract public class AbstractLevelFactory {
             return this;
         }
 
-        public EntityBuilder addTypeComponent(TypeComponent.Type type) {
+        private EntityBuilder addTypeComponent(TypeComponent.Type type) {
             TypeComponent typeComponent = engine.createComponent(TypeComponent.class);
             typeComponent.type = type;
             entity.add(typeComponent);
             return this;
         }
 
-        public EntityBuilder addKeyComponent(Entity door) {
+        private EntityBuilder addKeyComponent(Entity door) {
             KeyComponent keyComponent = engine.createComponent(KeyComponent.class);
             keyComponent.door = door;
             entity.add(keyComponent);
@@ -393,13 +393,13 @@ abstract public class AbstractLevelFactory {
             return this;
         }
 
-        public EntityBuilder addDoorComponent() {
+        private EntityBuilder addDoorComponent() {
             DoorComponent doorComponent = engine.createComponent(DoorComponent.class);
             entity.add(doorComponent);
             return this;
         }
 
-        public EntityBuilder addTumblerComponent(Runnable task) {
+        private EntityBuilder addTumblerComponent(Runnable task) {
             TumblerComponent tumblerComponent = engine.createComponent(TumblerComponent.class);
             tumblerComponent.setAction(task);
             entity.add(tumblerComponent);
@@ -422,8 +422,7 @@ abstract public class AbstractLevelFactory {
         );
         float width = relativeWidth * RenderingSystem.getScreenSizeInMeters().x;
         float height = relativeHeight * RenderingSystem.getScreenSizeInMeters().y;
-        Entity wall = createImpenetrableWall(center, width, height);
-        return wall;
+        return createImpenetrableWall(center, width, height);
     }
 
     protected Entity placeDynamicImpenetrableWall(
@@ -437,8 +436,7 @@ abstract public class AbstractLevelFactory {
         );
         float width = relativeWidth * RenderingSystem.getScreenSizeInMeters().x;
         float height = relativeHeight * RenderingSystem.getScreenSizeInMeters().y;
-        Entity wall = createImpenetrableDynamicWall(center, width, height);
-        return wall;
+        return createImpenetrableDynamicWall(center, width, height);
     }
 
     protected void addAngularVelocity(Entity entity, float angularVelocity) {
@@ -555,7 +553,7 @@ abstract public class AbstractLevelFactory {
         return bodyFactory;
     }
 
-    public void addBarrier(Vector2 center, float width, float height, int id) {
+    private void addBarrier(Vector2 center, float width, float height, int id) {
         barriers.add(new Barrier(center, width, height, id));
     }
 

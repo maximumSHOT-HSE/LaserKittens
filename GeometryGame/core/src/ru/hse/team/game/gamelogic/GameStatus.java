@@ -84,10 +84,6 @@ public class GameStatus {
         return endDate;
     }
 
-    public long getStopNanoTime() {
-        return stopNano;
-    }
-
     private int starCounter = 0;
     private int starsInLevel = 0;
 
