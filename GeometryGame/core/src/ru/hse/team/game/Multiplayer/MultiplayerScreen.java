@@ -35,7 +35,6 @@ import ru.hse.team.game.gamelogic.algorithms.RandomGenerator;
 import ru.hse.team.settings.about.PagedScrollPane;
 
 public class MultiplayerScreen implements Screen, WarpListener {
-
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
@@ -44,7 +43,6 @@ public class MultiplayerScreen implements Screen, WarpListener {
     private InputMultiplexer inputMultiplexer;
     private WarpController warpController = null;
     private List<AbstractMultiplayerLevel> abstractMultiplayerLevels = new ArrayList<>();
-
     private Label connectionStatusLabel;
     private int choosedLevelId = -1;
 
