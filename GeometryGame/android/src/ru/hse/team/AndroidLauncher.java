@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,7 +27,6 @@ import ru.hse.team.database.DatabaseAndroid;
  * Provides interface to access google services API
  */
 public class AndroidLauncher extends AndroidApplication implements GoogleServicesAction {
-
 
 	private static final int RC_SIGN_IN = 9001;
     private static final int RC_CODE_UNUSED = 9002;
@@ -139,15 +139,12 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 		}
 	}
 
-	private void handleException(Exception exception, String details) {
-		int status = 0;
+	private void handleException(@Nullable Exception exception, String details) {
+	    if (exception == null) {
+	        return;
+        }
 
-		if (exception instanceof ApiException) {
-			ApiException apiException = (ApiException) exception;
-			status = apiException.getStatusCode();
-		}
-
-		String message = "Error" + exception.getMessage();
+		String message = "Error" + exception.getMessage() + details;
 
 		new AlertDialog.Builder(this)
 				.setMessage(message)
