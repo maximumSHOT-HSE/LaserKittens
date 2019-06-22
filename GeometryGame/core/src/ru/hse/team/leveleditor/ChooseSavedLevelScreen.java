@@ -111,30 +111,14 @@ public class ChooseSavedLevelScreen implements Screen {
      * Get's all saved levels from database.
      */
     private List<SavedLevel> allLevels() {
-        List<List<SavedLevel>> levelsList = new ArrayList<>();
-        Thread t = new Thread(() ->
-                levelsList.add(laserKittens.getDatabase().levelsDao().getAll()));
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return levelsList.get(0);
+        return laserKittens.getDatabase().levelsDao().getAll();
     }
 
     /**
      * Deletes savedLevel from database by it's id.
      */
     private void deleteLevel(int id) {
-        Thread t = new Thread(() ->
-                laserKittens.getDatabase().levelsDao().delete(levels.get(id)));
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        laserKittens.getDatabase().levelsDao().delete(levels.get(id));
     }
 
     private class Menu {
@@ -145,7 +129,7 @@ public class ChooseSavedLevelScreen implements Screen {
                 new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private List<TextButton> openLevelButtons = new ArrayList<>();
 
-        public Menu(Stage stage) {
+        private Menu(Stage stage) {
             levels = allLevels();
             stage.addActor(table);
             table.setFillParent(true);

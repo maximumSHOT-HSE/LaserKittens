@@ -109,16 +109,7 @@ public class LevelSavingScreen implements Screen {
      * Get's all {@code SavedLevel} instances from database.
      */
     private List<SavedLevel> allLevels() {
-        List<List<SavedLevel>> levelsList = new ArrayList<>();
-        Thread t = new Thread(() ->
-                levelsList.add(laserKittens.getDatabase().levelsDao().getAll()));
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return levelsList.get(0);
+        return laserKittens.getDatabase().levelsDao().getAll();
     }
 
     private class Menu {
@@ -131,7 +122,7 @@ public class LevelSavingScreen implements Screen {
         private List<TextButton> openLevelButtons = new ArrayList<>();
         private List<SavedLevel> levels = allLevels();
 
-        public Menu(Stage stage) {
+        private Menu(Stage stage) {
             stage.addActor(table);
             table.setFillParent(true);
             titleLabel.setFontScale(4f * LaserKittens.scaleToPreferredWidth());
@@ -176,7 +167,7 @@ public class LevelSavingScreen implements Screen {
         private final List<SavedLevel> levels;
         private final LaserKittens laserKittens;
 
-        public AskName(SavedLevel level, List<SavedLevel> levels, LaserKittens laserKittens) {
+        private AskName(SavedLevel level, List<SavedLevel> levels, LaserKittens laserKittens) {
             this.level = level;
             this.levels = levels;
             this.laserKittens = laserKittens;
@@ -211,13 +202,7 @@ public class LevelSavingScreen implements Screen {
          * Add new {@code SavedLevel} to database.
          */
         private void addLevel() {
-            Thread t =  (new Thread(() -> laserKittens.getDatabase().levelsDao().insert(level)));
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            laserKittens.getDatabase().levelsDao().insert(level);
         }
     }
 }
