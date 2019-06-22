@@ -24,7 +24,6 @@ import ru.hse.team.settings.SettingsScreen;
  * Used for changing screens and accessing common resources
  */
 public class LaserKittens extends Game {
-
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
@@ -36,14 +35,24 @@ public class LaserKittens extends Game {
     private final GoogleServicesAction googleServices;
     private final AndroidActions androidActions;
 
-    public static final int PREFERRED_WIDTH = 1080;
-    public static final int PREFERRED_HEIGHT = 1920;
+    private static final int PREFERRED_WIDTH = 1080;
+    private static final int PREFERRED_HEIGHT = 1920;
 
-    public LaserKittens(GameDatabase database, GoogleServicesAction googleServicesAction, AndroidActions androidActions) {
+    public LaserKittens(GameDatabase database,
+                        GoogleServicesAction googleServicesAction,
+                        AndroidActions androidActions) {
         super();
         this.database = database;
         this.googleServices = googleServicesAction;
         this.androidActions = androidActions;
+    }
+
+    public static int getPreferredWidth() {
+        return PREFERRED_WIDTH;
+    }
+
+    public static int getPreferredHeight() {
+        return PREFERRED_HEIGHT;
     }
 
     public enum SCREEN_TYPE {
@@ -54,7 +63,7 @@ public class LaserKittens extends Game {
         ABOUT_SCREEN,
         STATISTICS_SCREEN,
         SAVED_LEVELS_SCREEN,
-        LEVEL_CREATE_SCREEN;
+        LEVEL_CREATE_SCREEN
     }
 
     private MainMenuScreen mainMenuScreen;
@@ -192,10 +201,10 @@ public class LaserKittens extends Game {
     }
 
     public static float scaleToPreferredWidth() {
-        return (float)Gdx.graphics.getWidth() / PREFERRED_WIDTH;
+        return (float)Gdx.graphics.getWidth() / getPreferredWidth();
     }
 
     public static float scaleToPreferredHeight() {
-        return (float)Gdx.graphics.getHeight() / PREFERRED_HEIGHT;
+        return (float)Gdx.graphics.getHeight() / getPreferredHeight();
     }
 }

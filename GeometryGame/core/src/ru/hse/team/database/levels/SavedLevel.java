@@ -13,8 +13,8 @@ import java.util.List;
  */
 @android.arch.persistence.room.Entity
 public class SavedLevel {
-
-    public SavedLevel(int id, List<SimpleEntity> entities, int widthInScreens,
+    public SavedLevel(int id, List<SimpleEntity> entities,
+                      int widthInScreens,
                       int heightInScreens, String levelName) {
         this.id = id;
         this.entities = entities;
@@ -37,6 +37,4 @@ public class SavedLevel {
 
     @ColumnInfo
     public String levelName;
-
-
 }
