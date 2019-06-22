@@ -143,6 +143,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             }
         }
     }
+    
 
     private void drawHintsForDoors() {
         for (Entity entity : renderQueue) {
