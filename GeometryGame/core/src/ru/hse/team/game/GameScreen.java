@@ -31,46 +31,37 @@ import ru.hse.team.game.levels.AbstractLevel;
  *  is initialised and disposed when it is closed.
  */
 public class GameScreen implements Screen {
-
     private final LaserKittens laserKittens;
     private AbstractLevel level;
     private PooledEngine engine;
-
     private GameScreenInputProcessor inputProcessor;
     private GestureProcessor gestureProcessor;
     private InputMultiplexer inputMultiplexer;
-
     private RenderingSystem renderingSystem;
     private PhysicsSystem physicsSystem;
     private PhysicsDebugSystem physicsDebugSystem;
     private BulletSystem bulletSystem;
     private StateControlSystem stateControlSystem;
     private MessageSystem messageSystem;
-
     private WarpController warpController;
 
     public GameScreen(LaserKittens laserKittens, AbstractLevel abstractLevel) {
         level = abstractLevel;
-
         this.laserKittens = laserKittens;
-
         engine = new PooledEngine();
         abstractLevel.createLevel(engine, this.laserKittens.getAssetManager());
-
         renderingSystem = new RenderingSystem(abstractLevel, laserKittens);
         physicsSystem = new PhysicsSystem(abstractLevel);
         physicsDebugSystem = new PhysicsDebugSystem(abstractLevel.getWorld(), renderingSystem.getCamera());
         bulletSystem = new BulletSystem();
         stateControlSystem = new StateControlSystem(engine, abstractLevel);
         messageSystem = new MessageSystem(laserKittens.getAndroidActions());
-
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(bulletSystem);
         engine.addSystem(stateControlSystem);
         engine.addSystem(messageSystem);
-
         inputProcessor = new GameScreenInputProcessor(
                 this.laserKittens, abstractLevel, renderingSystem.getCamera());
         gestureProcessor = new GestureProcessor(renderingSystem, inputProcessor, abstractLevel);
@@ -101,12 +92,9 @@ public class GameScreen implements Screen {
     public void render (float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         engine.update(delta);
-
         inputProcessor.touchDraggedExplicitly();
         inputProcessor.moveWithAccelerometer(delta);
-
         if (level.getGameStatus().readyToFinish()) {
             level.getGameStatus().stop();
             endGame();

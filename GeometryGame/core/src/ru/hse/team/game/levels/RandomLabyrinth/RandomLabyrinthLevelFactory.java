@@ -57,9 +57,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     }
 
     private Cell[][] cells;
-    Map<EdgePosition, Cell> doorToKey = new HashMap<>();
-    private int startX;
-    private int startY;
+    private Map<EdgePosition, Cell> doorToKey = new HashMap<>();
 
     private boolean cellExists(int x, int y) {
         return 0 <= x && x < cells.length && 0 <= y && y < cells[0].length;
@@ -142,8 +140,8 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                 cells[i][j] = new Cell(i, j);
             }
         }
-        startX = getRandom(n);
-        startY = getRandom(m);
+        int startX = getRandom(n);
+        int startY = getRandom(m);
 
         cells[startX][startY].contentType = TypeComponent.Type.PLAYER;
 
@@ -271,9 +269,9 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     }
 
     private void clearUsed() {
-        for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[i].length; j++) {
-                cells[i][j].used = 0;
+        for (Cell[] cell : cells) {
+            for (Cell aCell : cell) {
+                aCell.used = 0;
             }
         }
     }
@@ -352,7 +350,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     public enum EdgeType {
         EMPTY,
         WALL,
-        DOOR;
+        DOOR
     }
 
     private static class Cell {
@@ -364,7 +362,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
         private int distance;
         private Cell parent;
 
-        public Cell(int x, int y) {
+        private Cell(int x, int y) {
             this.x = x;
             this.y = y;
             edges = new EdgeType[4];
@@ -397,7 +395,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
         private final int y;
         private final int direction;
 
-        public EdgePosition(int x, int y, int direction) {
+        private EdgePosition(int x, int y, int direction) {
             this.x = x;
             this.y = y;
             this.direction = direction;

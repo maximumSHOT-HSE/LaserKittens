@@ -32,19 +32,16 @@ import ru.hse.team.settings.about.PagedScrollPane;
  * Won't accept a name if it is too long or already used.
  */
 public class LevelSavingScreen implements Screen {
-
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
     private Stage stage;
     private Menu menu;
-
     private final SavedLevel savedLevel;
 
     public LevelSavingScreen(final LaserKittens laserKittens, SavedLevel savedLevel) {
         this.laserKittens = laserKittens;
         this.savedLevel = savedLevel;
-
         background = new Background(laserKittens.getAssetManager()
                 .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         stage = new Stage(new ScreenViewport());
@@ -64,7 +61,6 @@ public class LevelSavingScreen implements Screen {
         });
         menu = new Menu(stage);
         Gdx.input.setInputProcessor(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         laserKittens.getBatch().setProjectionMatrix(camera.combined);
@@ -74,13 +70,10 @@ public class LevelSavingScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
         laserKittens.getBatch().begin();
         background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -116,47 +109,31 @@ public class LevelSavingScreen implements Screen {
      * Get's all {@code SavedLevel} instances from database.
      */
     private List<SavedLevel> allLevels() {
-        List<List<SavedLevel>> levelsList = new ArrayList<>();
-        Thread t = new Thread(() -> {
-            levelsList.add(laserKittens.getDatabase().levelsDao().getAll());
-        });
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return levelsList.get(0);
+        return laserKittens.getDatabase().levelsDao().getAll();
     }
 
     private class Menu {
         private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
-
-        private Label titleLabel = new Label("Save level", new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+        private Skin skin = laserKittens
+                .getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
+        private Label titleLabel = new Label("Save level",
+                new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
         private TextButton newLevelButton = new TextButton("New level", skin);
+        private List<TextButton> openLevelButtons = new ArrayList<>();
+        private List<SavedLevel> levels = allLevels();
 
-        List<TextButton> openLevelButtons = new ArrayList<>();
-
-        List<SavedLevel> levels = allLevels();
-
-        public Menu(Stage stage) {
+        private Menu(Stage stage) {
             stage.addActor(table);
             table.setFillParent(true);
-
             titleLabel.setFontScale(4f * LaserKittens.scaleToPreferredWidth());
             newLevelButton.getLabel().setFontScale(1 * LaserKittens.scaleToPreferredWidth());
-
             table.add(titleLabel);
             table.row().pad(10, 10, 10, 10);
-
             initializeButtons();
-
             PagedScrollPane scroll = new PagedScrollPane(skin);
             scroll.setFlingTime(0.1f);
             scroll.setPageSpacing(25);
             Table buttonsTable = new Table();
-
             final float buttonHeight = Gdx.graphics.getHeight() * 0.15f;
             final float buttonWidth = Gdx.graphics.getWidth() * 0.65f;
             for (TextButton button : openLevelButtons) {
@@ -166,13 +143,10 @@ public class LevelSavingScreen implements Screen {
             buttonsTable.row().pad(10, 10, 10, 10);
             buttonsTable.add(newLevelButton).width(buttonWidth).height(buttonHeight);
             scroll.addPage(buttonsTable);
-
             table.add(scroll).expand().fill();
-
         }
 
         private void initializeButtons() {
-
             newLevelButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -186,17 +160,14 @@ public class LevelSavingScreen implements Screen {
                 }
             });
         }
-
     }
 
-
     private static class AskName implements Input.TextInputListener {
-
         private final SavedLevel level;
         private final List<SavedLevel> levels;
         private final LaserKittens laserKittens;
 
-        public AskName(SavedLevel level, List<SavedLevel> levels, LaserKittens laserKittens) {
+        private AskName(SavedLevel level, List<SavedLevel> levels, LaserKittens laserKittens) {
             this.level = level;
             this.levels = levels;
             this.laserKittens = laserKittens;
@@ -205,14 +176,12 @@ public class LevelSavingScreen implements Screen {
         @Override
         public void input (String text) {
             level.levelName = " " + text + " ";
-
             if (text.length() > 10) {
                 AskName listener = new AskName(level, levels, laserKittens);
                 Gdx.input.getTextInput(listener, "Add a name to your level",
                         "", "Max length is 10 symbols");
                 return;
             }
-
             for (SavedLevel savedLevel : levels) {
                 if (level.levelName.equals(savedLevel.levelName)) {
                     AskName listener = new AskName(level, levels, laserKittens);
@@ -221,7 +190,6 @@ public class LevelSavingScreen implements Screen {
                     return;
                 }
             }
-
             addLevel();
             laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
         }
@@ -234,15 +202,7 @@ public class LevelSavingScreen implements Screen {
          * Add new {@code SavedLevel} to database.
          */
         private void addLevel() {
-            Thread t =  (new Thread(() -> {
-                laserKittens.getDatabase().levelsDao().insert(level);
-            }));
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            laserKittens.getDatabase().levelsDao().insert(level);
         }
     }
 }

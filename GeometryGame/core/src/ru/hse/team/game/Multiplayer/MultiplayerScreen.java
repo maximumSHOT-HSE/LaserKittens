@@ -35,7 +35,6 @@ import ru.hse.team.game.gamelogic.algorithms.RandomGenerator;
 import ru.hse.team.settings.about.PagedScrollPane;
 
 public class MultiplayerScreen implements Screen, WarpListener {
-
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
@@ -44,22 +43,11 @@ public class MultiplayerScreen implements Screen, WarpListener {
     private InputMultiplexer inputMultiplexer;
     private WarpController warpController = null;
     private List<AbstractMultiplayerLevel> abstractMultiplayerLevels = new ArrayList<>();
-
     private Label connectionStatusLabel;
     private int choosedLevelId = -1;
 
     private void fillLevels() {
-        abstractMultiplayerLevels.add(
-                new MultiplayerQuizLevel(laserKittens, this));
-    }
-
-    private AbstractMultiplayerLevel getLevelByName(String levelName) {
-        for (AbstractMultiplayerLevel level : abstractMultiplayerLevels) {
-            if (level.getLevelName().equals(levelName)) {
-                return level;
-            }
-        }
-        return null;
+        abstractMultiplayerLevels.add(new MultiplayerQuizLevel());
     }
 
     public MultiplayerScreen(LaserKittens laserKittens) {

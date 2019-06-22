@@ -17,22 +17,13 @@ public interface LevelsDaoAndroid extends LevelsDao {
     @Query("SELECT * FROM SavedLevel")
     List<SavedLevel> getAll();
 
-    @Query("SELECT * FROM SavedLevel WHERE id = :id")
-    SavedLevel getById(long id);
-
     @Insert
     void insert(SavedLevel level);
-
-    @Insert
-    void insertAll(SavedLevel ... levels);
 
     @Update
     void update(SavedLevel level);
 
     @Delete
     void delete(SavedLevel level);
-
-    @Delete
-    void deleteAll(SavedLevel ... levels);
 
 }

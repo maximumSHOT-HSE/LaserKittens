@@ -11,8 +11,6 @@ import ru.hse.team.database.levels.SimpleEntity;
  * Gesture processor for level creating screen.
  */
 public class LevelGestureProcessor implements GestureDetector.GestureListener {
-
-
     private float scale = 1;
     private Vector2 entityScale = new Vector2(1, 1);
     private Vector2 entityScaleBase = new Vector2(1, 1);
@@ -20,14 +18,13 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
     private final LevelCreateInputProcessor levelCreateInputProcessor;
     private final OrthographicCamera camera;
 
-
-    public LevelGestureProcessor(LaserKittens laserKittens, LevelCreateInputProcessor levelCreateInputProcessor,
+    public LevelGestureProcessor(LaserKittens laserKittens,
+                                 LevelCreateInputProcessor levelCreateInputProcessor,
                                  OrthographicCamera camera) {
         this.laserKittens = laserKittens;
         this.levelCreateInputProcessor = levelCreateInputProcessor;
         this.camera = camera;
     }
-
 
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
@@ -102,7 +99,6 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
 
     private void positiveRotation(Vector2 distance, float rotation) {
         Vector2 wasDistance = new Vector2(distance);
-
         distance.x = (float)Math.abs(wasDistance.x * Math.abs(Math.cos(rotation))
                  - wasDistance.y * Math.abs(Math.sin(rotation)));
         distance.y = (float)Math.abs(wasDistance.x * Math.abs(Math.sin(rotation) )
@@ -117,17 +113,14 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         if (levelCreateInputProcessor.isDragging()) {
             Vector2 initialDistance = distanceModule(initialPointer1, initialPointer2);
             Vector2 distance = distanceModule(pointer1, pointer2);
-
             SimpleEntity entity = levelCreateInputProcessor.getCurrentEntity();
             if (entity != null) {
                 float rotation = (float)Math.toRadians(entity.getRotation());
                 positiveRotation(distance, rotation);
                 positiveRotation(initialDistance, rotation);
             }
-
             makeAtLeastTenBothCoordinates(distance);
             makeAtLeastTenBothCoordinates(initialDistance);
-
             levelCreateInputProcessor.zoomCurrentEntity(
                     distance.x / initialDistance.x * entityScale.x,
                     distance.y / initialDistance.y * entityScale.y);
@@ -137,7 +130,6 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
         }
         return false;
     }
-
 
     @Override
     public void pinchStop() {

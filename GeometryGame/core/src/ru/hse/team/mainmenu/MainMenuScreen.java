@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -23,7 +22,6 @@ import ru.hse.team.LaserKittens;
  * Main menu screen providing user interface to move between screens.
  */
 public class MainMenuScreen implements Screen {
-
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
@@ -86,7 +84,6 @@ public class MainMenuScreen implements Screen {
     }
 
     private class Menu {
-
         private Table table = new Table();
         private Skin skin =
                 laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
@@ -94,7 +91,6 @@ public class MainMenuScreen implements Screen {
         private TextButton multiplayer = new TextButton("Multiplayer", skin);
         private TextButton settings = new TextButton("Settings", skin);
         private TextButton exit = new TextButton("Exit", skin);
-
         private ImageButton loginButton = new ImageButton(
                 new TextureRegionDrawable(laserKittens.getAssetManager()
                                 .getImage(KittensAssetManager.Images.GOOGLE_SIGN_IN)));
@@ -108,14 +104,11 @@ public class MainMenuScreen implements Screen {
         public Menu(Stage stage) {
             table.setFillParent(true);
             stage.addActor(table);
-
             levels.getLabel().setFontScale(2f * LaserKittens.scaleToPreferredWidth());
             multiplayer.getLabel().setFontScale(2f * LaserKittens.scaleToPreferredWidth());
             settings.getLabel().setFontScale(2f * LaserKittens.scaleToPreferredWidth());
             exit.getLabel().setFontScale(2f * LaserKittens.scaleToPreferredWidth());
-
             setListeners();
-
             final float buttonHeight = Gdx.graphics.getHeight() * 0.15f;
             final float buttonWidth = Gdx.graphics.getWidth() * 0.65f;
             table.row().pad(5, 10, 5, 10);
@@ -127,13 +120,11 @@ public class MainMenuScreen implements Screen {
             table.row().pad(5, 10, 5, 10);
             table.add(exit).width(buttonWidth).height(buttonHeight).colspan(3);
             table.row().pad(5, 10, 5, 10);
-
             final float googleButtonWidth = Gdx.graphics.getWidth() * 0.2f;
             final float googleButtonHeight = Gdx.graphics.getHeight() * 0.1f;
             table.add(loginButton).width(googleButtonWidth).height(googleButtonHeight);
             table.add(achievementsButton).width(googleButtonWidth).height(googleButtonHeight);
             table.add(rateButton).width(googleButtonWidth).height(googleButtonHeight);
-
         }
 
         private void setListeners() {
@@ -150,43 +141,36 @@ public class MainMenuScreen implements Screen {
                     laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MULTIPLAYER_SCREEN);
                 }
             });
-
             settings.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SETTINGS_SCREEN);
                 }
             });
-
-
             exit.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     Gdx.app.exit();
                 }
             });
-
             loginButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     laserKittens.getGoogleServices().signIn();
                 }
             });
-
             achievementsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     laserKittens.getGoogleServices().showAchievements();
                 }
             });
-
             rateButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     laserKittens.getGoogleServices().rateGame();
                 }
             });
-
         }
     }
 }

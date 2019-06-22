@@ -45,8 +45,8 @@ public class RenderingSystem extends SortedIteratingSystem {
     // pixels per meter
     public static final float PPM = 32.0f;
 
-    public static final float SCREEN_WIDTH = LaserKittens.PREFERRED_WIDTH / PPM;
-    public static final float SCREEN_HEIGHT = LaserKittens.PREFERRED_HEIGHT / PPM;
+    public static final float SCREEN_WIDTH = LaserKittens.getPreferredWidth() / PPM;
+    public static final float SCREEN_HEIGHT = LaserKittens.getPreferredHeight() / PPM;
 
     private static final Vector2 METER_DIMENSIONS = new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
     private static final Vector2 PIXEL_DIMENSIONS =
@@ -124,7 +124,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         createCamera();
     }
 
-    public void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
+    private void drawSegment(Vector2 from, Vector2 to, ShapeRenderer shapeRenderer, Color color) {
         shapeRenderer.setColor(color);
         shapeRenderer.rectLine(from, to, 0.2f);
     }

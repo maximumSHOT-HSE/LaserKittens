@@ -17,13 +17,9 @@ public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements Wa
     private static final int HEIGHT_SCREENS = 2;
 
     private MultiplayerQuizLevelFactory multiplayerQuizLevelFactory;
-    private LaserKittens parent;
-    private MultiplayerScreen multiplayerScreen;
 
-    public MultiplayerQuizLevel(LaserKittens parent, MultiplayerScreen multiplayerScreen) {
+    public MultiplayerQuizLevel() {
         super("Multiplayer Quiz", WIDTH_SCREENS, HEIGHT_SCREENS);
-        this.parent = parent;
-        this.multiplayerScreen = multiplayerScreen;
     }
 
     @Override

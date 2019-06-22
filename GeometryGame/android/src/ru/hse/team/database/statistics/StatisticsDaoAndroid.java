@@ -1,11 +1,9 @@
 package ru.hse.team.database.statistics;
 
-import android.arch.persistence.db.SupportSQLiteQuery;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.RawQuery;
 import android.arch.persistence.room.Update;
 
 import java.util.List;
@@ -16,9 +14,6 @@ import java.util.List;
  */
 @Dao
 public interface StatisticsDaoAndroid extends StatisticsDao {
-
-    @RawQuery
-    LevelStatistics getStatisticsByQuery(SupportSQLiteQuery query);
 
     @Query("SELECT * FROM LevelStatistics")
     List<LevelStatistics> getAll();

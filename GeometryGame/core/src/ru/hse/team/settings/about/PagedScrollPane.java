@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
  * Scrollable pane.
  */
 public class PagedScrollPane extends ScrollPane {
-
     private boolean wasPanDragFling = false;
     private Table content;
 
@@ -24,7 +23,6 @@ public class PagedScrollPane extends ScrollPane {
         content.defaults().space(50);
         super.setActor(content);
     }
-
 
     public void addPage(Actor page) {
         content.add(page).expandX().fillX();

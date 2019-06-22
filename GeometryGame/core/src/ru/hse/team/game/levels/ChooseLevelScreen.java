@@ -1,5 +1,7 @@
 package ru.hse.team.game.levels;
 
+import android.support.annotation.Nullable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -149,7 +151,7 @@ public class ChooseLevelScreen implements Screen {
          * Save current section id, which should be drawn
          * next time.
          * */
-        public void saveState() {
+        private void saveState() {
             currentSection = slidingPane.getCurrentSectionId();
         }
 
@@ -178,43 +180,26 @@ public class ChooseLevelScreen implements Screen {
         }
 
         private long getBestTime(String levelName) {
-            long[] bestTime = new long[1];
-            Thread queryThread = (new Thread(() -> {
-                LevelStatistics statistics = laserKittens
-                        .getDatabase().statisticsDao()
-                        .getBestByLevelName(levelName);
-                if (statistics != null) {
-                    bestTime[0] = TimeUnit.NANOSECONDS.toMillis(statistics.timeNano);
-                } else {
-                    bestTime[0] = Long.MAX_VALUE;
-                }
-            }));
-            queryThread.start();
-            try {
-                queryThread.join();
-            } catch (InterruptedException exception) {
-                Gdx.app.log("fail", "Database query interrupted");
+            LevelStatistics statistics = laserKittens
+                    .getDatabase().statisticsDao()
+                    .getBestByLevelName(levelName);
+            if (statistics != null) {
+                return TimeUnit.NANOSECONDS.toMillis(statistics.timeNano);
+            } else {
+                return Long.MAX_VALUE;
             }
-            return bestTime[0];
         }
 
+        @Nullable
         private Label getBestResult(String levelName) {
-            Label[] label = new Label[1];
-            Thread queryThread = (new Thread(() -> {
-                LevelStatistics statistics =
-                        laserKittens.getDatabase()
-                                .statisticsDao().getBestByLevelName(levelName);
-                if (statistics != null) {
-                    label[0] = new Label(GameStatus.getTimeStamp(statistics.timeNano), skin);
-                }
-            }));
-            queryThread.start();
-            try {
-                queryThread.join();
-            } catch (InterruptedException exception) {
-                Gdx.app.log("fail", "Database query interrupted");
+            LevelStatistics statistics =
+                    laserKittens.getDatabase()
+                            .statisticsDao().getBestByLevelName(levelName);
+            if (statistics != null) {
+                return new Label(GameStatus.getTimeStamp(statistics.timeNano), skin);
+            } else {
+                return null;
             }
-            return label[0];
         }
 
         private void addDumpLabels(Table table) {
