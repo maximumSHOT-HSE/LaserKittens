@@ -27,8 +27,7 @@ public class WarpController {
         FAILURE,
         JOINING_ROOM,
         LEAVING_ROOM,
-        WAITING_OTHER_PLAYERS,
-        PLAYING
+        WAITING_OTHER_PLAYERS
     }
 
     // the size of string which will be added to the left of user name
