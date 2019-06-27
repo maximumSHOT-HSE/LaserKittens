@@ -156,7 +156,7 @@ public class BodyFactory {
 
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(width / 2, height / 2);
-        body.createFixture(FixtureFactory.MirrorFixture(polygonShape));
+        body.createFixture(FixtureFactory.mirrorFixture(polygonShape));
         polygonShape.dispose();
 
         setFilter(body, Category.OTHER.mask, Category.all());
@@ -232,9 +232,9 @@ public class BodyFactory {
         return boxBody;
     }
 
-    //adds bodies to world on build
+    // adds bodies to world on build
     private class BodyBuilder {
-        private BodyDef bodyDef = new BodyDef();
+        private final BodyDef bodyDef = new BodyDef();
 
         private Body build() {
             return world.createBody(bodyDef);
@@ -247,16 +247,6 @@ public class BodyFactory {
 
         private BodyBuilder setPosition(Vector2 position) {
             bodyDef.position.set(position);
-            return this;
-        }
-
-        private BodyBuilder setPosition(float x, float y) {
-            bodyDef.position.set(x, y);
-            return this;
-        }
-
-        private BodyBuilder setLinearVelocity(Vector2 linearVelocity) {
-            bodyDef.linearVelocity.set(linearVelocity);
             return this;
         }
 
@@ -296,20 +286,22 @@ public class BodyFactory {
      */
     private static class FixtureFactory {
 
-        private static FixtureDef MakeFixture(Shape shape, float density, float friction,
-                                              float restitution) {
-            return (new FixtureBuilder()).setShape(shape).setDensiity(density)
-                    .setFriction(friction).setRestitution(restitution).build();
-        }
-
-        private static FixtureDef MirrorFixture(Shape shape) {
-            return (new FixtureBuilder()).setShape(shape).setDensiity(0.5f)
-                    .setFriction(0.2f).setRestitution(0.01f).build();
+        private static FixtureDef mirrorFixture(Shape shape) {
+            return new FixtureBuilder()
+                    .setShape(shape)
+                    .setDensiity(0.5f)
+                    .setFriction(0.2f)
+                    .setRestitution(0.01f)
+                    .build();
         }
 
         private static FixtureDef bouncingBulletFixture(Shape shape) {
-            return (new FixtureBuilder()).setShape(shape).setDensiity(0)
-                    .setFriction(0).setRestitution(1).build();
+            return new FixtureBuilder()
+                    .setShape(shape)
+                    .setDensiity(0)
+                    .setFriction(0)
+                    .setRestitution(1)
+                    .build();
         }
 
         private static FixtureDef ignoringWallFixture(Shape shape) {
@@ -322,21 +314,32 @@ public class BodyFactory {
         }
 
         private static FixtureDef stoneFixture(Shape shape) {
-            return (new FixtureBuilder()).setShape(shape).setDensiity(1)
-                    .setFriction(0.9f).setRestitution(0.01f).build();
+            return new FixtureBuilder()
+                    .setShape(shape)
+                    .setDensiity(1)
+                    .setFriction(0.9f)
+                    .setRestitution(0.01f)
+                    .build();
         }
 
         private static FixtureDef playerFixture(Shape shape) {
-            return (new FixtureBuilder()).setShape(shape).setDensiity(100)
-                    .setFriction(0.9f).setRestitution(0.1f).build();
+            return new FixtureBuilder()
+                    .setShape(shape)
+                    .setDensiity(100)
+                    .setFriction(0.9f)
+                    .setRestitution(0.1f)
+                    .build();
         }
 
         private static FixtureDef sensorFixture(Shape shape){
-            return (new FixtureBuilder()).setShape(shape).setSensor(true).build();
+            return new FixtureBuilder()
+                    .setShape(shape)
+                    .setSensor(true)
+                    .build();
         }
 
         private static class FixtureBuilder {
-            FixtureDef fixtureDef = new FixtureDef();
+            private final FixtureDef fixtureDef = new FixtureDef();
 
             FixtureDef build() {
                 return fixtureDef;
