@@ -169,8 +169,11 @@ public class WarpController {
 
     public void sendRequestCreateRoom(
             String roomName, int maxUsers, String levelName) {
-        System.out.println("WarpController.sendRequestCreateRoom(), room name = " + roomName + ", maxUsers = " + maxUsers
-                + ", level name = " + levelName);
+        System.out.println(
+                "WarpController.sendRequestCreateRoom(), room name = " + roomName
+                        + ", maxUsers = " + maxUsers
+                        + ", level name = " + levelName
+        );
         HashMap<String, Object> tableProperties = new HashMap<>();
         tableProperties.put(LEVEL_NAME_PROPERTY, levelName);
         warpClient.createRoom(roomName, playerName, maxUsers, tableProperties);
@@ -181,7 +184,10 @@ public class WarpController {
         if (roomEvent.getResult() != WarpResponseResultCode.SUCCESS) {
             return;
         }
-        System.out.println("data = " + roomEvent.getData() + ", owner = " + roomEvent.getData().getRoomOwner());
+        System.out.println(
+                "data = " + roomEvent.getData()
+            + ", owner = " + roomEvent.getData().getRoomOwner()
+        );
         activeRooms.put(roomEvent.getData().getName(), roomEvent.getData());
         warpListener.update("create room done");
     }
@@ -196,7 +202,10 @@ public class WarpController {
         if (roomEvent.getResult() != WarpResponseResultCode.SUCCESS) {
             return;
         }
-        System.out.println("data = " + roomEvent.getData() + ", owner = " + roomEvent.getData().getRoomOwner());
+        System.out.println(
+                "data = " + roomEvent.getData()
+            + ", owner = " + roomEvent.getData().getRoomOwner()
+        );
         activeRooms.remove(roomEvent.getData().getName());
         subscribedRooms.remove(roomEvent.getData().getId());
         joinedRooms.remove(roomEvent.getData().getId());
@@ -210,7 +219,9 @@ public class WarpController {
     }
 
     public void onJoinAndSubscribeRoomDone(RoomEvent roomEvent) {
-        System.out.println("WarpController.onJoinAndSubscribeRoomDone, result = " + roomEvent.getResult());
+        System.out.println(
+                "WarpController.onJoinAndSubscribeRoomDone, result = " + roomEvent.getResult()
+        );
         if (roomEvent.getResult() != WarpResponseResultCode.SUCCESS) {
             return;
         }
@@ -229,7 +240,9 @@ public class WarpController {
     }
 
     public void onLeaveAndUnsubscribeRoomDone(RoomEvent roomEvent) {
-        System.out.println("WarpController.onLeaveAndUnsubscribeRoomDone, result = " + roomEvent.getResult());
+        System.out.println(
+                "WarpController.onLeaveAndUnsubscribeRoomDone, result = " + roomEvent.getResult()
+        );
         if (roomId == null) {
             free();
             System.out.println("ALREADY LEFT");
@@ -250,7 +263,10 @@ public class WarpController {
     }
 
     public void onUserJoinedRoom(RoomData roomData, String userName) {
-        System.out.println("WarpController. USER JOINED! userName = " + userName + ", room id = " + roomData.getId());
+        System.out.println(
+                "WarpController. USER JOINED! userName = " + userName
+                        + ", room id = " + roomData.getId()
+        );
         if (roomId != null && roomData.getId().equals(roomId)) {
             joinedUsers.add(userName);
             warpListener.update(userName + " join room");
@@ -260,7 +276,10 @@ public class WarpController {
     }
 
     public void onUserLeftRoom(RoomData roomData, String userName) {
-        System.out.println("WarpController. USER LEFT! userName = " + userName + ", room id = " + roomData.getId());
+        System.out.println(
+                "WarpController. USER LEFT! userName = " + userName
+                        + ", room id = " + roomData.getId()
+        );
         if (roomId != null && roomData.getId().equals(roomId)) {
             joinedUsers.remove(userName);
             warpListener.update(userName + " left rome");
@@ -299,7 +318,11 @@ public class WarpController {
         String message = new String(event.getUpdate());
         String userName = message.substring(0, message.indexOf("#@"));
         String data = message.substring(message.indexOf("#@") + 2);
-        System.out.println("WarpController.onGameUpdateReceived, msg = " + message + ", userName = " + userName + ", data = " + data);
+        System.out.println(
+                "WarpController.onGameUpdateReceived, msg = " + message
+                        + ", userName = " + userName
+                        + ", data = " + data
+        );
         if (!(playerNameSalt + playerName).equals(userName)) {
             warpListener.update(data);
         }
