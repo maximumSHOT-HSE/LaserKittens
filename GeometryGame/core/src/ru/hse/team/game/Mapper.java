@@ -19,6 +19,10 @@ import ru.hse.team.game.gamelogic.components.TypeComponent;
  *  Which is better that entities {@code get} method
  */
 public class Mapper {
+    private Mapper() {
+
+    }
+
     public static ComponentMapper<BodyComponent> bodyComponent =
             ComponentMapper.getFor(BodyComponent.class);
     public static ComponentMapper<StateComponent> stateComponent =

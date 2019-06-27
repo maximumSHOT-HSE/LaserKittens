@@ -69,7 +69,6 @@ public class WarpController {
         WarpClient.initialize(API_KEY, SECRET_KEY);
         warpClient = WarpClient.getInstance();
         warpClient.addConnectionRequestListener(new ConnectionListener(this));
-        warpClient.addChatRequestListener(new ChatListener(this));
         warpClient.addZoneRequestListener(new ZoneListener(this));
         warpClient.addRoomRequestListener(new RoomListener(this));
         warpClient.addNotificationListener(new NotificationListener(this));
