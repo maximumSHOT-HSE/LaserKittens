@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -53,7 +52,7 @@ public class SettingsScreen implements Screen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.BACK) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.MAIN_MENU_SCREEN);
                 }
                 return true;
             }
@@ -201,7 +200,7 @@ public class SettingsScreen implements Screen {
             about.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.ABOUT_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.ABOUT_SCREEN);
                 }
             });
 
@@ -243,7 +242,7 @@ public class SettingsScreen implements Screen {
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.MAIN_MENU_SCREEN);
                 }
             });
 

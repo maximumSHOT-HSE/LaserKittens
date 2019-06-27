@@ -64,7 +64,7 @@ public class GameEndingScreen implements Screen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.BACK) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.CHOOSE_LEVEL_SCREEN);
                 }
                 return true;
             }
@@ -159,9 +159,9 @@ public class GameEndingScreen implements Screen {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (parentLevel instanceof AbstractMultiplayerLevel) {
-                        laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                        laserKittens.changeScreen(LaserKittens.ScreenType.MAIN_MENU_SCREEN);
                     } else {
-                        laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                        laserKittens.changeScreen(LaserKittens.ScreenType.CHOOSE_LEVEL_SCREEN);
                     }
                 }
             });

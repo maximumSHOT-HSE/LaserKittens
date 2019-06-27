@@ -92,7 +92,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
                 break;
             default:
                 warpController.stop();
-                Gdx.app.postRunnable(() -> laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN));
+                Gdx.app.postRunnable(() -> laserKittens.changeScreen(LaserKittens.ScreenType.MAIN_MENU_SCREEN));
         }
     }
 

@@ -57,7 +57,7 @@ public class LevelSavingScreen implements Screen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.BACK) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.LEVEL_CREATE_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.LEVEL_CREATE_SCREEN);
                 }
                 return true;
             }
@@ -223,7 +223,7 @@ public class LevelSavingScreen implements Screen {
             }
 
             addLevel();
-            laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
+            laserKittens.changeScreen(LaserKittens.ScreenType.SAVED_LEVELS_SCREEN);
         }
 
         @Override

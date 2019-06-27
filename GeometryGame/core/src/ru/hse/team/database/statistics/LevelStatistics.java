@@ -9,7 +9,6 @@ import android.arch.persistence.room.PrimaryKey;
  */
 @Entity
 public class LevelStatistics {
-
     public LevelStatistics(String levelName, long timeNano, int stars, String date) {
         this.timeNano = timeNano;
         this.stars = stars;
@@ -31,7 +30,6 @@ public class LevelStatistics {
 
     @ColumnInfo(name = "date")
     public String date;
-
 
     @Override
     public String toString() {

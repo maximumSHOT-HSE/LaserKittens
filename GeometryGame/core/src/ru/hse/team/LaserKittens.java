@@ -39,14 +39,16 @@ public class LaserKittens extends Game {
     public static final int PREFERRED_WIDTH = 1080;
     public static final int PREFERRED_HEIGHT = 1920;
 
-    public LaserKittens(GameDatabase database, GoogleServicesAction googleServicesAction, AndroidActions androidActions) {
+    public LaserKittens(GameDatabase database,
+                        GoogleServicesAction googleServicesAction,
+                        AndroidActions androidActions) {
         super();
         this.database = database;
         this.googleServices = googleServicesAction;
         this.androidActions = androidActions;
     }
 
-    public enum SCREEN_TYPE {
+    public enum ScreenType {
         MAIN_MENU_SCREEN,
         CHOOSE_LEVEL_SCREEN,
         MULTIPLAYER_SCREEN,
@@ -54,7 +56,7 @@ public class LaserKittens extends Game {
         ABOUT_SCREEN,
         STATISTICS_SCREEN,
         SAVED_LEVELS_SCREEN,
-        LEVEL_CREATE_SCREEN;
+        LEVEL_CREATE_SCREEN
     }
 
     private MainMenuScreen mainMenuScreen;
@@ -82,7 +84,7 @@ public class LaserKittens extends Game {
      * Change screen.
      * Creates it if it is not created
      */
-    public void changeScreen(SCREEN_TYPE screen) {
+    public void changeScreen(ScreenType screen) {
         switch (screen) {
             case MAIN_MENU_SCREEN:
                 if (mainMenuScreen == null) {
@@ -132,6 +134,8 @@ public class LaserKittens extends Game {
                 }
                 this.setScreen(savedLevelScreen);
                 break;
+            default:
+                throw new IllegalArgumentException("Screen Type not found!");
         }
     }
 
@@ -145,16 +149,10 @@ public class LaserKittens extends Game {
         shapeRenderer = new ShapeRenderer();
 
         getAssetManager().loadEverything();
-        getAssetManager().finishLoading();
 
         font = getAssetManager().getFont(KittensAssetManager.Fonts.FONT);
 
-        changeScreen(SCREEN_TYPE.MAIN_MENU_SCREEN);
-    }
-
-    @Override
-    public void render() {
-        super.render();
+        changeScreen(ScreenType.MAIN_MENU_SCREEN);
     }
 
     @Override

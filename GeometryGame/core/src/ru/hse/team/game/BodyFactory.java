@@ -1,5 +1,7 @@
 package ru.hse.team.game;
 
+import android.support.annotation.Nullable;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -18,8 +20,7 @@ import ru.hse.team.game.gamelogic.systems.RenderingSystem;
  * Utility class for creating bodies.
  */
 public class BodyFactory {
-
-    private World world;
+    private final World world;
 
     private BodyFactory(World world) {
         this.world = world;
@@ -63,20 +64,17 @@ public class BodyFactory {
      * Goes though all fixtures in body and sets
      * them filter specified by given masks.
      */
-    private void setFilter(Body body, short categoryBits, short maskBits){
-        if (body != null) {
-            Array<Fixture> fixtures = body.getFixtureList();
-            Filter filter = new Filter();
-            filter.categoryBits = categoryBits;
-            filter.maskBits = maskBits;
-            for (Fixture fixture : fixtures) {
-                fixture.setFilterData(filter);
-            }
+    private void setFilter(@Nullable Body body, short categoryBits, short maskBits){
+        if (body == null) {
+            return;
         }
-    }
-
-    public Body newTransparentRectangle(Vector2 center, float width, float height) {
-        return newTransparentRectangle(center, width, height, 0);
+        Array<Fixture> fixtures = body.getFixtureList();
+        Filter filter = new Filter();
+        filter.categoryBits = categoryBits;
+        filter.maskBits = maskBits;
+        for (Fixture fixture : fixtures) {
+            fixture.setFilterData(filter);
+        }
     }
 
     public Body newTransparentRectangle(Vector2 center, float width, float height, float rotation) {
@@ -86,9 +84,11 @@ public class BodyFactory {
     }
 
     public Body newCircleBody(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
-
-        Body body = (new BodyBuilder()).setType(bodyType).setPosition(center)
-                .setFixedRotation(fixedRotation).build();
+        Body body = new BodyBuilder()
+                .setType(bodyType)
+                .setPosition(center)
+                .setFixedRotation(fixedRotation)
+                .build();
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
@@ -183,27 +183,12 @@ public class BodyFactory {
         return body;
     }
 
-    public Body newPolygonBody(Vector2[] polygonVertices, Vector2 leftDownCorner, BodyDef.BodyType bodyType, boolean fixedRotation) {
-
-        Body body = (new BodyBuilder()).setType(bodyType).setPosition(leftDownCorner)
-                .setFixedRotation(fixedRotation).build();
-
-        PolygonShape polygon = new PolygonShape();
-        polygon.set(polygonVertices);
-        body.createFixture(FixtureFactory.stoneFixture(polygon));
-        polygon.dispose();
-
-        setFilter(body, Category.OTHER.mask, Category.all());
-        return body;
-    }
-
     private Vector2 coordinatesByAngle(Vector2 center, float angle, float length) {
         return new Vector2(center.x + (float)Math.cos(Math.toRadians(angle)) * length,
                 center.y + (float)Math.sin(Math.toRadians(angle)) * length);
     }
 
     public Body newStar(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
-
         Vector2 origin = new Vector2(0, 0);
         Body body = (new BodyBuilder()).setType(bodyType).setFixedRotation(fixedRotation)
                 .setPosition(center).build();
@@ -227,10 +212,15 @@ public class BodyFactory {
     }
 
     public Body newBullet(Vector2 source, Vector2 direction) {
-
-        Body boxBody  = (new BodyBuilder()).setType(BodyDef.BodyType.DynamicBody).setPosition(source)
-                .setFixedRotation(true).setLinearVelocity(1e9f * direction.x, 1e9f * direction.y)
-                .setIsBullet(true).setLinearDamping(0).setGravityScale(0).build();
+        Body boxBody  = new BodyBuilder()
+                .setType(BodyDef.BodyType.DynamicBody)
+                .setPosition(source)
+                .setFixedRotation(true)
+                .setLinearVelocity(1e9f * direction.x, 1e9f * direction.y)
+                .setIsBullet(true)
+                .setLinearDamping(0)
+                .setGravityScale(0)
+                .build();
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(RenderingSystem.getScreenSizeInMeters().x * 0.0005f);
@@ -241,7 +231,6 @@ public class BodyFactory {
         setFilter(boxBody, Category.BULLET.mask, (short)(Category.BULLET.allExceptMe() & ~Category.PLAYER.mask));
         return boxBody;
     }
-
 
     //adds bodies to world on build
     private class BodyBuilder {

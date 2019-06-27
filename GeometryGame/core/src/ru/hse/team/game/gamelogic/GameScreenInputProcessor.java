@@ -82,7 +82,7 @@ public class GameScreenInputProcessor implements InputProcessor {
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
             final Screen gameScreen = laserKittens.getScreen();
-            laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+            laserKittens.changeScreen(LaserKittens.ScreenType.CHOOSE_LEVEL_SCREEN);
             gameScreen.dispose();
             return true;
         }

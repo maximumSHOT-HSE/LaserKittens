@@ -74,7 +74,7 @@ public class ChooseLevelScreen implements Screen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.BACK) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.MAIN_MENU_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.MAIN_MENU_SCREEN);
                 }
                 return true;
             }
@@ -235,7 +235,7 @@ public class ChooseLevelScreen implements Screen {
                 public void changed(ChangeEvent event, Actor actor) {
                     currentSection = slidingPane.getCurrentSectionId();
                     direction = slidingPane.getDirection();
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.STATISTICS_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.STATISTICS_SCREEN);
                 }
             });
             ImageButton scoreButton = new ImageButton(
@@ -279,7 +279,7 @@ public class ChooseLevelScreen implements Screen {
                 public void changed(ChangeEvent event, Actor actor) {
                     currentSection = slidingPane.getCurrentSectionId();
                     direction = slidingPane.getDirection();
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.LEVEL_CREATE_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.LEVEL_CREATE_SCREEN);
                 }
             });
 
@@ -306,7 +306,7 @@ public class ChooseLevelScreen implements Screen {
                 public void changed(ChangeEvent event, Actor actor) {
                     currentSection = slidingPane.getCurrentSectionId();
                     direction = slidingPane.getDirection();
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.SAVED_LEVELS_SCREEN);
                 }
             });
             Table table = new Table();

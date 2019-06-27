@@ -149,9 +149,6 @@ public class KittensAssetManager {
         loadSkins();
         loadSounds();
         loadFonts();
-    }
-
-    public void finishLoading() {
         manager.finishLoading();
     }
 

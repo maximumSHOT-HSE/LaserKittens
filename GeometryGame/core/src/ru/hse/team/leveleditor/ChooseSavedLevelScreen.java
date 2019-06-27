@@ -58,7 +58,7 @@ public class ChooseSavedLevelScreen implements Screen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.BACK) {
-                    laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.CHOOSE_LEVEL_SCREEN);
+                    laserKittens.changeScreen(LaserKittens.ScreenType.CHOOSE_LEVEL_SCREEN);
                 }
                 return true;
             }
@@ -194,7 +194,7 @@ public class ChooseSavedLevelScreen implements Screen {
                         bDialog.setClickListener(button1 -> {
                             if (button1 == 0) {
                                 deleteLevel(ii);
-                                laserKittens.changeScreen(LaserKittens.SCREEN_TYPE.SAVED_LEVELS_SCREEN);
+                                laserKittens.changeScreen(LaserKittens.ScreenType.SAVED_LEVELS_SCREEN);
                             }
                         });
 
@@ -210,7 +210,6 @@ public class ChooseSavedLevelScreen implements Screen {
             scroll.addPage(buttonsTable);
 
             table.add(scroll).expand().fill();
-
         }
 
         private void initializeButtons() {
