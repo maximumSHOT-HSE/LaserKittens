@@ -18,6 +18,16 @@ import ru.hse.team.game.gamelogic.components.MessageComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 import ru.hse.team.game.levels.AbstractLevel;
 
+import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.BULLET;
+import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.DOOR;
+import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.GUARDIAN;
+import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.IMPENETRABLE_WALL;
+import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.KEY;
+import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.PLAYER;
+import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.QUESTION;
+import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.STAR;
+import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.TUMBLER;
+
 /**
  * Class that processes contacts between bodies in game.
  */
@@ -128,43 +138,34 @@ public class ContactProcessor implements ContactListener {
         if (!areSwapped) {
             process(entityB, entityA, true);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET)) {
+        if (checkType(entityA, BULLET)) {
             processBullet(entityA);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET)
-                && checkType(entityB, TypeComponent.Type.STAR)) {
+        if (checkType(entityA, BULLET) && checkType(entityB, STAR)) {
             processBulletStar(entityA, entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET)
-                && checkType(entityB, TypeComponent.Type.KEY)) {
+        if (checkType(entityA, BULLET) && checkType(entityB, KEY)) {
             processBulletKey(entityA, entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET)
-                && checkType(entityB, TypeComponent.Type.IMPENETRABLE_WALL)) {
+        if (checkType(entityA, BULLET) && checkType(entityB, IMPENETRABLE_WALL)) {
             processBulletImpenetrableWall(entityA);
         }
-        if (checkType(entityA, TypeComponent.Type.PLAYER)
-                && checkType(entityB, TypeComponent.Type.STAR)) {
+        if (checkType(entityA, PLAYER) && checkType(entityB, STAR)) {
             processPlayerStar(entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.PLAYER)
-                && checkType(entityB, TypeComponent.Type.KEY)) {
+        if (checkType(entityA, PLAYER) && checkType(entityB, KEY)) {
             processPlayerKey(entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET)
-                && checkType(entityB, TypeComponent.Type.DOOR)) {
+        if (checkType(entityA, BULLET) && checkType(entityB, DOOR)) {
             processBulletDoor(entityA, entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET)
-                && checkType(entityB, TypeComponent.Type.TUMBLER)) {
+        if (checkType(entityA, BULLET) && checkType(entityB, TUMBLER)) {
             processBulletTumbler(entityA, entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.PLAYER)
-                && checkType(entityB, TypeComponent.Type.GUARDIAN)) {
+        if (checkType(entityA, PLAYER) && checkType(entityB, GUARDIAN)) {
             processPlayerGuardian(entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.PLAYER)
-                && checkType(entityB, TypeComponent.Type.QUESTION)) {
+        if (checkType(entityA, PLAYER) && checkType(entityB, QUESTION)) {
             processPlayerQuestion(entityA, entityB);
         }
     }
