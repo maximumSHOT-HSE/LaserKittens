@@ -167,8 +167,7 @@ public class WarpController {
         warpListener.update("Get matched room done");
     }
 
-    public void sendRequestCreateRoom(
-            String roomName, int maxUsers, String levelName) {
+    public void sendRequestCreateRoom(String roomName, int maxUsers, String levelName) {
         System.out.println(
                 "WarpController.sendRequestCreateRoom(), room name = " + roomName
                         + ", maxUsers = " + maxUsers

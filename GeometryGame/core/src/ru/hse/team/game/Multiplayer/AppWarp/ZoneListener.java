@@ -9,7 +9,7 @@ import com.shephertz.app42.gaming.multiplayer.client.listener.ZoneRequestListene
 
 public class ZoneListener implements ZoneRequestListener {
 
-    private WarpController warpController;
+    private final WarpController warpController;
 
     public ZoneListener(WarpController warpController) {
         this.warpController = warpController;
