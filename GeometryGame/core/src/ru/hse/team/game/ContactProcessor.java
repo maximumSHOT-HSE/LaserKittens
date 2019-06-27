@@ -22,7 +22,6 @@ import ru.hse.team.game.levels.AbstractLevel;
  * Class that processes contacts between bodies in game.
  */
 public class ContactProcessor implements ContactListener {
-
     private AbstractLevel abstractLevel;
 
     public ContactProcessor(AbstractLevel abstractLevel) {
@@ -46,7 +45,7 @@ public class ContactProcessor implements ContactListener {
         Mapper.stateComponent.get(star).finish();
     }
 
-    private void processBulletImpenetrableWall(Entity bullet, Entity impenetrableWall) {
+    private void processBulletImpenetrableWall(Entity bullet) {
         stopBullet(bullet);
     }
 
@@ -62,7 +61,7 @@ public class ContactProcessor implements ContactListener {
         }
     }
 
-    private void processPlayerStar(Entity player, Entity star) {
+    private void processPlayerStar(Entity star) {
         if (abstractLevel instanceof AbstractMultiplayerLevel) {
             WarpController.getInstance().sendGameUpdate(
                     MessageCreator.createFinishStarMessage(
@@ -73,11 +72,11 @@ public class ContactProcessor implements ContactListener {
         Mapper.stateComponent.get(star).finish();
     }
 
-    private void processPlayerGuardian(Entity player, Entity guardian) {
+    private void processPlayerGuardian(Entity guardian) {
         Mapper.stateComponent.get(guardian).finish();
     }
 
-    private void processPlayerKey(Entity player, Entity key) {
+    private void processPlayerKey(Entity key) {
         Mapper.stateComponent.get(key).finish();
         if (abstractLevel instanceof AbstractMultiplayerLevel) {
             Gdx.app.postRunnable(() -> WarpController.getInstance().sendGameUpdate(
@@ -132,40 +131,40 @@ public class ContactProcessor implements ContactListener {
         if (checkType(entityA, TypeComponent.Type.BULLET)) {
             processBullet(entityA);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET) &&
-            checkType(entityB, TypeComponent.Type.STAR)) {
+        if (checkType(entityA, TypeComponent.Type.BULLET)
+                && checkType(entityB, TypeComponent.Type.STAR)) {
             processBulletStar(entityA, entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET) &&
-                checkType(entityB, TypeComponent.Type.KEY)) {
+        if (checkType(entityA, TypeComponent.Type.BULLET)
+                && checkType(entityB, TypeComponent.Type.KEY)) {
             processBulletKey(entityA, entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET) &&
-            checkType(entityB, TypeComponent.Type.IMPENETRABLE_WALL)) {
-            processBulletImpenetrableWall(entityA, entityB);
+        if (checkType(entityA, TypeComponent.Type.BULLET)
+                && checkType(entityB, TypeComponent.Type.IMPENETRABLE_WALL)) {
+            processBulletImpenetrableWall(entityA);
         }
-        if (checkType(entityA, TypeComponent.Type.PLAYER) &&
-            checkType(entityB, TypeComponent.Type.STAR)) {
-            processPlayerStar(entityA, entityB);
+        if (checkType(entityA, TypeComponent.Type.PLAYER)
+                && checkType(entityB, TypeComponent.Type.STAR)) {
+            processPlayerStar(entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.PLAYER) &&
-            checkType(entityB, TypeComponent.Type.KEY)) {
-            processPlayerKey(entityA, entityB);
+        if (checkType(entityA, TypeComponent.Type.PLAYER)
+                && checkType(entityB, TypeComponent.Type.KEY)) {
+            processPlayerKey(entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET) &&
-            checkType(entityB, TypeComponent.Type.DOOR)) {
+        if (checkType(entityA, TypeComponent.Type.BULLET)
+                && checkType(entityB, TypeComponent.Type.DOOR)) {
             processBulletDoor(entityA, entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.BULLET) &&
-            checkType(entityB, TypeComponent.Type.TUMBLER)) {
+        if (checkType(entityA, TypeComponent.Type.BULLET)
+                && checkType(entityB, TypeComponent.Type.TUMBLER)) {
             processBulletTumbler(entityA, entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.PLAYER) &&
-        checkType(entityB, TypeComponent.Type.GUARDIAN)) {
-            processPlayerGuardian(entityA, entityB);
+        if (checkType(entityA, TypeComponent.Type.PLAYER)
+                && checkType(entityB, TypeComponent.Type.GUARDIAN)) {
+            processPlayerGuardian(entityB);
         }
-        if (checkType(entityA, TypeComponent.Type.PLAYER) &&
-                checkType(entityB, TypeComponent.Type.QUESTION)) {
+        if (checkType(entityA, TypeComponent.Type.PLAYER)
+                && checkType(entityB, TypeComponent.Type.QUESTION)) {
             processPlayerQuestion(entityA, entityB);
         }
     }
