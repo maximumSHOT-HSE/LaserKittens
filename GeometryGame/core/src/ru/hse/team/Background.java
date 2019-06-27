@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * */
 public class Background {
 
-    private Texture backgroundTexture;
+    private final Texture backgroundTexture;
 
     public Background(Texture background) {
         backgroundTexture = background;

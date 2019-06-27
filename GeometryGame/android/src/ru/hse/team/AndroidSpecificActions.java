@@ -23,5 +23,4 @@ public class AndroidSpecificActions implements AndroidActions {
             activity.runOnUiThread(() -> Toast.makeText(activity, message, Toast.LENGTH_LONG).show());
         }
     }
-
 }

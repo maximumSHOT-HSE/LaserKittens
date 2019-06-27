@@ -4,7 +4,6 @@ package ru.hse.team;
  * Class for working with google services.
  */
 public interface GoogleServicesAction {
-
     void signIn();
     void signInSilently();
     void signOut();
@@ -14,7 +13,6 @@ public interface GoogleServicesAction {
     void showScores();
     void unlockAchievement(String achievementId);
     void showAchievements();
-
 
     String accelerometerAchievement = "CgkIg87J7v4LEAIQAg";
 }

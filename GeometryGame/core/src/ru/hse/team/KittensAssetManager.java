@@ -7,12 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-
 /**
  * Class for simplification of assets loading.
  */
 public class KittensAssetManager {
-
     private final AssetManager manager = new AssetManager();
 
     public enum Images {
@@ -80,7 +78,7 @@ public class KittensAssetManager {
     public enum Sounds {
         LASER_SOUND("sounds/laser-shot.wav");
 
-        private String soundName;
+        private final String soundName;
 
         Sounds(String soundName) {
             this.soundName = soundName;
@@ -94,7 +92,7 @@ public class KittensAssetManager {
     public enum Fonts {
         FONT("skin/gameFont.fnt");
 
-        private String fontName;
+        private final String fontName;
 
         Fonts(String fontName) {
             this.fontName = fontName;
@@ -104,8 +102,6 @@ public class KittensAssetManager {
             return fontName;
         }
     }
-
-
 
     private void loadImages() {
         for (Images image : Images.values()) {

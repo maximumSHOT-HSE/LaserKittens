@@ -92,7 +92,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
                     if (task.isSuccessful()) {
                         Log.d(TAG, "signOut(): success");
                     } else {
-                        handleException(task.getException(), "signOut() failed!");
+                        handleException(task.getException());
                     }
                 });
     }
@@ -119,7 +119,6 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
                         .show();
             }
         }
-
     }
 
     @Override
@@ -139,14 +138,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         }
     }
 
-    private void handleException(Exception exception, String details) {
-        int status = 0;
-
-        if (exception instanceof ApiException) {
-            ApiException apiException = (ApiException) exception;
-            status = apiException.getStatusCode();
-        }
-
+    private void handleException(Exception exception) {
         String message = "Error" + exception.getMessage();
 
         new AlertDialog.Builder(this)
@@ -158,7 +150,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 
     @Override
     public void rateGame() {
-        String str ="https://play.google.com/store/apps/details?id=ru.hse.team";
+        String str = "https://play.google.com/store/apps/details?id=ru.hse.team";
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
     }
 
@@ -169,8 +161,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
             Games.getLeaderboardsClient(this, mSignedInAccount)
                     .submitScore(getString(R.string.leaderboard_id), score);
             showScores();
-        }
-        else {
+        } else {
             runOnUiThread(() -> Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show());
         }
     }
@@ -181,7 +172,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
             Games.getLeaderboardsClient(this, mSignedInAccount)
                     .getLeaderboardIntent((getString(R.string.leaderboard_id)))
                     .addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
-                    .addOnFailureListener(e -> handleException(e, "LeaderBoard exception"));
+                    .addOnFailureListener(e -> handleException(e));
         } else {
             runOnUiThread(() -> Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show());
         }
@@ -194,13 +185,12 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         }
     }
 
-
     @Override
     public void showAchievements() {
         if (isSignedIn()) {
             Games.getAchievementsClient(this, mSignedInAccount).getAchievementsIntent()
                     .addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
-                    .addOnFailureListener(e -> handleException(e, "Achievements exception"));
+                    .addOnFailureListener(e -> handleException(e));
         } else {
             runOnUiThread(() -> Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show());
         }
@@ -209,6 +199,5 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     @Override
     public boolean isSignedIn() {
         return GoogleSignIn.getLastSignedInAccount(this) != null;
-
     }
 }
