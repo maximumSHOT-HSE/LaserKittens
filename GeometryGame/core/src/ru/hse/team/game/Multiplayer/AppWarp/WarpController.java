@@ -49,10 +49,10 @@ public class WarpController {
     private String playerNameSalt;
     private String roomId = null;
 
-    private Set<String> joinedRooms = new HashSet<>();
-    private Set<String> subscribedRooms = new HashSet<>();
-    private Set<String> joinedUsers = new TreeSet<>();
-    private Map<String, RoomData> activeRooms = new HashMap<>();
+    private final Set<String> joinedRooms = new HashSet<>();
+    private final Set<String> subscribedRooms = new HashSet<>();
+    private final Set<String> joinedUsers = new TreeSet<>();
+    private final Map<String, RoomData> activeRooms = new HashMap<>();
     private Label connectionStatusLabel;
     private State state = State.WAITING_FOR_CONNECTION;
 
