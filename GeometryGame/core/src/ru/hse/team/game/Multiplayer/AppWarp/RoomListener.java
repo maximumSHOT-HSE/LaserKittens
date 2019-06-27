@@ -6,7 +6,7 @@ import com.shephertz.app42.gaming.multiplayer.client.listener.RoomRequestListene
 
 public class RoomListener implements RoomRequestListener {
 
-    private WarpController warpController;
+    private final WarpController warpController;
 
     public RoomListener(WarpController warpController) {
         this.warpController = warpController;

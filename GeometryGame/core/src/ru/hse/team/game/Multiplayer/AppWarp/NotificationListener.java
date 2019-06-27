@@ -64,7 +64,8 @@ public class NotificationListener implements NotifyListener {
 
     @Override
     public void onUpdatePeersReceived(UpdateEvent updateEvent) {
-        System.out.println("NotificationListener.onUpdatePeersReveived: " + (new String(updateEvent.getUpdate())));
+        System.out.println("NotificationListener.onUpdatePeersReveived: "
+                + new String(updateEvent.getUpdate()));
         warpController.onGameUpdateReceived(updateEvent);
     }
 
