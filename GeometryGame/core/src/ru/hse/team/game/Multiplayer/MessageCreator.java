@@ -6,17 +6,17 @@ import org.json.JSONObject;
 
 public class MessageCreator {
 
-    public static final String CATCH_KEY = "catch key";
-    public static final String CATCH_STAR = "catch star";
+    public static final String CATCH_KEY = "catchKey";
+    public static final String CATCH_STAR = "catchStar";
 
     public static final String SHOOT = "shoot";
-    public static final String SHOOT_SOURCE = "shoot source";
-    public static final String SHOOT_DIRECTION = "shoot direction";
-    public static final String SHOOT_LIFETIME = "shoot lifetime";
+    public static final String SHOOT_SOURCE = "shootSource";
+    public static final String SHOOT_DIRECTION = "shootDirection";
+    public static final String SHOOT_LIFETIME = "shootLifetime";
 
     public static final String TYPE = "type";
-    public static final String KEY_ID = "key id";
-    public static final String STAR_ID = "star id";
+    public static final String KEY_ID = "keyId";
+    public static final String STAR_ID = "starId";
 
     public static String createFinishKeyMessage(int id) {
         JSONObject data = new JSONObject();
