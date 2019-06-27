@@ -72,11 +72,15 @@ public class GameScreen implements Screen {
         engine.addSystem(messageSystem);
 
         inputProcessor = new GameScreenInputProcessor(
-                this.laserKittens, abstractLevel, renderingSystem.getCamera());
+            this.laserKittens,
+            abstractLevel,
+            renderingSystem.getCamera()
+        );
         gestureProcessor = new GestureProcessor(renderingSystem, inputProcessor, abstractLevel);
         inputMultiplexer = new InputMultiplexer(
-                new GestureDetector(gestureProcessor),
-                inputProcessor);
+            new GestureDetector(gestureProcessor),
+            inputProcessor
+        );
     }
 
     public void endGame() {
@@ -120,14 +124,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
+
     }
 
     @Override
     public void resume() {
+
     }
 
     @Override
     public void hide() {
+
     }
 
     @Override
@@ -135,7 +142,7 @@ public class GameScreen implements Screen {
         World world = level.getWorld();
         for (Entity entity : engine.getEntities()) {
             BodyComponent bodyComponent = Mapper.bodyComponent.get(entity);
-            if(bodyComponent != null && world != null && bodyComponent.body != null) {
+            if (bodyComponent != null && world != null && bodyComponent.body != null) {
                 world.destroyBody(bodyComponent.body);
             }
         }

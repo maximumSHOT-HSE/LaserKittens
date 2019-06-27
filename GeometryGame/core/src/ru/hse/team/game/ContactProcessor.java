@@ -32,7 +32,7 @@ import static ru.hse.team.game.gamelogic.components.TypeComponent.Type.TUMBLER;
  * Class that processes contacts between bodies in game.
  */
 public class ContactProcessor implements ContactListener {
-    private AbstractLevel abstractLevel;
+    private final AbstractLevel abstractLevel;
 
     public ContactProcessor(AbstractLevel abstractLevel) {
         this.abstractLevel = abstractLevel;
@@ -123,7 +123,7 @@ public class ContactProcessor implements ContactListener {
     }
 
     // Checks whether entity has given type
-    private boolean checkType(Entity entity, TypeComponent.Type type) {
+    private boolean collisionTypeIs(Entity entity, TypeComponent.Type type) {
         TypeComponent typeComponent = Mapper.typeComponent.get(entity);
         if (typeComponent == null) {
             return false;
@@ -138,34 +138,34 @@ public class ContactProcessor implements ContactListener {
         if (!areSwapped) {
             process(entityB, entityA, true);
         }
-        if (checkType(entityA, BULLET)) {
+        if (collisionTypeIs(entityA, BULLET)) {
             processBullet(entityA);
         }
-        if (checkType(entityA, BULLET) && checkType(entityB, STAR)) {
+        if (collisionTypeIs(entityA, BULLET) && collisionTypeIs(entityB, STAR)) {
             processBulletStar(entityA, entityB);
         }
-        if (checkType(entityA, BULLET) && checkType(entityB, KEY)) {
+        if (collisionTypeIs(entityA, BULLET) && collisionTypeIs(entityB, KEY)) {
             processBulletKey(entityA, entityB);
         }
-        if (checkType(entityA, BULLET) && checkType(entityB, IMPENETRABLE_WALL)) {
+        if (collisionTypeIs(entityA, BULLET) && collisionTypeIs(entityB, IMPENETRABLE_WALL)) {
             processBulletImpenetrableWall(entityA);
         }
-        if (checkType(entityA, PLAYER) && checkType(entityB, STAR)) {
+        if (collisionTypeIs(entityA, PLAYER) && collisionTypeIs(entityB, STAR)) {
             processPlayerStar(entityB);
         }
-        if (checkType(entityA, PLAYER) && checkType(entityB, KEY)) {
+        if (collisionTypeIs(entityA, PLAYER) && collisionTypeIs(entityB, KEY)) {
             processPlayerKey(entityB);
         }
-        if (checkType(entityA, BULLET) && checkType(entityB, DOOR)) {
+        if (collisionTypeIs(entityA, BULLET) && collisionTypeIs(entityB, DOOR)) {
             processBulletDoor(entityA, entityB);
         }
-        if (checkType(entityA, BULLET) && checkType(entityB, TUMBLER)) {
+        if (collisionTypeIs(entityA, BULLET) && collisionTypeIs(entityB, TUMBLER)) {
             processBulletTumbler(entityA, entityB);
         }
-        if (checkType(entityA, PLAYER) && checkType(entityB, GUARDIAN)) {
+        if (collisionTypeIs(entityA, PLAYER) && collisionTypeIs(entityB, GUARDIAN)) {
             processPlayerGuardian(entityB);
         }
-        if (checkType(entityA, PLAYER) && checkType(entityB, QUESTION)) {
+        if (collisionTypeIs(entityA, PLAYER) && collisionTypeIs(entityB, QUESTION)) {
             processPlayerQuestion(entityA, entityB);
         }
     }
