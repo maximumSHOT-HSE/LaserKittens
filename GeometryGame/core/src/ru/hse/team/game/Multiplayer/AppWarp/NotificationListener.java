@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class NotificationListener implements NotifyListener {
 
-    private WarpController warpController;
+    private final WarpController warpController;
 
     public NotificationListener(WarpController warpController) {
         this.warpController = warpController;
@@ -69,7 +69,11 @@ public class NotificationListener implements NotifyListener {
     }
 
     @Override
-    public void onUserChangeRoomProperty(RoomData roomData, String s, HashMap<String, Object> hashMap, HashMap<String, String> hashMap1) {
+    public void onUserChangeRoomProperty(
+            RoomData roomData,
+            String s,
+            HashMap<String, Object> hashMap,
+            HashMap<String, String> hashMap1) {
 
     }
 

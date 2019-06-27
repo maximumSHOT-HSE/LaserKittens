@@ -5,7 +5,7 @@ import com.shephertz.app42.gaming.multiplayer.client.listener.ConnectionRequestL
 
 public class ConnectionListener implements ConnectionRequestListener {
 
-    private WarpController warpController;
+    private final WarpController warpController;
 
     public ConnectionListener(WarpController warpController) {
         this.warpController = warpController;
