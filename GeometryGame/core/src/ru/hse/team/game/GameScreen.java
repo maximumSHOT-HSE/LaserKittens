@@ -33,21 +33,19 @@ import ru.hse.team.game.levels.AbstractLevel;
 public class GameScreen implements Screen {
 
     private final LaserKittens laserKittens;
-    private AbstractLevel level;
-    private PooledEngine engine;
+    private final AbstractLevel level;
+    private final PooledEngine engine;
 
-    private GameScreenInputProcessor inputProcessor;
-    private GestureProcessor gestureProcessor;
-    private InputMultiplexer inputMultiplexer;
+    private final GameScreenInputProcessor inputProcessor;
+    private final GestureProcessor gestureProcessor;
+    private final InputMultiplexer inputMultiplexer;
 
-    private RenderingSystem renderingSystem;
-    private PhysicsSystem physicsSystem;
-    private PhysicsDebugSystem physicsDebugSystem;
-    private BulletSystem bulletSystem;
-    private StateControlSystem stateControlSystem;
-    private MessageSystem messageSystem;
-
-    private WarpController warpController;
+    private final RenderingSystem renderingSystem;
+    private final PhysicsSystem physicsSystem;
+    private final PhysicsDebugSystem physicsDebugSystem;
+    private final BulletSystem bulletSystem;
+    private final StateControlSystem stateControlSystem;
+    private final MessageSystem messageSystem;
 
     public GameScreen(LaserKittens laserKittens, AbstractLevel abstractLevel) {
         level = abstractLevel;
@@ -91,7 +89,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         if (level instanceof AbstractMultiplayerLevel) {
-            warpController = WarpController.getInstance();
+            WarpController warpController = WarpController.getInstance();
             if (warpController != null) {
                 System.out.println("SET WARP LISTENER ! level = " + level.getLevelName());
                 warpController.setWarpListener((WarpListener) level);
