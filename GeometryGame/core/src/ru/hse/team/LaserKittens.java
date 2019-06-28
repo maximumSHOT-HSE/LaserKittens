@@ -24,19 +24,12 @@ import ru.hse.team.settings.SettingsScreen;
  * Used for changing screens and accessing common resources
  */
 public class LaserKittens extends Game {
-    private SpriteBatch batch;
-    private ShapeRenderer shapeRenderer;
-    private BitmapFont font;
-    private GDXDialogs dialogs;
-
-    private final AppPreferences preferences = new AppPreferences();
-    private final KittensAssetManager assetManager = new KittensAssetManager();
-    private final GameDatabase database;
-    private final GoogleServicesAction googleServices;
-    private final AndroidActions androidActions;
 
     public static final int PREFERRED_WIDTH = 1080;
     public static final int PREFERRED_HEIGHT = 1920;
+
+    private final AndroidToolsHolder androidToolsHolder;
+    private ToolsHolder toolsHolder;
 
     public LaserKittens(
         GameDatabase database,
@@ -44,9 +37,7 @@ public class LaserKittens extends Game {
         AndroidActions androidActions
     ) {
         super();
-        this.database = database;
-        this.googleServices = googleServicesAction;
-        this.androidActions = androidActions;
+        androidToolsHolder = new AndroidToolsHolder(database, googleServicesAction, androidActions);
     }
 
     public enum ScreenType {
@@ -70,15 +61,15 @@ public class LaserKittens extends Game {
     private ChooseSavedLevelScreen savedLevelScreen;
 
     public AppPreferences getPreferences() {
-        return preferences;
+        return toolsHolder.preferences;
     }
 
     public GoogleServicesAction getGoogleServices() {
-        return googleServices;
+        return androidToolsHolder.googleServices;
     }
 
     public GameDatabase getDatabase() {
-        return database;
+        return androidToolsHolder.database;
     }
 
     /**
@@ -144,14 +135,8 @@ public class LaserKittens extends Game {
     public void create() {
         Gdx.input.setCatchBackKey(true);
         System.out.println(Gdx.graphics.getWidth() + " " + Gdx.graphics.getHeight());
-        dialogs = GDXDialogsSystem.install();
 
-        batch = new SpriteBatch();
-        shapeRenderer = new ShapeRenderer();
-
-        getAssetManager().loadEverything();
-
-        font = getAssetManager().getFont(KittensAssetManager.Fonts.FONT);
+        toolsHolder = new ToolsHolder();
 
         changeScreen(ScreenType.MAIN_MENU_SCREEN);
     }
@@ -159,35 +144,32 @@ public class LaserKittens extends Game {
     @Override
     public void dispose() {
         super.dispose();
-        googleServices.signOut();
-        getBatch().dispose();
-        getFont().dispose();
-        getAssetManager().dispose();
-        getShapeRenderer().dispose();
+        toolsHolder.dispose();
+        androidToolsHolder.dispose();
     }
 
     public GDXDialogs getDialogs() {
-        return dialogs;
+        return toolsHolder.dialogs;
     }
 
     public BitmapFont getFont() {
-        return font;
+        return toolsHolder.font;
     }
 
     public SpriteBatch getBatch() {
-        return batch;
+        return toolsHolder.batch;
     }
 
     public ShapeRenderer getShapeRenderer() {
-        return shapeRenderer;
+        return toolsHolder.shapeRenderer;
     }
 
     public KittensAssetManager getAssetManager() {
-        return assetManager;
+        return toolsHolder.assetManager;
     }
 
     public AndroidActions getAndroidActions() {
-        return androidActions;
+        return androidToolsHolder.androidActions;
     }
 
     public static float scaleToPreferredWidth() {
@@ -196,5 +178,53 @@ public class LaserKittens extends Game {
 
     public static float scaleToPreferredHeight() {
         return (float) Gdx.graphics.getHeight() / PREFERRED_HEIGHT;
+    }
+
+    private class AndroidToolsHolder {
+        private final GameDatabase database;
+        private final GoogleServicesAction googleServices;
+        private final AndroidActions androidActions;
+
+        private AndroidToolsHolder(
+                GameDatabase database
+                , GoogleServicesAction googleServices
+                , AndroidActions androidActions
+        ) {
+            this.database = database;
+            this.googleServices = googleServices;
+            this.androidActions = androidActions;
+        }
+
+        public void dispose() {
+            googleServices.signOut();
+        }
+    }
+
+    private class ToolsHolder {
+        private final GDXDialogs dialogs;
+        private final SpriteBatch batch;
+        private final ShapeRenderer shapeRenderer;
+        private final AppPreferences preferences;
+        private final KittensAssetManager assetManager;
+        private final BitmapFont font;
+
+        private ToolsHolder() {
+            dialogs = GDXDialogsSystem.install();
+            batch = new SpriteBatch();
+            shapeRenderer = new ShapeRenderer();
+            preferences = new AppPreferences();
+            assetManager = new KittensAssetManager();
+
+            getAssetManager().loadEverything();
+            font = getAssetManager().getFont(KittensAssetManager.Fonts.FONT);
+        }
+
+        public void dispose() {
+            batch.dispose();
+            font.dispose();
+            assetManager.dispose();
+            shapeRenderer.dispose();
+        }
+
     }
 }
