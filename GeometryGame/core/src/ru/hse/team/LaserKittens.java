@@ -24,7 +24,6 @@ import ru.hse.team.settings.SettingsScreen;
  * Used for changing screens and accessing common resources
  */
 public class LaserKittens extends Game {
-
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
@@ -39,9 +38,11 @@ public class LaserKittens extends Game {
     public static final int PREFERRED_WIDTH = 1080;
     public static final int PREFERRED_HEIGHT = 1920;
 
-    public LaserKittens(GameDatabase database,
-                        GoogleServicesAction googleServicesAction,
-                        AndroidActions androidActions) {
+    public LaserKittens(
+        GameDatabase database,
+        GoogleServicesAction googleServicesAction,
+        AndroidActions androidActions
+    ) {
         super();
         this.database = database;
         this.googleServices = googleServicesAction;
@@ -190,10 +191,10 @@ public class LaserKittens extends Game {
     }
 
     public static float scaleToPreferredWidth() {
-        return (float)Gdx.graphics.getWidth() / PREFERRED_WIDTH;
+        return (float) Gdx.graphics.getWidth() / PREFERRED_WIDTH;
     }
 
     public static float scaleToPreferredHeight() {
-        return (float)Gdx.graphics.getHeight() / PREFERRED_HEIGHT;
+        return (float) Gdx.graphics.getHeight() / PREFERRED_HEIGHT;
     }
 }

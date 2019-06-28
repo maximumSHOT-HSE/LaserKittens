@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * device screen size.
  * */
 public class Background {
-
     private final Texture backgroundTexture;
 
     public Background(Texture background) {
@@ -23,8 +22,9 @@ public class Background {
      * */
     public void resizeClampToEdge() {
         backgroundTexture.setWrap(
-                Texture.TextureWrap.ClampToEdge,
-                Texture.TextureWrap.ClampToEdge);
+            Texture.TextureWrap.ClampToEdge,
+            Texture.TextureWrap.ClampToEdge
+        );
     }
 
     /**
@@ -34,9 +34,9 @@ public class Background {
     public void draw(SpriteBatch batch) {
         batch.draw(
             backgroundTexture,
-                0f, 0f,
-                Gdx.graphics.getWidth(),
-                Gdx.graphics.getHeight()
+            0f, 0f,
+            Gdx.graphics.getWidth(),
+            Gdx.graphics.getHeight()
         );
     }
 

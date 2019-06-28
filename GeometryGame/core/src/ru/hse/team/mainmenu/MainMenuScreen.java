@@ -22,17 +22,17 @@ import ru.hse.team.LaserKittens;
  * Main menu screen providing user interface to move between screens.
  */
 public class MainMenuScreen implements Screen {
-
     private final LaserKittens laserKittens;
-    private OrthographicCamera camera = new OrthographicCamera();
-    private Background background;
-    private Stage stage = new Stage(new ScreenViewport());
+    private final OrthographicCamera camera = new OrthographicCamera();
+    private final Background background;
+    private final Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
 
     public MainMenuScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-        background = new Background(laserKittens.getAssetManager()
-                        .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
+        background = new Background(
+            laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND)
+        );
     }
 
     @Override
@@ -65,17 +65,14 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
@@ -85,24 +82,28 @@ public class MainMenuScreen implements Screen {
     }
 
     private class Menu {
-
-        private Table table = new Table();
-        private Skin skin =
-                laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
-        private TextButton levels = new TextButton("Singleplayer", skin);
-        private TextButton multiplayer = new TextButton("Multiplayer", skin);
-        private TextButton settings = new TextButton("Settings", skin);
-        private TextButton exit = new TextButton("Exit", skin);
-
-        private ImageButton loginButton = new ImageButton(
-                new TextureRegionDrawable(laserKittens.getAssetManager()
-                                .getImage(KittensAssetManager.Images.GOOGLE_SIGN_IN)));
-        private ImageButton achievementsButton = new ImageButton(
-                new TextureRegionDrawable(laserKittens.getAssetManager()
-                                .getImage(KittensAssetManager.Images.CUP)));
-        private ImageButton rateButton = new ImageButton(
-                new TextureRegionDrawable(laserKittens.getAssetManager()
-                                .getImage(KittensAssetManager.Images.PLAY_MARKET)));
+        private final Table table = new Table();
+        private final Skin skin = laserKittens.getAssetManager()
+                .getSkin(KittensAssetManager.Skins.BLUE_SKIN);
+        private final TextButton levels = new TextButton("Singleplayer", skin);
+        private final TextButton multiplayer = new TextButton("Multiplayer", skin);
+        private final TextButton settings = new TextButton("Settings", skin);
+        private final TextButton exit = new TextButton("Exit", skin);
+        private final ImageButton loginButton = new ImageButton(
+            new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.GOOGLE_SIGN_IN)
+            )
+        );
+        private final ImageButton achievementsButton = new ImageButton(
+            new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.CUP)
+            )
+        );
+        private final ImageButton rateButton = new ImageButton(
+            new TextureRegionDrawable(
+                laserKittens.getAssetManager().getImage(KittensAssetManager.Images.PLAY_MARKET)
+            )
+        );
 
         public Menu(Stage stage) {
             table.setFillParent(true);
@@ -132,7 +133,6 @@ public class MainMenuScreen implements Screen {
             table.add(loginButton).width(googleButtonWidth).height(googleButtonHeight);
             table.add(achievementsButton).width(googleButtonWidth).height(googleButtonHeight);
             table.add(rateButton).width(googleButtonWidth).height(googleButtonHeight);
-
         }
 
         private void setListeners() {
@@ -185,7 +185,6 @@ public class MainMenuScreen implements Screen {
                     laserKittens.getGoogleServices().rateGame();
                 }
             });
-
         }
     }
 }

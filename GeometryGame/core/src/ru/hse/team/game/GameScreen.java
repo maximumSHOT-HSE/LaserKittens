@@ -31,7 +31,6 @@ import ru.hse.team.game.levels.AbstractLevel;
  *  is initialised and disposed when it is closed.
  */
 public class GameScreen implements Screen {
-
     private final LaserKittens laserKittens;
     private final AbstractLevel level;
     private final PooledEngine engine;
@@ -57,7 +56,10 @@ public class GameScreen implements Screen {
 
         renderingSystem = new RenderingSystem(abstractLevel, laserKittens);
         physicsSystem = new PhysicsSystem(abstractLevel);
-        physicsDebugSystem = new PhysicsDebugSystem(abstractLevel.getWorld(), renderingSystem.getCamera());
+        physicsDebugSystem = new PhysicsDebugSystem(
+            abstractLevel.getWorld(),
+            renderingSystem.getCamera()
+        );
         bulletSystem = new BulletSystem();
         stateControlSystem = new StateControlSystem(engine, abstractLevel);
         messageSystem = new MessageSystem(laserKittens.getAndroidActions());
@@ -117,22 +119,18 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
