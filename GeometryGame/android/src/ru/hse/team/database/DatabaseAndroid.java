@@ -13,7 +13,7 @@ import ru.hse.team.database.statistics.StatisticsDaoAndroid;
 /**
  *  Database used to save {@code SavedLevel} and {@code LevelStatistics} objects.
  */
-@Database(entities = {SavedLevel.class, LevelStatistics.class}, version = 6, exportSchema = false)
+@Database(entities = {SavedLevel.class, LevelStatistics.class}, version = 7, exportSchema = false)
 @TypeConverters({SavedLevelsConverter.class})
 public abstract class DatabaseAndroid extends RoomDatabase implements GameDatabase {
     public abstract LevelsDaoAndroid levelsDao();

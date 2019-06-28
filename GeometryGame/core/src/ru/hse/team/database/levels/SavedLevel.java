@@ -31,13 +31,13 @@ public class SavedLevel {
     public int id;
 
     @ColumnInfo
-    public List<SimpleEntity> entities;
+    final public List<SimpleEntity> entities;
 
     @ColumnInfo
-    public int widthInScreens;
+    final public int widthInScreens;
 
     @ColumnInfo
-    public int heightInScreens;
+    final public int heightInScreens;
 
     @ColumnInfo
     public String levelName;

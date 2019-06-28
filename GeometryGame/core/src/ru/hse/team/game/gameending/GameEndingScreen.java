@@ -57,7 +57,6 @@ public class GameEndingScreen implements Screen {
                     new LevelStatistics(
                         parentLevel.getLevelName(),
                         gameStatus.timeGone(),
-                        gameStatus.getStarsInLevel(),
                         gameStatus.getCalendarDate()
                     )
                 )

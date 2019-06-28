@@ -9,9 +9,8 @@ import android.arch.persistence.room.PrimaryKey;
  */
 @Entity
 public class LevelStatistics {
-    public LevelStatistics(String levelName, long timeNano, int stars, String date) {
+    public LevelStatistics(String levelName, long timeNano, String date) {
         this.timeNano = timeNano;
-        this.stars = stars;
         this.levelName = levelName;
         this.date = date;
     }
@@ -20,13 +19,10 @@ public class LevelStatistics {
     public int id;
 
     @ColumnInfo(name = "levelName")
-    public String levelName;
+    final public String levelName;
 
     @ColumnInfo(name = "time")
-    public long timeNano;
-
-    @ColumnInfo(name = "stars")
-    public int stars;
+    final public long timeNano;
 
     @ColumnInfo(name = "date")
     public String date;
@@ -36,7 +32,6 @@ public class LevelStatistics {
         return "Level " + id
                 + " statistics:"
                 + " time " + timeNano
-                + ", stars" + stars
                 + ", level name: " + levelName
                 + ".";
     }

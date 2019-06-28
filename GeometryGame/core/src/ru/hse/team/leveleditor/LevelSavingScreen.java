@@ -168,7 +168,6 @@ public class LevelSavingScreen implements Screen {
                     for (SavedLevel level : levels) {
                         savedLevel.id = Math.max(savedLevel.id, level.id + 1);
                     }
-                    savedLevel.levelName = null;
                     AskName listener = new AskName(savedLevel, levels, laserKittens);
                     Gdx.input.getTextInput(listener, "Add a name to your level", "", null);
                 }
