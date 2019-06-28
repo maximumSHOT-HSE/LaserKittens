@@ -14,8 +14,16 @@ public class TestLongCorridorLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        testLongCorridorFactory = new TestLongCorridorFactory(engine, assetManager, getBodyFactory());
-        testLongCorridorFactory.createLevel(getLevelWidthInScreens(), getLevelHeightInScreens(), this);
+        testLongCorridorFactory = new TestLongCorridorFactory(
+            engine,
+            assetManager,
+            getBodyFactory()
+        );
+        testLongCorridorFactory.createLevel(
+            getLevelWidthInScreens(),
+            getLevelHeightInScreens(),
+            this
+        );
     }
 
     @Override
