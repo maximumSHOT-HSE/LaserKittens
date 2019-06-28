@@ -40,10 +40,10 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         super.onCreate(savedInstanceState);
 
         mGoogleSignInClient = GoogleSignIn.getClient(
-                this,
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-                        .requestScopes(Games.SCOPE_GAMES)
-                        .build()
+            this,
+            new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+                .requestScopes(Games.SCOPE_GAMES)
+                .build()
         );
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
