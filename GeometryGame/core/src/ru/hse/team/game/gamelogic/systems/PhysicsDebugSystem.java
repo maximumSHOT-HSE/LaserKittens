@@ -11,17 +11,22 @@ import com.badlogic.gdx.physics.box2d.World;
  * Renders world with box2DDebugRenderer.
  */
 public class PhysicsDebugSystem extends IteratingSystem {
-
     private boolean debug = false;
 
-    private Box2DDebugRenderer debugRenderer;
-    private World world;
-    private OrthographicCamera camera;
+    private final Box2DDebugRenderer debugRenderer;
+    private final World world;
+    private final OrthographicCamera camera;
 
     public PhysicsDebugSystem(World world, OrthographicCamera camera) {
         super(Family.all().get());
         debugRenderer =  new Box2DDebugRenderer(
-                true, true, false, true, false, true);
+                true,
+                true,
+                false,
+                true,
+                false,
+                true
+        );
         this.world = world;
         this.camera = camera;
     }
@@ -36,6 +41,5 @@ public class PhysicsDebugSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-
     }
 }
