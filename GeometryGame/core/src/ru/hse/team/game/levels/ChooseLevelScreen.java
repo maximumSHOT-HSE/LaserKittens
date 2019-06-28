@@ -37,14 +37,12 @@ import ru.hse.team.game.levels.TestLongCorridor.TestLongCorridorLevel;
 import ru.hse.team.game.levels.TestShooting.ShootingLevel;
 
 public class ChooseLevelScreen implements Screen {
-
     private final LaserKittens laserKittens;
-    private OrthographicCamera camera = new OrthographicCamera();
-    private Background background;
-    private Stage stage = new Stage(new ScreenViewport());
+    private final OrthographicCamera camera = new OrthographicCamera();
+    private final Background background;
+    private final Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
-
-    private java.util.List<AbstractLevel> abstractLevels = new ArrayList<>();
+    private final java.util.List<AbstractLevel> abstractLevels = new ArrayList<>();
     private int currentSection;
 
     private void fillLevels() {
@@ -61,9 +59,7 @@ public class ChooseLevelScreen implements Screen {
         background = new Background(this.laserKittens.getAssetManager()
                 .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         fillLevels();
-
         currentSection = abstractLevels.size() + 3;
-
         menu = new Menu();
     }
 
@@ -80,11 +76,9 @@ public class ChooseLevelScreen implements Screen {
             }
         });
         Gdx.input.setInputProcessor(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         laserKittens.getBatch().setProjectionMatrix(camera.combined);
-
         menu = new Menu();
         menu.show(stage);
     }
@@ -93,15 +87,11 @@ public class ChooseLevelScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
         laserKittens.getBatch().begin();
         background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
-
         menu.render();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -135,12 +125,12 @@ public class ChooseLevelScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
+        private final Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
         private SlidingPane slidingPane;
         private SlidingPane.DIRECTION direction = SlidingPane.DIRECTION.UP;
-        private Texture naviActive = laserKittens.getAssetManager()
+        private final Texture naviActive = laserKittens.getAssetManager()
                 .getImage(KittensAssetManager.Images.LEVEL_INDICATOR_ACTIVE_PNG);
-        private Texture naviPassive = laserKittens.getAssetManager()
+        private final Texture naviPassive = laserKittens.getAssetManager()
                 .getImage(KittensAssetManager.Images.LEVEL_INDICATOR_PASSIVE_PNG);
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
@@ -180,9 +170,9 @@ public class ChooseLevelScreen implements Screen {
         private long getBestTime(String levelName) {
             long[] bestTime = new long[1];
             Thread queryThread = (new Thread(() -> {
-                LevelStatistics statistics = laserKittens
-                        .getDatabase().statisticsDao()
-                        .getBestByLevelName(levelName);
+                LevelStatistics statistics = laserKittens.getDatabase()
+                    .statisticsDao()
+                    .getBestByLevelName(levelName);
                 if (statistics != null) {
                     bestTime[0] = TimeUnit.NANOSECONDS.toMillis(statistics.timeNano);
                 } else {
@@ -201,9 +191,9 @@ public class ChooseLevelScreen implements Screen {
         private Label getBestResult(String levelName) {
             Label[] label = new Label[1];
             Thread queryThread = (new Thread(() -> {
-                LevelStatistics statistics =
-                        laserKittens.getDatabase()
-                                .statisticsDao().getBestByLevelName(levelName);
+                LevelStatistics statistics = laserKittens.getDatabase()
+                    .statisticsDao()
+                    .getBestByLevelName(levelName);
                 if (statistics != null) {
                     label[0] = new Label(GameStatus.getTimeStamp(statistics.timeNano), skin);
                 }
@@ -220,16 +210,19 @@ public class ChooseLevelScreen implements Screen {
         private void addDumpLabels(Table table) {
             table.row();
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                .width(0.6f * screenWidth)
+                .height(0.2f * screenHeight);
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                .width(0.6f * screenWidth)
+                .height(0.2f * screenHeight);
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                .width(0.6f * screenWidth)
+                .height(0.2f * screenHeight);
         }
 
         private Table statisticsTable() {
             TextButton statisticsButton = new TextButton("Statistics", skin);
-            statisticsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
+            statisticsButton.getLabel().setFontScale(LaserKittens.scaleToPreferredWidth());
             statisticsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -239,8 +232,10 @@ public class ChooseLevelScreen implements Screen {
                 }
             });
             ImageButton scoreButton = new ImageButton(
-                    new TextureRegionDrawable(laserKittens.getAssetManager()
-                            .getImage(KittensAssetManager.Images.CUP)));
+                new TextureRegionDrawable(
+                    laserKittens.getAssetManager().getImage(KittensAssetManager.Images.CUP)
+                )
+            );
             scoreButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -257,23 +252,30 @@ public class ChooseLevelScreen implements Screen {
             addDumpLabels(table);
             table.row();
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(statisticsButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
+            table.add(statisticsButton)
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
             table.row();
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(scoreButton).width(Gdx.graphics.getWidth() * 0.2f)
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
+            table.add(scoreButton)
+                    .width(Gdx.graphics.getWidth() * 0.2f)
                     .height(Gdx.graphics.getHeight() * 0.1f);
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
             return table;
         }
 
         private Table editorScreenTable() {
             TextButton statisticsButton = new TextButton("Level editor", skin);
-            statisticsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
+            statisticsButton.getLabel().setFontScale(LaserKittens.scaleToPreferredWidth());
             statisticsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -290,17 +292,22 @@ public class ChooseLevelScreen implements Screen {
             addDumpLabels(table);
             table.row();
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
-            table.add(statisticsButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
+            table.add(statisticsButton)
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
             addDumpLabels(table);
             return table;
         }
 
         private Table savedLevelsTable() {
             TextButton savedLevelsButton = new TextButton("MyLevels", skin);
-            savedLevelsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
+            savedLevelsButton.getLabel()
+                    .setFontScale(LaserKittens.scaleToPreferredWidth());
             savedLevelsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -316,11 +323,14 @@ public class ChooseLevelScreen implements Screen {
             addDumpLabels(table);
             table.row();
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
             table.add(savedLevelsButton)
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
             table.add(new Label("", skin))
-                    .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                    .width(0.6f * screenWidth)
+                    .height(0.2f * screenHeight);
             table.row();
 
             addDumpLabels(table);
@@ -358,15 +368,20 @@ public class ChooseLevelScreen implements Screen {
                 addDumpLabels(table);
                 table.row();
                 table.add(new Label("", skin))
-                        .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                        .width(0.6f * screenWidth)
+                        .height(0.2f * screenHeight);
                 table.add(levelButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
                 table.add(new Label("", skin))
-                        .width(0.6f * screenWidth).height(0.2f * screenHeight);
+                        .width(0.6f * screenWidth)
+                        .height(0.2f * screenHeight);
                 table.row();
                 if (statusLabel != null) {
                     statusLabel.setFontScale(5f * LaserKittens.scaleToPreferredWidth());
-                    table.add(statusLabel).width(0.6f * screenWidth)
-                            .height(0.2f * screenHeight).align(Align.center).colspan(3);
+                    table.add(statusLabel)
+                            .width(0.6f * screenWidth)
+                            .height(0.2f * screenHeight)
+                            .align(Align.center)
+                            .colspan(3);
                     statusLabel.setAlignment(Align.center);
                     table.row().pad(5, 10, 5, 10);
                 }
