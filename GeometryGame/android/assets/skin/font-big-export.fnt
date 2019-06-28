@@ -79,7 +79,7 @@ char id=106 x=323 y=117 width=10 height=58 xoffset=0 yoffset=13 xadvance=13 page
 char id=107 x=253 y=0 width=27 height=45 xoffset=0 yoffset=15 xadvance=30 page=0 chnl=0 letter="k"
 char id=108 x=333 y=0 width=5 height=45 xoffset=0 yoffset=15 xadvance=8 page=0 chnl=0 letter="l"
 char id=109 x=0 y=124 width=48 height=34 xoffset=0 yoffset=26 xadvance=51 page=0 chnl=0 letter="m"
-char id=110 x=224 y=196 width=28 height=34 xoffset=0 yoffset=26 xadvance=31 page=0 chnl=0 letter="n"
+char id=110 x=224 y=196 width=28 height=34 xoffset=0 yoffset=26 xadvance=31 page=0 chnl=0 letter="verticesNumber"
 char id=111 x=91 y=0 width=34 height=35 xoffset=0 yoffset=25 xadvance=37 page=0 chnl=0 letter="o"
 char id=112 x=91 y=255 width=34 height=46 xoffset=0 yoffset=25 xadvance=37 page=0 chnl=0 letter="p"
 char id=113 x=91 y=70 width=34 height=46 xoffset=0 yoffset=25 xadvance=37 page=0 chnl=0 letter="q"
