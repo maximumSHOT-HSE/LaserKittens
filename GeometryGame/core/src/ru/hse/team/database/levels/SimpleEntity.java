@@ -6,13 +6,12 @@ package ru.hse.team.database.levels;
  * Type should be one of {@code STAR, WALL, MIRROR, PLAYER, GLASS} only.
  */
 public class SimpleEntity {
-
     public enum EntityType {
         STAR,
         WALL,
         MIRROR,
         PLAYER,
-        GLASS;
+        GLASS
     }
 
     private float positionX;
@@ -25,7 +24,14 @@ public class SimpleEntity {
 
     private final EntityType type;
 
-    public SimpleEntity(float positionX, float positionY, float sizeX, float sizeY, float rotation, EntityType type) {
+    public SimpleEntity(
+        float positionX,
+        float positionY,
+        float sizeX,
+        float sizeY,
+        float rotation,
+        EntityType type
+    ) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.sizeX = sizeX;
