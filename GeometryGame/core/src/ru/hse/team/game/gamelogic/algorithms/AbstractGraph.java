@@ -7,11 +7,11 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.List;
 
 public abstract class AbstractGraph {
-
     private static final long MAX_DRAW_GRAPH_TIME = 10_000;
+    private static final long NEGATIVE_TIME_INFINITY = (long) -1e9;
 
     protected boolean drawGraph = false;
-    protected long previousDrawGraphTime = (long) -1e9;
+    protected long previousDrawGraphTime = NEGATIVE_TIME_INFINITY;
 
     abstract public void addEdge(Vector2 u, Vector2 v);
 
