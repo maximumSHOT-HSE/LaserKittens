@@ -46,16 +46,15 @@ public class BodyFactory {
             this.mask = (short)(1 << index);
         }
 
-        private static short all() {
-            short sumMask = 0;
+        private static short all = 0;
+        static {
             for (Category category : Category.values()) {
-                sumMask |= category.mask;
+                all |= category.mask;
             }
-            return sumMask;
         }
 
         private short allExceptMe() {
-            return (short) (all() ^ mask);
+            return (short) (all ^ mask);
         }
     }
 
@@ -86,7 +85,7 @@ public class BodyFactory {
         setFilter(
             body,
             Category.TRANSPARENT.mask,
-            (short) (Category.all() ^ Category.BULLET.mask)
+            (short) (Category.all ^ Category.BULLET.mask)
         );
         return body;
     }
@@ -106,7 +105,7 @@ public class BodyFactory {
         circleShape.setRadius(radius);
         body.createFixture(FixtureFactory.stoneFixture(circleShape));
         circleShape.dispose();
-        setFilter(body, Category.OTHER.mask, Category.all());
+        setFilter(body, Category.OTHER.mask, Category.all);
         return body;
     }
 
@@ -120,7 +119,7 @@ public class BodyFactory {
         circleShape.setRadius(radius);
         body.createFixture(FixtureFactory.playerFixture(circleShape));
         circleShape.dispose();
-        setFilter(body, Category.PLAYER.mask, (short)(Category.all() & ~Category.BULLET.mask));
+        setFilter(body, Category.PLAYER.mask, (short)(Category.all & ~Category.BULLET.mask));
         return body;
     }
 
@@ -134,7 +133,7 @@ public class BodyFactory {
         circleShape.setRadius(radius);
         body.createFixture(FixtureFactory.playerFixture(circleShape));
         circleShape.dispose();
-        setFilter(body, Category.OTHER.mask, Category.all());
+        setFilter(body, Category.OTHER.mask, Category.all);
         return body;
     }
 
@@ -150,7 +149,7 @@ public class BodyFactory {
         polygonShape.setAsBox(width / 2, height / 2);
         body.createFixture(FixtureFactory.ignoringWallFixture(polygonShape));
         polygonShape.dispose();
-        setFilter(body, Category.OTHER.mask, Category.all());
+        setFilter(body, Category.OTHER.mask, Category.all);
         return body;
     }
 
@@ -164,7 +163,7 @@ public class BodyFactory {
         polygonShape.setAsBox(width / 2, height / 2);
         body.createFixture(FixtureFactory.mirrorFixture(polygonShape));
         polygonShape.dispose();
-        setFilter(body, Category.OTHER.mask, Category.all());
+        setFilter(body, Category.OTHER.mask, Category.all);
         return body;
     }
 
@@ -200,10 +199,13 @@ public class BodyFactory {
                 .setFixedRotation(fixedRotation)
                 .setPosition(center)
                 .build();
-        for (int i = 0; i < 5; i++) {
-            float angle = 234f - i * 72f;
-            float angleR = angle - 36f;
-            float angleL = angle + 36f;
+
+        int starRays = 5;
+        float fullCircleDegrees = 360f;
+        for (int i = 0; i < starRays; i++) {
+            float angle = fullCircleDegrees * 0.6f - i * fullCircleDegrees / starRays;
+            float angleR = angle - fullCircleDegrees / (2 * starRays);
+            float angleL = angle + fullCircleDegrees / (2 * starRays);
             Vector2[] coordinates = {
                     coordinatesByAngle(origin, angle, radius),
                     coordinatesByAngle(origin, angleL, radius / 2),
@@ -215,7 +217,7 @@ public class BodyFactory {
             body.createFixture(FixtureFactory.sensorFixture(polygon));
             polygon.dispose();
         }
-        setFilter(body, Category.OTHER.mask, Category.all());
+        setFilter(body, Category.OTHER.mask, Category.all);
         return body;
     }
 
