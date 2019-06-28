@@ -50,17 +50,14 @@ public class GameEndingScreen implements Screen {
     }
 
     private void addResultToDatabase(GameStatus gameStatus) {
-        new Thread(() ->
-            laserKittens.getDatabase()
-                .statisticsDao()
-                .insert(
-                    new LevelStatistics(
-                        parentLevel.getLevelName(),
-                        gameStatus.timeGone(),
-                        gameStatus.getCalendarDate()
+       laserKittens.getDatabase().statisticsDao()
+               .insert(
+                       new LevelStatistics(
+                               parentLevel.getLevelName()
+                               , gameStatus.timeGone()
+                               , gameStatus.getCalendarDate()
                     )
-                )
-        ).start();
+                );
     }
 
     @Override
