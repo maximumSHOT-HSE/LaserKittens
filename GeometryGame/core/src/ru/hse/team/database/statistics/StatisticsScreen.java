@@ -126,17 +126,7 @@ public class StatisticsScreen implements Screen {
         }
 
         private List<LevelStatistics> getAllLevels() {
-            List<List<LevelStatistics>> allLevels = new ArrayList<>(1);
-            Thread queryThread = new Thread(() ->
-                    allLevels.add(laserKittens
-                            .getDatabase().statisticsDao().getAll()));
-            queryThread.start();
-            try {
-                queryThread.join();
-            } catch (InterruptedException exception) {
-                Gdx.app.log("fail", "Database query interrupted");
-            }
-            return allLevels.get(0);
+            return laserKittens.getDatabase().statisticsDao().getAll();
         }
 
         public Menu(Stage stage) {
@@ -167,7 +157,6 @@ public class StatisticsScreen implements Screen {
                 }
             }
             scroll.addPage(information);
-
             table.add(scroll).expand().fill();
 
             table.row().pad(30, 10, 10, 10);
