@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ru.hse.team.Background;
@@ -116,13 +117,12 @@ public class StatisticsScreen implements Screen {
         private final List<List<Label>> listOfStatistics = new ArrayList<>();
 
         private List<Label> levelStatisticsToLabels(LevelStatistics levelStatistics) {
-            List<Label> statisticsLabels = new ArrayList<>();
-            statisticsLabels.add(new Label(levelStatistics.date, skin));
-            statisticsLabels.add(new Label(levelStatistics.levelName, skin));
-            statisticsLabels.add(
-                new Label(GameStatus.getTimeStamp(levelStatistics.timeNano), skin)
+            return Arrays.asList(
+                    new Label(levelStatistics.date, skin)
+                    , new Label(levelStatistics.date, skin)
+                    , new Label(levelStatistics.levelName, skin)
+                    , new Label(GameStatus.getTimeStamp(levelStatistics.timeNano), skin)
             );
-            return statisticsLabels;
         }
 
         private List<LevelStatistics> getAllLevels() {
