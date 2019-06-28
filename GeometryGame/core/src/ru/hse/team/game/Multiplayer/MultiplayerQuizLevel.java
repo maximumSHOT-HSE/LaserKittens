@@ -12,7 +12,6 @@ import ru.hse.team.game.Multiplayer.AppWarp.WarpListener;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements WarpListener {
-
     private static final int WIDTH_SCREENS = 2;
     private static final int HEIGHT_SCREENS = 2;
 
@@ -60,7 +59,7 @@ public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements Wa
                 float length = (float) Math.sqrt(direction.x * direction.x + direction.y * direction.y);
                 float playerRadius = getPlayerRadius() / length;
 
-                Vector2 catPosition =  new Vector2(source.x - playerRadius * direction.x * 0.96f,
+                Vector2 catPosition = new Vector2(source.x - playerRadius * direction.x * 0.96f,
                         source.y - playerRadius * direction.y * 0.96f);
                 if (getFactory() != null) {
                     Gdx.app.postRunnable(() -> {
@@ -69,6 +68,8 @@ public class MultiplayerQuizLevel extends AbstractMultiplayerLevel implements Wa
                     });
                 }
                 break;
+            default:
+                throw new IllegalArgumentException("Incorrect message");
         }
     }
 
