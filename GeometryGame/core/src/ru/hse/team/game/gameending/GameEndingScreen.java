@@ -37,23 +37,31 @@ public class GameEndingScreen implements Screen {
     private final AbstractLevel parentLevel;
     private final OrthographicCamera camera = new OrthographicCamera();
     private final Background background;
-    private Menu menu;
     private final Stage stage;
 
     public GameEndingScreen(LaserKittens laserKittens, AbstractLevel level) {
         this.laserKittens = laserKittens;
         this.parentLevel = level;
-        this.background = new Background(laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
+        this.background = new Background(
+            laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND)
+        );
         this.stage = new Stage(new ScreenViewport());
         addResultToDatabase(parentLevel.getGameStatus());
     }
 
     private void addResultToDatabase(GameStatus gameStatus) {
-        new Thread(() -> {
-            laserKittens.getDatabase().statisticsDao().insert(
-                        new LevelStatistics(parentLevel.getLevelName(),gameStatus.timeGone(),
-                                gameStatus.getStarsInLevel(), gameStatus.getCalendarDate()));
-        }).start();
+        new Thread(() ->
+            laserKittens.getDatabase()
+                .statisticsDao()
+                .insert(
+                    new LevelStatistics(
+                        parentLevel.getLevelName(),
+                        gameStatus.timeGone(),
+                        gameStatus.getStarsInLevel(),
+                        gameStatus.getCalendarDate()
+                    )
+                )
+        ).start();
     }
 
     @Override
@@ -70,7 +78,7 @@ public class GameEndingScreen implements Screen {
         });
         Gdx.input.setInputProcessor(stage);
 
-        menu = new Menu(stage);
+        new Menu(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
@@ -119,10 +127,11 @@ public class GameEndingScreen implements Screen {
     }
 
     private class Menu {
-        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
-        private TextButton restartButton = new TextButton("Restart", skin);
-        private TextButton quitButton = new TextButton("Quit", skin);
-        private Table table = new Table();
+        private final Skin skin = laserKittens.getAssetManager()
+                .getSkin(KittensAssetManager.Skins.BLUE_SKIN);
+        private final TextButton restartButton = new TextButton("Restart", skin);
+        private final TextButton quitButton = new TextButton("Quit", skin);
+        private final Table table = new Table();
 
         private final float screenWidth = Gdx.graphics.getWidth();
         private final float screenHeight = Gdx.graphics.getHeight();
@@ -131,21 +140,24 @@ public class GameEndingScreen implements Screen {
 
         public Menu(Stage stage) {
             stage.addActor(table);
-            table.setWidth(0.6f * screenWidth);
-            table.setHeight(0.6f * screenHeight);
+            table.setWidth(screenWidth * 0.6f);
+            table.setHeight(screenHeight * 0.6f);
             table.center();
 
-            restartButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
-            quitButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
+            restartButton.getLabel().setFontScale(LaserKittens.scaleToPreferredWidth());
+            quitButton.getLabel().setFontScale(LaserKittens.scaleToPreferredWidth());
             statusLabel = new Label(GameStatus.getTimeStamp(parentLevel.getGameStatus().timeGone()), skin);
-            statusLabel.setFontScale(5f * LaserKittens.scaleToPreferredWidth());
+            statusLabel.setFontScale(LaserKittens.scaleToPreferredWidth() * 5f);
 
             table.setFillParent(true);
-            table.add(restartButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(restartButton).width(screenWidth * 0.6f).height(screenHeight * 0.2f);
             table.row().pad(5, 10, 5, 10);
-            table.add(quitButton).width(0.6f * screenWidth).height(0.2f * screenHeight);
+            table.add(quitButton).width(screenWidth * 0.6f).height(screenHeight * 0.2f);
             table.row().pad(5, 10, 5, 10);
-            table.add(statusLabel).width(0.6f * screenWidth).height(0.2f * screenHeight).align(Align.center);
+            table.add(statusLabel)
+                .width(screenWidth * 0.6f)
+                .height(screenHeight * 0.2f)
+                .align(Align.center);
             statusLabel.setAlignment(Align.center);
             table.row().pad(5, 10, 5, 10);
 
