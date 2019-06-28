@@ -11,23 +11,22 @@ import ru.hse.team.database.levels.SimpleEntity;
  * Gesture processor for level creating screen.
  */
 public class LevelGestureProcessor implements GestureDetector.GestureListener {
-
-
     private float scale = 1;
-    private Vector2 entityScale = new Vector2(1, 1);
-    private Vector2 entityScaleBase = new Vector2(1, 1);
+    private final Vector2 entityScale = new Vector2(1, 1);
+    private final Vector2 entityScaleBase = new Vector2(1, 1);
     private final LaserKittens laserKittens;
     private final LevelCreateInputProcessor levelCreateInputProcessor;
     private final OrthographicCamera camera;
 
-
-    public LevelGestureProcessor(LaserKittens laserKittens, LevelCreateInputProcessor levelCreateInputProcessor,
-                                 OrthographicCamera camera) {
+    public LevelGestureProcessor(
+        LaserKittens laserKittens,
+        LevelCreateInputProcessor levelCreateInputProcessor,
+        OrthographicCamera camera
+    ) {
         this.laserKittens = laserKittens;
         this.levelCreateInputProcessor = levelCreateInputProcessor;
         this.camera = camera;
     }
-
 
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
@@ -102,9 +101,8 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
 
     private void positiveRotation(Vector2 distance, float rotation) {
         Vector2 wasDistance = new Vector2(distance);
-
         distance.x = (float)Math.abs(wasDistance.x * Math.abs(Math.cos(rotation))
-                 - wasDistance.y * Math.abs(Math.sin(rotation)));
+                - wasDistance.y * Math.abs(Math.sin(rotation)));
         distance.y = (float)Math.abs(wasDistance.x * Math.abs(Math.sin(rotation) )
                 + wasDistance.y * Math.abs(Math.cos(rotation)));
     }
@@ -113,7 +111,12 @@ public class LevelGestureProcessor implements GestureDetector.GestureListener {
      * If now some entity is in focus, zooms it's sizes.
      */
     @Override
-    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+    public boolean pinch(
+        Vector2 initialPointer1,
+        Vector2 initialPointer2,
+        Vector2 pointer1,
+        Vector2 pointer2
+    ) {
         if (levelCreateInputProcessor.isDragging()) {
             Vector2 initialDistance = distanceModule(initialPointer1, initialPointer2);
             Vector2 distance = distanceModule(pointer1, pointer2);
