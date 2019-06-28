@@ -31,18 +31,18 @@ import ru.hse.team.LaserKittens;
  * Settings screen provides an ability to manage application settings.
  */
 public class SettingsScreen implements Screen {
-
     private final LaserKittens laserKittens;
-    private OrthographicCamera camera = new OrthographicCamera();
-    private Background background;
-    private Stage stage = new Stage(new ScreenViewport());
+    private final OrthographicCamera camera = new OrthographicCamera();
+    private final Background background;
+    private final Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
 
     public SettingsScreen(LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
         background = new Background(
-                this.laserKittens.getAssetManager()
-                        .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
+            this.laserKittens.getAssetManager()
+                    .getImage(KittensAssetManager.Images.BLUE_BACKGROUND)
+        );
     }
 
     @Override
@@ -59,7 +59,6 @@ public class SettingsScreen implements Screen {
         });
         Gdx.input.setInputProcessor(stage);
         menu = new Menu(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         laserKittens.getBatch().setProjectionMatrix(camera.combined);
@@ -88,61 +87,60 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
     public void dispose() {
-
     }
 
     private class Menu {
-        private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
+        private final Table table = new Table();
+        private final Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
 
-        private Label titleLabel = new Label("Settings",
+        private final Label titleLabel = new Label("Settings",
                 new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
-        private Label playerNameLabel = new Label("player name: ",
+        private final Label playerNameLabel = new Label("player name: ",
                 new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
-        private Label volumeSoundLabel = new Label("sound volume",
+        private final Label volumeSoundLabel = new Label("sound volume",
                 new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
 
-        final private TextButton backButton = new TextButton("Back", skin);
-        private TextButton about = new TextButton("About", skin);
+        private final TextButton backButton = new TextButton("Back", skin);
+        private final TextButton about = new TextButton("About", skin);
 
-        final private Label playerNameTextField = new Label(
+        private final Label playerNameTextField = new Label(
                 laserKittens.getPreferences().getPlayerName(),
                 new Label.LabelStyle(laserKittens.getFont(), Color.YELLOW));
 
-        final private Slider volumeSoundSlider =
+        private final Slider volumeSoundSlider =
                 new Slider( 0f, 1f, 0.1f,false, skin );
 
-        private CheckBox enableAccelerometer = new CheckBox(null, skin);
-        private Label accelerometerLabel =
-                new Label("accelerometer",
-                        new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+        private final CheckBox enableAccelerometer = new CheckBox(null, skin);
+        private final Label accelerometerLabel = new Label(
+            "accelerometer",
+            new Label.LabelStyle(laserKittens.getFont(), Color.WHITE)
+        );
 
-        private CheckBox showTime = new CheckBox(null, skin);
-        private Label showTimeLabel =
-                new Label("timer",
-                        new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+        private final CheckBox showTime = new CheckBox(null, skin);
+        private final Label showTimeLabel = new Label(
+            "timer",
+            new Label.LabelStyle(laserKittens.getFont(), Color.WHITE)
+        );
 
-        private CheckBox enableFog = new CheckBox(null, skin);
-        private Label fogLabel =
-                new Label("enable fog",
-                        new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+        private final CheckBox enableFog = new CheckBox(null, skin);
+        private final Label fogLabel = new Label(
+            "enable fog",
+            new Label.LabelStyle(laserKittens.getFont(), Color.WHITE)
+        );
 
         public Menu(Stage stage) {
             table.setFillParent(true);
@@ -196,7 +194,6 @@ public class SettingsScreen implements Screen {
         }
 
         private void setListeners() {
-
             about.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
