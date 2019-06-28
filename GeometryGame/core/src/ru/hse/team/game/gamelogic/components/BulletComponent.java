@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * Laser is implemented via BulletComponent
  */
 public class BulletComponent implements Component, Poolable {
-
     /** Time of bullet creation in milliseconds */
     public long creationTime;
 

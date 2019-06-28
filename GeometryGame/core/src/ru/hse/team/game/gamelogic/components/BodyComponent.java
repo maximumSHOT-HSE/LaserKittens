@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  * Contains information about current entity body.
  */
 public class BodyComponent implements Component, Poolable {
-
     /** Box2D body for entity */
     public Body body;
 
