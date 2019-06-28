@@ -30,11 +30,10 @@ import ru.hse.team.LaserKittens;
  *     External libraries, sounds, skins
  */
 public class AboutScreen implements Screen {
-
     private final LaserKittens laserKittens;
-    private OrthographicCamera camera = new OrthographicCamera();
-    private Background background;
-    private Stage stage = new Stage(new ScreenViewport());
+    private final OrthographicCamera camera = new OrthographicCamera();
+    private final Background background;
+    private final Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
 
     public AboutScreen(final LaserKittens laserKittens) {
@@ -57,7 +56,6 @@ public class AboutScreen implements Screen {
         });
         menu = new Menu(stage);
         Gdx.input.setInputProcessor(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         laserKittens.getBatch().setProjectionMatrix(camera.combined);
@@ -86,17 +84,14 @@ public class AboutScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
@@ -105,15 +100,14 @@ public class AboutScreen implements Screen {
         background.dispose();
     }
 
-
     /**
      * Menu with clickable labels and scrollable plane.
      */
     private class Menu {
-        private Table table = new Table();
-
-        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
-        private Label titleLabel = new Label("About", skin);
+        private final Table table = new Table();
+        private final Skin skin = laserKittens.getAssetManager()
+                .getSkin(KittensAssetManager.Skins.BLUE_SKIN);
+        private final Label titleLabel = new Label("About", skin);
         private final TextButton backButton = new TextButton("Back", skin);
 
         private final Label libgdxLicense =
@@ -144,7 +138,7 @@ public class AboutScreen implements Screen {
         private final Label laserSoundLicenseLink =
                 new Label("CC BY 3.0", skin, "black");
 
-        List<List<Label>> listOfLicenses = Arrays.asList(
+        private final List<List<Label>> listOfLicenses = Arrays.asList(
                 Arrays.asList(libgdxLicense, libgdxLink, libgdxApacheLink),
                 Arrays.asList(ashleyLicense, ashleyLink, ashleyApacheLink),
                 Arrays.asList(skinLicense, skinLink, skinCC4Link),
@@ -186,7 +180,6 @@ public class AboutScreen implements Screen {
         }
 
         private void setListeners() {
-
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
