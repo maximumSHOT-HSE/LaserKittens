@@ -178,13 +178,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
                 .submitScore(getString(R.string.leaderboard_id), score);
             showScores();
         } else {
-            runOnUiThread(() ->
-                Toast.makeText(
-                    this,
-                    "Sign in first",
-                    Toast.LENGTH_SHORT
-                ).show()
-            );
+            showInvitationToSignIn();
         }
     }
 
@@ -196,13 +190,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
                 .addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
                 .addOnFailureListener(this::handleException);
         } else {
-            runOnUiThread(() ->
-                Toast.makeText(
-                    this,
-                    "Sign in first",
-                    Toast.LENGTH_SHORT
-                ).show()
-            );
+            showInvitationToSignIn();
         }
     }
 
@@ -220,14 +208,18 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
                 .addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
                 .addOnFailureListener(this::handleException);
         } else {
-            runOnUiThread(() ->
-                Toast.makeText(
-                    this,
-                    "Sign in first",
-                    Toast.LENGTH_SHORT
-                ).show()
-            );
+            showInvitationToSignIn();
         }
+    }
+
+    private void showInvitationToSignIn() {
+        runOnUiThread(() ->
+                Toast.makeText(
+                        this,
+                        "Sign in first",
+                        Toast.LENGTH_SHORT
+                ).show()
+        );
     }
 
     @Override
