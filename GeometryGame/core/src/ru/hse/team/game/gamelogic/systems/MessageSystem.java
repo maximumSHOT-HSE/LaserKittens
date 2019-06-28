@@ -12,12 +12,11 @@ import ru.hse.team.game.gamelogic.components.MessageComponent;
 
 /**
  * Displays messages.
- * Interval between any message showing is at least {@code SHOWING_INTERVAL}
+ * Interval between any message showing is at least {@code SHOWING_INTERVAL_IN_SECONDS}
  */
 public class MessageSystem extends IteratingSystem {
 
-    //seconds
-    public static final long SHOWING_INTERVAL = 3;
+    public static final long SHOWING_INTERVAL_IN_SECONDS = 3;
 
     private final AndroidActions androidActions;
 
@@ -32,7 +31,7 @@ public class MessageSystem extends IteratingSystem {
 
         long currentTimeMillis = System.currentTimeMillis();
         if (message.likeToShow &&
-                currentTimeMillis - message.lastTimeShown > TimeUnit.SECONDS.toMillis(SHOWING_INTERVAL)) {
+                currentTimeMillis - message.lastTimeShown > TimeUnit.SECONDS.toMillis(SHOWING_INTERVAL_IN_SECONDS)) {
             androidActions.showToast(message.message, false);
             message.lastTimeShown = currentTimeMillis;
             message.likeToShow = false;
