@@ -33,28 +33,26 @@ import ru.hse.team.game.levels.AbstractLevel;
  */
 public class GameScreenInputProcessor implements InputProcessor {
 
-    private LaserKittens laserKittens;
-    private Entity focusedPlayer;
-    private AbstractLevel abstractLevel;
-    private OrthographicCamera camera;
+    private final LaserKittens laserKittens;
+    private final Entity focusedPlayer;
+    private final AbstractLevel abstractLevel;
+    private final OrthographicCamera camera;
 
     private boolean dragging;
     private int draggingPointer = -1;
-    private Vector3 position = new Vector3();
+    private final Vector3 position = new Vector3();
 
     /** won't change during abstractLevel */
-    private final boolean enabledAccelerometer;
+    private boolean enabledAccelerometer;
 
-    private Vector3 draggingPosition = new Vector3();
-    private Vector2 draggingStartedDiff = new Vector2();
+    private final Vector3 draggingPosition = new Vector3();
+    private final Vector2 draggingStartedDiff = new Vector2();
 
     private volatile MouseJoint mouseJoint = null;
     /** special dummy body for mousejoint */
     private final Body ground;
 
-    public static final int MAXIMUM_NUMBER_OF_TOUCHES = 20;
-
-    private Vector2 target = new Vector2();
+    private final Vector2 target = new Vector2();
 
     public boolean isDragging() {
         return dragging;
@@ -69,8 +67,7 @@ public class GameScreenInputProcessor implements InputProcessor {
         enabledAccelerometer = laserKittens.getPreferences().isEnabledAccelerometer();
 
         ground = BodyFactory.getBodyFactory(abstractLevel.getWorld())
-        .newCircleBody(
-            new Vector2(0, abstractLevel.getLevelHeightInScreens() *
+                .newCircleBody(new Vector2(0, abstractLevel.getLevelHeightInScreens() *
                     RenderingSystem.getScreenSizeInMeters().y * 2),
                 0.1f,
                 BodyDef.BodyType.StaticBody,
@@ -80,7 +77,7 @@ public class GameScreenInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.BACK){
+        if(keycode == Input.Keys.BACK) {
             final Screen gameScreen = laserKittens.getScreen();
             laserKittens.changeScreen(LaserKittens.ScreenType.CHOOSE_LEVEL_SCREEN);
             gameScreen.dispose();

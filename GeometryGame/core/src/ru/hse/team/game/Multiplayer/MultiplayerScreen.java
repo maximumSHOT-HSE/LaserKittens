@@ -35,7 +35,6 @@ import ru.hse.team.game.gamelogic.algorithms.RandomGenerator;
 import ru.hse.team.settings.about.PagedScrollPane;
 
 public class MultiplayerScreen implements Screen, WarpListener {
-
     private final LaserKittens laserKittens;
     private OrthographicCamera camera = new OrthographicCamera();
     private Background background;
@@ -44,23 +43,8 @@ public class MultiplayerScreen implements Screen, WarpListener {
     private InputMultiplexer inputMultiplexer;
     private WarpController warpController = null;
     private List<AbstractMultiplayerLevel> abstractMultiplayerLevels = new ArrayList<>();
-
     private Label connectionStatusLabel;
-    private int choosedLevelId = -1;
-
-    private void fillLevels() {
-        abstractMultiplayerLevels.add(
-                new MultiplayerQuizLevel(laserKittens, this));
-    }
-
-    private AbstractMultiplayerLevel getLevelByName(String levelName) {
-        for (AbstractMultiplayerLevel level : abstractMultiplayerLevels) {
-            if (level.getLevelName().equals(levelName)) {
-                return level;
-            }
-        }
-        return null;
-    }
+    private volatile int choosedLevelId = -1;
 
     public MultiplayerScreen(LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
@@ -173,61 +157,15 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     private class Menu {
 
-        private Skin skin = laserKittens.getAssetManager().getSkin(KittensAssetManager.Skins.BLUE_SKIN);
-        private Table table = new Table();
-        private TextButton createRoomButton = new TextButton("create room", skin);
-        private TextButton refreshRoomsButton = new TextButton("refresh", skin);
-        private Label levelNameFilterLabel = new Label("FILTER ME",
+        private final Skin skin = laserKittens.getAssetManager()
+                .getSkin(KittensAssetManager.Skins.BLUE_SKIN);
+
+        private final Table table = new Table();
+
+        private final TextButton createRoomButton = new TextButton("create room", skin);
+        private final TextButton refreshRoomsButton = new TextButton("refresh", skin);
+        private final Label levelNameFilterLabel = new Label("FILTER ME",
                 new Label.LabelStyle(laserKittens.getFont(), Color.BLACK));
-
-        private void addRooms() {
-            Table roomTable = new Table().pad(50).align(Align.top);
-            roomTable.defaults().pad(10, 10, 10, 10);
-
-            PagedScrollPane scroll = new PagedScrollPane(skin);
-            scroll.setFlingTime(0.1f);
-            scroll.setPageSpacing(25);
-
-            for (RoomData roomData : warpController.getActiveRooms()) {
-                Label roomLabel = new Label(roomData.getId() + "#" + roomData.getName(),
-                        new Label.LabelStyle(laserKittens.getFont(), Color.YELLOW));
-                roomLabel.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        GDXButtonDialog bDialog = laserKittens.getDialogs().newDialog(GDXButtonDialog.class);
-                        bDialog.setTitle("Room manager");
-                        bDialog.setMessage("Choose action");
-                        bDialog.setCancelable(true);
-                        bDialog.addButton("Join") // 0
-                                .addButton("Delete"); // 1
-                        bDialog.setClickListener(button -> {
-                            switch (button) {
-                                case 0: // Join
-                                    if (warpController != null && warpController.getState().equals(WarpController.State.CONNECTION_DONE)) {
-                                        if (choosedLevelId != -1) {
-                                            warpController.sendJoinAndSubscribeRoomRequest(roomData.getId());
-                                        }
-                                    }
-                                    break;
-                                case 1: // Delete
-                                    if (warpController != null && warpController.getState().equals(WarpController.State.CONNECTION_DONE)) {
-                                        warpController.sendRequestDeleteRoom(roomData.getId());
-                                    }
-                                    break;
-                            }
-                        });
-
-                        bDialog.build().show();
-                    }
-                });
-                roomTable.row();
-                roomTable.add(roomLabel);
-            }
-
-            scroll.addPage(roomTable);
-
-            table.add(scroll).colspan(3);
-        }
 
         public Menu(Stage stage) {
 
@@ -290,8 +228,7 @@ public class MultiplayerScreen implements Screen, WarpListener {
                                 RandomGenerator.generateRandomString(10),
                                 abstractMultiplayerLevels.get(button).getNumberOfPlayers(),
                                 abstractMultiplayerLevels.get(button).getLevelName());
-                        levelNameFilterLabel
-                                .setText(abstractMultiplayerLevels.get(choosedLevelId).getLevelName());
+                        levelNameFilterLabel.setText(abstractMultiplayerLevels.get(choosedLevelId).getLevelName());
                     });
 
                     bDialog.build().show();
@@ -328,5 +265,59 @@ public class MultiplayerScreen implements Screen, WarpListener {
                 addRooms();
             }
         }
+
+        private void addRooms() {
+            Table roomTable = new Table().pad(50).align(Align.top);
+            roomTable.defaults().pad(10, 10, 10, 10);
+
+            PagedScrollPane scroll = new PagedScrollPane(skin);
+            scroll.setFlingTime(0.1f);
+            scroll.setPageSpacing(25);
+
+            for (RoomData roomData : warpController.getActiveRooms()) {
+                Label roomLabel = new Label(roomData.getId() + "#" + roomData.getName(),
+                        new Label.LabelStyle(laserKittens.getFont(), Color.YELLOW));
+                roomLabel.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        GDXButtonDialog bDialog = laserKittens.getDialogs().newDialog(GDXButtonDialog.class);
+                        bDialog.setTitle("Room manager");
+                        bDialog.setMessage("Choose action");
+                        bDialog.setCancelable(true);
+                        bDialog.addButton("Join") // 0
+                                .addButton("Delete"); // 1
+                        bDialog.setClickListener(button -> {
+                            switch (button) {
+                                case 0: // Join
+                                    if (warpController != null && warpController.getState().equals(WarpController.State.CONNECTION_DONE)) {
+                                        if (choosedLevelId != -1) {
+                                            warpController.sendJoinAndSubscribeRoomRequest(roomData.getId());
+                                        }
+                                    }
+                                    break;
+                                case 1: // Delete
+                                    if (warpController != null && warpController.getState().equals(WarpController.State.CONNECTION_DONE)) {
+                                        warpController.sendRequestDeleteRoom(roomData.getId());
+                                    }
+                                    break;
+                            }
+                        });
+
+                        bDialog.build().show();
+                    }
+                });
+                roomTable.row();
+                roomTable.add(roomLabel);
+            }
+
+            scroll.addPage(roomTable);
+
+            table.add(scroll).colspan(3);
+        }
+    }
+
+    private void fillLevels() {
+        abstractMultiplayerLevels.add(
+                new MultiplayerQuizLevel(laserKittens, this));
     }
 }

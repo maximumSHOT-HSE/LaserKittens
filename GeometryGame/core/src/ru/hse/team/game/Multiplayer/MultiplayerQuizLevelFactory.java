@@ -19,11 +19,16 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
 
     private float CW;
     private float CH;
-    private int role = 1;
+    private int role;
 
     private Entity opponentPlayer = null;
 
-    public MultiplayerQuizLevelFactory(PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory, int role) {
+    public MultiplayerQuizLevelFactory(
+        PooledEngine engine,
+        KittensAssetManager manager,
+        BodyFactory bodyFactory,
+        int role
+    ) {
         super(engine, manager, bodyFactory);
         this.role = role;
     }
@@ -110,11 +115,23 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
             @Override
             public void run() {
                 if (state == 0) {
-                    barrier.getComponent(BodyComponent.class).body.setLinearVelocity(0, 100);
-                    tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.BLUE_TUMBLER));
+                    barrier.getComponent(BodyComponent.class)
+                        .body
+                        .setLinearVelocity(0, 100);
+                    tumbler.getComponent(TextureComponent.class)
+                        .region
+                        .setTexture(
+                            getManager().getImage(KittensAssetManager.Images.BLUE_TUMBLER)
+                        );
                 } else {
-                    barrier.getComponent(BodyComponent.class).body.setLinearVelocity(0, -100);
-                    tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.YELLOW_TUMBLER));
+                    barrier.getComponent(BodyComponent.class)
+                        .body
+                        .setLinearVelocity(0, -100);
+                    tumbler.getComponent(TextureComponent.class)
+                        .region
+                        .setTexture(
+                            getManager().getImage(KittensAssetManager.Images.YELLOW_TUMBLER)
+                        );
                 }
                 state ^= 1;
             }

@@ -33,13 +33,12 @@ import ru.hse.team.game.levels.AbstractLevel;
  *  Adds finished level result to LevelStatistics database
  */
 public class GameEndingScreen implements Screen {
-
-    private LaserKittens laserKittens;
-    private AbstractLevel parentLevel;
-    private OrthographicCamera camera = new OrthographicCamera();
-    private Background background;
+    private final LaserKittens laserKittens;
+    private final AbstractLevel parentLevel;
+    private final OrthographicCamera camera = new OrthographicCamera();
+    private final Background background;
     private Menu menu;
-    private Stage stage;
+    private final Stage stage;
 
     public GameEndingScreen(LaserKittens laserKittens, AbstractLevel level) {
         this.laserKittens = laserKittens;
@@ -154,18 +153,16 @@ public class GameEndingScreen implements Screen {
         }
 
         private void setListeners() {
-
             quitButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (parentLevel instanceof AbstractMultiplayerLevel) {
                         laserKittens.changeScreen(LaserKittens.ScreenType.MAIN_MENU_SCREEN);
-                    } else {
+                    } else { // parentLevel instanceof AbstractLevel
                         laserKittens.changeScreen(LaserKittens.ScreenType.CHOOSE_LEVEL_SCREEN);
                     }
                 }
             });
-
             restartButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
