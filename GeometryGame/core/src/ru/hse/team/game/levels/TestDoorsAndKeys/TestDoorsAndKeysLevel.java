@@ -14,8 +14,16 @@ public class TestDoorsAndKeysLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        testDoorsAndKeysLevelFactory = new TestDoorsAndKeysLevelFactory(engine, assetManager, getBodyFactory());
-        testDoorsAndKeysLevelFactory.createLevel(getWidthInScreens(), getHeightInScreens(), this);
+        testDoorsAndKeysLevelFactory = new TestDoorsAndKeysLevelFactory(
+            engine,
+            assetManager,
+            getBodyFactory()
+        );
+        testDoorsAndKeysLevelFactory.createLevel(
+            getWidthInScreens(),
+            getHeightInScreens(),
+            this
+        );
     }
 
     @Override
