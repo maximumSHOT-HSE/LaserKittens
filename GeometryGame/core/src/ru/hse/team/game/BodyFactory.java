@@ -35,11 +35,12 @@ public class BodyFactory {
      * Box2D allows up to 16 body types
      */
     private enum Category {
+        PLAYER(0),
+        BULLET(1),
+        OTHER(2),
+        TRANSPARENT(3);
 
-        PLAYER((short)0),
-        BULLET((short)1),
-        OTHER((short)2),
-        TRANSPARENT((short)3);
+        private short mask;
 
         Category(int index) {
             this.mask = (short)(1 << index);
@@ -56,15 +57,13 @@ public class BodyFactory {
         private short allExceptMe() {
             return (short) (all() ^ mask);
         }
-
-        private short mask;
     }
 
     /**
      * Goes though all fixtures in body and sets
      * them filter specified by given masks.
      */
-    private void setFilter(@Nullable Body body, short categoryBits, short maskBits){
+    private void setFilter(@Nullable Body body, short categoryBits, short maskBits) {
         if (body == null) {
             return;
         }
@@ -77,46 +76,56 @@ public class BodyFactory {
         }
     }
 
-    public Body newTransparentRectangle(Vector2 center, float width, float height, float rotation) {
+    public Body newTransparentRectangle(
+        Vector2 center,
+        float width,
+        float height,
+        float rotation
+    ) {
         Body body = newRectangle(center, width, height, rotation);
-        setFilter(body, Category.TRANSPARENT.mask, (short) (Category.all() ^ Category.BULLET.mask));
+        setFilter(
+            body,
+            Category.TRANSPARENT.mask,
+            (short) (Category.all() ^ Category.BULLET.mask)
+        );
         return body;
     }
 
-    public Body newCircleBody(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
+    public Body newCircleBody(
+        Vector2 center,
+        float radius,
+        BodyDef.BodyType bodyType,
+        boolean fixedRotation
+    ) {
         Body body = new BodyBuilder()
                 .setType(bodyType)
                 .setPosition(center)
                 .setFixedRotation(fixedRotation)
                 .build();
-
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
         body.createFixture(FixtureFactory.stoneFixture(circleShape));
         circleShape.dispose();
-
         setFilter(body, Category.OTHER.mask, Category.all());
         return body;
     }
 
     public Body newPlayerBody(Vector2 center, float radius) {
-        Body body = (new BodyBuilder())
+        Body body = new BodyBuilder()
                 .setType(BodyDef.BodyType.DynamicBody)
                 .setPosition(center)
                 .setFixedRotation(true)
                 .build();
-
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius);
         body.createFixture(FixtureFactory.playerFixture(circleShape));
         circleShape.dispose();
-
         setFilter(body, Category.PLAYER.mask, (short)(Category.all() & ~Category.BULLET.mask));
         return body;
     }
 
     public Body newGuardianBody(Vector2 center, float radius) {
-        Body body = (new BodyBuilder())
+        Body body = new BodyBuilder()
                 .setType(BodyDef.BodyType.KinematicBody)
                 .setPosition(center)
                 .setFixedRotation(false)
@@ -125,20 +134,18 @@ public class BodyFactory {
         circleShape.setRadius(radius);
         body.createFixture(FixtureFactory.playerFixture(circleShape));
         circleShape.dispose();
-
         setFilter(body, Category.OTHER.mask, Category.all());
         return body;
     }
 
     public Body newDynamicRectangle(Vector2 center, float width, float height, float rotation) {
-        Body body = (new BodyBuilder())
+        Body body = new BodyBuilder()
                 .setType(BodyDef.BodyType.DynamicBody)
                 .setPosition(center)
                 .setRotation(rotation)
                 .setGravityScale(10)
                 .setLinearDamping(1f)
                 .build();
-
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(width / 2, height / 2);
         body.createFixture(FixtureFactory.ignoringWallFixture(polygonShape));
@@ -148,17 +155,15 @@ public class BodyFactory {
     }
 
     public Body newRectangle(Vector2 center, float width, float height, float rotation) {
-        Body body = (new BodyBuilder())
+        Body body = new BodyBuilder()
                 .setType(BodyDef.BodyType.KinematicBody)
                 .setPosition(center)
                 .setRotation(rotation)
                 .build();
-
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(width / 2, height / 2);
         body.createFixture(FixtureFactory.mirrorFixture(polygonShape));
         polygonShape.dispose();
-
         setFilter(body, Category.OTHER.mask, Category.all());
         return body;
     }
@@ -168,45 +173,48 @@ public class BodyFactory {
     }
 
     public Body newSensorRectangle(Vector2 center, float width, float height, float rotation) {
-        Body body = (new BodyBuilder())
+        Body body = new BodyBuilder()
                 .setType(BodyDef.BodyType.StaticBody)
                 .setPosition(center)
                 .setRotation(rotation)
                 .build();
-
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(width / 2, height / 2);
         body.createFixture(FixtureFactory.sensorFixture(polygonShape));
         polygonShape.dispose();
-
         setFilter(body, Category.OTHER.mask, Category.PLAYER.mask);
         return body;
     }
 
     private Vector2 coordinatesByAngle(Vector2 center, float angle, float length) {
-        return new Vector2(center.x + (float)Math.cos(Math.toRadians(angle)) * length,
-                center.y + (float)Math.sin(Math.toRadians(angle)) * length);
+        return new Vector2(
+            center.x + (float)Math.cos(Math.toRadians(angle)) * length,
+            center.y + (float)Math.sin(Math.toRadians(angle)) * length
+        );
     }
 
     public Body newStar(Vector2 center, float radius, BodyDef.BodyType bodyType, boolean fixedRotation) {
         Vector2 origin = new Vector2(0, 0);
-        Body body = (new BodyBuilder()).setType(bodyType).setFixedRotation(fixedRotation)
-                .setPosition(center).build();
-
+        Body body = new BodyBuilder()
+                .setType(bodyType)
+                .setFixedRotation(fixedRotation)
+                .setPosition(center)
+                .build();
         for (int i = 0; i < 5; i++) {
             float angle = 234f - i * 72f;
             float angleR = angle - 36f;
             float angleL = angle + 36f;
-
-            Vector2[] coordinates = {coordinatesByAngle(origin, angle, radius), coordinatesByAngle(origin, angleL, radius / 2),
-                    origin, coordinatesByAngle(origin, angleR, radius / 2)};
-
+            Vector2[] coordinates = {
+                    coordinatesByAngle(origin, angle, radius),
+                    coordinatesByAngle(origin, angleL, radius / 2),
+                    origin,
+                    coordinatesByAngle(origin, angleR, radius / 2)
+            };
             PolygonShape polygon = new PolygonShape();
             polygon.set(coordinates);
             body.createFixture(FixtureFactory.sensorFixture(polygon));
             polygon.dispose();
         }
-
         setFilter(body, Category.OTHER.mask, Category.all());
         return body;
     }
@@ -221,14 +229,16 @@ public class BodyFactory {
                 .setLinearDamping(0)
                 .setGravityScale(0)
                 .build();
-
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(RenderingSystem.getScreenSizeInMeters().x * 0.0005f);
         FixtureDef fixtureDef = FixtureFactory.bouncingBulletFixture(circleShape);
         boxBody.createFixture(fixtureDef);
         circleShape.dispose();
-
-        setFilter(boxBody, Category.BULLET.mask, (short)(Category.BULLET.allExceptMe() & ~Category.PLAYER.mask));
+        setFilter(
+            boxBody,
+            Category.BULLET.mask,
+            (short) (Category.BULLET.allExceptMe() & ~Category.PLAYER.mask)
+        );
         return boxBody;
     }
 
@@ -285,7 +295,6 @@ public class BodyFactory {
      * Utility class for creating fixtures.
      */
     private static class FixtureFactory {
-
         private static FixtureDef mirrorFixture(Shape shape) {
             return new FixtureBuilder()
                     .setShape(shape)
@@ -305,7 +314,7 @@ public class BodyFactory {
         }
 
         private static FixtureDef ignoringWallFixture(Shape shape) {
-            return (new FixtureBuilder())
+            return new FixtureBuilder()
                     .setShape(shape)
                     .setDensiity(200)
                     .setFriction(0.5f)

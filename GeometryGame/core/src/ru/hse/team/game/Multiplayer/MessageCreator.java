@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import org.json.JSONObject;
 
 public class MessageCreator {
-
     public static final String CATCH_KEY = "catchKey";
     public static final String CATCH_STAR = "catchStar";
 
@@ -33,10 +32,10 @@ public class MessageCreator {
     }
 
     public static String createShootMessage(
-            Vector2 source,
-            Vector2 direction,
-            int lifeTime) {
-
+        Vector2 source,
+        Vector2 direction,
+        int lifeTime
+    ) {
         JSONObject data = new JSONObject();
         data.put(TYPE, SHOOT);
         data.put(SHOOT_SOURCE + "x", Float.toString(source.x));

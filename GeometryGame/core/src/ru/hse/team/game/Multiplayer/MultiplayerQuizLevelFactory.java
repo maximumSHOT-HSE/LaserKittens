@@ -16,11 +16,9 @@ import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
-
     private float CW;
     private float CH;
     private int role;
-
     private Entity opponentPlayer = null;
 
     public MultiplayerQuizLevelFactory(
@@ -58,23 +56,21 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
     public void createLevel(int widthInScreens, int heightInScreens, AbstractLevel abstractLevel) {
         CH = widthInScreens;
         CW = heightInScreens;
-
         createBackground(widthInScreens, heightInScreens);
-
         if (role == 1) {
             abstractLevel.setPlayer(createPlayer(
-                    RenderingSystem.getScreenSizeInMeters().x * 0.25f,
-                    RenderingSystem.getScreenSizeInMeters().y * 0.8f,
-                    3f));
+                RenderingSystem.getScreenSizeInMeters().x * 0.25f,
+                RenderingSystem.getScreenSizeInMeters().y * 0.8f,
+                3f)
+            );
         } else {
             abstractLevel.setPlayer(createPlayer(
-                    RenderingSystem.getScreenSizeInMeters().x * 0.25f,
-                    RenderingSystem.getScreenSizeInMeters().y * 1.8f,
-                    3f));
+                RenderingSystem.getScreenSizeInMeters().x * 0.25f,
+                RenderingSystem.getScreenSizeInMeters().y * 1.8f,
+                3f)
+            );
         }
-
         createBorders();
-
         placeImpenetrableWall(1f, 1f, 2f, 0.1f);
         placeImpenetrableWall(1.5f, 1.4f, 0.1f, 0.8f);
         placeTransparentWall(1.5f, 1.9f, 0.05f, 0.2f);
@@ -82,36 +78,43 @@ public class MultiplayerQuizLevelFactory extends AbstractLevelFactory {
         placeImpenetrableWall(1.75f, 0.5f, 0.5f, 0.05f);
         Entity barrier = placeDynamicImpenetrableWall(1.4f, 0.25f, 0.05f, 0.5f);
         Entity downDoor = placeDoor(0.25f, 0.45f, 0.5f, 0.025f);
-        createKey(new Vector2(
-                        1.75f * RenderingSystem.getScreenSizeInMeters().x,
-                        1.1f * RenderingSystem.getScreenSizeInMeters().y),
-                0.05f * RenderingSystem.getScreenSizeInMeters().x,
-                0.03f * RenderingSystem.getScreenSizeInMeters().y,
-                downDoor);
+        createKey(
+            new Vector2(
+                1.75f * RenderingSystem.getScreenSizeInMeters().x,
+                1.1f * RenderingSystem.getScreenSizeInMeters().y
+            ),
+            0.05f * RenderingSystem.getScreenSizeInMeters().x,
+            0.03f * RenderingSystem.getScreenSizeInMeters().y,
+            downDoor
+        );
         createStar(
-                0.25f * RenderingSystem.getScreenSizeInMeters().x,
-                1.2f * RenderingSystem.getScreenSizeInMeters().y,
-                2f
+            0.25f * RenderingSystem.getScreenSizeInMeters().x,
+            1.2f * RenderingSystem.getScreenSizeInMeters().y,
+            2f
         );
         placeImpenetrableWall(0.25f, 1.4f, 0.5f, 0.05f);
         Entity upDoor = placeDoor(0.45f, 1.2f, 0.05f, 0.4f);
         placeTransparentWall(1f, 0.5f, 0.2f, 1f);
-        createKey(new Vector2(
-                        1.75f * RenderingSystem.getScreenSizeInMeters().x,
-                        0.4f * RenderingSystem.getScreenSizeInMeters().y),
-                0.05f * RenderingSystem.getScreenSizeInMeters().x,
-                0.03f * RenderingSystem.getScreenSizeInMeters().y,
-                upDoor);
+        createKey(
+            new Vector2(
+                1.75f * RenderingSystem.getScreenSizeInMeters().x,
+                0.4f * RenderingSystem.getScreenSizeInMeters().y
+            ),
+            0.05f * RenderingSystem.getScreenSizeInMeters().x,
+            0.03f * RenderingSystem.getScreenSizeInMeters().y,
+            upDoor
+        );
 
-        final Entity tumbler = createTumbler(new Vector2(
-                        0.25f * RenderingSystem.getScreenSizeInMeters().x,
-                        0.2f * RenderingSystem.getScreenSizeInMeters().y),
-                0.07f * RenderingSystem.getScreenSizeInMeters().x,
-                0.04f * RenderingSystem.getScreenSizeInMeters().y, () -> {});
+        final Entity tumbler = createTumbler(
+            new Vector2(
+                0.25f * RenderingSystem.getScreenSizeInMeters().x,
+                0.2f * RenderingSystem.getScreenSizeInMeters().y
+            ),
+            0.07f * RenderingSystem.getScreenSizeInMeters().x,
+            0.04f * RenderingSystem.getScreenSizeInMeters().y, () -> {}
+        );
         Runnable task = new Runnable() {
-
             private int state = 0;
-
             @Override
             public void run() {
                 if (state == 0) {

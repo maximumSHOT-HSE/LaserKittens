@@ -64,9 +64,9 @@ public class ContactProcessor implements ContactListener {
         Mapper.stateComponent.get(key).finish();
         if (abstractLevel instanceof AbstractMultiplayerLevel) {
             Gdx.app.postRunnable(() -> WarpController.getInstance().sendGameUpdate(
-                    MessageCreator.createFinishKeyMessage(
-                            Mapper.stateComponent.get(key).getId()
-                    )
+                MessageCreator.createFinishKeyMessage(
+                    Mapper.stateComponent.get(key).getId()
+                )
             ));
         }
     }
@@ -74,9 +74,9 @@ public class ContactProcessor implements ContactListener {
     private void processPlayerStar(Entity star) {
         if (abstractLevel instanceof AbstractMultiplayerLevel) {
             WarpController.getInstance().sendGameUpdate(
-                    MessageCreator.createFinishStarMessage(
-                            Mapper.stateComponent.get(star).getId()
-                    )
+                MessageCreator.createFinishStarMessage(
+                    Mapper.stateComponent.get(star).getId()
+                )
             );
         }
         Mapper.stateComponent.get(star).finish();
@@ -90,9 +90,9 @@ public class ContactProcessor implements ContactListener {
         Mapper.stateComponent.get(key).finish();
         if (abstractLevel instanceof AbstractMultiplayerLevel) {
             Gdx.app.postRunnable(() -> WarpController.getInstance().sendGameUpdate(
-                    MessageCreator.createFinishKeyMessage(
-                            Mapper.stateComponent.get(key).getId()
-                    )
+                MessageCreator.createFinishKeyMessage(
+                    Mapper.stateComponent.get(key).getId()
+                )
             ));
         }
     }
@@ -190,16 +190,13 @@ public class ContactProcessor implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-
     }
 }

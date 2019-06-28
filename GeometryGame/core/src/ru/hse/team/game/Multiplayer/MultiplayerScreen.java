@@ -36,25 +36,27 @@ import ru.hse.team.settings.about.PagedScrollPane;
 
 public class MultiplayerScreen implements Screen, WarpListener {
     private final LaserKittens laserKittens;
-    private OrthographicCamera camera = new OrthographicCamera();
-    private Background background;
-    private Stage stage = new Stage(new ScreenViewport());
+    private final OrthographicCamera camera = new OrthographicCamera();
+    private final Background background;
+    private final Stage stage = new Stage(new ScreenViewport());
     private Menu menu;
-    private InputMultiplexer inputMultiplexer;
+    private final InputMultiplexer inputMultiplexer;
     private WarpController warpController = null;
-    private List<AbstractMultiplayerLevel> abstractMultiplayerLevels = new ArrayList<>();
-    private Label connectionStatusLabel;
+    private final List<AbstractMultiplayerLevel> abstractMultiplayerLevels = new ArrayList<>();
+    private final Label connectionStatusLabel;
     private volatile int choosedLevelId = -1;
 
     public MultiplayerScreen(LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-        background = new Background(laserKittens.getAssetManager()
-                .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
-
+        background = new Background(
+            laserKittens.getAssetManager().getImage(KittensAssetManager.Images.BLUE_BACKGROUND)
+        );
         inputMultiplexer = new InputMultiplexer(stage);
         fillLevels();
-        connectionStatusLabel = new Label("Waiting...",
-                new Label.LabelStyle(laserKittens.getFont(), Color.GRAY));
+        connectionStatusLabel = new Label(
+            "Waiting...",
+            new Label.LabelStyle(laserKittens.getFont(), Color.GRAY)
+        );
         connectionStatusLabel.setFontScale(2f);
     }
 
@@ -84,13 +86,10 @@ public class MultiplayerScreen implements Screen, WarpListener {
     public synchronized void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
         laserKittens.getBatch().begin();
         background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -127,12 +126,10 @@ public class MultiplayerScreen implements Screen, WarpListener {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
@@ -156,31 +153,27 @@ public class MultiplayerScreen implements Screen, WarpListener {
     }
 
     private class Menu {
-
         private final Skin skin = laserKittens.getAssetManager()
                 .getSkin(KittensAssetManager.Skins.BLUE_SKIN);
-
         private final Table table = new Table();
-
         private final TextButton createRoomButton = new TextButton("create room", skin);
         private final TextButton refreshRoomsButton = new TextButton("refresh", skin);
-        private final Label levelNameFilterLabel = new Label("FILTER ME",
-                new Label.LabelStyle(laserKittens.getFont(), Color.BLACK));
+        private final Label levelNameFilterLabel = new Label(
+            "FILTER ME",
+            new Label.LabelStyle(laserKittens.getFont(), Color.BLACK)
+        );
 
         public Menu(Stage stage) {
-
             table.setFillParent(true);
             stage.addActor(table);
-
             connectionStatusLabel.setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             levelNameFilterLabel.setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             createRoomButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             refreshRoomsButton.getLabel().setFontScale(1f * LaserKittens.scaleToPreferredWidth());
             if (choosedLevelId != -1) {
                 levelNameFilterLabel
-                        .setText(abstractMultiplayerLevels.get(choosedLevelId).getLevelName());
+                    .setText(abstractMultiplayerLevels.get(choosedLevelId).getLevelName());
             }
-
             levelNameFilterLabel.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -188,21 +181,17 @@ public class MultiplayerScreen implements Screen, WarpListener {
                     bDialog.setTitle("Choose level to play");
                     bDialog.setMessage("Choose the level");
                     bDialog.setCancelable(true);
-
                     for (AbstractMultiplayerLevel level : abstractMultiplayerLevels) {
                         bDialog.addButton(level.getLevelName());
                     }
-
                     bDialog.setClickListener(button -> {
                         choosedLevelId = button;
                         levelNameFilterLabel
                                 .setText(abstractMultiplayerLevels.get(button).getLevelName());
                     });
-
                     bDialog.build().show();
                 }
             });
-
             createRoomButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -212,16 +201,13 @@ public class MultiplayerScreen implements Screen, WarpListener {
                     } else {
                         createRoomButton.setDisabled(false);
                     }
-
                     GDXButtonDialog bDialog = laserKittens.getDialogs().newDialog(GDXButtonDialog.class);
                     bDialog.setTitle("Create level");
                     bDialog.setMessage("Choose the level");
                     bDialog.setCancelable(true);
-
                     for (AbstractMultiplayerLevel level : abstractMultiplayerLevels) {
                         bDialog.addButton(level.getLevelName());
                     }
-
                     bDialog.setClickListener(button -> {
                         choosedLevelId = button;
                         warpController.sendRequestCreateRoom(
@@ -230,37 +216,39 @@ public class MultiplayerScreen implements Screen, WarpListener {
                                 abstractMultiplayerLevels.get(button).getLevelName());
                         levelNameFilterLabel.setText(abstractMultiplayerLevels.get(choosedLevelId).getLevelName());
                     });
-
                     bDialog.build().show();
                 }
             });
-
             refreshRoomsButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (warpController != null && !warpController.getState().equals(WarpController.State.FAILURE)) {
                         refreshRoomsButton.setDisabled(false);
                         warpController.sendRequestGetRoomInRangeWithProperties(
-                                0,
-                                choosedLevelId == -1 ? (int) 1e9 :
-                                        abstractMultiplayerLevels.get(choosedLevelId).getNumberOfPlayers() - 1,
-                                levelNameFilterLabel.getText().toString());
+                            0,
+                            choosedLevelId == -1 ?
+                                (int) 1e9 :
+                                abstractMultiplayerLevels
+                                        .get(choosedLevelId)
+                                        .getNumberOfPlayers() - 1,
+                            levelNameFilterLabel.getText().toString()
+                        );
                     } else {
                         refreshRoomsButton.setDisabled(true);
                     }
                 }
             });
-
             table.row().pad(10, 10, 10, 10);
             table.add(connectionStatusLabel).colspan(1);
             table.add(levelNameFilterLabel).colspan(2);
             table.row().pad(10, 10, 10, 10);
-            table.add(createRoomButton).width(Gdx.graphics.getWidth() * 0.4f)
+            table.add(createRoomButton)
+                    .width(Gdx.graphics.getWidth() * 0.4f)
                     .height(Gdx.graphics.getHeight() * 0.05f);
-            table.add(refreshRoomsButton).width(Gdx.graphics.getWidth() * 0.4f)
+            table.add(refreshRoomsButton)
+                    .width(Gdx.graphics.getWidth() * 0.4f)
                     .height(Gdx.graphics.getHeight() * 0.05f);
             table.row().pad(10, 10, 10, 10);
-
             if (warpController != null) {
                 addRooms();
             }
@@ -269,18 +257,17 @@ public class MultiplayerScreen implements Screen, WarpListener {
         private void addRooms() {
             Table roomTable = new Table().pad(50).align(Align.top);
             roomTable.defaults().pad(10, 10, 10, 10);
-
             PagedScrollPane scroll = new PagedScrollPane(skin);
             scroll.setFlingTime(0.1f);
             scroll.setPageSpacing(25);
-
             for (RoomData roomData : warpController.getActiveRooms()) {
                 Label roomLabel = new Label(roomData.getId() + "#" + roomData.getName(),
                         new Label.LabelStyle(laserKittens.getFont(), Color.YELLOW));
                 roomLabel.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        GDXButtonDialog bDialog = laserKittens.getDialogs().newDialog(GDXButtonDialog.class);
+                        GDXButtonDialog bDialog = laserKittens.getDialogs()
+                                .newDialog(GDXButtonDialog.class);
                         bDialog.setTitle("Room manager");
                         bDialog.setMessage("Choose action");
                         bDialog.setCancelable(true);
@@ -289,35 +276,39 @@ public class MultiplayerScreen implements Screen, WarpListener {
                         bDialog.setClickListener(button -> {
                             switch (button) {
                                 case 0: // Join
-                                    if (warpController != null && warpController.getState().equals(WarpController.State.CONNECTION_DONE)) {
+                                    if (warpController != null
+                                            && warpController.getState()
+                                            .equals(WarpController.State.CONNECTION_DONE)) {
                                         if (choosedLevelId != -1) {
-                                            warpController.sendJoinAndSubscribeRoomRequest(roomData.getId());
+                                            warpController.sendJoinAndSubscribeRoomRequest(
+                                                roomData.getId()
+                                            );
                                         }
                                     }
                                     break;
                                 case 1: // Delete
-                                    if (warpController != null && warpController.getState().equals(WarpController.State.CONNECTION_DONE)) {
+                                    if (warpController != null
+                                            && warpController.getState()
+                                            .equals(WarpController.State.CONNECTION_DONE)) {
                                         warpController.sendRequestDeleteRoom(roomData.getId());
                                     }
                                     break;
                             }
                         });
-
                         bDialog.build().show();
                     }
                 });
                 roomTable.row();
                 roomTable.add(roomLabel);
             }
-
             scroll.addPage(roomTable);
-
             table.add(scroll).colspan(3);
         }
     }
 
     private void fillLevels() {
         abstractMultiplayerLevels.add(
-                new MultiplayerQuizLevel(laserKittens, this));
+                new MultiplayerQuizLevel(laserKittens, this)
+        );
     }
 }
