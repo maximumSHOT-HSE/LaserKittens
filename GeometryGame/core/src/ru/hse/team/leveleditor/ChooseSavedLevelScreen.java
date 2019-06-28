@@ -35,17 +35,15 @@ import ru.hse.team.settings.about.PagedScrollPane;
  * Allows to launch and delete these levels.
  */
 public class ChooseSavedLevelScreen implements Screen {
-
     private final LaserKittens laserKittens;
-    private OrthographicCamera camera = new OrthographicCamera();
-    private Background background;
-    private Stage stage;
+    private final OrthographicCamera camera = new OrthographicCamera();
+    private final Background background;
+    private final Stage stage;
     private Menu menu;
     private List<SavedLevel> levels;
 
     public ChooseSavedLevelScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
-
         background = new Background(this.laserKittens.getAssetManager()
                 .getImage(KittensAssetManager.Images.BLUE_BACKGROUND));
         stage = new Stage(new ScreenViewport());
@@ -65,7 +63,6 @@ public class ChooseSavedLevelScreen implements Screen {
         });
         menu = new Menu(stage);
         Gdx.input.setInputProcessor(stage);
-
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         laserKittens.getBatch().setProjectionMatrix(camera.combined);
@@ -75,13 +72,10 @@ public class ChooseSavedLevelScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(26f / 256f, 144f / 256f, 255f / 256f, 0.3f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
         laserKittens.getBatch().begin();
         background.draw(laserKittens.getBatch());
         laserKittens.getBatch().end();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -94,17 +88,14 @@ public class ChooseSavedLevelScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
@@ -146,14 +137,12 @@ public class ChooseSavedLevelScreen implements Screen {
     }
 
     private class Menu {
-        private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager()
+        private final Table table = new Table();
+        private final Skin skin = laserKittens.getAssetManager()
                 .getSkin(KittensAssetManager.Skins.BLUE_SKIN);
-
         private Label titleLabel = new Label("Saved levels",
                 new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
-
-        List<TextButton> openLevelButtons = new ArrayList<>();
+        private final List<TextButton> openLevelButtons = new ArrayList<>();
 
         public Menu(Stage stage) {
             levels = allLevels();
@@ -202,13 +191,10 @@ public class ChooseSavedLevelScreen implements Screen {
                         bDialog.addButton("No");
 
                         bDialog.build().show();
-
                     }
                 });
             }
-
             scroll.addPage(buttonsTable);
-
             table.add(scroll).expand().fill();
         }
 
@@ -217,7 +203,6 @@ public class ChooseSavedLevelScreen implements Screen {
                 String levelName = levels.get(i).levelName;
                 TextButton button = new TextButton(levelName, skin);
                 button.getLabel().setFontScale(1.5f * LaserKittens.scaleToPreferredWidth());
-
                 final int ii = i;
                 button.addListener(new ChangeListener() {
                     @Override
@@ -225,11 +210,9 @@ public class ChooseSavedLevelScreen implements Screen {
                         laserKittens.setScreen(new GameScreen(laserKittens, LevelGenerator.generate(levels.get(ii))));
                     }
                 });
-
                 openLevelButtons.add(button);
             }
         }
-
     }
 }
 

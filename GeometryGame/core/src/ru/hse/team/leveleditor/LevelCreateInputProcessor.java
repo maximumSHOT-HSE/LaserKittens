@@ -19,14 +19,13 @@ import ru.hse.team.database.levels.SimpleEntity;
  * Puts focused entity on position of touch.
  */
 public class LevelCreateInputProcessor implements InputProcessor {
-
     private final LaserKittens laserKittens;
     private final LevelCreateScreen levelCreateScreen;
     private final OrthographicCamera camera;
 
     private SimpleEntity.EntityType focusedType;
     private SimpleEntity currentEntity;
-    private Vector2 currentEntityScale = new Vector2(1, 1);
+    private final Vector2 currentEntityScale = new Vector2(1, 1);
     private SimpleEntity player;
 
     private Tool tool;
@@ -34,8 +33,11 @@ public class LevelCreateInputProcessor implements InputProcessor {
     private boolean dragging;
     private int draggingPointer = -1;
 
-    public LevelCreateInputProcessor(LaserKittens laserKittens, LevelCreateScreen levelCreateScreen,
-                                     OrthographicCamera camera) {
+    public LevelCreateInputProcessor(
+        LaserKittens laserKittens,
+        LevelCreateScreen levelCreateScreen,
+        OrthographicCamera camera
+    ) {
         this.laserKittens = laserKittens;
         this.levelCreateScreen = levelCreateScreen;
         this.camera = camera;
@@ -48,7 +50,7 @@ public class LevelCreateInputProcessor implements InputProcessor {
      */
     public enum Tool {
         ERASER,
-        CURSOR;
+        CURSOR
     }
 
     /**
@@ -56,7 +58,7 @@ public class LevelCreateInputProcessor implements InputProcessor {
      */
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.BACK){
+        if (keycode == Input.Keys.BACK) {
             laserKittens.changeScreen(LaserKittens.ScreenType.CHOOSE_LEVEL_SCREEN);
             return true;
         }
@@ -77,15 +79,16 @@ public class LevelCreateInputProcessor implements InputProcessor {
      * Deals with touch event.
      * Ignores it if dragging focused entity now.
      * If there is no chosen entity type, uses current tool.
-     *  if there is current entity, puts it on position of touch,
-     *   otherwise creates new entity on position of touch, unless
-     *    current type is player and we already have player on map, then
-     *    player will only gets in focus and moves to the touch position
+     * if there is current entity, puts it on position of touch,
+     * otherwise creates new entity on position of touch, unless
+     * current type is player and we already have player on map, then
+     * player will only gets in focus and moves to the touch position
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-        if (dragging) return false;
+        if (dragging) {
+            return false;
+        }
 
         Vector3 position = camera.unproject(new Vector3(screenX, screenY, 0));
 
@@ -121,12 +124,15 @@ public class LevelCreateInputProcessor implements InputProcessor {
         draggingPointer = pointer;
 
         if (currentEntity == null) {
-
             TextureRegion texture = levelCreateScreen.getTextureByType(focusedType);
-            currentEntity = new SimpleEntity(position.x, position.y,
-                    texture.getRegionWidth() * LaserKittens.scaleToPreferredWidth(),
-                    texture.getRegionHeight() * LaserKittens.scaleToPreferredHeight(),
-                    0, focusedType);
+            currentEntity = new SimpleEntity(
+                position.x,
+                position.y,
+                texture.getRegionWidth() * LaserKittens.scaleToPreferredWidth(),
+                texture.getRegionHeight() * LaserKittens.scaleToPreferredHeight(),
+                0,
+                focusedType
+            );
 
             levelCreateScreen.addSimpleEntity(currentEntity);
 
@@ -144,8 +150,9 @@ public class LevelCreateInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
-        if (!dragging || draggingPointer != pointer) return false;
+        if (!dragging || draggingPointer != pointer) {
+            return false;
+        }
 
         dragging = false;
         draggingPointer = -1;
@@ -155,8 +162,9 @@ public class LevelCreateInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-
-        if (!dragging || draggingPointer != pointer) return false;
+        if (!dragging || draggingPointer != pointer) {
+            return false;
+        }
 
         if (currentEntity == null) {
             return false;
@@ -247,7 +255,6 @@ public class LevelCreateInputProcessor implements InputProcessor {
         scaleY = Math.max(scaleY, 0.01f);
 
         if (currentEntity != null) {
-
             if (currentEntity.getType() == SimpleEntity.EntityType.PLAYER ||
             currentEntity.getType() == SimpleEntity.EntityType.STAR) {
                 float scale = (float) Math.sqrt(scaleX * scaleX + scaleY * scaleY);
