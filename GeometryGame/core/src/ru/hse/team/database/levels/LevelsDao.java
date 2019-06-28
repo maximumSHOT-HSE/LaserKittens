@@ -6,7 +6,6 @@ import java.util.List;
  * Interface for saving {@code SavedLevel.class} in Android Room database.
  */
 public interface LevelsDao {
-
     List<SavedLevel> getAll();
 
     SavedLevel getById(long id);

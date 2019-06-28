@@ -13,10 +13,13 @@ import java.util.List;
  */
 @android.arch.persistence.room.Entity
 public class SavedLevel {
-    public SavedLevel(int id, List<SimpleEntity> entities,
-                      int widthInScreens,
-                      int heightInScreens,
-                      String levelName) {
+    public SavedLevel(
+        int id,
+        List<SimpleEntity> entities,
+        int widthInScreens,
+        int heightInScreens,
+        String levelName
+    ) {
         this.id = id;
         this.entities = entities;
         this.widthInScreens = widthInScreens;
