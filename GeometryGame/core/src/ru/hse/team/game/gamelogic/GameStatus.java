@@ -16,15 +16,14 @@ import ru.hse.team.game.gamelogic.systems.RenderingSystem;
  * Which is number of collected stars and time from level start
  */
 public class GameStatus {
+    private long startNano;
+    private long stopNano;
+    private long penaltyNano;
 
-    private long startNano = 0;
-    private long stopNano = 0;
-    private long penaltyNano = 0;
+    private boolean started;
+    private boolean stopped;
 
-    private boolean started = false;
-    private boolean stopped = false;
-
-    private OrthographicCamera statusCamera = new OrthographicCamera(
+    private final OrthographicCamera statusCamera = new OrthographicCamera(
             RenderingSystem.SCREEN_WIDTH, RenderingSystem.SCREEN_HEIGHT);
 
     public void start() {
@@ -84,10 +83,6 @@ public class GameStatus {
         return endDate;
     }
 
-    public long getStopNanoTime() {
-        return stopNano;
-    }
-
     private int starCounter = 0;
     private int starsInLevel = 0;
 
@@ -132,14 +127,16 @@ public class GameStatus {
 
         batch.setProjectionMatrix(statusCamera.combined);
         batch.begin();
-        font.draw(batch, getTimeStamp(timeGone()),
-                -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2,
-                statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2);
+        font.draw(
+            batch,
+            getTimeStamp(timeGone()),
+            -statusCamera.zoom * RenderingSystem.SCREEN_WIDTH / 2,
+            statusCamera.zoom * RenderingSystem.SCREEN_HEIGHT / 2
+        );
 
         batch.end();
     }
 
     public void dispose() {
-
     }
 }

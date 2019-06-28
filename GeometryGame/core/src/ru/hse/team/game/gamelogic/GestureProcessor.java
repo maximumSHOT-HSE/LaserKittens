@@ -10,16 +10,16 @@ import ru.hse.team.game.levels.AbstractLevel;
  * Class which processes gestures on game screen.
  */
 public class GestureProcessor implements GestureDetector.GestureListener {
-
     private float scale = 1;
-    private RenderingSystem renderingSystem;
-    private GameScreenInputProcessor gameScreenInputProcessor;
-    private AbstractLevel abstractLevel;
+    private final RenderingSystem renderingSystem;
+    private final GameScreenInputProcessor gameScreenInputProcessor;
+    private final AbstractLevel abstractLevel;
 
     public GestureProcessor(
-            RenderingSystem renderingSystem,
-            GameScreenInputProcessor gameScreenInputProcessor,
-            AbstractLevel abstractLevel) {
+        RenderingSystem renderingSystem,
+        GameScreenInputProcessor gameScreenInputProcessor,
+        AbstractLevel abstractLevel
+    ) {
         this.renderingSystem = renderingSystem;
         this.gameScreenInputProcessor = gameScreenInputProcessor;
         this.abstractLevel = abstractLevel;
@@ -101,6 +101,5 @@ public class GestureProcessor implements GestureDetector.GestureListener {
 
     @Override
     public void pinchStop() {
-
     }
 }
