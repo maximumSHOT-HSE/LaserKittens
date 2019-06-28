@@ -6,7 +6,6 @@ import java.util.List;
  * Interface for saving {@code LevelStatistics.class} in Android Room database.
  */
 public interface StatisticsDao {
-
     List<LevelStatistics> getAll();
 
     LevelStatistics getById(long id);
@@ -22,5 +21,4 @@ public interface StatisticsDao {
     void delete(LevelStatistics statistics);
 
     void deleteAll(LevelStatistics ... statistics);
-
 }
