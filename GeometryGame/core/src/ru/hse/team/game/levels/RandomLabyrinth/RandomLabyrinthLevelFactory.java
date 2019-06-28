@@ -24,14 +24,17 @@ import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
-
     //there may be less stars!
     private int stars = 1;
     //there may be less keys/doors
     private int keys = 0;
 
 
-    public RandomLabyrinthLevelFactory(PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory) {
+    public RandomLabyrinthLevelFactory(
+        PooledEngine engine,
+        KittensAssetManager manager,
+        BodyFactory bodyFactory
+    ) {
         super(engine, manager, bodyFactory);
     }
 
@@ -43,10 +46,9 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
         this.keys = keys;
     }
 
-
-    private int[][] directions = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
-    private List<Integer> permutation = Arrays.asList(0, 1, 2, 3);
-    private Random random = new Random(System.currentTimeMillis());
+    private final int[][] directions = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+    private final List<Integer> permutation = Arrays.asList(0, 1, 2, 3);
+    private final Random random = new Random(System.currentTimeMillis());
 
     private int getRandom(int bound) {
         int randomInt = random.nextInt() % bound;
@@ -57,7 +59,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     }
 
     private Cell[][] cells;
-    Map<EdgePosition, Cell> doorToKey = new HashMap<>();
+    private final Map<EdgePosition, Cell> doorToKey = new HashMap<>();
     private int startX;
     private int startY;
 
@@ -68,7 +70,6 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     private void markReachable(Cell start) {
         Queue<Cell> queue = new LinkedList<>();
         queue.add(start);
-
         while (!queue.isEmpty()) {
             Cell vertex = queue.poll();
             for (int i = 0; i < 4; i++) {
@@ -87,13 +88,11 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     private void bfsGenerate(Cell cell, int depth) {
         Queue<Cell> queue = new LinkedList<>();
         queue.add(cell);
-
         while (!queue.isEmpty()) {
             Cell vertex = queue.poll();
             if (cell.distance + depth == vertex.distance) {
                 continue;
             }
-
             Collections.shuffle(permutation, ThreadLocalRandom.current());
             for (int i = 0; i < 4; i++) {
                 int toX = vertex.x + directions[permutation.get(i)][0];
@@ -107,17 +106,15 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                     queue.add(cells[toX][toY]);
                 }
             }
-
-
             vertex.used = 2;
         }
-
     }
 
     private void dfsGenerate(Cell cell, int depth) {
         cell.used = 1;
-        if (depth == 0) return;
-
+        if (depth == 0) {
+            return;
+        }
         Collections.shuffle(permutation, ThreadLocalRandom.current());
         List<Integer> dfsPermutation = new ArrayList<>(permutation);
         for (int i = 0; i < 4; i++) {
@@ -134,7 +131,6 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
         cell.used = 2;
     }
 
-
     private void generateLabyrinth(int n, int m) {
         cells = new Cell[n][m];
         for (int i = 0; i < n; i++) {
@@ -144,9 +140,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
         }
         startX = getRandom(n);
         startY = getRandom(m);
-
         cells[startX][startY].contentType = TypeComponent.Type.PLAYER;
-
         int maxIterations = 10;
         cells[startX][startY].used = 1;
         for (int iterations = 1; iterations <= maxIterations; iterations++) {
@@ -158,7 +152,6 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                     }
                 }
             }
-
             for (Cell cell : toUpdate) {
                 if (iterations == maxIterations) {
                     dfsGenerate(cell, -1);
@@ -170,9 +163,7 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                     }
                 }
             }
-
         }
-
         for (int starIteration = 0; starIteration < stars; starIteration++) {
             int posX = getRandom(n);
             int posY = getRandom(m);
@@ -190,7 +181,6 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                 }
             }
         }
-
         for (int i = 0; i < keys; i++) {
             for (int x = 0, posX = getRandom(n); x < n; x++, posX++) {
                 if (posX == n) {
@@ -211,8 +201,22 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
                         clearUsed();
                         Cell keyPosition = placeKey(cells[startX][startY]);
                         if (keyPosition != null) {
-                            doorToKey.put(new EdgePosition(now.x, now.y, getDirection(now, now.parent)), keyPosition);
-                            doorToKey.put(new EdgePosition(now.parent.x, now.parent.y, getDirection(now.parent, now)), keyPosition);
+                            doorToKey.put(
+                                new EdgePosition(
+                                    now.x,
+                                    now.y,
+                                    getDirection(now, now.parent)
+                                ),
+                                keyPosition
+                            );
+                            doorToKey.put(
+                                new EdgePosition(
+                                    now.parent.x,
+                                    now.parent.y,
+                                    getDirection(now.parent, now)
+                                ),
+                                keyPosition
+                            );
                             x = n;
                             break;
                         } else {
@@ -244,15 +248,14 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     }
 
     private void placeBetween(Cell from, Cell to, EdgeType type, int edgeIndex) {
-            from.edges[edgeIndex] = type;
-            to.edges[(edgeIndex + 2) % 4] = type;
+        from.edges[edgeIndex] = type;
+        to.edges[(edgeIndex + 2) % 4] = type;
     }
 
     private Cell placeKey(Cell from) {
         markReachable(from);
         int n = cells.length;
         int m = cells[0].length;
-
         for (int x = 0, posX = getRandom(n); x < n; x++, posX++) {
             if (posX == n) {
                 posX = 0;
@@ -292,55 +295,105 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
         final int cellsPerWidth = 2;
         final int cellsPerHeight = 3;
 
-
         createBackground(widthInScreens, heightInScreens);
-        createImpenetrableWall(new Vector2(0, 0.5f * levelHeight), wallThickness, levelHeight); // left big wall
-        createImpenetrableWall(new Vector2(levelWidth, 0.5f * levelHeight), wallThickness, levelHeight); // right big wall
-        createImpenetrableWall(new Vector2(0.5f * levelWidth, 0), levelWidth, wallThickness); // down big wall
-        createImpenetrableWall(new Vector2(0.5f * levelWidth, levelHeight), levelWidth, wallThickness); // up big wall
+        createImpenetrableWall(
+            new Vector2(0, 0.5f * levelHeight), wallThickness, levelHeight
+        ); // left big wall
+        createImpenetrableWall(
+            new Vector2(levelWidth, 0.5f * levelHeight), wallThickness, levelHeight
+        ); // right big wall
+        createImpenetrableWall(
+            new Vector2(0.5f * levelWidth, 0), levelWidth, wallThickness
+        ); // down big wall
+        createImpenetrableWall(
+            new Vector2(0.5f * levelWidth, levelHeight), levelWidth, wallThickness
+        ); // up big wall
 
-
-        generateLabyrinth(widthInScreens * cellsPerWidth, heightInScreens * cellsPerHeight);
+        generateLabyrinth(
+            widthInScreens * cellsPerWidth,
+            heightInScreens * cellsPerHeight
+        );
 
         for (int i = 0; i < cellsPerWidth * widthInScreens; i++) {
             for (int j = 0; j < cellsPerHeight * heightInScreens; j++) {
                 switch (cells[i][j].edges[0]) {
                     case WALL:
-                        createImpenetrableWall(new Vector2(i * screenWidth / cellsPerWidth, (j + 0.5f) * screenHeight / cellsPerHeight),
-                                wallThickness,screenHeight / cellsPerHeight);
+                        createImpenetrableWall(
+                            new Vector2(
+                                i * screenWidth / cellsPerWidth,
+                                (j + 0.5f) * screenHeight / cellsPerHeight
+                            ),
+                            wallThickness,
+                            screenHeight / cellsPerHeight
+                        );
                         break;
                     case DOOR:
-                        final Entity door = createDoor(new Vector2(i * screenWidth / cellsPerWidth, (j + 0.5f) * screenHeight / cellsPerHeight),
-                            wallThickness,screenHeight / cellsPerHeight);
-                        createKey(doorToKey.get(new EdgePosition(i, j, 0)).getPosition().add(new Vector2(0.5f, 0.5f))
-                                    .scl(screenWidth / cellsPerWidth, screenHeight / cellsPerHeight), keyWidth, keyHeight, door);
-
+                        final Entity door = createDoor(
+                            new Vector2(i * screenWidth / cellsPerWidth, (j + 0.5f) * screenHeight / cellsPerHeight),
+                            wallThickness,
+                            screenHeight / cellsPerHeight
+                        );
+                        createKey(
+                            doorToKey.get(new EdgePosition(i, j, 0))
+                                    .getPosition()
+                                    .add(new Vector2(0.5f, 0.5f))
+                                    .scl(screenWidth / cellsPerWidth, screenHeight / cellsPerHeight),
+                            keyWidth,
+                            keyHeight,
+                            door
+                        );
                         break;
 
                 }
                 switch (cells[i][j].edges[1]) {
                     case WALL:
-                        createImpenetrableWall(new Vector2((i + 0.5f) * screenWidth / cellsPerWidth, j * screenHeight / cellsPerHeight),
-                                screenWidth / cellsPerWidth, wallThickness);
+                        createImpenetrableWall(
+                            new Vector2(
+                                (i + 0.5f) * screenWidth / cellsPerWidth,
+                                j * screenHeight / cellsPerHeight
+                            ),
+                            screenWidth / cellsPerWidth,
+                            wallThickness
+                        );
                         break;
                     case DOOR:
-                        final Entity door = createDoor(new Vector2((i + 0.5f) * screenWidth / cellsPerWidth, j * screenHeight / cellsPerHeight),
-                            screenWidth / cellsPerWidth, wallThickness);
-                    createKey(doorToKey.get(new EdgePosition(i, j, 1)).getPosition().add(new Vector2(0.5f, 0.5f))
-                            .scl(screenWidth / cellsPerWidth, screenHeight / cellsPerHeight), keyWidth, keyHeight, door);
+                        final Entity door = createDoor(
+                            new Vector2(
+                                (i + 0.5f) * screenWidth / cellsPerWidth,
+                                j * screenHeight / cellsPerHeight),
+                            screenWidth / cellsPerWidth,
+                            wallThickness
+                        );
+                        createKey(
+                            doorToKey.get(new EdgePosition(i, j, 1))
+                                    .getPosition()
+                                    .add(new Vector2(0.5f, 0.5f))
+                                    .scl(
+                                        screenWidth / cellsPerWidth,
+                                        screenHeight / cellsPerHeight
+                                    ),
+                            keyWidth,
+                            keyHeight,
+                            door
+                        );
                         break;
                 }
 
                 if (cells[i][j].hasObject()) {
                     switch (cells[i][j].contentType) {
                         case STAR:
-                            createStar((i + 0.5f) * screenWidth / cellsPerWidth, (j + 0.5f) * screenHeight / cellsPerHeight, starRadius);
+                            createStar(
+                                (i + 0.5f) * screenWidth / cellsPerWidth,
+                                (j + 0.5f) * screenHeight / cellsPerHeight,
+                                starRadius
+                            );
                             break;
                         case PLAYER:
                             abstractLevel.setPlayer(createPlayer(
-                                    (i + 0.5f) * screenWidth / cellsPerWidth,
-                                    (j + 0.5f) * screenHeight / cellsPerHeight,
-                                    playerRadius));
+                                (i + 0.5f) * screenWidth / cellsPerWidth,
+                                (j + 0.5f) * screenHeight / cellsPerHeight,
+                                playerRadius)
+                            );
                             break;
                     }
                 }
@@ -352,14 +405,14 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
     public enum EdgeType {
         EMPTY,
         WALL,
-        DOOR;
+        DOOR
     }
 
     private static class Cell {
         private final int x;
         private final int y;
         private TypeComponent.Type contentType;
-        private EdgeType[] edges;
+        private final EdgeType[] edges;
         private int used;
         private int distance;
         private Cell parent;
@@ -405,18 +458,19 @@ public class RandomLabyrinthLevelFactory extends AbstractLevelFactory {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             EdgePosition that = (EdgePosition) o;
-            return x == that.x &&
-                    y == that.y &&
-                    direction == that.direction;
+            return x == that.x && y == that.y && direction == that.direction;
         }
 
         @Override
         public int hashCode() {
             return Objects.hash(x, y, direction);
         }
-
     }
 }

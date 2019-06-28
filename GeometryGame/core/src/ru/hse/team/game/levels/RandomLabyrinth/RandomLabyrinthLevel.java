@@ -9,7 +9,6 @@ import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class RandomLabyrinthLevel extends AbstractLevel {
-
     private RandomLabyrinthLevelFactory randomLabyrinthLevelFactory;
 
     private int keys;
@@ -29,14 +28,27 @@ public class RandomLabyrinthLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        randomLabyrinthLevelFactory = new RandomLabyrinthLevelFactory(engine, assetManager, getBodyFactory());
+        randomLabyrinthLevelFactory = new RandomLabyrinthLevelFactory(
+            engine,
+            assetManager,
+            getBodyFactory()
+        );
         randomLabyrinthLevelFactory.setKeys(keys);
         randomLabyrinthLevelFactory.setStars(stars);
-        randomLabyrinthLevelFactory.createLevel(getLevelWidthInScreens(), getLevelHeightInScreens(), this);
+        randomLabyrinthLevelFactory.createLevel(
+            getLevelWidthInScreens(),
+            getLevelHeightInScreens(),
+                this
+        );
 
-        setAbstractGraph(new GridGraph(getLevelWidthInScreens(), getLevelHeightInScreens(),
+        setAbstractGraph(
+            new GridGraph(
+                getLevelWidthInScreens(),
+                getLevelHeightInScreens(),
                 RenderingSystem.getScreenSizeInMeters().x,
-                RenderingSystem.getScreenSizeInMeters().y));
+                RenderingSystem.getScreenSizeInMeters().y
+            )
+        );
     }
 
     @Override
