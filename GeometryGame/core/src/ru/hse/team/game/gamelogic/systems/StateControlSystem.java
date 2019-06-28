@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,9 +22,8 @@ import ru.hse.team.game.levels.AbstractLevel;
  *  their state to NORMAL
  */
 public class StateControlSystem extends IteratingSystem {
-
-    private PooledEngine engine;
-    private AbstractLevel abstractLevel;
+    private final PooledEngine engine;
+    private final AbstractLevel abstractLevel;
 
     public StateControlSystem(PooledEngine engine, AbstractLevel abstractLevel) {
         super(Family.all(StateComponent.class).get());
@@ -45,7 +43,6 @@ public class StateControlSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         StateComponent stateComponent = Mapper.stateComponent.get(entity);
         TypeComponent typeComponent = Mapper.typeComponent.get(entity); // may be null
-
         switch (stateComponent.get()) {
             case JUST_CREATED:
                 stateComponent.set(StateComponent.State.NORMAL);
@@ -58,43 +55,45 @@ public class StateControlSystem extends IteratingSystem {
                 removeEntity(entity);
                 break;
         }
-
     }
 
     private void removeEntity(Entity entity) {
-            BodyComponent bodyComponent = Mapper.bodyComponent.get(entity); // may be null
-            TypeComponent typeComponent = Mapper.typeComponent.get(entity); // may be null
-
-            if (typeComponent != null) {
-                switch (typeComponent.type) {
-                    case STAR:
-                        System.out.println("REMOVE STAR!");
-                        abstractLevel.getGameStatus().removeStar();
-                        break;
-                    case KEY:
-                        Entity door = Mapper.keyComponent.get(entity).door;
-                        StateComponent doorState = Mapper.stateComponent.get(door);
-                        DoorComponent doorComponent = Mapper.doorComponent.get(door);
-                        doorComponent.removeKey(entity);
-                        if (doorComponent.remainingKeys() == 0) {
-                            if (abstractLevel != null && abstractLevel.getAbstractGraph() != null &&
-                                    bodyComponent != null && bodyComponent.body != null) {
-                                abstractLevel.getAbstractGraph().updateGraphAfterRemoveRectangleBarrier(doorState.getId());
-                            }
-                            doorState.finish();
+        BodyComponent bodyComponent = Mapper.bodyComponent.get(entity); // may be null
+        TypeComponent typeComponent = Mapper.typeComponent.get(entity); // may be null
+        if (typeComponent != null) {
+            switch (typeComponent.type) {
+                case STAR:
+                    System.out.println("REMOVE STAR!");
+                    abstractLevel.getGameStatus().removeStar();
+                    break;
+                case KEY:
+                    Entity door = Mapper.keyComponent.get(entity).door;
+                    StateComponent doorState = Mapper.stateComponent.get(door);
+                    DoorComponent doorComponent = Mapper.doorComponent.get(door);
+                    doorComponent.removeKey(entity);
+                    if (doorComponent.remainingKeys() == 0) {
+                        if (abstractLevel != null
+                                && abstractLevel.getAbstractGraph() != null
+                                && bodyComponent != null
+                                && bodyComponent.body != null) {
+                            abstractLevel.getAbstractGraph().updateGraphAfterRemoveRectangleBarrier(doorState.getId());
                         }
-                        break;
-                    case GUARDIAN:
-                        abstractLevel.getGameStatus().addPenaltyNanoTime(TimeUnit.MINUTES.toNanos(1));
-                        break;
-                }
+                        doorState.finish();
+                    }
+                    break;
+                case GUARDIAN:
+                    abstractLevel.getGameStatus().addPenaltyNanoTime(TimeUnit.MINUTES.toNanos(1));
+                    break;
             }
-
-            if (bodyComponent != null && bodyComponent.body != null && abstractLevel.getWorld() != null) {
-                //null checking is the best way to avoid sigfault related with libgdx!!!
-                abstractLevel.getWorld().destroyBody(bodyComponent.body);
-                bodyComponent.body = null;
-            }
-            engine.removeEntity(entity);
+        }
+        if (bodyComponent != null
+                && bodyComponent.body != null
+                && abstractLevel != null
+                && abstractLevel.getWorld() != null) {
+            // null checking is the best way to avoid sigfault related with libgdx!!!
+            abstractLevel.getWorld().destroyBody(bodyComponent.body);
+            bodyComponent.body = null;
+        }
+        engine.removeEntity(entity);
     }
 }
