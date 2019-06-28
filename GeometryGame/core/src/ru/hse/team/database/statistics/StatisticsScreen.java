@@ -30,12 +30,10 @@ import ru.hse.team.settings.about.PagedScrollPane;
  * Screen for showing statistics of all ever finished levels.
  * */
 public class StatisticsScreen implements Screen {
-
     private final LaserKittens laserKittens;
-    private OrthographicCamera camera = new OrthographicCamera();
-    private Background background;
-    private Stage stage = new Stage(new ScreenViewport());
-    private Menu menu;
+    private final OrthographicCamera camera = new OrthographicCamera();
+    private final Background background;
+    private final Stage stage = new Stage(new ScreenViewport());
 
     public StatisticsScreen(final LaserKittens laserKittens) {
         this.laserKittens = laserKittens;
@@ -56,7 +54,7 @@ public class StatisticsScreen implements Screen {
             }
         });
 
-        menu = new Menu(stage);
+        new Menu(stage);
         Gdx.input.setInputProcessor(stage);
 
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -106,22 +104,24 @@ public class StatisticsScreen implements Screen {
         background.dispose();
     }
 
-
     private class Menu {
-        private Table table = new Table();
-        private Skin skin = laserKittens.getAssetManager()
+        private final Table table = new Table();
+        private final Skin skin = laserKittens.getAssetManager()
                 .getSkin(KittensAssetManager.Skins.BLUE_SKIN);
-        private Label titleLabel = new Label("Statistics",
-                new Label.LabelStyle(laserKittens.getFont(), Color.WHITE));
+        private final Label titleLabel = new Label(
+                "Statistics",
+                new Label.LabelStyle(laserKittens.getFont(), Color.WHITE)
+        );
         private final TextButton backButton = new TextButton("Back", skin);
-        private List<List<Label>> listOfStatistics = new ArrayList<>();
+        private final List<List<Label>> listOfStatistics = new ArrayList<>();
 
         private List<Label> levelStatisticsToLabels(LevelStatistics levelStatistics) {
             List<Label> statisticsLabels = new ArrayList<>();
             statisticsLabels.add(new Label(levelStatistics.date, skin));
             statisticsLabels.add(new Label(levelStatistics.levelName, skin));
-            statisticsLabels.add(new Label(
-                    GameStatus.getTimeStamp(levelStatistics.timeNano), skin));
+            statisticsLabels.add(
+                new Label(GameStatus.getTimeStamp(levelStatistics.timeNano), skin)
+            );
             return statisticsLabels;
         }
 
@@ -147,7 +147,7 @@ public class StatisticsScreen implements Screen {
             table.setFillParent(true);
             stage.addActor(table);
 
-            titleLabel.setFontScale(5f * LaserKittens.scaleToPreferredWidth());
+            titleLabel.setFontScale(LaserKittens.scaleToPreferredWidth() * 5f);
 
             table.row().pad(10, 10, 30, 10);
             table.add(titleLabel).colspan(2).expand();
@@ -171,23 +171,22 @@ public class StatisticsScreen implements Screen {
             table.add(scroll).expand().fill();
 
             table.row().pad(30, 10, 10, 10);
-            table.add(backButton).
-                    width(Gdx.graphics.getWidth() * 0.25f)
-                    .height(Gdx.graphics.getHeight() * 0.1f).colspan(2).expand();
+            table.add(backButton)
+                .width(Gdx.graphics.getWidth() * 0.25f)
+                .height(Gdx.graphics.getHeight() * 0.1f)
+                .colspan(2)
+                .expand();
 
             setListeners();
         }
 
         private void setListeners() {
-
             backButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     laserKittens.changeScreen(LaserKittens.ScreenType.CHOOSE_LEVEL_SCREEN);
                 }
             });
-
         }
-
     }
 }
