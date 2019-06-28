@@ -33,10 +33,11 @@ public class LevelStatistics {
 
     @Override
     public String toString() {
-        return "Level " + id + " statistics:" +
-                " time " + timeNano +
-                ", stars" + stars +
-                ", level name: " + levelName +
-                ".";
+        return "Level " + id
+                + " statistics:"
+                + " time " + timeNano
+                + ", stars" + stars
+                + ", level name: " + levelName
+                + ".";
     }
 }
