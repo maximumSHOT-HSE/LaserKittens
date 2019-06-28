@@ -126,14 +126,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
                     ).show()
                 );
             } catch (ApiException apiException) {
-                String message = apiException.getMessage();
-                if (message == null || message.isEmpty()) {
-                    message = "Sign in another Error";
-                }
-                new AlertDialog.Builder(this)
-                    .setMessage(message)
-                    .setNeutralButton(android.R.string.ok, null)
-                    .show();
+                handleException(apiException);
             }
         }
     }
