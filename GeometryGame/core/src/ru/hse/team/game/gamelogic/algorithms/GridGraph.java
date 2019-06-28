@@ -16,8 +16,15 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+/**
+ * Abstraction for graph which is rectangle grid
+ * of particular number of rows and columns.
+ * Each intersection of row and column is the
+ * vertex in such graph and edges between two
+ * vertices will be created iff such vertices
+ * are neighboring
+ */
 public class GridGraph extends AbstractGraph {
-
     private static int VERTEX_COUNT_IN_CELL_WIDTH = 2;
     private static int VERTEX_COUNT_IN_CELL_HEIGHT = 4;
 
@@ -27,10 +34,15 @@ public class GridGraph extends AbstractGraph {
     private float cellHeight;
 
     private Vertex[][] graph;
-    private List<Pair<Vertex, Vertex>> edges = new ArrayList<>();
-    private Map<Integer, List<Pair<Vertex, Vertex>>> deletedEdges = new HashMap<>();
+    private final List<Pair<Vertex, Vertex>> edges = new ArrayList<>();
+    private final Map<Integer, List<Pair<Vertex, Vertex>>> deletedEdges = new HashMap<>();
 
-    public GridGraph(int countScreensWidth, int countScreensHeight, float cellWidth, float cellHeight) {
+    public GridGraph(
+        int countScreensWidth,
+        int countScreensHeight,
+        float cellWidth,
+        float cellHeight
+    ) {
         this.countScreensWidth = countScreensWidth;
         this.countScreensHeight = countScreensHeight;
         this.cellWidth = cellWidth;
@@ -203,7 +215,12 @@ public class GridGraph extends AbstractGraph {
      */
     @Override
     public void removeEdgeAfterPlacingRectangleBarrier(Vector2 center, float width, float height, int id) {
-        System.out.println("REMOVE (" + center.x + ", " + center.y + ") W = " + width + ", H = " + height + "id = " + id);
+        System.out.println(
+            "REMOVE (" + center.x + ", " + center.y
+                    + ") W = " + width
+                    + ", H = " + height
+                    + "id = " + id
+        );
         List<Pair<Vertex, Vertex>> deletedEs = new ArrayList<>();
         deletedEdges.put(id, deletedEs);
         Iterator<Pair<Vertex, Vertex>> iterator = edges.iterator();
@@ -263,9 +280,8 @@ public class GridGraph extends AbstractGraph {
     }
 
     private class Vertex {
-
-        public Vector2 position;
-        public Set<Vertex> neighbours = new HashSet<>();
+        public final Vector2 position;
+        public final Set<Vertex> neighbours = new HashSet<>();
         public boolean isVisited = false;
         public boolean isReacheble = false;
         public int id;
