@@ -20,11 +20,14 @@ import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class QuizLevelFactory extends AbstractLevelFactory {
-
     private float CW;
     private float CH;
 
-    public QuizLevelFactory(PooledEngine engine, KittensAssetManager manager, BodyFactory bodyFactory) {
+    public QuizLevelFactory(
+        PooledEngine engine,
+        KittensAssetManager manager,
+        BodyFactory bodyFactory
+    ) {
         super(engine, manager, bodyFactory);
     }
 
@@ -182,17 +185,26 @@ public class QuizLevelFactory extends AbstractLevelFactory {
             0.07f * RenderingSystem.getScreenSizeInMeters().x,
             0.04f * RenderingSystem.getScreenSizeInMeters().y, () -> {});
         Runnable task = new Runnable() {
-
             private int state = 0;
 
             @Override
             public void run() {
                 if (state == 0) {
-                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, 50);
-                    tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.BLUE_TUMBLER));
+                    movableWall.getComponent(BodyComponent.class)
+                            .body.setLinearVelocity(0, 50);
+                    tumbler.getComponent(TextureComponent.class)
+                            .region.setTexture(
+                                getManager().getImage(KittensAssetManager.Images.BLUE_TUMBLER)
+                            );
                 } else {
-                    movableWall.getComponent(BodyComponent.class).body.setLinearVelocity(0, -50);
-                    tumbler.getComponent(TextureComponent.class).region.setTexture(getManager().getImage(KittensAssetManager.Images.YELLOW_TUMBLER));
+                    movableWall.getComponent(BodyComponent.class)
+                            .body
+                            .setLinearVelocity(0, -50);
+                    tumbler.getComponent(TextureComponent.class)
+                            .region
+                            .setTexture(
+                                getManager().getImage(KittensAssetManager.Images.YELLOW_TUMBLER)
+                            );
                 }
                 state ^= 1;
             }
@@ -366,6 +378,7 @@ public class QuizLevelFactory extends AbstractLevelFactory {
         final Entity gate2 = placeDynamicImpenetrableWall(5.25f, 0.475f, 0.5f, 0.025f);
         Runnable moveTask = new Runnable() {
             private int state = 0;
+
             @Override
             public void run() {
                 if (state == 0) {
