@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -38,10 +39,12 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this,
-            new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-            .requestScopes(Games.SCOPE_GAMES)
-            .build());
+        mGoogleSignInClient = GoogleSignIn.getClient(
+                this,
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+                        .requestScopes(Games.SCOPE_GAMES)
+                        .build()
+        );
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.useAccelerometer = true;
@@ -51,8 +54,10 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
             new LaserKittens(
                 Room.databaseBuilder(this, DatabaseAndroid.class, "database").build(),
                 this,
-                new AndroidSpecificActions(this)),
-            config);
+                new AndroidSpecificActions(this)
+            ),
+            config
+        );
     }
 
     /**
@@ -64,59 +69,71 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         if (!isSignedIn()) {
             startActivityForResult(mGoogleSignInClient.getSignInIntent(), RC_SIGN_IN);
         } else {
-            runOnUiThread(() -> Toast.makeText(this, "You are already signed in", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() ->
+                Toast.makeText(
+                    this,
+                    "You are already signed in",
+                    Toast.LENGTH_SHORT
+                ).show()
+            );
         }
     }
 
     @Override
     public void signInSilently() {
         Log.d(TAG, "signInSilently()");
-
-        mGoogleSignInClient.silentSignIn().addOnCompleteListener(this,
-                task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "signInSilently(): success");
-                        onConnected(task.getResult());
-                    } else {
-                        Log.d(TAG, "signInSilently(): failure", task.getException());
-                    }
-                });
+        mGoogleSignInClient.silentSignIn().addOnCompleteListener(
+            this,
+            task -> {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "signInSilently(): success");
+                    onConnected(task.getResult());
+                } else {
+                    Log.d(TAG, "signInSilently(): failure", task.getException());
+                }
+            }
+        );
     }
 
     @Override
     public void signOut() {
         Log.d(TAG, "signOut()");
-
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "signOut(): success");
-                    } else {
-                        handleException(task.getException());
-                    }
-                });
+        mGoogleSignInClient.signOut().addOnCompleteListener(
+            this,
+            task -> {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "signOut(): success");
+                } else {
+                    handleException(task.getException());
+                }
+            }
+        );
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
-
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 onConnected(account);
-                runOnUiThread(() -> Toast.makeText(this, "Google Services sign in: successful", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() ->
+                    Toast.makeText(
+                        this,
+                        "Google Services sign in: successful",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                );
             } catch (ApiException apiException) {
                 String message = apiException.getMessage();
                 if (message == null || message.isEmpty()) {
                     message = "Sign in another Error";
                 }
                 new AlertDialog.Builder(this)
-                        .setMessage(message)
-                        .setNeutralButton(android.R.string.ok, null)
-                        .show();
+                    .setMessage(message)
+                    .setNeutralButton(android.R.string.ok, null)
+                    .show();
             }
         }
     }
@@ -125,27 +142,25 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
-
         signInSilently();
     }
 
-
     private void onConnected(GoogleSignInAccount googleSignInAccount) {
         Log.d(TAG, "onConnected(): connected to Google APIs");
-
         if (mSignedInAccount != googleSignInAccount) {
             mSignedInAccount = googleSignInAccount;
         }
     }
 
-    private void handleException(Exception exception) {
+    private void handleException(@Nullable Exception exception) {
+        if (exception == null) {
+            return;
+        }
         String message = "Error" + exception.getMessage();
-
         new AlertDialog.Builder(this)
-                .setMessage(message)
-                .setNeutralButton(android.R.string.ok, null)
-                .show();
-
+            .setMessage(message)
+            .setNeutralButton(android.R.string.ok, null)
+            .show();
     }
 
     @Override
@@ -159,10 +174,16 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         if (isSignedIn()) {
             System.out.println(score);
             Games.getLeaderboardsClient(this, mSignedInAccount)
-                    .submitScore(getString(R.string.leaderboard_id), score);
+                .submitScore(getString(R.string.leaderboard_id), score);
             showScores();
         } else {
-            runOnUiThread(() -> Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() ->
+                Toast.makeText(
+                    this,
+                    "Sign in first",
+                    Toast.LENGTH_SHORT
+                ).show()
+            );
         }
     }
 
@@ -170,11 +191,17 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     public void showScores() {
         if (isSignedIn()) {
             Games.getLeaderboardsClient(this, mSignedInAccount)
-                    .getLeaderboardIntent((getString(R.string.leaderboard_id)))
-                    .addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
-                    .addOnFailureListener(e -> handleException(e));
+                .getLeaderboardIntent(getString(R.string.leaderboard_id))
+                .addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
+                .addOnFailureListener(this::handleException);
         } else {
-            runOnUiThread(() -> Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() ->
+                Toast.makeText(
+                    this,
+                    "Sign in first",
+                    Toast.LENGTH_SHORT
+                ).show()
+            );
         }
     }
 
@@ -189,10 +216,16 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     public void showAchievements() {
         if (isSignedIn()) {
             Games.getAchievementsClient(this, mSignedInAccount).getAchievementsIntent()
-                    .addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
-                    .addOnFailureListener(e -> handleException(e));
+                .addOnSuccessListener(intent -> startActivityForResult(intent, RC_CODE_UNUSED))
+                .addOnFailureListener(this::handleException);
         } else {
-            runOnUiThread(() -> Toast.makeText(this, "Sign in first", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() ->
+                Toast.makeText(
+                    this,
+                    "Sign in first",
+                    Toast.LENGTH_SHORT
+                ).show()
+            );
         }
     }
 

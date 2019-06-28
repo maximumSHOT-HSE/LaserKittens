@@ -22,7 +22,6 @@ public class SavedLevelsConverter {
     @TypeConverter
     public static String fromList(List<SimpleEntity> list) {
         Gson gson = new Gson();
-        String json = gson.toJson(list);
-        return json;
+        return gson.toJson(list);
     }
 }

@@ -16,7 +16,6 @@ import java.util.List;
  */
 @Dao
 public interface StatisticsDaoAndroid extends StatisticsDao {
-
     @RawQuery
     LevelStatistics getStatisticsByQuery(SupportSQLiteQuery query);
 
@@ -43,5 +42,4 @@ public interface StatisticsDaoAndroid extends StatisticsDao {
 
     @Delete
     void deleteAll(LevelStatistics ... statistics);
-
 }

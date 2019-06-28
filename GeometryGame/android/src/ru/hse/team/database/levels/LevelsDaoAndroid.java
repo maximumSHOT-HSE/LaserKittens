@@ -13,7 +13,6 @@ import java.util.List;
  */
 @Dao
 public interface LevelsDaoAndroid extends LevelsDao {
-
     @Query("SELECT * FROM SavedLevel")
     List<SavedLevel> getAll();
 
@@ -34,5 +33,4 @@ public interface LevelsDaoAndroid extends LevelsDao {
 
     @Delete
     void deleteAll(SavedLevel ... levels);
-
 }
