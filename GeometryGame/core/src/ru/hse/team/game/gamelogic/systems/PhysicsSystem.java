@@ -1,6 +1,5 @@
 package ru.hse.team.game.gamelogic.systems;
 
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -14,7 +13,6 @@ import ru.hse.team.game.gamelogic.components.TransformComponent;
 import ru.hse.team.game.gamelogic.components.TypeComponent;
 import ru.hse.team.game.levels.AbstractLevel;
 
-
 /**
  *  Do world step iterations.
  *  Once in MAX_STEP_TIME
@@ -24,17 +22,18 @@ import ru.hse.team.game.levels.AbstractLevel;
  *  Controls territory patrol.
  */
 public class PhysicsSystem extends IteratingSystem {
-
     private static final float MAX_STEP_TIME = 1 / 60f;
     private static float accumulator = 0f;
 
-    private AbstractLevel abstractLevel;
+    private final AbstractLevel abstractLevel;
 
     public PhysicsSystem(AbstractLevel abstractLevel) {
-        super(Family.all(
+        super(
+            Family.all(
                 BodyComponent.class,
                 TransformComponent.class
-        ).get());
+            ).get()
+        );
         this.abstractLevel = abstractLevel;
     }
 
@@ -46,7 +45,6 @@ public class PhysicsSystem extends IteratingSystem {
         if(accumulator >= MAX_STEP_TIME) {
             abstractLevel.getWorld().step(MAX_STEP_TIME, 6, 2);
             accumulator -= MAX_STEP_TIME;
-
             changePositions();
             patrolTerritory();
             updateGraph();
