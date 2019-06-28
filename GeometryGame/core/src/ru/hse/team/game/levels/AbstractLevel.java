@@ -24,7 +24,6 @@ import ru.hse.team.game.gamelogic.components.BodyComponent;
  * (creating, drawing and storing data, e.g. score, times, etc.).
  * */
 abstract public class AbstractLevel {
-
     private long rechargeTime = 0;
     private long lastShootTime = 0;
 
@@ -32,15 +31,15 @@ abstract public class AbstractLevel {
      * Name of the level.
      * User will see it in choose level screen
      */
-    private String levelName;
+    private final String levelName;
     private AbstractGraph abstractGraph;
     private GameStatus gameStatus = new GameStatus();
     private Entity player;
 
     private int widthInScreens;
     private int heightInScreens;
-    private World world = new World(new Vector2(0, 0), true);
-    private BodyFactory bodyFactory = BodyFactory.getBodyFactory(world);
+    private final World world = new World(new Vector2(0, 0), true);
+    private final BodyFactory bodyFactory = BodyFactory.getBodyFactory(world);
 
     public AbstractLevel(String levelName, int widthInScreens, int heightInScreens) {
         this.levelName = levelName;
@@ -58,7 +57,6 @@ abstract public class AbstractLevel {
     abstract public AbstractLevelFactory getFactory();
 
     public void shoot(float x, float y) {
-
         long currentShootTime = System.currentTimeMillis();
 
         if (currentShootTime - lastShootTime < rechargeTime) {
@@ -74,19 +72,20 @@ abstract public class AbstractLevel {
         direction.set(direction.x / length, direction.y / length);
         float playerRadius = getPlayerRadius();
 
-        Vector2 source =  new Vector2(playerPosition.x + playerRadius * direction.x,
-                playerPosition.y + playerRadius * direction.y);
+        Vector2 source =  new Vector2(
+            playerPosition.x + playerRadius * direction.x,
+            playerPosition.y + playerRadius * direction.y
+        );
         int lifeTime = 10_000;
 
         getFactory().createLaser(source, direction, lifeTime);
 
         if (isMultiplayer()) {
             System.out.println("SHOOT!!");
-            WarpController
-                    .getInstance()
-                    .sendGameUpdate(
-                            MessageCreator.createShootMessage(
-                                    source, direction, lifeTime));
+            WarpController.getInstance()
+                .sendGameUpdate(
+                    MessageCreator.createShootMessage(source, direction, lifeTime)
+                );
         }
     }
     
@@ -118,12 +117,17 @@ abstract public class AbstractLevel {
     }
 
     public float getPlayerRadius() {
-        if (player == null) return 1;
+        if (player == null) {
+            return 1;
+        }
         final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(player);
-        if (playerBodyComponent == null) return 1;
+        if (playerBodyComponent == null) {
+            return 1;
+        }
         final Body playerBody = playerBodyComponent.body;
-        if (playerBody == null) return 1;
-
+        if (playerBody == null) {
+            return 1;
+        }
         return playerBody.getFixtureList().get(0).getShape().getRadius();
     }
 
