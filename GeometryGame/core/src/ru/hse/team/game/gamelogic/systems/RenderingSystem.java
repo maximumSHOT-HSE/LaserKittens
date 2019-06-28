@@ -41,12 +41,10 @@ import ru.hse.team.game.levels.AbstractLevel;
  * doesn't allow it to move out of game borders
  */
 public class RenderingSystem extends SortedIteratingSystem {
+    public static final float PIXELS_PER_METER = 32.0f;
 
-    // pixels per meter
-    public static final float PPM = 32.0f;
-
-    public static final float SCREEN_WIDTH = LaserKittens.PREFERRED_WIDTH / PPM;
-    public static final float SCREEN_HEIGHT = LaserKittens.PREFERRED_HEIGHT / PPM;
+    public static final float SCREEN_WIDTH = LaserKittens.PREFERRED_WIDTH / PIXELS_PER_METER;
+    public static final float SCREEN_HEIGHT = LaserKittens.PREFERRED_HEIGHT / PIXELS_PER_METER;
 
     private static final Vector2 METER_DIMENSIONS = new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
     private static final Vector2 PIXEL_DIMENSIONS =
@@ -80,16 +78,16 @@ public class RenderingSystem extends SortedIteratingSystem {
         return meterValue * Gdx.graphics.getHeight() / SCREEN_HEIGHT;
     }
 
-    private SpriteBatch batch;
-    private ShapeRenderer shapeRenderer;
+    private final SpriteBatch batch;
+    private final ShapeRenderer shapeRenderer;
     private ImmutableArray<Entity> renderQueue;
 
     private OrthographicCamera camera;
     private float cameraWaiting = 0;
-    private Vector3 cameraMovingTo = new Vector3();
+    private final Vector3 cameraMovingTo = new Vector3();
 
     private final LaserKittens laserKittens;
-    private AbstractLevel abstractLevel;
+    private final AbstractLevel abstractLevel;
 
     public void decreaseCameraWaitingTime(float deltaTime) {
         cameraWaiting -= deltaTime;
@@ -114,7 +112,9 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     public RenderingSystem(AbstractLevel abstractLevel, LaserKittens laserKittens) {
-        super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
+        super(
+            Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator()
+        );
 
         this.abstractLevel = abstractLevel;
         this.batch = laserKittens.getBatch();
@@ -155,7 +155,8 @@ public class RenderingSystem extends SortedIteratingSystem {
                 for (Entity keyEntity : keyEntities) {
                     Body keyBody = Mapper.bodyComponent.get(keyEntity).body;
                     Vector2 keyPosition = keyBody.getPosition();
-                    drawSegment(doorCenterPosition, keyPosition, shapeRenderer, Color.YELLOW); // DRAW HINT
+                    // DRAW HINT
+                    drawSegment(doorCenterPosition, keyPosition, shapeRenderer, Color.YELLOW);
                     if (abstractLevel.getAbstractGraph() != null) {
                         abstractLevel.getAbstractGraph().visit(keyPosition);
                     }
@@ -170,20 +171,24 @@ public class RenderingSystem extends SortedIteratingSystem {
             float w = abstractLevel.getAbstractGraph().getVertexControlWidth() * 1.5f;
             float h = abstractLevel.getAbstractGraph().getVertexControlHeight() * 1.5f;
             for (Vector2 fogPosition : fogPositions) {
-                Texture fogTexture = laserKittens.getAssetManager().getImage(KittensAssetManager.Images.FOG);
+                Texture fogTexture = laserKittens.getAssetManager()
+                        .getImage(KittensAssetManager.Images.FOG);
                 batch.draw(fogTexture, fogPosition.x - w / 2, fogPosition.y - h / 2, w, h);
             }
         }
     }
 
     private void drawGraph() {
-        if (abstractLevel.getAbstractGraph() != null && abstractLevel.getAbstractGraph().isDrawGraph()) {
+        if (abstractLevel.getAbstractGraph() != null
+                && abstractLevel.getAbstractGraph().isDrawGraph()) {
             abstractLevel.getAbstractGraph().draw(shapeRenderer, batch);
         }
     }
 
-    private void drawVisibleTexture(TextureComponent textureComponent,
-                                    TransformComponent transformComponent) {
+    private void drawVisibleTexture(
+        TextureComponent textureComponent,
+        TransformComponent transformComponent
+    ) {
         float width = textureComponent.region.getRegionWidth();
         float height = textureComponent.region.getRegionHeight();
         float originX = width / 2f;
@@ -264,7 +269,6 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
-
     }
 
     public OrthographicCamera getCamera() {
@@ -272,7 +276,6 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     private static class ZComparator implements Comparator<Entity> {
-
         @Override
         public int compare(Entity entityA, Entity entityB) {
             float az = Mapper.transformComponent.get(entityA).position.z;
