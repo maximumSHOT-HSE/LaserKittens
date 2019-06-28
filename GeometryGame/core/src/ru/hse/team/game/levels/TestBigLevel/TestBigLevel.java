@@ -6,7 +6,6 @@ import ru.hse.team.game.levels.AbstractLevel;
 import ru.hse.team.game.levels.AbstractLevelFactory;
 
 public class TestBigLevel extends AbstractLevel {
-
     private TestBigLevelFactory testBigLevelFactory;
 
     public TestBigLevel() {
@@ -15,8 +14,16 @@ public class TestBigLevel extends AbstractLevel {
 
     @Override
     public void createLevel(PooledEngine engine, KittensAssetManager assetManager) {
-        testBigLevelFactory = new TestBigLevelFactory(engine, assetManager, getBodyFactory());
-        testBigLevelFactory.createLevel(getWidthInScreens(), getHeightInScreens(), this);
+        testBigLevelFactory = new TestBigLevelFactory(
+            engine,
+            assetManager,
+            getBodyFactory()
+        );
+        testBigLevelFactory.createLevel(
+            getWidthInScreens(),
+            getHeightInScreens(),
+            this
+        );
     }
 
     @Override
