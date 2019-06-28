@@ -85,7 +85,7 @@ public class GameScreenInputProcessor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK) {
-            final Screen gameScreen = laserKittens.getScreen();
+            Screen gameScreen = laserKittens.getScreen();
             laserKittens.changeScreen(LaserKittens.ScreenType.CHOOSE_LEVEL_SCREEN);
             gameScreen.dispose();
             return true;
@@ -108,9 +108,9 @@ public class GameScreenInputProcessor implements InputProcessor {
     }
 
     private boolean clickInPlayerRegion() {
-        final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
+        BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
         if (playerBodyComponent == null) return false;
-        final Body playerBody = playerBodyComponent.body;
+        Body playerBody = playerBodyComponent.body;
         if (playerBody == null) return false;
 
 
@@ -144,9 +144,9 @@ public class GameScreenInputProcessor implements InputProcessor {
             return false;
         }
 
-        final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
+        BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
         if (playerBodyComponent == null) return false;
-        final Body playerBody = playerBodyComponent.body;
+        Body playerBody = playerBodyComponent.body;
         if (playerBody == null) return false;
 
         dragging = true;
@@ -185,11 +185,11 @@ public class GameScreenInputProcessor implements InputProcessor {
         dragging = false;
         draggingPointer = -1;
 
-        final MouseJoint joint = mouseJoint;
+        MouseJoint joint = mouseJoint;
         if (joint != null) {
-            final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
+            BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
             if (playerBodyComponent == null) return false;
-            final Body playerBody = playerBodyComponent.body;
+            Body playerBody = playerBodyComponent.body;
             if (playerBody == null) return false;
 
             Gdx.app.postRunnable(() -> {
@@ -224,7 +224,7 @@ public class GameScreenInputProcessor implements InputProcessor {
         draggingPosition.x -= draggingStartedDiff.x;
         draggingPosition.y -= draggingStartedDiff.y;
 
-        final MouseJoint joint = mouseJoint;
+        MouseJoint joint = mouseJoint;
         if (joint != null) {
             joint.setTarget(target.set(draggingPosition.x, draggingPosition.y));
         }
@@ -242,9 +242,9 @@ public class GameScreenInputProcessor implements InputProcessor {
         final float accelerometerX = Gdx.input.getAccelerometerX();
         final float accelerometerY = Gdx.input.getAccelerometerY();
 
-        final BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
+        BodyComponent playerBodyComponent = Mapper.bodyComponent.get(focusedPlayer);
         if (playerBodyComponent == null) return;
-        final Body playerBody = playerBodyComponent.body;
+        Body playerBody = playerBodyComponent.body;
         if (playerBody == null) return;
 
         if (Math.abs(accelerometerX) < 0.1 && Math.abs(accelerometerY) < 0.1) {
