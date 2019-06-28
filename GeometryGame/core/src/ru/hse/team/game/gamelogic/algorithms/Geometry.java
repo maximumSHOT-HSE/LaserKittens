@@ -2,8 +2,11 @@ package ru.hse.team.game.gamelogic.algorithms;
 
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Class with static methods related with
+ * geometry calculations
+ */
 public class Geometry {
-
     private static final float EPS = (float) 1e-3;
 
     public static boolean floatEquals(float x, float y) {
@@ -15,8 +18,10 @@ public class Geometry {
     }
 
     public static boolean inRectangle(Vector2 point, Vector2 center, float width, float height) {
-        return center.x - width / 2 <= point.x && point.x <= center.x + width / 2 &&
-                center.y - height / 2 <= point.y && point.y <= center.y + height / 2;
+        return center.x - width / 2 <= point.x
+                && point.x <= center.x + width / 2
+                && center.y - height / 2 <= point.y
+                && point.y <= center.y + height / 2;
     }
 
     public static float vectorMultiplication(Vector2 v1, Vector2 v2) {
@@ -28,7 +33,10 @@ public class Geometry {
     }
 
     public static boolean areIntersected(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2) {
-        if (pointEquals(a1, b1) || pointEquals(a1, b2) || pointEquals(a2, b1) || pointEquals(a2, b2)) {
+        if (pointEquals(a1, b1)
+                || pointEquals(a1, b2)
+                || pointEquals(a2, b1)
+                || pointEquals(a2, b2)) {
             return true;
         }
         float val1, val2;
@@ -51,7 +59,13 @@ public class Geometry {
     }
 
     // segment and rectangle
-    public static boolean areIntersected(Vector2 a1, Vector2 b1, Vector2 center, float width, float height) {
+    public static boolean areIntersected(
+        Vector2 a1,
+        Vector2 b1,
+        Vector2 center,
+        float width,
+        float height
+    ) {
         if (inRectangle(a1, center, width, height)) {
             return true;
         }
