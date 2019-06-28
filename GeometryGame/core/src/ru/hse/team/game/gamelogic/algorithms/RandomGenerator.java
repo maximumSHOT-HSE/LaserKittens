@@ -2,8 +2,11 @@ package ru.hse.team.game.gamelogic.algorithms;
 
 import java.util.Random;
 
+/**
+ * Class with different methods of generation
+ * different objects
+ */
 public class RandomGenerator {
-    
     private static final Random random = new Random(System.currentTimeMillis());
     private static final int ENGLISH_ALPHABET_SIZE = 26;
 
@@ -17,8 +20,9 @@ public class RandomGenerator {
      */
     public static String generateRandomString(int length) {
         if (length <= 0) {
-            throw new IllegalArgumentException("length should be positive integer, but found length = " 
-                    + length);
+            throw new IllegalArgumentException(
+                "length should be positive integer, but found length = " + length
+            );
         }
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < length; i++) {
