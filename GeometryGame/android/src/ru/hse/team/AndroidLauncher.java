@@ -35,6 +35,8 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount mSignedInAccount = null;
 
+    private static final String gamePageGooglePlay = "https://play.google.com/store/apps/details?id=ru.hse.team";
+
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,7 +151,14 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
         if (exception == null) {
             return;
         }
-        String message = "Error" + exception.getMessage();
+        Log.d(TAG, "Error: " + exception);
+        String message;
+        if (exception.getMessage() == null) {
+            message = "Unknown error";
+        } else {
+            message = "Error: " + exception.getMessage();
+        }
+
         new AlertDialog.Builder(this)
             .setMessage(message)
             .setNeutralButton(android.R.string.ok, null)
@@ -158,8 +167,7 @@ public class AndroidLauncher extends AndroidApplication implements GoogleService
 
     @Override
     public void rateGame() {
-        String str = "https://play.google.com/store/apps/details?id=ru.hse.team";
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(gamePageGooglePlay)));
     }
 
     @Override
