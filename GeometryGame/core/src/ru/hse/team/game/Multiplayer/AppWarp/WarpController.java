@@ -20,7 +20,6 @@ import java.util.TreeSet;
 import ru.hse.team.game.gamelogic.algorithms.RandomGenerator;
 
 public class WarpController {
-
     public enum State {
         WAITING_FOR_CONNECTION,
         CONNECTION_DONE,
@@ -41,7 +40,7 @@ public class WarpController {
 
     private static WarpController instance = null;
 
-    private WarpClient warpClient;
+    private final WarpClient warpClient;
     private WarpListener warpListener;
 
     private String playerName;
@@ -127,7 +126,9 @@ public class WarpController {
     public void start(String playerName) {
         free();
         playerNameSalt = RandomGenerator.generateRandomString(SALT_SIZE);
-        System.out.println("WarpController.start(): FULL NAME = " + playerNameSalt + "|" + playerName);
+        System.out.println(
+            "WarpController.start(): FULL NAME = " + playerNameSalt + "|" + playerName
+        );
 
         this.playerName = playerName;
 
@@ -151,8 +152,8 @@ public class WarpController {
         HashMap<String, Object> properties = new HashMap<>();
         properties.put(LEVEL_NAME_PROPERTY, levelName);
         warpClient.getRoomInRangeWithProperties(
-                minUserNumber, maxUserNumber,
-                properties
+            minUserNumber, maxUserNumber,
+            properties
         );
     }
 
@@ -185,7 +186,7 @@ public class WarpController {
         }
         System.out.println(
                 "data = " + roomEvent.getData()
-            + ", owner = " + roomEvent.getData().getRoomOwner()
+          + ", owner = " + roomEvent.getData().getRoomOwner()
         );
         activeRooms.put(roomEvent.getData().getName(), roomEvent.getData());
         warpListener.update("create room done");

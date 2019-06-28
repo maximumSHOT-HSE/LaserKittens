@@ -11,14 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
  * Sliding pane for choose level menu.
  */
 public class SlidingPane extends Group {
-
     // width of one section
     private float sectionWidth = Gdx.app.getGraphics().getWidth();
     // height of one section
     private float sectionHeight = Gdx.app.getGraphics().getHeight();
 
     // container for sections
-    private Group sections = new Group();
+    private final Group sections = new Group();
     // offset of section by y coordinate
     private float offsetY;
 
@@ -103,25 +102,22 @@ public class SlidingPane extends Group {
 
     // section in focus
     private Actor focusedSection;
-    private Rectangle cullingArea = new Rectangle();
+    private final Rectangle cullingArea = new Rectangle();
 
-    private ActorGestureListener actorGestureListener;
+    private final ActorGestureListener actorGestureListener;
 
     private float itemWidth = getSectionWidth();
     private float itemHeight = getSectionHeight();
 
     public SlidingPane() {
         this.addActor(getSections());
-
         actorGestureListener = new ActorGestureListener() {
-
             @Override
             public void touchDown(InputEvent event, float x, float y, int pointer, int button) {
             }
 
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-
             }
 
             @Override
@@ -184,13 +180,11 @@ public class SlidingPane extends Group {
     }
 
     public void addWidget(Actor widget) {
-        widget.setY(getSections().getChildren().size * getSectionHeight() +
-                (getSectionHeight() - getItemHeight()) * 0.5f);
+        widget.setY(getSections().getChildren().size * getSectionHeight()
+                + (getSectionHeight() - getItemHeight()) * 0.5f);
         widget.setX((getSectionWidth() - getItemWidth()) * 0.5f);
-
         widget.setWidth(getItemWidth());
         widget.setHeight(getItemHeight());
-
         getSections().addActor(widget);
     }
 
@@ -207,7 +201,7 @@ public class SlidingPane extends Group {
 
     private void move(float delta) {
         if (getOffsetY() < getStopOffset()) {
-            if (getDirection() == DIRECTION.DOWN ) {
+            if (getDirection() == DIRECTION.DOWN) {
                 offsetY = getStopOffset();
                 currentSectionId = calculateCurrentSection();
                 return;
@@ -226,16 +220,13 @@ public class SlidingPane extends Group {
     @Override
     public void act(float delta) {
         getSections().setY(-getOffsetY());
-
         getCullingArea().set(
             getSections().getX(),
             -getSections().getY(),
-                getSectionWidth(),
-                getSectionHeight()
+            getSectionWidth(),
+            getSectionHeight()
         );
-
         getSections().setCullingArea(getCullingArea());
-
         if (!getActorGestureListener().getGestureDetector().isPanning()) {
             move(delta);
         }

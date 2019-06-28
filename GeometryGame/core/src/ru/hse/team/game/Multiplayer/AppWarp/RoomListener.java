@@ -5,7 +5,6 @@ import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 import com.shephertz.app42.gaming.multiplayer.client.listener.RoomRequestListener;
 
 public class RoomListener implements RoomRequestListener {
-
     private final WarpController warpController;
 
     public RoomListener(WarpController warpController) {
@@ -19,7 +18,6 @@ public class RoomListener implements RoomRequestListener {
 
     @Override
     public void onUnSubscribeRoomDone(RoomEvent roomEvent) {
-
     }
 
     @Override
@@ -42,22 +40,18 @@ public class RoomListener implements RoomRequestListener {
 
     @Override
     public void onSetCustomRoomDataDone(LiveRoomInfoEvent liveRoomInfoEvent) {
-
     }
 
     @Override
     public void onUpdatePropertyDone(LiveRoomInfoEvent liveRoomInfoEvent) {
-
     }
 
     @Override
     public void onLockPropertiesDone(byte b) {
-
     }
 
     @Override
     public void onUnlockPropertiesDone(byte b) {
-
     }
 
     @Override

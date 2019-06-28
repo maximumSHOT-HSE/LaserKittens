@@ -10,7 +10,6 @@ import com.shephertz.app42.gaming.multiplayer.client.listener.NotifyListener;
 import java.util.HashMap;
 
 public class NotificationListener implements NotifyListener {
-
     private final WarpController warpController;
 
     public NotificationListener(WarpController warpController) {
@@ -64,8 +63,9 @@ public class NotificationListener implements NotifyListener {
 
     @Override
     public void onUpdatePeersReceived(UpdateEvent updateEvent) {
-        System.out.println("NotificationListener.onUpdatePeersReveived: "
-                + new String(updateEvent.getUpdate()));
+        System.out.println(
+            "NotificationListener.onUpdatePeersReveived: " + new String(updateEvent.getUpdate())
+        );
         warpController.onGameUpdateReceived(updateEvent);
     }
 
@@ -74,37 +74,31 @@ public class NotificationListener implements NotifyListener {
             RoomData roomData,
             String s,
             HashMap<String, Object> hashMap,
-            HashMap<String, String> hashMap1) {
-
+            HashMap<String, String> hashMap1
+    ) {
     }
 
     @Override
     public void onMoveCompleted(MoveEvent moveEvent) {
-
     }
 
     @Override
     public void onGameStarted(String s, String s1, String s2) {
-
     }
 
     @Override
     public void onGameStopped(String s, String s1) {
-
     }
 
     @Override
     public void onUserPaused(String s, boolean b, String s1) {
-
     }
 
     @Override
     public void onUserResumed(String s, boolean b, String s1) {
-
     }
 
     @Override
     public void onNextTurnRequest(String s) {
-
     }
 }

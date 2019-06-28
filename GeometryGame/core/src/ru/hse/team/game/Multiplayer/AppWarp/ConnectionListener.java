@@ -4,7 +4,6 @@ import com.shephertz.app42.gaming.multiplayer.client.events.ConnectEvent;
 import com.shephertz.app42.gaming.multiplayer.client.listener.ConnectionRequestListener;
 
 public class ConnectionListener implements ConnectionRequestListener {
-
     private final WarpController warpController;
 
     public ConnectionListener(WarpController warpController) {
@@ -19,12 +18,12 @@ public class ConnectionListener implements ConnectionRequestListener {
 
     @Override
     public void onDisconnectDone(ConnectEvent connectEvent) {
-        System.out.println("ConnectionListener.onDisconnectDone: result " + connectEvent.getResult());
+        System.out.println("ConnectionListener.onDisconnectDone: result "
+                + connectEvent.getResult());
 //        warpController.onDisconnectDone(connectEvent.getResult());
     }
 
     @Override
     public void onInitUDPDone(byte b) {
-
     }
 }
