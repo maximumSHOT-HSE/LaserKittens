@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Pool;
  * Contains runnable action that can be called on some event happened with entity.
  */
 public class TumblerComponent implements Component, Pool.Poolable {
-
     private Runnable action;
 
     public Runnable getAction() {

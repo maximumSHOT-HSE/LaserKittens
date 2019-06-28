@@ -7,18 +7,13 @@ import com.badlogic.gdx.utils.Pool;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Keeps path which entity patrols.
  */
 public class PatrolComponent implements Component, Pool.Poolable {
+    private static final float EPS = 1;
 
-    private static final float EPS = (float) 1;
-
-    /*
-    * 0 -> 1 -> 2 -> ... -> (n - 1) -> 0 -> 1 ...
-    * */
     private List<Vector2> path = new ArrayList<>();
     private int currentVertex;
     private Entity character;

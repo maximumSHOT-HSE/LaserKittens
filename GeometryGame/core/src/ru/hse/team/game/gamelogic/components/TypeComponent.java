@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  * This data is used to handle entities interaction
  */
 public class TypeComponent implements Component, Poolable {
-
     public enum Type {
         PLAYER,
         BULLET,

@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Pool.Poolable;
  * Contains information about current entity state.
  */
 public class StateComponent implements Component, Poolable {
-
     public enum State {
         NORMAL,
         JUST_CREATED,
