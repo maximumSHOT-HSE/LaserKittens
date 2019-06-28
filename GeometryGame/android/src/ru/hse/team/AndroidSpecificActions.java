@@ -8,7 +8,6 @@ import android.widget.Toast;
  *  to make later use of them outside of android module
  */
 public class AndroidSpecificActions implements AndroidActions {
-
     private final Activity activity;
 
     public AndroidSpecificActions(Activity activity) {
@@ -18,9 +17,13 @@ public class AndroidSpecificActions implements AndroidActions {
     @Override
     public void showToast(String message, boolean isLong) {
         if (isLong) {
-            activity.runOnUiThread(() -> Toast.makeText(activity, message, Toast.LENGTH_SHORT).show());
+            activity.runOnUiThread(() ->
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+            );
         } else {
-            activity.runOnUiThread(() -> Toast.makeText(activity, message, Toast.LENGTH_LONG).show());
+            activity.runOnUiThread(() ->
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+            );
         }
     }
 }
