@@ -15,8 +15,8 @@ public class AndroidSpecificActions implements AndroidActions {
     }
 
     @Override
-    public void showToast(String message, boolean isLong) {
-        if (isLong) {
+    public void showToast(String message, boolean isShort) {
+        if (isShort) {
             activity.runOnUiThread(() ->
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
             );
